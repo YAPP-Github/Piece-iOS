@@ -83,3 +83,11 @@ xcuserdata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 Keys.xcconfig
+
+### Tuist ###
+XCConfig/*
+!XCConfig/Shared.xcconfig
+Tuist/Dependencies
+Derived/
+*.xcworkspace
+*.xcodeproj
