@@ -14,9 +14,31 @@ import PackageDescription
 
 let package = Package(
     name: "Piece-iOS",
-    dependencies: [
-        // Add your own dependencies here:
-        // .package(url: "https://github.com/Alamofire/Alamofire", from: "5.0.0"),
-        // You can read more about dependencies here: https://docs.tuist.io/documentation/tuist/dependencies
-    ]
+    dependencies:
+      ExternalDependency.allCases.map {
+        Package.Dependency.package(
+          url: $0.url,
+          from: $0.version
+        )
+      }
 )
+
+enum ExternalDependency: String, CaseIterable {
+  case Kingfisher // 예시
+}
+
+extension ExternalDependency {
+  var url: String {
+    switch self {
+    case .Kingfisher: "https://github.com/onevcat/Kingfisher.git"
+    }
+  }
+}
+
+extension ExternalDependency {
+  var version: PackageDescription.Version {
+    switch self {
+    case .Kingfisher: "7.0.0"
+    }
+  }
+}
