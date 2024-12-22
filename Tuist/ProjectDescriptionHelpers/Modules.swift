@@ -60,14 +60,14 @@ public extension Modules {
     
     var path: String {
       switch self {
-      case .DesignSystem: "\(self.rawValue)"
+      case .DesignSystem: "Presentation/\(self.rawValue)"
       default: "Presentation/Feature/\(self.rawValue)"
       }
     }
     
     var targetName: String {
       switch self {
-      case .DesignSystem: "Presentation\(self.rawValue)"
+      case .DesignSystem: "\(self.rawValue)"
       default: "\(self.rawValue)Feature"
       }
     }
