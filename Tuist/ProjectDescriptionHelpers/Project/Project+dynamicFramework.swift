@@ -10,6 +10,7 @@ import ProjectDescription
 extension Project {
   public static func dynamicFramework(
     name: String,
+    infoPlist: InfoPlist? = .default,
     dependencies: [TargetDependency] = [],
     packages: [Package] = [],
     mergedBinaryType: MergedBinaryType = .disabled,
@@ -21,6 +22,7 @@ extension Project {
       product: .framework,
       bundleId: "\(Constants.organizationName).\(name)",
       deploymentTargets: Constants.deploymentTargets,
+      infoPlist: infoPlist,
       sources: ["Sources/**"],
       dependencies: dependencies,
       mergedBinaryType: mergedBinaryType,
