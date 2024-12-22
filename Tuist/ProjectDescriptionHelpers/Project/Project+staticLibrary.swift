@@ -10,6 +10,7 @@ import ProjectDescription
 extension Project {
   public static func staticLibrary(
     name: String,
+    infoPlist: InfoPlist? = .default,
     dependencies: [TargetDependency] = [],
     packages: [Package] = []
   ) -> Project {
@@ -19,6 +20,7 @@ extension Project {
       product: .staticLibrary,
       bundleId: "\(Constants.organizationName).\(name)",
       deploymentTargets: Constants.deploymentTargets,
+      infoPlist: infoPlist,
       sources: ["Sources/**"],
       dependencies: dependencies
     )
