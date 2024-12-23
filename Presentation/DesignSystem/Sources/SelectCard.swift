@@ -1,5 +1,5 @@
 //
-//  AnswerOption.swift
+//  SelectCard.swift
 //  DesignSystem
 //
 //  Created by summercat on 12/22/24.
@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-public struct AnswerOption: View {
-
+public struct SelectCard: View {
   public init(
     isSelected: Bool,
     text: String,
@@ -42,7 +41,7 @@ public struct AnswerOption: View {
 
 #Preview {
   VStack {
-    AnswerOption(isSelected: true, text: "selected")
-    AnswerOption(isSelected: false, text: "unselected")
+    SelectCard(isSelected: true, text: "selected")
+    SelectCard(isSelected: false, text: "unselected")
   }
 }
