@@ -10,8 +10,8 @@ import ProjectDescription
 extension Scheme {
   public static func makeScheme(environment: AppEnvironment) -> Scheme {
     return .scheme(
-      name: "\(Constants.appName)-\(environment.rawValue)",
-      buildAction: .buildAction(targets: ["\(Constants.appName)"]),
+      name: "\(AppConstants.appName)-\(environment.rawValue)",
+      buildAction: .buildAction(targets: ["\(AppConstants.appName)"]),
       runAction: .runAction(configuration: environment.configurationName),
       archiveAction: .archiveAction(configuration: environment.configurationName),
       profileAction: .profileAction(configuration: environment.configurationName),

@@ -11,13 +11,13 @@ extension Project {
   public static func app(
     dependencies: [TargetDependency] = []
   ) -> Project {
-    let name = Constants.appName
+    let name = AppConstants.appName
     let target = Target.target(
-      name: Constants.appName,
-      destinations: Constants.destinations,
+      name: AppConstants.appName,
+      destinations: AppConstants.destinations,
       product: .app,
-      bundleId: "\(Constants.organizationName).\(name)",
-      deploymentTargets: Constants.deploymentTargets,
+      bundleId: "\(AppConstants.organizationName).\(name)",
+      deploymentTargets: AppConstants.deploymentTargets,
       infoPlist: .default,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
@@ -34,7 +34,7 @@ extension Project {
     
     return Project(
       name: name,
-      organizationName: Constants.organizationName,
+      organizationName: AppConstants.organizationName,
       options: .options(
         automaticSchemesOptions: .disabled,
         developmentRegion: "kor"
