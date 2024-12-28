@@ -20,6 +20,7 @@ public enum Fonts {
     case body_M_R
     case body_S_SB
     case body_S_M
+    case body_S_R
     case caption_M_M
     
     var swiftUIFont: Font {
@@ -34,6 +35,7 @@ public enum Fonts {
       case .body_M_R: DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 16)
       case .body_S_SB: DesignSystemFontFamily.Pretendard.semiBold.swiftUIFont(size: 14)
       case .body_S_M: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 14)
+      case .body_S_R: DesignSystemFontFamily.Pretendard.regular.swiftUIFont(size: 14)
       case .caption_M_M: DesignSystemFontFamily.Pretendard.medium.swiftUIFont(size: 12)
       }
     }
@@ -50,6 +52,7 @@ public enum Fonts {
       case .body_M_R: DesignSystemFontFamily.Pretendard.regular.font(size: 16)
       case .body_S_SB: DesignSystemFontFamily.Pretendard.semiBold.font(size: 14)
       case .body_S_M: DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+      case .body_S_R: DesignSystemFontFamily.Pretendard.regular.font(size: 14)
       case .caption_M_M: DesignSystemFontFamily.Pretendard.medium.font(size: 12)
       }
     }
@@ -61,7 +64,7 @@ public enum Fonts {
       case .heading_M_SB: 24
       case .heading_S_SB, .heading_S_M: 22
       case .body_M_SB, .body_M_M, .body_M_R: 24
-      case .body_S_SB, .body_S_M: 18
+      case .body_S_SB, .body_S_M, .body_S_R: 18
       case .caption_M_M: 16
       }
     }
