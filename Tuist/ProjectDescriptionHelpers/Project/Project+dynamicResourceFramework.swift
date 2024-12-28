@@ -10,6 +10,7 @@ import ProjectDescription
 extension Project {
   public static func dynamicResourceFramework(
     name: String,
+    infoPlist: InfoPlist? = .default,
     dependencies: [TargetDependency] = [],
     packages: [Package] = []
   ) -> Project {
@@ -19,6 +20,7 @@ extension Project {
       product: .framework,
       bundleId: "\(AppConstants.organizationName).\(name)",
       deploymentTargets: AppConstants.deploymentTargets,
+      infoPlist: infoPlist,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: dependencies
@@ -27,6 +29,12 @@ extension Project {
     return Project(
       name: name,
       packages: packages,
+      settings: .settings(
+        configurations: [
+          .configuration(environment: .dev),
+          .configuration(environment: .prod),
+        ]
+      ),
       targets: [target]
     )
   }
