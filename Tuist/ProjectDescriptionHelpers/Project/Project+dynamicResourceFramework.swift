@@ -15,10 +15,10 @@ extension Project {
   ) -> Project {
     let target = Target.target(
       name: name,
-      destinations: Constants.destinations,
+      destinations: AppConstants.destinations,
       product: .framework,
-      bundleId: "\(Constants.organizationName).\(name)",
-      deploymentTargets: Constants.deploymentTargets,
+      bundleId: "\(AppConstants.organizationName).\(name)",
+      deploymentTargets: AppConstants.deploymentTargets,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: dependencies
