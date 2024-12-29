@@ -64,7 +64,7 @@ public enum Fonts {
       case .heading_M_SB: 24
       case .heading_S_SB, .heading_S_M: 22
       case .body_M_SB, .body_M_M, .body_M_R: 24
-      case .body_S_SB, .body_S_M, .body_S_R: 18
+      case .body_S_SB, .body_S_M, .body_S_R: 20
       case .caption_M_M: 16
       }
     }
