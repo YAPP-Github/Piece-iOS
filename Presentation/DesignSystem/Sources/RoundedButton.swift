@@ -46,11 +46,13 @@ public struct RoundedButton: View {
     type: ButtonType,
     buttonText: String,
     icon: Image?,
+    height: CGFloat? = 36,
     action: @escaping () -> Void
   ) {
     self.type = type
     self.buttonText = buttonText
     self.icon = icon
+    self.height = height
     self.action = action
   }
   
@@ -68,7 +70,7 @@ public struct RoundedButton: View {
           .pretendard(.body_M_SB)
           .foregroundStyle(type.contentColor)
       }
-      .frame(height: 36)
+      .frame(height: height)
       .frame(maxWidth: .infinity)
       .background(
         RoundedRectangle(cornerRadius: 8)
@@ -84,6 +86,7 @@ public struct RoundedButton: View {
   private let type: ButtonType
   private let buttonText: String
   private let icon: Image?
+  private let height: CGFloat?
   private let action: () -> Void
 }
 
