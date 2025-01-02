@@ -1,0 +1,12 @@
+//
+// {{ name }}ViewModel.swift
+// {{ name }}
+//
+// Created by {{ author }} on {{ date }}.
+//
+
+import Foundation
+
+final class {{ name }}ViewModel: ObservableObject {
+
+}
