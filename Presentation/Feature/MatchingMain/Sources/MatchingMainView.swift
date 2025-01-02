@@ -10,19 +10,15 @@ import DesignSystem
 
 public struct MatchingMainView: View {
   public var body: some View {
-      
-      ZStack {
-        Color.grayscaleBlack.edgesIgnoringSafeArea(.all)
-        
-        VStack {
-          MatchingTimerView()
-
-          MatchingProfileCardView()
-        }
-        .padding(.horizontal, 20)
-        
+    ZStack {
+      Color.grayscaleBlack.edgesIgnoringSafeArea(.all)
+      VStack {
+        MatchingTimerView()
+        MatchingProfileCardView()
       }
+      .padding(.horizontal, 20)
     }
+  }
 }
 
 // MARK: - 타이머
@@ -49,7 +45,7 @@ private struct MatchingTimerView: View {
 private struct MatchingProfileCardView: View {
   var body: some View {
     VStack(alignment: .leading) {
-        MatchingAnswer(type: .before)
+      MatchingAnswer(type: .before)
       
       Spacer()
         .frame(height: 20)
@@ -79,8 +75,7 @@ private struct MatchingProfileCardView: View {
         .lineLimit(2)
         .truncationMode(.tail)
         .frame(maxWidth: 260, alignment: .leading)
-        .padding(.trailing, 35)
-        .background(Color.yellow.opacity(0.3))
+        .padding(.trailing, calculateTrailingPadding(parentWidth: UIScreen.main.bounds.width))
       }
       
       RoundedButton(
@@ -90,7 +85,6 @@ private struct MatchingProfileCardView: View {
         height: 52,
         action: {
         })
-      
     }
     .padding(.vertical, 20)
     .padding(.horizontal, 20)
@@ -99,6 +93,12 @@ private struct MatchingProfileCardView: View {
         .fill(Color.grayscaleWhite)
         .cornerRadius(16)
     )
+  }
+  
+  private func calculateTrailingPadding(parentWidth: CGFloat) -> CGFloat {
+    let contentMaxWidth: CGFloat = 260
+    let basePadding: CGFloat = 20
+    return max(0, (parentWidth - contentMaxWidth - basePadding*2)/2)
   }
 }
 
