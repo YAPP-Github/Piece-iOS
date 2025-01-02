@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-public enum NavigationType {
-  case main
-  case subBack
-  case subClose
-  case feature
-}
-
-
 struct NavigationBarModifier: ViewModifier {
   private var navigationBar: NavigationBar
   
@@ -27,7 +19,6 @@ struct NavigationBarModifier: ViewModifier {
   func body(content: Content) -> some View {
     VStack(spacing: 0) {
       navigationBar
-      
       content
     }
     .navigationBarHidden(true)
@@ -37,5 +28,22 @@ struct NavigationBarModifier: ViewModifier {
 public extension SwiftUI.View {
   func navigationBarModifier(navigationBar: () -> NavigationBar) -> some View {
     modifier(NavigationBarModifier(navigationBar: navigationBar()))
+  }
+}
+
+#Preview {
+  ZStack {
+    Color.grayscaleWhite.ignoresSafeArea()
+    VStack{
+      Text("Hello")
+    }
+  }
+  .navigationBarModifier {
+    NavigationBar(
+      title: "Feature",
+      titleColor: .grayscaleWhite,
+      leftButtonTap: {},
+      backgroundColor: .grayscaleBlack
+    )
   }
 }
