@@ -18,54 +18,44 @@ public struct TabBarView: View {
   }
   
   public var body: some View {
-      VStack {
-        
+    VStack {
+      Spacer()
+      HStack {
         Spacer()
-        
-        HStack {
-          
-          Spacer()
-          
-          Button {
-            print("프로필")
-            viewModel.selectedTab = .profile
-          } label: {
-            TabBarButton(
-              tabBarImage: .profile32,
-              tabBarTitle: "프로필",
-              isSelected: viewModel.selectedTab == .profile
-            )
-          }
-          
-          Spacer()
-          
-          Button {
-            print("홈")
-            viewModel.selectedTab = .home
-          } label: {
-            Image(.btnMatch)
-              .offset(y: -12)
-          }
-          
-          Spacer()
-          
-          Button {
-            print("설정")
-            viewModel.selectedTab = .settings
-          } label: {
-            TabBarButton(
-              tabBarImage: .setting32,
-              tabBarTitle: "설정",
-              isSelected: viewModel.selectedTab == .settings
-            )
-          }
-          
-          Spacer()
-          
+        Button {
+          print("프로필")
+          viewModel.selectedTab = .profile
+        } label: {
+          TabBarButton(
+            tabBarImage: .profile32,
+            tabBarTitle: "프로필",
+            isSelected: viewModel.selectedTab == .profile
+          )
         }
-        .frame(height: 89)
-        .background(Color.white)
+        Spacer()
+        Button {
+          print("홈")
+          viewModel.selectedTab = .home
+        } label: {
+          Image(.btnMatch)
+            .offset(y: -12)
+        }
+        Spacer()
+        Button {
+          print("설정")
+          viewModel.selectedTab = .settings
+        } label: {
+          TabBarButton(
+            tabBarImage: .setting32,
+            tabBarTitle: "설정",
+            isSelected: viewModel.selectedTab == .settings
+          )
+        }
+        Spacer()
       }
+      .frame(height: 89)
+      .background(Color.white)
+    }
   }
 }
 
@@ -84,7 +74,6 @@ public class TabBarViewModel: ObservableObject {
 
 // MARK: - 탭바 버튼
 public struct TabBarButton: View {
-  
   public init(
     tabBarImage: ImageResource,
     tabBarTitle: String,
@@ -104,7 +93,6 @@ public struct TabBarButton: View {
     }
     .foregroundColor(isSelected ? .primaryDefault : .grayscaleDark3)
   }
-  
   
   private let tabBarImage: ImageResource
   private let tabBarTitle: String
