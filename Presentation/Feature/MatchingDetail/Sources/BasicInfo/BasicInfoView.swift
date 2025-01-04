@@ -18,7 +18,11 @@ struct BasicInfoView: View {
       VStack(alignment: .leading) {
         title
         Spacer()
-        name
+        BasicInfoNameView(
+          description: viewModel.matchingBasicInfoModel.description,
+          nickname: viewModel.matchingBasicInfoModel.nickname,
+          moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
+        )
       }
       .padding(.vertical, 20)
       basicInfoCards
@@ -32,30 +36,6 @@ struct BasicInfoView: View {
     Text(viewModel.title)
       .pretendard(.body_M_M)
       .foregroundStyle(Color.primaryDefault)
-  }
-  
-  // MARK: - Nickname
-  
-  private var name: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Text(viewModel.matchingBasicInfoModel.description)
-        .pretendard(.body_M_R)
-        .foregroundStyle(Color.grayscaleBlack)
-      
-      HStack(alignment: .center) {
-        Text(viewModel.matchingBasicInfoModel.nickname)
-          .pretendard(.heading_L_SB)
-          .foregroundStyle(Color.primaryDefault)
-        Spacer()
-        Button {
-          viewModel.handleAction(.didTapMoreButton)
-        } label: {
-          DesignSystemAsset.Icons.more32.swiftUIImage
-            .renderingMode(.template)
-            .foregroundStyle(Color.grayscaleBlack)
-        }
-      }
-    }
   }
   
   // MARK: - Basic info card
