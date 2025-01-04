@@ -16,7 +16,7 @@ extension Project {
       name: AppConstants.appName,
       destinations: AppConstants.destinations,
       product: .app,
-      bundleId: "\(AppConstants.organizationName).\(name)",
+      bundleId: AppConstants.bundleId,
       deploymentTargets: AppConstants.deploymentTargets,
       infoPlist: .default,
       sources: ["Sources/**"],
