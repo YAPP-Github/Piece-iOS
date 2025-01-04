@@ -1,5 +1,5 @@
 //
-//  MatchingBasicInfoModel.swift
+//  BasicInfoModel.swift
 //  MatchingDetail
 //
 //  Created by summercat on 1/4/25.
@@ -7,7 +7,7 @@
 
 import Observation
 
-struct MatchingBasicInfoModel {
+struct BasicInfoModel {
   let description: String
   let nickname: String
   let age: Int

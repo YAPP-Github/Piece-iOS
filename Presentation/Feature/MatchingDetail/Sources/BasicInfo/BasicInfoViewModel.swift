@@ -1,5 +1,5 @@
 //
-// MatchingDetailBasicInfoViewModel.swift
+// BasicInfoViewModel.swift
 // MatchingDetail
 //
 // Created by summercat on 2025/01/02.
@@ -8,7 +8,7 @@
 import Observation
 
 @Observable
-final class MatchingDetailBasicInfoViewModel {
+final class BasicInfoViewModel {
   enum Constant {
     static let title = "오늘의 매칭 조각"
   }
@@ -19,9 +19,9 @@ final class MatchingDetailBasicInfoViewModel {
   }
   
   @ObservationIgnored let title = Constant.title
-  var matchingBasicInfoModel: MatchingBasicInfoModel
+  var matchingBasicInfoModel: BasicInfoModel
   
-  init(matchingBasicInfoModel: MatchingBasicInfoModel) {
+  init(matchingBasicInfoModel: BasicInfoModel) {
     self.matchingBasicInfoModel = matchingBasicInfoModel
   }
   
