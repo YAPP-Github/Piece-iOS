@@ -65,7 +65,7 @@ public struct CircleButton: View {
             .strokeBorder(type.borderColor, lineWidth: 1)
         }
     }
-
+    .disabled(type == .disabled)
   }
   
   private let type: ButtonType
