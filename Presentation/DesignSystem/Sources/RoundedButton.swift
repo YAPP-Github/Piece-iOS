@@ -46,7 +46,7 @@ public struct RoundedButton: View {
     type: ButtonType,
     buttonText: String,
     icon: Image?,
-    height: CGFloat? = 36,
+    height: CGFloat? = 52,
     action: @escaping () -> Void
   ) {
     self.type = type
