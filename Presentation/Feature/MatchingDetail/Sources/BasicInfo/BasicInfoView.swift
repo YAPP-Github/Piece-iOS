@@ -1,5 +1,5 @@
 //
-// MatchingDetailBasicInfoView.swift
+// BasicInfoView.swift
 // MatchingDetail
 //
 // Created by summercat on 2025/01/02.
@@ -8,8 +8,8 @@
 import SwiftUI
 import DesignSystem
 
-struct MatchingDetailBasicInfoView: View {
-  @State var viewModel: MatchingDetailBasicInfoViewModel
+struct BasicInfoView: View {
+  @State var viewModel: BasicInfoViewModel
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -198,10 +198,10 @@ struct MatchingDetailBasicInfoView: View {
 }
 
 #Preview {
-  MatchingDetailBasicInfoView(
-    viewModel: MatchingDetailBasicInfoViewModel(
+  BasicInfoView(
+    viewModel: BasicInfoViewModel(
       matchingBasicInfoModel:
-        MatchingBasicInfoModel(
+        BasicInfoModel(
           description: "음악과 요리를 좋아하는",
           nickname: "수줍은 수달",
           age: 25,
