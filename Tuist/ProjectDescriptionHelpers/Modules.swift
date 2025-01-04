@@ -57,6 +57,7 @@ public extension Modules {
   enum Presentation: String {
     case DesignSystem
     case MatchingMain
+    case MatchingDetail
     
     var path: String {
       switch self {
