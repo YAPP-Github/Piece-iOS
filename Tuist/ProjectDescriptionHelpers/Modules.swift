@@ -75,6 +75,7 @@ public extension Modules {
     case DesignSystem
     case Login
     case MatchingMain
+    case MatchingDetail
     
     var path: String {
       switch self {
