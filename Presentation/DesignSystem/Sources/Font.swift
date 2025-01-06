@@ -75,4 +75,24 @@ public enum Fonts {
       }
     }
   }
+  
+  public enum WixMadeforDisplay {
+    case Branding
+    
+    var swiftUIFont: Font {
+      .system(size: 18)
+    }
+    
+    var uiFont: UIFont {
+      DesignSystemFontFamily.WixMadeforDisplay.medium.font(size: 18)
+    }
+    
+    var lineHeight: CGFloat {
+      22
+    }
+    
+    var letterSpacing: CGFloat {
+      0
+    }
+  }
 }
