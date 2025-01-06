@@ -68,12 +68,6 @@ public enum Fonts {
       case .caption_M_M: 16
       }
     }
-    
-    var letterSpacing: CGFloat {
-      switch self {
-      default: 0 // All cases use letter spacing of -0%
-      }
-    }
   }
   
   public enum WixMadeforDisplay {
@@ -89,10 +83,6 @@ public enum Fonts {
     
     var lineHeight: CGFloat {
       22
-    }
-    
-    var letterSpacing: CGFloat {
-      0
     }
   }
 }
