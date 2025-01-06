@@ -77,7 +77,7 @@ public enum Fonts {
   }
   
   public enum WixMadeforDisplay {
-    case Branding
+    case branding
     
     var swiftUIFont: Font {
       .system(size: 18)
