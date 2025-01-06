@@ -10,7 +10,7 @@ import Observation
 
 @Observable
 final class ValueTalkViewModel {
-  enum Constant {
+  private enum Constant {
     static let navigationTitle = "가치관 Talk"
     static let nameVisibilityOffset: CGFloat = -80
   }
