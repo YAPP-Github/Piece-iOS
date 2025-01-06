@@ -71,7 +71,7 @@ public enum Fonts {
     
     var letterSpacing: CGFloat {
       switch self {
-      default: -0.01 // All cases use letter spacing of -1%
+      default: 0 // All cases use letter spacing of -0%
       }
     }
   }
