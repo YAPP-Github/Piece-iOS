@@ -22,4 +22,5 @@ public extension Color {
     static let subDefault = DesignSystemAsset.Colors.subDefault.swiftUIColor
     static let subLight = DesignSystemAsset.Colors.subLight.swiftUIColor
     static let subMiddle = DesignSystemAsset.Colors.subMiddle.swiftUIColor
+    static let systemError = DesignSystemAsset.Colors.systemError.swiftUIColor
 }
