@@ -42,7 +42,7 @@ public struct NavigationBar: View {
   public init(
     title: String,
     titleColor: Color = .grayscaleBlack,
-    rightImage: ImageResource,
+    rightIcon: Image,
     rightButtonTap: (() -> Void)? = nil,
     backgroundColor: Color? = .clear
   ) {
@@ -51,7 +51,7 @@ public struct NavigationBar: View {
       title: title,
       titleColor: titleColor,
       rightButtonTap: rightButtonTap,
-      rightImage: rightImage,
+      rightIcon: rightIcon,
       backgroundColor: backgroundColor
     )
   }
@@ -115,7 +115,7 @@ public struct NavigationBar: View {
     titleColor: Color = .grayscaleBlack,
     leftButtonTap: (() -> Void)? = nil,
     rightButtonTap: (() -> Void)? = nil,
-    rightImage: ImageResource? = nil,
+    rightIcon: Image? = nil,
     label: String? = nil,
     backgroundColor: Color? = .clear
   ) {
@@ -124,7 +124,7 @@ public struct NavigationBar: View {
     self.titleColor = titleColor
     self.leftButtonTap = leftButtonTap
     self.rightButtonTap = rightButtonTap
-    self.rightImage = rightImage
+    self.rightIcon = rightIcon
     self.label = label
     self.backgroundColor = backgroundColor
   }
@@ -151,8 +151,8 @@ public struct NavigationBar: View {
           Button {
             rightButtonTap?()
           } label: {
-            if let rightImage = rightImage {
-              Image(rightImage)
+            if let rightIcon {
+              rightIcon
                 .renderingMode(.template)
                 .foregroundColor(titleColor ?? .none)
             } else if let label = label {
@@ -187,7 +187,7 @@ public struct NavigationBar: View {
   private let type: NavigationType
   private let title: String
   private let titleColor: Color?
-  private let rightImage: ImageResource?
+  private let rightIcon: Image?
   private let rightButtonTap: (() -> Void)?
   private let leftButtonTap: (() -> Void)?
   private let label: String?
@@ -201,7 +201,7 @@ public struct NavigationBar: View {
       NavigationBar(
         title: "Feature Name",
         titleColor: .grayscaleWhite,
-        rightImage: .null32,
+        rightIcon: DesignSystemAsset.Icons.null32.swiftUIImage,
         backgroundColor: .clear
       )
       NavigationBar(
