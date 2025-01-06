@@ -15,7 +15,7 @@ public struct AlertView: View {
   
   public init(
     type: AlertType,
-    icon: ImageResource? = nil,
+    icon: Image? = nil,
     title: String,
     message: String,
     firstButtonText: String,
@@ -57,7 +57,7 @@ public struct AlertView: View {
   }
   
   private let type: AlertType
-  private let icon: ImageResource?
+  private let icon: Image?
   private let title: String
   private let message: String
   private let firstButtonText: String
@@ -70,7 +70,7 @@ private struct AlertTopView: View {
   var body: some View {
     VStack(spacing: 8) {
       if type == .iconType, let icon {
-        Image(icon)
+        icon
       }
       Text(title)
         .pretendard(.body_M_SB)
@@ -86,7 +86,7 @@ private struct AlertTopView: View {
   }
   
   let type: AlertView.AlertType
-  let icon: ImageResource?
+  let icon: Image?
   let title: String
   let message: String
 }
@@ -135,7 +135,7 @@ private struct AlertBottomView: View {
       )
       AlertView(
         type: .iconType,
-        icon: .matchingModeCheck20,
+        icon: DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage,
         title: "수줍은 수달님과의 인연을 이어가시겠습니까?",
         message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
         firstButtonText: "label",
