@@ -9,11 +9,12 @@ import Observation
 
 @Observable
 final class BasicInfoViewModel {
-  enum Constant {
+  private enum Constant {
     static let title = "오늘의 매칭 조각"
   }
   
   enum Action {
+    case didTapCloseButton
     case didTapMoreButton
     case didTapNextButton
   }
