@@ -9,17 +9,20 @@ import Observation
 
 @Observable
 final class BasicInfoViewModel {
-  enum Constant {
+  private enum Constant {
+    static let navigationTitle = ""
     static let title = "오늘의 매칭 조각"
   }
   
   enum Action {
+    case didTapCloseButton
     case didTapMoreButton
     case didTapNextButton
   }
   
-  @ObservationIgnored let title = Constant.title
-  var matchingBasicInfoModel: BasicInfoModel
+  let navigationTitle = Constant.navigationTitle
+  let title = Constant.title
+  private(set) var matchingBasicInfoModel: BasicInfoModel
   
   init(matchingBasicInfoModel: BasicInfoModel) {
     self.matchingBasicInfoModel = matchingBasicInfoModel

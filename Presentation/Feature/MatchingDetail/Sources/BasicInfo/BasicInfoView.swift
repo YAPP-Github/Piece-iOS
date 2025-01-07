@@ -9,11 +9,18 @@ import SwiftUI
 import DesignSystem
 
 struct BasicInfoView: View {
+  private enum Constant {
+    static let horizontalPadding: CGFloat = 20
+  }
   @State var viewModel: BasicInfoViewModel
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
-      // TODO: - add navigation bar
+      NavigationBar(
+        title: viewModel.navigationTitle,
+        rightButtonTap: {
+        viewModel.handleAction(.didTapCloseButton)
+      })
       
       VStack(alignment: .leading) {
         title
@@ -24,11 +31,15 @@ struct BasicInfoView: View {
           moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
         )
       }
+      .padding(.horizontal, Constant.horizontalPadding)
       .padding(.vertical, 20)
+      
       basicInfoCards
+        .padding(.horizontal, Constant.horizontalPadding)
+
       buttons
+        .padding(.horizontal, Constant.horizontalPadding)
     }
-    .padding(.horizontal, 20)
     .background(Color.primaryLight)
   }
   
