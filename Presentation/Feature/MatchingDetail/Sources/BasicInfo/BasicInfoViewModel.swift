@@ -19,7 +19,7 @@ final class BasicInfoViewModel {
     case didTapNextButton
   }
   
-  @ObservationIgnored let title = Constant.title
+  let title = Constant.title
   private(set) var matchingBasicInfoModel: BasicInfoModel
   
   init(matchingBasicInfoModel: BasicInfoModel) {
