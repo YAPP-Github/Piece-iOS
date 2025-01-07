@@ -9,5 +9,8 @@ import ProjectDescriptionHelpers
 
 let project = Project.staticLibrary(
   name: Modules.Presentation.MatchingMain.rawValue,
-  dependencies: [.presentation(target: .DesignSystem)]
+  dependencies: [
+    .presentation(target: .DesignSystem),
+    .utility(target: .Extension)
+  ]
 )
