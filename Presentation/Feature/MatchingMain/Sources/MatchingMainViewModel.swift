@@ -6,68 +6,65 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 
-final class MatchingMainViewModel: ObservableObject {
-  struct State {
-    var description: String
-    var name: String
-    var age: String
-    var location: String
-    var job: String
-    var tags: [String]
-  }
-  
-  enum Event {
-    case fetchProfile
-  }
-  
-  @Published private(set) var state: State
-  private var cancellables: Set<AnyCancellable> = []
-  
-  init(initialState: State = State(
-    description: "[나를 표현하는 한마디]",
-    name: "[닉네임]",
-    age: "02",
-    location: "대구광역시",
-    job: "학생",
-    tags: [
-      "바깥 데이트 스킨십도 가능",
-      "함께 술을 즐기고 싶어요",
-      "커밍아웃은 가까운 친구에게만 했어요",
-      "연락은 바쁘더라도 자주",
-      "최대 너비 260. 두 줄 노출 가능. 최대 너비 260. 두 줄 노출 가능."
-    ]
-  )
-  ) {
-    self.state = initialState
-  }
-  
-  func send(_ event: Event) {
-    switch event {
-    case .fetchProfile:
-      fetchProfile()
+@Observable
+final class MatchingMainViewModel {
+    private enum Constant {
+        static let defaultDescription = "[나를 표현하는 한마디]"
+        static let defaultName = "[닉네임]"
+        static let defaultAge = "02"
+        static let defaultLocation = "대구광역시"
+        static let defaultJob = "학생"
+        static let defaultTags = [
+            "바깥 데이트 스킨십도 가능",
+            "함께 술을 즐기고 싶어요",
+            "커밍아웃은 가까운 친구에게만 했어요",
+            "연락은 바쁘더라도 자주",
+            "최대 너비 260. 두 줄 노출 가능. 최대 너비 260. 두 줄 노출 가능."
+        ]
     }
-  }
-  
-  private func fetchProfile() {
-    Just(State(
-      description: "[나를 표현하는 한마디]",
-      name: "[닉네임]",
-      age: "02",
-      location: "대구광역시",
-      job: "학생",
-      tags: [
-        "바깥 데이트 스킨십도 가능",
-        "함께 술을 즐기고 싶어요",
-        "커밍아웃은 가까운 친구에게만 했어요",
-        "연락은 바쁘더라도 자주",
-        "최대 너비 260. 두 줄 노출 가능. 최대 너비 260. 두 줄 노출 가능."
-      ]
-    ))
-    .sink { [weak self] newState in
-      self?.state = newState
+    
+    enum Action {
+        case fetchProfile
     }
-    .store(in: &cancellables)
-  }
+    
+    private(set) var description: String
+    private(set) var name: String
+    private(set) var age: String
+    private(set) var location: String
+    private(set) var job: String
+    private(set) var tags: [String]
+    
+    init(
+        description: String = Constant.defaultDescription,
+        name: String = Constant.defaultName,
+        age: String = Constant.defaultAge,
+        location: String = Constant.defaultLocation,
+        job: String = Constant.defaultJob,
+        tags: [String] = Constant.defaultTags
+    ) {
+        self.description = description
+        self.name = name
+        self.age = age
+        self.location = location
+        self.job = job
+        self.tags = tags
+    }
+    
+    func handleAction(_ action: Action) {
+        switch action {
+        case .fetchProfile:
+            fetchProfile()
+        }
+    }
+    
+    private func fetchProfile() {
+        description = Constant.defaultDescription
+        name = Constant.defaultName
+        age = Constant.defaultAge
+        location = Constant.defaultLocation
+        job = Constant.defaultJob
+        tags = Constant.defaultTags
+    }
 }
