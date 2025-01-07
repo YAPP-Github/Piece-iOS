@@ -10,7 +10,7 @@ import DesignSystem
 
 // MARK: - 프로필 카드
 struct MatchingProfileCardView: View {
-  @ObservedObject var matchingMainViewModel: MatchingMainViewModel
+  @Bindable var matchingMainViewModel: MatchingMainViewModel
   
   var body: some View {
     VStack(alignment: .leading) {
@@ -20,18 +20,18 @@ struct MatchingProfileCardView: View {
         .frame(height: 20)
       
       ProfileBasicButton(
-        description: matchingMainViewModel.state.description ,
-        name: matchingMainViewModel.state.name,
-        age: matchingMainViewModel.state.age,
-        location: matchingMainViewModel.state.location,
-        job: matchingMainViewModel.state.job
+        description: matchingMainViewModel.description ,
+        name: matchingMainViewModel.name,
+        age: matchingMainViewModel.age,
+        location: matchingMainViewModel.location,
+        job: matchingMainViewModel.job
       )
       
       Divider(weight: .normal, isVertical: false)
       
       HStack(spacing: 4) {
         Text("나와 같은 가치관")
-        Text("\(matchingMainViewModel.state.tags.count)개")
+        Text("\(matchingMainViewModel.tags.count)개")
           .foregroundColor(.primaryDefault)
       }
       .pretendard(.body_M_M)
@@ -39,7 +39,7 @@ struct MatchingProfileCardView: View {
       
       ScrollView(.vertical, showsIndicators: true) {
         VStack(alignment: .leading, spacing: 8) {
-          ForEach(matchingMainViewModel.state.tags, id: \.self) { tag in
+          ForEach(matchingMainViewModel.tags, id: \.self) { tag in
             Tag(badgeText: tag)
               .frame(maxWidth: 260, alignment: .leading)
           }

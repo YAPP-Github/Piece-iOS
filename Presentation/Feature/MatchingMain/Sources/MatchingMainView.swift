@@ -6,13 +6,11 @@
 //
 
 import SwiftUI
-
-import Combine
 import DesignSystem
 
 struct MatchingMainView: View {
-  let matchingTimerViewModel: MatchingTimerViewModel
-  let matchingMainViewModel: MatchingMainViewModel
+  @Bindable var matchingTimerViewModel: MatchingTimerViewModel
+  @Bindable var matchingMainViewModel: MatchingMainViewModel
   
   public var body: some View {
     ZStack {
@@ -28,7 +26,7 @@ struct MatchingMainView: View {
 
 // MARK: - 타이머
 private struct MatchingTimerView: View {
-  @ObservedObject var matchingTimerViewModel: MatchingTimerViewModel
+  @Bindable var matchingTimerViewModel: MatchingTimerViewModel
   
   var body: some View {
     HStack(spacing: 4) {
