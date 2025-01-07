@@ -18,7 +18,7 @@ struct BasicInfoView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       NavigationBar(
-        title: "",
+        title: viewModel.navigationTitle,
         rightButtonTap: {
         viewModel.handleAction(.didTapCloseButton)
       })

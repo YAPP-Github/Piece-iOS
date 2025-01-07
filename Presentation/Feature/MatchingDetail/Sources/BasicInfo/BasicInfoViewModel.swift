@@ -10,6 +10,7 @@ import Observation
 @Observable
 final class BasicInfoViewModel {
   private enum Constant {
+    static let navigationTitle = ""
     static let title = "오늘의 매칭 조각"
   }
   
@@ -19,6 +20,7 @@ final class BasicInfoViewModel {
     case didTapNextButton
   }
   
+  let navigationTitle = Constant.navigationTitle
   let title = Constant.title
   private(set) var matchingBasicInfoModel: BasicInfoModel
   
