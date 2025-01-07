@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension DateFormatter {
+public extension DateFormatter {
   static func formattedTimeString(from timeInterval: TimeInterval) -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "HH:mm:ss"
