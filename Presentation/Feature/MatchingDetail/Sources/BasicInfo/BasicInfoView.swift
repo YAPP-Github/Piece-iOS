@@ -12,7 +12,6 @@ struct BasicInfoView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
   }
-  
   @State var viewModel: BasicInfoViewModel
   
   var body: some View {
@@ -40,7 +39,6 @@ struct BasicInfoView: View {
 
       buttons
         .padding(.horizontal, Constant.horizontalPadding)
-
     }
     .background(Color.primaryLight)
   }
