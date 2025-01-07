@@ -20,7 +20,7 @@ final class BasicInfoViewModel {
   }
   
   @ObservationIgnored let title = Constant.title
-  var matchingBasicInfoModel: BasicInfoModel
+  private(set) var matchingBasicInfoModel: BasicInfoModel
   
   init(matchingBasicInfoModel: BasicInfoModel) {
     self.matchingBasicInfoModel = matchingBasicInfoModel
