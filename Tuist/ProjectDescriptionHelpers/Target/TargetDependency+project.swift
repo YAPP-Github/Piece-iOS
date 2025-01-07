@@ -22,6 +22,13 @@ public extension TargetDependency {
     )
   }
   
+  static func utility(target: Modules.Utility) -> TargetDependency {
+    .project(
+      target: target.targetName,
+      path: .relativeToRoot(target.path)
+    )
+  }
+  
   static func presentation(target: Modules.Presentation) -> TargetDependency {
     .project(
       target: target.targetName,
