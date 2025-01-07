@@ -68,11 +68,21 @@ public enum Fonts {
       case .caption_M_M: 16
       }
     }
+  }
+  
+  public enum WixMadeforDisplay {
+    case branding
     
-    var letterSpacing: CGFloat {
-      switch self {
-      default: -0.01 // All cases use letter spacing of -1%
-      }
+    var swiftUIFont: Font {
+      .system(size: 18)
+    }
+    
+    var uiFont: UIFont {
+      DesignSystemFontFamily.WixMadeforDisplay.medium.font(size: 18)
+    }
+    
+    var lineHeight: CGFloat {
+      22
     }
   }
 }
