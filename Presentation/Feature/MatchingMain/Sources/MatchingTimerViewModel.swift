@@ -63,6 +63,6 @@ final class MatchingTimerViewModel {
     targetDateComponents.minute = Constant.targetMinute
     targetDateComponents.second = Constant.targetSecond
 
-    return calendar.date(from: targetDateComponents)!
+    return calendar.date(from: targetDateComponents) ?? date
   }
 }
