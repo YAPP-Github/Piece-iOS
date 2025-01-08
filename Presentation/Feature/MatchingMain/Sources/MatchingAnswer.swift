@@ -52,9 +52,7 @@ public struct MatchingAnswer: View {
     }
   }
   
-  public init(
-    type: MatchingStatus
-  ) {
+  public init(type: MatchingStatus) {
     self.type = type
   }
   
