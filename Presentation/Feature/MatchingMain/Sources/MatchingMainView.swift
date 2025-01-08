@@ -16,7 +16,6 @@ struct MatchingMainView: View {
     ZStack {
       Color.grayscaleBlack.edgesIgnoringSafeArea(.all)
       VStack {
-        MatchingProfileCardView(matchingMainViewModel: matchingMainViewModel)
         MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
       }
       .padding(.horizontal, 20)
