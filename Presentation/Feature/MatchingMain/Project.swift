@@ -11,6 +11,6 @@ let project = Project.staticLibrary(
   name: Modules.Presentation.MatchingMain.rawValue,
   dependencies: [
     .presentation(target: .DesignSystem),
-    .utility(target: .Extension)
+    .utility(target: .PCFoundationExtension)
   ]
 )

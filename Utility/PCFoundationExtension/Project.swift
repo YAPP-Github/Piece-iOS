@@ -9,5 +9,5 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicResourceFramework(
-  name: Modules.Utility.Extension.rawValue
+  name: Modules.Utility.PCFoundationExtension.rawValue
 )
