@@ -56,7 +56,7 @@ public extension Modules {
 
 public extension Modules {
   enum Utility: String {
-    case Extension
+    case PCFoundationExtension
     
     var path: String {
       "Utility/\(self.rawValue)"
