@@ -26,7 +26,7 @@ struct MatchingMainView: View {
           Button {
             matchingMainViewModel.handleAction(.tapProfileInfo)
           } label: {
-            ProfileInfo
+            profileInfo
           }
           
           HStack(spacing: 4) {
@@ -39,7 +39,7 @@ struct MatchingMainView: View {
           
           Divider(weight: .normal, isVertical: false)
           
-          Tags
+          tags
           
           Spacer()
             .frame(height: 16)
@@ -58,7 +58,7 @@ struct MatchingMainView: View {
     }
   }
   
-  private var ProfileInfo: some View {
+  private var profileInfo: some View {
     VStack(alignment: .leading) {
       VStack(alignment: .leading) {
         Text(matchingMainViewModel.description)
@@ -84,7 +84,7 @@ struct MatchingMainView: View {
     }
   }
   
-  private var Tags: some View {
+  private var tags: some View {
     ScrollView(.vertical, showsIndicators: true) {
       VStack(alignment: .leading, spacing: 8) {
         ForEach(matchingMainViewModel.tags, id: \.self) { tag in
