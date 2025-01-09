@@ -8,6 +8,6 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.dynamicResourceFramework(
+let project = Project.dynamicFramework(
   name: Modules.Utility.PCFoundationExtension.rawValue
 )
