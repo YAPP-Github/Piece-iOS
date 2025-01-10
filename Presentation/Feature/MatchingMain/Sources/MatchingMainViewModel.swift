@@ -7,12 +7,42 @@
 
 import SwiftUI
 import Observation
+import DesignSystem
 
 @Observable
 final class MatchingMainViewModel {
+  enum MatchingButtonState {
+    case checkMatchingPiece // 매칭 조각 확인하기
+    case acceptMatching // 매칭 수락하기
+    case responseComplete // 응답 완료
+    case checkContact // 연락처 확인하기
+    
+    var title: String {
+      switch self {
+      case .checkMatchingPiece:
+        "매칭 조각 확인하기"
+      case .acceptMatching:
+        "매칭 수락하기"
+      case .responseComplete:
+        "응답 완료"
+      case .checkContact:
+        "연락처 확인하기"
+      }
+    }
+    
+    var buttonType: RoundedButton.ButtonType {
+      switch self {
+      case .checkMatchingPiece, .acceptMatching, .checkContact:
+          .solid
+      case .responseComplete:
+          .disabled
+      }
+    }
+  }
+  
   enum Action {
     case tapProfileInfo
-    case acceptMatching
+    case tapMatchingButton
   }
   
   private(set) var description: String
@@ -21,7 +51,13 @@ final class MatchingMainViewModel {
   private(set) var location: String
   private(set) var job: String
   private(set) var tags: [String]
-  var buttonTitle: String
+  var buttonTitle: String {
+    matchingButtonState.title
+  }
+  var buttonStatus: RoundedButton.ButtonType {
+    matchingButtonState.buttonType
+  }
+  var matchingButtonState: MatchingButtonState
   var matchingStatus: MatchingAnswer.MatchingStatus
   
   init(
@@ -31,7 +67,7 @@ final class MatchingMainViewModel {
     location: String,
     job: String,
     tags: [String],
-    buttonTitle: String,
+    matchingButtonState: MatchingButtonState,
     matchingStatus: MatchingAnswer.MatchingStatus
   ) {
     self.description = description
@@ -40,12 +76,20 @@ final class MatchingMainViewModel {
     self.location = location
     self.job = job
     self.tags = tags
-    self.buttonTitle = buttonTitle
+    self.matchingButtonState = matchingButtonState
     self.matchingStatus = matchingStatus
   }
   
   func handleAction(_ action: Action) {
     switch action {
+    case .tapMatchingButton:
+      handleMatchingButtonTap()
+    default: return
+    }
+  }
+  
+  private func handleMatchingButtonTap() {
+    switch MatchingButtonState.self {
     default: return
     }
   }
