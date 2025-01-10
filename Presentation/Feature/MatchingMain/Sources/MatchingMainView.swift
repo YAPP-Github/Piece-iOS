@@ -44,7 +44,7 @@ struct MatchingMainView: View {
           Spacer()
             .frame(height: 16)
           
-          SummitButton
+          matchingButton
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 20)
@@ -101,7 +101,7 @@ struct MatchingMainView: View {
     }
   }
   
-  private var SummitButton: some View {
+  private var matchingButton: some View {
     RoundedButton(
       type: .solid,
       buttonText: matchingMainViewModel.buttonTitle,
