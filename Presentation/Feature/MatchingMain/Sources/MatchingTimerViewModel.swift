@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Observation
-import Extension
+import PCFoundationExtension
 
 @Observable
 final class MatchingTimerViewModel {
