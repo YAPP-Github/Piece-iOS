@@ -103,12 +103,13 @@ struct MatchingMainView: View {
   
   private var matchingButton: some View {
     RoundedButton(
-      type: .solid,
-      buttonText: matchingMainViewModel.buttonTitle,
+      type: matchingMainViewModel.matchingButtonState.buttonType,
+      buttonText: matchingMainViewModel.matchingButtonState.title,
       icon: nil,
       action: {
-        matchingMainViewModel.handleAction(.acceptMatching)
-      })
+        matchingMainViewModel.handleAction(.tapMatchingButton)
+      }
+    )
   }
 }
 
@@ -131,7 +132,7 @@ struct MatchingMainView: View {
         "최대 너비 260. 두 줄 노출 가능. 최대 너비 260. 두 줄 노출 가능.",
         "최대 너비 260. 두 줄 노출 가능. 최대 너비 260. 두 줄 노출 가능."
       ],
-      buttonTitle: "매칭 수락하기",
+      matchingButtonState: .responseComplete,
       matchingStatus: .before
     )
   )
