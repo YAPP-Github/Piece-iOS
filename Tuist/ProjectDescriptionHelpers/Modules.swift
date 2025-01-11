@@ -10,6 +10,7 @@ import ProjectDescription
 public enum Modules {
   case data
   case domain
+  case utility
   case presentation
 }
 
@@ -47,6 +48,22 @@ public extension Modules {
       case .Entities:  "\(self.rawValue)"
       default: "\(self.rawValue)UseCase"
       }
+    }
+  }
+}
+
+// MARK: - Extension
+
+public extension Modules {
+  enum Utility: String {
+    case PCFoundationExtension
+    
+    var path: String {
+      "Utility/\(self.rawValue)"
+    }
+    
+    var targetName: String {
+      "\(self.rawValue)"
     }
   }
 }
