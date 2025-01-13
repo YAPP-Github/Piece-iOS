@@ -40,6 +40,7 @@ final class ValuePickViewModel {
     case didTapPhotoButton
     case didTapPreviousButton
     case didTapAcceptButton
+    case didTapDenyButton
   }
   
   init(
@@ -90,6 +91,9 @@ final class ValuePickViewModel {
       return
       
     case .didTapAcceptButton:
+      return
+      
+    case .didTapDenyButton:
       return
     }
   }

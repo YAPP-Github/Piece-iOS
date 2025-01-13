@@ -51,6 +51,14 @@ struct ValuePickView: View {
           viewModel.handleAction(.contentOffsetDidChange(offset))
         })) {
           pickCards
+          
+          PCTextButton(content: "매칭 거절하기")
+            .onTapGesture {
+              viewModel.handleAction(.didTapDenyButton)
+            }
+          
+          Spacer()
+            .frame(height: 60)
         }
         .scrollIndicators(.never)
         .background(Color.grayscaleLight3)
@@ -116,6 +124,8 @@ struct ValuePickView: View {
     .padding(.top, 20)
     .padding(.bottom, 60)
   }
+  
+  // MARK: - 하단 버튼
   
   private var bottomButtons: some View {
     HStack(alignment: .center, spacing: 8) {
