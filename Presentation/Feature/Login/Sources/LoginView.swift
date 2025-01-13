@@ -26,7 +26,6 @@ struct LoginView: View {
             .foregroundStyle(Color.grayscaleDark3)
         }
         .pretendard(.heading_L_SB)
-        .padding(.top, 20)
         .frame(maxWidth: .infinity, alignment: .leading)
         
         Spacer()
@@ -42,15 +41,10 @@ struct LoginView: View {
           kakaoLoginButton
           googleLoginButton
         }
-        .padding(.bottom, 10)
       }
+      .padding(.bottom, 10)
+      .padding(.top, 80)
       .padding(.horizontal, 20)
-    }
-    .navigationBarModifier {
-      NavigationBar(
-        title: "",
-        rightIcon: DesignSystemAsset.Icons.close32.swiftUIImage
-      )
     }
   }
   
