@@ -1,0 +1,16 @@
+//
+// Project.swift
+// {{ name }}
+//
+// Created by {{ author }} on {{ date }}.
+//
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let project = Project.staticLibrary(
+  name: Modules.Presentation.{{ name }}.rawValue,
+  dependencies: [
+    .presentation(target: .DesignSystem),
+  ]
+)
