@@ -9,6 +9,8 @@ import SwiftUI
 import DesignSystem
 
 struct {{ name }}View: View {
+  @State var viewModel: {{ name }}ViewModel
+
   var body: some View {
   
   }
