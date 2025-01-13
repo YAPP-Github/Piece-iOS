@@ -1,0 +1,13 @@
+//
+// {{ name }}ViewModel.swift
+// {{ name }}
+//
+// Created by {{ author }} on {{ date }}.
+//
+
+import Foundation
+
+@Observable
+final class {{ name }}ViewModel {
+  enum Action { }
+}
