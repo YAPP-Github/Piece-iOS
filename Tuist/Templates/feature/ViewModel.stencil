@@ -7,6 +7,7 @@
 
 import Foundation
 
-final class {{ name }}ViewModel: ObservableObject {
-
+@Observable
+final class {{ name }}ViewModel {
+  enum Action { }
 }
