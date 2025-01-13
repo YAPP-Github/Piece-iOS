@@ -11,6 +11,8 @@ import SwiftUI
 struct ValuePickView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
+    static let accepetButtonText = "매칭 수락하기"
+    static let denyButtonText = "매칭 거절하기"
   }
   
   @State var viewModel: ValuePickViewModel
@@ -52,7 +54,7 @@ struct ValuePickView: View {
         })) {
           pickCards
           
-          PCTextButton(content: "매칭 거절하기")
+          PCTextButton(content: Constant.denyButtonText)
             .onTapGesture {
               viewModel.handleAction(.didTapDenyButton)
             }
@@ -147,7 +149,7 @@ struct ValuePickView: View {
       
       RoundedButton(
         type: .solid,
-        buttonText: "매칭 수락하기",
+        buttonText: Constant.accepetButtonText,
         icon: nil,
         rounding: true,
         action: { viewModel.handleAction(.didTapAcceptButton) }
