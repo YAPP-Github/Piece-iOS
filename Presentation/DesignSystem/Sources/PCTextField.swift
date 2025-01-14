@@ -18,6 +18,10 @@ public struct PCTextField<FocusField: Hashable>: View {
       HStack(spacing: 8) {
         TextField("", text: $text)
           .focused(focusState, equals: focusField)
+          .onChange(of: text) { newValue in
+            text = newValue
+            onChangeHandler?(newValue)
+          }
           .foregroundStyle(textColor)
           .pretendard(.body_M_M)
           .padding(.vertical, 14)
@@ -150,6 +154,7 @@ public struct PCTextField<FocusField: Hashable>: View {
   private var rightText: String?
   private var rightTextColor: Color?
   private var timerText: String?
+  private var onChangeHandler: ((String) -> Void)?
 }
 
 extension PCTextField {
@@ -202,6 +207,12 @@ extension PCTextField {
     var view = self
     view.button = button
     view.buttonWidth = width
+    return view
+  }
+  
+  public func onChange(_ handler: @escaping (String) -> Void) -> PCTextField {
+    var view = self
+    view.onChangeHandler = handler
     return view
   }
 }
