@@ -1,0 +1,103 @@
+//
+//  VerifingContactView.swift
+//  Login
+//
+//  Created by eunseou on 1/11/25.
+//
+
+import SwiftUI
+import DesignSystem
+
+struct VerifingContactView: View {
+  @Bindable var viewModel: VerifingContactViewModel
+  @FocusState private var isFocused: Bool
+  
+  var body: some View {
+    ZStack {
+      Color.grayscaleWhite.ignoresSafeArea()
+      VStack(alignment: .center) {
+        VStack(alignment: .leading, spacing: 12) {
+          Text("휴대폰 번호")
+            .foregroundStyle(Color.primaryDefault) +
+          Text("로\n인증을 진행해 주세요")
+          Text("신뢰도 높은 매칭과 안전한 커뮤니티를 위해\n휴대폰 번호로 인증해 주세요.")
+            .pretendard(.body_S_M)
+            .foregroundStyle(Color.grayscaleDark3)
+        }
+        .pretendard(.heading_L_SB)
+        .padding(.top, 20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        
+        Spacer()
+          .frame(height: 68)
+        
+        VStack(spacing: 32) {
+          PCTextField(
+            title: "휴대폰 번호",
+            text: $viewModel.phoneNumber,
+            focusState: $isFocused,
+            focusField: true
+          )
+          .infoText("- 없이 숫자만 입력해주세요")
+          .withButton(
+            RoundedButton(
+              type: viewModel.isPhoneNumberValid ? .solid : .disabled,
+              buttonText: "인증번호 받기",
+              action: {
+                viewModel.handleAction(.reciveCertificationNumber)
+              }
+            ),
+            width: 111
+          )
+          
+          if viewModel.showVerificationField {
+            PCTextField(
+              title: "인증번호",
+              text: $viewModel.verificationCode,
+              focusState: $isFocused,
+              focusField: true
+            )
+            .infoText("어떤 경우에도 타인에게 공유하지 마세요")
+            .rightText(viewModel.timerText, textColor: .primaryDefault)
+            .withButton(
+              RoundedButton(
+                type: viewModel.isVerificationCodeValid ? .solid : .disabled,
+                buttonText: "확인",
+                action: {
+                  viewModel.handleAction(.checkCertificationNumber)
+                }
+              )
+            )
+          }
+        }
+        Spacer()
+        
+        RoundedButton(
+          type: viewModel.isActiveNextButton ? .solid : .disabled,
+          buttonText: "다음",
+          icon: nil,
+          action: {
+            viewModel.handleAction(.tapNextButton)
+          }
+        )
+      }
+      .padding(.bottom, 10)
+      .padding(.horizontal, 20)
+    }
+    .navigationBarModifier {
+      NavigationBar(
+        title: "",
+        rightIcon: DesignSystemAsset.Icons.close32.swiftUIImage
+      )
+    }
+  }
+}
+
+#Preview {
+  VerifingContactView(
+    viewModel: VerifingContactViewModel(
+      phoneNumber: "01012345678",
+      verificationCode: ""
+    )
+  )
+}
