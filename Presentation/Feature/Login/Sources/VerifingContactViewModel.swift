@@ -27,7 +27,7 @@ final class VerifingContactViewModel {
   private var timeRemaining: Int = 300
   var phoneNumber: String = "" {
     didSet {
-      isPhoneNumberValid = !phoneNumber.isEmpty && phoneNumber.count >= 10
+      isPhoneNumberValid = !phoneNumber.isEmpty && (phoneNumber.count == 11 || phoneNumber.count == 10)
     }
   }
   var verificationCode: String = "" {
