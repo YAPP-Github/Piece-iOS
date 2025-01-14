@@ -42,12 +42,12 @@ struct VerifingContactView: View {
           .withButton(
             RoundedButton(
               type: viewModel.isPhoneNumberValid ? .solid : .disabled,
-              buttonText: "인증번호 받기",
+              buttonText: viewModel.recivedCertificationNumberButtonText,
               action: {
                 viewModel.handleAction(.reciveCertificationNumber)
               }
             ),
-            width: 111
+            width: viewModel.recivedCertificationNumberButtonWidth
           )
           
           if viewModel.showVerificationField {
