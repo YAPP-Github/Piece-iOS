@@ -49,6 +49,11 @@ struct VerifingContactView: View {
             ),
             width: viewModel.recivedCertificationNumberButtonWidth
           )
+          .onChange{ newValue in
+            viewModel.phoneNumber = newValue.filter { $0.isNumber }
+          }
+          .textContentType(.telephoneNumber)
+          
           
           if viewModel.showVerificationField {
             PCTextField(
