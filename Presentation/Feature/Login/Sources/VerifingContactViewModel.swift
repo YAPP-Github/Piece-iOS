@@ -21,6 +21,8 @@ final class VerifingContactViewModel {
   private(set) var showVerificationField: Bool = false
   private(set) var isVerificationCodeValid: Bool = false
   private(set) var isActiveNextButton: Bool = false
+  private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
+  private(set) var recivedCertificationNumberButtonWidth: CGFloat = 111
   private var timer: Timer?
   private var timeRemaining: Int = 300
   var phoneNumber: String = "" {
@@ -49,6 +51,8 @@ final class VerifingContactViewModel {
     switch action {
     case .reciveCertificationNumber:
       showVerificationField = true
+      recivedCertificationNumberButtonText = "인증번호 재전송"
+      recivedCertificationNumberButtonWidth = 125
       startTimer()
     case .checkCertificationNumber:
       isActiveNextButton = true
