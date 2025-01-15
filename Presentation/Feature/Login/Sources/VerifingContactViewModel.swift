@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Observation
+import DesignSystem
 import PCFoundationExtension
 
 @Observable
@@ -37,6 +38,14 @@ final class VerifingContactViewModel {
   var isPhoneNumberValid: Bool {
       !phoneNumber.isEmpty && (phoneNumber.count == 11 || phoneNumber.count == 10)
   }
+  var phoneNumberTextfieldButtonType: RoundedButton.ButtonType {
+    buttonType(for: isPhoneNumberValid)
+  }
+  var verificationCodeTextfieldButtonType: RoundedButton.ButtonType {
+    buttonType(for: isVerificationCodeValid)
+  }
+  var nextButtonType: RoundedButton.ButtonType {
+    buttonType(for: isActiveNextButton)
   }
   var timerText: String {
     timeRemaining.formattedTime

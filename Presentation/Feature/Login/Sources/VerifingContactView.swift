@@ -41,7 +41,7 @@ struct VerifingContactView: View {
           .infoText("- 없이 숫자만 입력해주세요")
           .withButton(
             RoundedButton(
-              type: viewModel.isPhoneNumberValid ? .solid : .disabled,
+              type: viewModel.phoneNumberTextfieldButtonType,
               buttonText: viewModel.recivedCertificationNumberButtonText,
               action: {
                 viewModel.handleAction(.reciveCertificationNumber)
@@ -66,7 +66,7 @@ struct VerifingContactView: View {
             .rightText(viewModel.timerText, textColor: .primaryDefault)
             .withButton(
               RoundedButton(
-                type: viewModel.isVerificationCodeValid ? .solid : .disabled,
+                type: viewModel.verificationCodeTextfieldButtonType,
                 buttonText: "확인",
                 action: {
                   viewModel.handleAction(.checkCertificationNumber)
@@ -78,7 +78,7 @@ struct VerifingContactView: View {
         Spacer()
         
         RoundedButton(
-          type: viewModel.isActiveNextButton ? .solid : .disabled,
+          type: viewModel.nextButtonType,
           buttonText: "다음",
           icon: nil,
           action: {
