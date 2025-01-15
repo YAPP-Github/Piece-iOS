@@ -6,12 +6,12 @@
 //
 
 import ProjectDescription
-
-public enum AppEnvironment: String {
-  case dev
-  case prod
-  
-  public var configurationName: ConfigurationName {
-    return ConfigurationName.configuration(self.rawValue)
-  }
-}
+//
+//public enum AppEnvironment: String {
+//  case dev
+//  case prod
+//  
+//  public var configurationName: ConfigurationName {
+//    return ConfigurationName.configuration(self.rawValue)
+//  }
+//}

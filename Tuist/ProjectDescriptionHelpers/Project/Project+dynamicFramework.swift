@@ -32,12 +32,14 @@ extension Project {
     return Project(
       name: name,
       packages: packages,
-      settings: .settings(
-        configurations: [
-          .configuration(environment: .dev),
-          .configuration(environment: .prod),
-        ]
-      ),
+      settings: .settings()
+//          .settings(
+//        configurations: [
+//          .configuration(environment: .dev),
+//          .configuration(environment: .prod),
+//        ]
+//      )
+      ,
       targets: [target]
     )
   }
