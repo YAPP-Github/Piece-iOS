@@ -10,7 +10,7 @@ import DesignSystem
 import PCFoundationExtension
 
 struct LoginView: View {
-  @Bindable var loginViewModel: LoginViewModel
+  @State var loginViewModel: LoginViewModel
   
   var body: some View {
     ZStack {
