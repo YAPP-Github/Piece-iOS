@@ -8,14 +8,14 @@
 import ProjectDescription
 
 extension Scheme {
-  public static func makeScheme(environment: AppEnvironment) -> Scheme {
+  public static func makeScheme(/*environment: AppEnvironment*/) -> Scheme {
     return .scheme(
-      name: "\(AppConstants.appName)-\(environment.rawValue)",
+      name: "\(AppConstants.appName)"/*-\(environment.rawValue)*/,
       buildAction: .buildAction(targets: ["\(AppConstants.appName)"]),
-      runAction: .runAction(configuration: environment.configurationName),
-      archiveAction: .archiveAction(configuration: environment.configurationName),
-      profileAction: .profileAction(configuration: environment.configurationName),
-      analyzeAction: .analyzeAction(configuration: environment.configurationName)
+      runAction: .runAction(configuration: "Debug"),// environment.configurationName),
+      archiveAction: .archiveAction(configuration: "Release"), //environment.configurationName),
+      profileAction: .profileAction(configuration: "Release"), //environment.configurationName),
+      analyzeAction: .analyzeAction(configuration: "Debug") //environment.configurationName)
     )
   }
 }
