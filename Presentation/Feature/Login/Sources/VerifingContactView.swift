@@ -9,7 +9,7 @@ import SwiftUI
 import DesignSystem
 
 struct VerifingContactView: View {
-  @Bindable var viewModel: VerifingContactViewModel
+  @State var viewModel: VerifingContactViewModel
   @FocusState private var isFocused: Bool
   
   var body: some View {
