@@ -11,6 +11,12 @@ import PCFoundationExtension
 
 @Observable
 final class VerifingContactViewModel {
+  private enum Constants {
+    static let initialTime: Int = 300
+    static let buttonDefaultWidth: CGFloat = 111
+    static let buttonExpandedWidth: CGFloat = 125
+  }
+  
   enum Action {
     case reciveCertificationNumber
     case checkCertificationNumber
@@ -22,13 +28,13 @@ final class VerifingContactViewModel {
   private(set) var isVerificationCodeValid: Bool = false
   private(set) var isActiveNextButton: Bool = false
   private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
-  private(set) var recivedCertificationNumberButtonWidth: CGFloat = 111
+  private(set) var recivedCertificationNumberButtonWidth = Constants.buttonDefaultWidth
   private var timer: Timer?
-  private var timeRemaining: Int = 300
   var phoneNumber: String = "" {
     didSet {
       isPhoneNumberValid = !phoneNumber.isEmpty && (phoneNumber.count == 11 || phoneNumber.count == 10)
     }
+  private var timeRemaining = Constants.initialTime
   }
   var verificationCode: String = "" {
     didSet {
@@ -52,7 +58,7 @@ final class VerifingContactViewModel {
     case .reciveCertificationNumber:
       showVerificationField = true
       recivedCertificationNumberButtonText = "인증번호 재전송"
-      recivedCertificationNumberButtonWidth = 125
+      recivedCertificationNumberButtonWidth = Constants.buttonExpandedWidth
       startTimer()
     case .checkCertificationNumber:
       isActiveNextButton = true
@@ -62,7 +68,7 @@ final class VerifingContactViewModel {
   }
   
   private func startTimer() {
-    timeRemaining = 300
+    timeRemaining = Constants.initialTime
     stopTimer()
     
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
