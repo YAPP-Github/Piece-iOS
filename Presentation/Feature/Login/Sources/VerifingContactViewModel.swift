@@ -23,23 +23,20 @@ final class VerifingContactViewModel {
     case tapNextButton
   }
   
-  private(set) var isPhoneNumberValid: Bool = false
   private(set) var showVerificationField: Bool = false
-  private(set) var isVerificationCodeValid: Bool = false
   private(set) var isActiveNextButton: Bool = false
   private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
   private(set) var recivedCertificationNumberButtonWidth = Constants.buttonDefaultWidth
   private var timer: Timer?
-  var phoneNumber: String = "" {
-    didSet {
-      isPhoneNumberValid = !phoneNumber.isEmpty && (phoneNumber.count == 11 || phoneNumber.count == 10)
-    }
   private var timeRemaining = Constants.initialTime
+  var phoneNumber: String = ""
+  var verificationCode: String = ""
+  var isVerificationCodeValid: Bool {
+      !verificationCode.isEmpty && verificationCode.count >= 4
   }
-  var verificationCode: String = "" {
-    didSet {
-      isVerificationCodeValid = !verificationCode.isEmpty && verificationCode.count >= 4
-    }
+  var isPhoneNumberValid: Bool {
+      !phoneNumber.isEmpty && (phoneNumber.count == 11 || phoneNumber.count == 10)
+  }
   }
   var timerText: String {
     timeRemaining.formattedTime
