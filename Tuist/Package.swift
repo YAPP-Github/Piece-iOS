@@ -2,35 +2,42 @@
 import PackageDescription
 
 #if TUIST
-    import struct ProjectDescription.PackageSettings
+import struct ProjectDescription.PackageSettings
+import ProjectDescriptionHelpers
 
-    let packageSettings = PackageSettings(
-        // Customize the product types for specific package product
-        // Default is .staticFramework
-        // productTypes: ["Alamofire": .framework,]
-        productTypes: [:]
-    )
+let packageSettings = PackageSettings(
+  // Customize the product types for specific package product
+  // Default is .staticFramework
+  // productTypes: ["Alamofire": .framework,]
+  productTypes: [:],
+  baseSettings: .settings()
+//      .settings(
+//    configurations: [
+//      .configuration(environment: .dev),
+//      .configuration(environment: .prod),
+//    ])
+)
 #endif
 
 let package = Package(
-    name: "Piece-iOS",
-    dependencies:
-      ExternalDependency.allCases.map {
-        Package.Dependency.package(
-          url: $0.url,
-          from: $0.version
-        )
-      }
+  name: "Piece-iOS",
+  dependencies:
+    ExternalDependency.allCases.map {
+      Package.Dependency.package(
+        url: $0.url,
+        from: $0.version
+      )
+    }
 )
 
 enum ExternalDependency: String, CaseIterable {
-  case Kingfisher // 예시
+  case SwiftNavigation
 }
 
 extension ExternalDependency {
   var url: String {
     switch self {
-    case .Kingfisher: "https://github.com/onevcat/Kingfisher.git"
+    case .SwiftNavigation: "https://github.com/pointfreeco/swift-navigation"
     }
   }
 }
@@ -38,7 +45,7 @@ extension ExternalDependency {
 extension ExternalDependency {
   var version: PackageDescription.Version {
     switch self {
-    case .Kingfisher: "7.0.0"
+    case .SwiftNavigation: "2.0.0"
     }
   }
 }
