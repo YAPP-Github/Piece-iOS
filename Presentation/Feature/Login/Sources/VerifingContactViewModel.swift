@@ -67,6 +67,10 @@ final class VerifingContactViewModel {
     }
   }
   
+  private func buttonType(for isEnabled: Bool) -> RoundedButton.ButtonType {
+    isEnabled ? .solid : .disabled
+  }
+  
   private func startTimer() {
     timeRemaining = Constants.initialTime
     stopTimer()
