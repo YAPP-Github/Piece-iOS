@@ -40,7 +40,6 @@ struct BasicInfoView: View {
 
       buttons
         .padding(.horizontal, Constant.horizontalPadding)
-
     }
     .background(Color.primaryLight)
   }
