@@ -40,6 +40,7 @@ struct TermsAgreementView: View {
           CheckBox(
             label: term.title,
             isChecked: term.isChecked,
+            isRequrired: term.required,
             tapCheckButton: { viewModel.handleAction(.toggleTerm(id: term.id))},
             tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
           )
@@ -68,6 +69,7 @@ struct TermsAgreementView: View {
   private func CheckBox(
     label: String,
     isChecked: Bool,
+    isRequrired: Bool? = nil,
     tapCheckButton: @escaping () -> Void,
     backgoundColor: Color? = .clear,
     tapChevornButton: (()->Void)? = nil
@@ -80,7 +82,8 @@ struct TermsAgreementView: View {
           .renderingMode(.template)
           .foregroundStyle(isChecked ? Color.primaryDefault : Color.grayscaleLight1)
       }
-      Text(label)
+      
+      Text(isRequiredText(isRequrired) + label)
         .pretendard(.body_M_R)
         .foregroundStyle(Color.grayscaleBlack)
       
@@ -105,6 +108,11 @@ struct TermsAgreementView: View {
         .cornerRadius(8)
     )
   }
+  
+  private func isRequiredText(_ isRequired: Bool?) -> String {
+    guard let isRequired = isRequired else { return "" }
+    return isRequired ? "[필수] " : "[선택] "
+  }
 }
 
 #Preview {
@@ -113,14 +121,14 @@ struct TermsAgreementView: View {
       terms: [
         TermModel(
           id: 0,
-          title: "[필수] 서비스 이용약관 동의",
+          title: "서비스 이용약관 동의",
           url: "",
           required: true,
           isChecked: false
         ),
         TermModel(
           id: 1,
-          title: "[필수] 개인정보처리 방침 동의",
+          title: "개인정보처리 방침 동의",
           url: "",
           required: true,
           isChecked: false
