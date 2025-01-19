@@ -74,8 +74,8 @@ struct TermsAgreementView: View {
       CheckableTermRow(
         label: term.title,
         isChecked: term.isChecked,
-        isRequired: term.required,
-        tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
+        isRequrired: term.required,
+        tapChevornButton: { viewModel.handleAction(.tapChevronButton) }
       )
       .onTapGesture {
         viewModel.handleAction(.toggleTerm(id: term.id))
