@@ -15,52 +15,18 @@ struct TermsAgreementView: View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
       VStack(alignment: .center, spacing: 0) {
-        VStack(alignment: .leading) {
-          Text("Piece의")
-          Text("이용약관")
-            .foregroundStyle(Color.primaryDefault) +
-          Text("을 확인해 주세요")
-        }
-        .pretendard(.heading_L_SB)
-        .foregroundStyle(Color.grayscaleBlack)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        title
         
         Spacer()
           .frame(height: 120)
         
-        CheckBox(
-          label: "약관 전체동의",
-          isChecked: viewModel.isAllChecked
-        )
-        .onTapGesture {
-          viewModel.handleAction(.toggleAll)
-        }
-        .background(
-          Rectangle()
-            .foregroundStyle(Color.grayscaleLight3)
-            .cornerRadius(8)
-        )
-        .padding(.bottom, 12)
+        allTermsCheckBox
         
-        ForEach(viewModel.terms) { term in
-          CheckBox(
-            label: term.title,
-            isChecked: term.isChecked,
-            isRequrired: term.required,
-            tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
-          )
-          .onTapGesture {
-            viewModel.handleAction(.toggleTerm(id: term.id))
-          }
-        }
+        termsList
         
         Spacer()
         
-        RoundedButton(
-          type: viewModel.nextButtonType,
-          buttonText: "다음",
-          action: { viewModel.handleAction(.tapNextButton) }
-        )
+        nextButton
       }
       .padding(.horizontal, 20)
       .padding(.top, 20)
@@ -72,6 +38,56 @@ struct TermsAgreementView: View {
         leftButtonTap: { viewModel.handleAction(.tapBackButton) }
       )
     }
+  }
+  
+  private var title: some View {
+    VStack(alignment: .leading) {
+      Text("Piece의")
+      Text("이용약관")
+        .foregroundStyle(Color.primaryDefault) +
+      Text("을 확인해 주세요")
+    }
+    .pretendard(.heading_L_SB)
+    .foregroundStyle(Color.grayscaleBlack)
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+  
+  private var allTermsCheckBox: some View {
+    CheckBox(
+      label: "약관 전체동의",
+      isChecked: viewModel.isAllChecked
+    )
+    .onTapGesture {
+      viewModel.handleAction(.toggleAll)
+    }
+    .background(
+      Rectangle()
+        .foregroundStyle(Color.grayscaleLight3)
+        .cornerRadius(8)
+    )
+    .padding(.bottom, 12)
+  }
+  
+  private var termsList: some View {
+    ForEach(viewModel.terms) { term in
+      CheckBox(
+        label: term.title,
+        isChecked: term.isChecked,
+        isRequrired: term.required,
+        tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
+      )
+      .onTapGesture {
+        viewModel.handleAction(.toggleTerm(id: term.id))
+      }
+    }
+  }
+  
+  private var nextButton: some View {
+    RoundedButton(
+      type: viewModel.nextButtonType,
+      buttonText: "다음",
+      action: { viewModel.handleAction(.tapNextButton) }
+    )
   }
   
   private func CheckBox(
