@@ -14,8 +14,9 @@ final class TermsWebViewModel {
     case tapAgreementButton
     case tapBackButton
   }
-    
+  
   var term: TermModel
+  private var dismissAction: (() -> Void)?
   
   init(term: TermModel) {
     self.term = term
@@ -23,7 +24,14 @@ final class TermsWebViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
-    default: return
+    case .tapBackButton:
+      dismissAction?()
+    case .tapAgreementButton:
+      return
     }
+  }
+  
+  func setDismissAction(_ dismiss: @escaping () -> Void) {
+    self.dismissAction = dismiss
   }
 }
