@@ -43,7 +43,8 @@ struct TermsAgreementView: View {
         if let index = viewModel.terms.firstIndex(where: { $0.id == term.id }) {
           TermsWebView(
             viewModel: TermsWebViewModel(
-              term: viewModel.terms[index]
+              term: viewModel.terms[index],
+              checkTerm: { viewModel.terms[index] = $0 }
             )
           )
         } else {

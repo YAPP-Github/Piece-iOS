@@ -16,10 +16,15 @@ final class TermsWebViewModel {
   }
   
   var term: TermModel
+  var checkTerm: ((TermModel) -> Void)?
   private var dismissAction: (() -> Void)?
   
-  init(term: TermModel) {
+  init(
+    term: TermModel,
+    checkTerm: ((TermModel) -> Void)? = nil
+  ) {
     self.term = term
+    self.checkTerm = checkTerm
   }
   
   func handleAction(_ action: Action) {
@@ -27,7 +32,9 @@ final class TermsWebViewModel {
     case .tapBackButton:
       dismissAction?()
     case .tapAgreementButton:
-      return
+      term.isChecked = true
+      checkTerm?(term)
+      dismissAction?()
     }
   }
   
