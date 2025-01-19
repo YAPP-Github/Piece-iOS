@@ -14,7 +14,7 @@ final class TermsAgreementViewModel {
   enum Action {
     case toggleAll
     case toggleTerm(id: Int)
-    case tapTermURL(url: String)
+    case tapChevronButton
     case tapNextButton
     case tapBackButton
   }
