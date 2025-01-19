@@ -136,14 +136,14 @@ struct TermsAgreementView: View {
         TermModel(
           id: 0,
           title: "서비스 이용약관 동의",
-          url: "",
+          url: "https://brassy-client-c0a.notion.site/16a2f1c4b966800f923cd499d8e07a97",
           required: true,
           isChecked: false
         ),
         TermModel(
           id: 1,
           title: "개인정보처리 방침 동의",
-          url: "",
+          url: "https://brassy-client-c0a.notion.site/16a2f1c4b96680f8b622e5925a394edf?pvs=4",
           required: true,
           isChecked: false
         )
