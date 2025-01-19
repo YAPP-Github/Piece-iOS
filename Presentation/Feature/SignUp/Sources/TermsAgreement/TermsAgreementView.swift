@@ -30,9 +30,15 @@ struct TermsAgreementView: View {
         
         CheckBox(
           label: "약관 전체동의",
-          isChecked: viewModel.isAllChecked,
-          tapCheckButton: { viewModel.handleAction(.toggleAll)},
-          backgoundColor: .grayscaleLight3
+          isChecked: viewModel.isAllChecked
+        )
+        .onTapGesture {
+          viewModel.handleAction(.toggleAll)
+        }
+        .background(
+          Rectangle()
+            .foregroundStyle(Color.grayscaleLight3)
+            .cornerRadius(8)
         )
         .padding(.bottom, 12)
         
@@ -41,9 +47,11 @@ struct TermsAgreementView: View {
             label: term.title,
             isChecked: term.isChecked,
             isRequrired: term.required,
-            tapCheckButton: { viewModel.handleAction(.toggleTerm(id: term.id))},
             tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
           )
+          .onTapGesture {
+            viewModel.handleAction(.toggleTerm(id: term.id))
+          }
         }
         
         Spacer()
@@ -70,18 +78,12 @@ struct TermsAgreementView: View {
     label: String,
     isChecked: Bool,
     isRequrired: Bool? = nil,
-    tapCheckButton: @escaping () -> Void,
-    backgoundColor: Color? = .clear,
     tapChevornButton: (()->Void)? = nil
   ) -> some View {
     HStack {
-      Button{
-        tapCheckButton()
-      } label: {
-        DesignSystemAsset.Icons.checkCircle20.swiftUIImage
-          .renderingMode(.template)
-          .foregroundStyle(isChecked ? Color.primaryDefault : Color.grayscaleLight1)
-      }
+      DesignSystemAsset.Icons.checkCircle20.swiftUIImage
+        .renderingMode(.template)
+        .foregroundStyle(isChecked ? Color.primaryDefault : Color.grayscaleLight1)
       
       Text(isRequiredText(isRequrired) + label)
         .pretendard(.body_M_R)
@@ -102,11 +104,6 @@ struct TermsAgreementView: View {
     .padding(.vertical, 14)
     .padding(.horizontal, 14)
     .frame(maxWidth: .infinity, alignment: .leading)
-    .background(
-      Rectangle()
-        .foregroundStyle(backgoundColor ?? .clear)
-        .cornerRadius(8)
-    )
   }
   
   private func isRequiredText(_ isRequired: Bool?) -> String {
