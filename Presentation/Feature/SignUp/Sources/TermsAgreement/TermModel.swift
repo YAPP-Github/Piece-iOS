@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TermModel: Identifiable {
+struct TermModel: Identifiable, Hashable {
   let id: Int
   let title: String
   let url: String
