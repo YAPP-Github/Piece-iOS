@@ -10,6 +10,7 @@ import DesignSystem
 
 struct TermsWebView: View {
   @State var viewModel: TermsWebViewModel
+  @Environment(\.dismiss) private var dismiss
   
   var body: some View {
     ZStack {
@@ -33,6 +34,9 @@ struct TermsWebView: View {
         title: viewModel.term.title,
         leftButtonTap: { viewModel.handleAction(.tapBackButton) }
       )
+    }
+    .onAppear {
+      viewModel.setDismissAction { dismiss() }
     }
   }
 }
