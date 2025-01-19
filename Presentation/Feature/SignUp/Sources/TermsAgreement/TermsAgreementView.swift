@@ -115,12 +115,14 @@ struct TermsAgreementView: View {
           id: 0,
           title: "[필수] 서비스 이용약관 동의",
           url: "",
+          required: true,
           isChecked: false
         ),
         TermModel(
           id: 1,
           title: "[필수] 개인정보처리 방침 동의",
           url: "",
+          required: true,
           isChecked: false
         )
       ]

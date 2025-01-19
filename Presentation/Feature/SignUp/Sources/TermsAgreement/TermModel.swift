@@ -11,5 +11,6 @@ struct TermModel: Identifiable {
   let id: Int
   let title: String
   let url: String
+  let required: Bool
   var isChecked: Bool
 }
