@@ -14,16 +14,21 @@ final class TermsAgreementViewModel {
   enum Action {
     case toggleAll
     case toggleTerm(id: Int)
-    case tapChevronButton
+    case tapChevronButton(with: TermModel)
     case tapNextButton
     case tapBackButton
   }
   
-  init(terms: [TermModel]) {
+  init(
+    terms: [TermModel],
+    navigationPath: NavigationPath
+  ) {
     self.terms = terms
+    self.navigationPath = navigationPath
   }
   
   var terms: [TermModel]
+  var navigationPath: NavigationPath
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
   }
@@ -42,6 +47,8 @@ final class TermsAgreementViewModel {
       if let index = terms.firstIndex(where: { $0.id == id }) {
         terms[index].isChecked.toggle()
       }
+    case .tapChevronButton(let term):
+      navigationPath.append(term)
     default:
       return
     }
