@@ -12,21 +12,43 @@ struct TermsAgreementView: View {
   @State var viewModel: TermsAgreementViewModel
   
   var body: some View {
-    ZStack {
-      Color.grayscaleWhite.ignoresSafeArea()
-      VStack(alignment: .center, spacing: 0) {
-        title
-        
-        Spacer()
-          .frame(height: 120)
-        
-        allTermsCheckableRow
-        
-        termsList
-        
-        Spacer()
-        
-        nextButton
+    NavigationStack(path: $viewModel.navigationPath){
+      ZStack {
+        Color.grayscaleWhite.ignoresSafeArea()
+        VStack(alignment: .center, spacing: 0) {
+          title
+          
+          Spacer()
+            .frame(height: 120)
+          
+          allTermsCheckBox
+          
+          termsList
+          
+          Spacer()
+          
+          nextButton
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+        .padding(.bottom, 10)
+      }
+      .navigationBarModifier {
+        NavigationBar(
+          title: "",
+          leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+        )
+      }
+      .navigationDestination(for: TermModel.self) { term in
+        if let index = viewModel.terms.firstIndex(where: { $0.id == term.id }) {
+          TermsWebView(
+            viewModel: TermsWebViewModel(
+              term: viewModel.terms[index]
+            )
+          )
+        } else {
+          Text("약관을 찾을 수 없습니다.")
+        }
       }
     }
   }
