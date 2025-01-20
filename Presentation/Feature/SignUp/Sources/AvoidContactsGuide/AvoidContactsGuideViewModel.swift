@@ -13,6 +13,7 @@ final class AvoidContactsGuideViewModel {
   enum Action {
     case tapBlockContactButton
     case tapBackButton
+    case tapDenyButton
   }
   
   func handleAction(_ action: Action) {
