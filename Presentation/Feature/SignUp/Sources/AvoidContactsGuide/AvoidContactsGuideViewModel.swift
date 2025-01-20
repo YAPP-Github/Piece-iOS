@@ -16,10 +16,18 @@ final class AvoidContactsGuideViewModel {
     case tapDenyButton
   }
   
+  private var dismissAction: (() -> Void)?
+  
   func handleAction(_ action: Action) {
     switch action {
+    case .tapBackButton:
+      dismissAction?()
     default :
       return
     }
+  }
+  
+  func setDismissAction(_ dismiss: @escaping () -> Void) {
+    self.dismissAction = dismiss
   }
 }
