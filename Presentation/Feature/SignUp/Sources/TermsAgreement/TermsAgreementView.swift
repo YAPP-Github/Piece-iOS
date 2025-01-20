@@ -20,7 +20,7 @@ struct TermsAgreementView: View {
         Spacer()
           .frame(height: 120)
         
-        allTermsCheckBox
+        allTermsCheckableRow
         
         termsList
         
@@ -52,7 +52,7 @@ struct TermsAgreementView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
   
-  private var allTermsCheckBox: some View {
+  private var allTermsCheckableRow: some View {
     CheckableTermRow(
       label: "약관 전체동의",
       isChecked: viewModel.isAllChecked
