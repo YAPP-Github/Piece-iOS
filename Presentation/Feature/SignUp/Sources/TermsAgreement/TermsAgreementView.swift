@@ -57,6 +57,7 @@ struct TermsAgreementView: View {
       label: "약관 전체동의",
       isChecked: viewModel.isAllChecked
     )
+    .contentShape(Rectangle())
     .onTapGesture {
       viewModel.handleAction(.toggleAll)
     }
