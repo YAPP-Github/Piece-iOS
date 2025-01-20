@@ -10,6 +10,7 @@ import DesignSystem
 
 struct AvoidContactsGuideView: View {
   @State var viewModel: AvoidContactsGuideViewModel
+  @Environment(\.dismiss) private var dismiss
   
   var body: some View {
     VStack {
@@ -32,6 +33,9 @@ struct AvoidContactsGuideView: View {
         title: "",
         leftButtonTap: { viewModel.handleAction(.tapBackButton) }
       )
+    }
+    .onAppear {
+      viewModel.setDismissAction { dismiss() }
     }
   }
   
