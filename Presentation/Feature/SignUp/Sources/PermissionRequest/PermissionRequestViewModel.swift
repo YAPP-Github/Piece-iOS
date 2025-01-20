@@ -18,6 +18,7 @@ final class PermissionRequestViewModel {
   var nextButtonType: RoundedButton.ButtonType {
     isCameraPermissionGranted ? .solid : .disabled
   }
+  private var dismissAction: (() -> Void)?
   
   enum Action {
     case showShettingAlert
@@ -27,7 +28,13 @@ final class PermissionRequestViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
+    case .tapBackButton:
+      dismissAction?()
     default: return
     }
+  }
+  
+  func setDismissAction(_ dismiss: @escaping () -> Void) {
+    self.dismissAction = dismiss
   }
 }
