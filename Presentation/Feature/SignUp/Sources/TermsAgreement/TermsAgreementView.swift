@@ -67,10 +67,11 @@ struct TermsAgreementView: View {
   }
   
   private var allTermsCheckBox: some View {
-    CheckBox(
+    CheckableTermRow(
       label: "약관 전체동의",
       isChecked: viewModel.isAllChecked
     )
+    .contentShape(Rectangle())
     .onTapGesture {
       viewModel.handleAction(.toggleAll)
     }
@@ -84,11 +85,11 @@ struct TermsAgreementView: View {
   
   private var termsList: some View {
     ForEach(viewModel.terms) { term in
-      CheckBox(
+      CheckableTermRow(
         label: term.title,
         isChecked: term.isChecked,
-        isRequrired: term.required,
-        tapChevornButton: { viewModel.handleAction(.tapChevronButton(with: term)) }
+        isRequired: term.required,
+        tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
       )
       .onTapGesture {
         viewModel.handleAction(.toggleTerm(id: term.id))
@@ -104,10 +105,10 @@ struct TermsAgreementView: View {
     )
   }
   
-  private func CheckBox(
+  private func CheckableTermRow(
     label: String,
     isChecked: Bool,
-    isRequrired: Bool? = nil,
+    isRequired: Bool? = nil,
     tapChevornButton: (()->Void)? = nil
   ) -> some View {
     HStack {
@@ -115,7 +116,7 @@ struct TermsAgreementView: View {
         .renderingMode(.template)
         .foregroundStyle(isChecked ? Color.primaryDefault : Color.grayscaleLight1)
       
-      Text(isRequiredText(isRequrired) + label)
+      Text(isRequiredText(isRequired) + label)
         .pretendard(.body_M_R)
         .foregroundStyle(Color.grayscaleBlack)
       
