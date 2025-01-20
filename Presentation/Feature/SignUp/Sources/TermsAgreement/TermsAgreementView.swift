@@ -73,7 +73,7 @@ struct TermsAgreementView: View {
       CheckBox(
         label: term.title,
         isChecked: term.isChecked,
-        isRequrired: term.required,
+        isRequired: term.required,
         tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
       )
       .onTapGesture {
@@ -93,7 +93,7 @@ struct TermsAgreementView: View {
   private func CheckBox(
     label: String,
     isChecked: Bool,
-    isRequrired: Bool? = nil,
+    isRequired: Bool? = nil,
     tapChevornButton: (()->Void)? = nil
   ) -> some View {
     HStack {
@@ -101,7 +101,7 @@ struct TermsAgreementView: View {
         .renderingMode(.template)
         .foregroundStyle(isChecked ? Color.primaryDefault : Color.grayscaleLight1)
       
-      Text(isRequiredText(isRequrired) + label)
+      Text(isRequiredText(isRequired) + label)
         .pretendard(.body_M_R)
         .foregroundStyle(Color.grayscaleBlack)
       
