@@ -10,7 +10,8 @@ import DesignSystem
 
 struct PermissionRequestView: View {
   @State var viewModel: PermissionRequestViewModel
-
+  @Environment(\.dismiss) private var dismiss
+  
   var body: some View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
@@ -57,6 +58,9 @@ struct PermissionRequestView: View {
         title: "",
         leftButtonTap: { viewModel.handleAction(.tapBackButton) }
       )
+    }
+    .onAppear {
+      viewModel.setDismissAction { dismiss() }
     }
   }
 
