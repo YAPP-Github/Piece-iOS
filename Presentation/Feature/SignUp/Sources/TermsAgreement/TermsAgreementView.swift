@@ -53,7 +53,7 @@ struct TermsAgreementView: View {
   }
   
   private var allTermsCheckBox: some View {
-    CheckBox(
+    CheckableTermRow(
       label: "약관 전체동의",
       isChecked: viewModel.isAllChecked
     )
@@ -70,7 +70,7 @@ struct TermsAgreementView: View {
   
   private var termsList: some View {
     ForEach(viewModel.terms) { term in
-      CheckBox(
+      CheckableTermRow(
         label: term.title,
         isChecked: term.isChecked,
         isRequired: term.required,
@@ -90,7 +90,7 @@ struct TermsAgreementView: View {
     )
   }
   
-  private func CheckBox(
+  private func CheckableTermRow(
     label: String,
     isChecked: Bool,
     isRequired: Bool? = nil,
