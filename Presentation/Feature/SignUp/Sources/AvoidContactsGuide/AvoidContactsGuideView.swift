@@ -20,6 +20,8 @@ struct AvoidContactsGuideView: View {
       
       Spacer()
       
+      denyButton
+      
       nextButton
     }
     .padding(.horizontal, 20)
@@ -47,6 +49,14 @@ struct AvoidContactsGuideView: View {
     .foregroundStyle(Color.grayscaleBlack)
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.bottom, 70)
+  }
+  
+  private var denyButton: some View {
+    PCTextButton(content: "다음에 할래요")
+      .onTapGesture {
+        viewModel.handleAction(.tapDenyButton)
+      }
+      .padding(.bottom, 20)
   }
   
   private var nextButton: some View {
