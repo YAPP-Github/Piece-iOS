@@ -74,6 +74,7 @@ public extension Modules {
   enum Presentation: String {
     case DesignSystem
     case Login
+    case SignUp
     case MatchingMain
     
     var path: String {
