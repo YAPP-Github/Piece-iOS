@@ -35,18 +35,17 @@ public extension Modules {
 public extension Modules {
   enum Domain: String {
     case Entities
+    case UseCase
     
     var path: String {
       switch self {
-      case .Entities: "Domain/\(self.rawValue)"
-      default: "Domain/UseCase/\(self.rawValue)"
+      default: "Domain/\(self.rawValue)"
       }
     }
     
     var targetName: String {
       switch self {
-      case .Entities:  "\(self.rawValue)"
-      default: "\(self.rawValue)UseCase"
+      default: "\(self.rawValue)"
       }
     }
   }
