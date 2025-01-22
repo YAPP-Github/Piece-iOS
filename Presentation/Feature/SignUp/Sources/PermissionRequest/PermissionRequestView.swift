@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DesignSystem
+import UseCase
 
 struct PermissionRequestView: View {
   @State var viewModel: PermissionRequestViewModel
@@ -127,9 +128,42 @@ struct PermissionRequestView: View {
   }
 }
 
+#Preview("권한 요청 - 카메라 거절 상태") {
+  PermissionRequestView(
+    viewModel:PermissionRequestViewModel(
+      requestCameraUseCase: MockRequestCameraUseCase(isGranted: false),
+      requestContactsUseCase: MockRequestContactsUseCase(),
+      requestNotificationUseCase: MockRequestNotificationUseCase()
+    )
+  )
+}
 
-struct PermissionRequestView_Previews: PreviewProvider {
-  static var previews: some View {
-    PermissionRequestView(viewModel: PermissionRequestViewModel())
-  }
+#Preview("권한 요청 - 카메라 허락 상태") {
+  PermissionRequestView(
+    viewModel: PermissionRequestViewModel(
+      requestCameraUseCase: MockRequestCameraUseCase(isGranted: true),
+      requestContactsUseCase: MockRequestContactsUseCase(),
+      requestNotificationUseCase: MockRequestNotificationUseCase()
+    )
+  )
+}
+
+class MockRequestCameraUseCase: RequestCameraUseCase {
+    var isGranted: Bool
+    
+    init(isGranted: Bool) {
+        self.isGranted = isGranted
+    }
+    
+    func execute() async -> Bool {
+        return isGranted
+    }
+}
+
+class MockRequestContactsUseCase: RequestContactsUseCase {
+  func execute() async throws -> Bool { return true }
+}
+
+class MockRequestNotificationUseCase: RequestNotificationUseCase {
+  func execute() async throws -> Bool { return true }
 }
