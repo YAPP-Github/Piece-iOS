@@ -20,7 +20,9 @@ extension Project {
       bundleId: AppConstants.bundleId,
       deploymentTargets: AppConstants.deploymentTargets,
       infoPlist: .extendingDefault(with: [
-        "UILaunchScreen": "LaunchScreen"
+        "UILaunchScreen": "LaunchScreen",
+        "NSCameraUsageDescription": "프로필 생성 시 사진 첨부를 위해 카메라 접근 권한이 필요합니다.",
+        "NSContactsUsageDescription": "지인을 수집하기 위해 연락처 접근 권한이 필요합니다."
       ]),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
