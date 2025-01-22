@@ -8,7 +8,7 @@
 import ProjectDescription
 
 public extension TargetDependency {
-  enum SPM {
-    static let Kingfisher     = TargetDependency.external(name: "Kingfisher") // 예시
+  public enum SPM {
+    public static let SwiftNavigation      = TargetDependency.external(name: "SwiftNavigation")
   }
 }

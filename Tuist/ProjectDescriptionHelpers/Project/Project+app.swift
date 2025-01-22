@@ -28,12 +28,14 @@ extension Project {
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: dependencies,
-      settings: .settings(
-        configurations: [
-          .configuration(environment: .dev),
-          .configuration(environment: .prod),
-        ]
-      ),
+      settings: .settings()
+//          .settings(
+//        configurations: [
+//          .configuration(environment: .dev),
+//          .configuration(environment: .prod),
+//        ]
+//      )
+      ,
       environmentVariables: [:],
       additionalFiles: []
     )
@@ -46,14 +48,16 @@ extension Project {
         developmentRegion: "kor"
       ),
       packages: [],
-      settings: .settings(configurations: [
-        .configuration(environment: .dev),
-        .configuration(environment: .prod),
-      ]),
+      settings: .settings(),
+//          .settings(configurations: [
+//        .configuration(environment: .dev),
+//        .configuration(environment: .prod),
+//      ]),
       targets: [target],
       schemes: [
-        .makeScheme(environment: .dev),
-        .makeScheme(environment: .prod),
+        .makeScheme(),
+//        .makeScheme(environment: .dev),
+//        .makeScheme(environment: .prod),
       ]
     )
   }

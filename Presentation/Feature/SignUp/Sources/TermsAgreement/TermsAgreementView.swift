@@ -12,44 +12,21 @@ struct TermsAgreementView: View {
   @State var viewModel: TermsAgreementViewModel
   
   var body: some View {
-    NavigationStack(path: $viewModel.navigationPath){
-      ZStack {
-        Color.grayscaleWhite.ignoresSafeArea()
-        VStack(alignment: .center, spacing: 0) {
-          title
-          
-          Spacer()
-            .frame(height: 120)
-          
-          allTermsCheckBox
-          
-          termsList
-          
-          Spacer()
-          
-          nextButton
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 10)
-      }
-      .navigationBarModifier {
-        NavigationBar(
-          title: "",
-          leftButtonTap: { viewModel.handleAction(.tapBackButton) }
-        )
-      }
-      .navigationDestination(for: TermModel.self) { term in
-        if let index = viewModel.terms.firstIndex(where: { $0.id == term.id }) {
-          TermsWebView(
-            viewModel: TermsWebViewModel(
-              term: viewModel.terms[index],
-              checkTerm: { viewModel.terms[index] = $0 }
-            )
-          )
-        } else {
-          Text("약관을 찾을 수 없습니다.")
-        }
+    ZStack {
+      Color.grayscaleWhite.ignoresSafeArea()
+      VStack(alignment: .center, spacing: 0) {
+        title
+        
+        Spacer()
+          .frame(height: 120)
+        
+        allTermsCheckableRow
+        
+        termsList
+        
+        Spacer()
+        
+        nextButton
       }
     }
   }
@@ -66,11 +43,12 @@ struct TermsAgreementView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
   
-  private var allTermsCheckBox: some View {
-    CheckBox(
+  private var allTermsCheckableRow: some View {
+    CheckableTermRow(
       label: "약관 전체동의",
       isChecked: viewModel.isAllChecked
     )
+    .contentShape(Rectangle())
     .onTapGesture {
       viewModel.handleAction(.toggleAll)
     }
@@ -84,10 +62,10 @@ struct TermsAgreementView: View {
   
   private var termsList: some View {
     ForEach(viewModel.terms) { term in
-      CheckBox(
+      CheckableTermRow(
         label: term.title,
         isChecked: term.isChecked,
-        isRequrired: term.required,
+        isRequired: term.required,
         tapChevornButton: { viewModel.handleAction(.tapChevronButton(with: term)) }
       )
       .onTapGesture {
@@ -104,10 +82,10 @@ struct TermsAgreementView: View {
     )
   }
   
-  private func CheckBox(
+  private func CheckableTermRow(
     label: String,
     isChecked: Bool,
-    isRequrired: Bool? = nil,
+    isRequired: Bool? = nil,
     tapChevornButton: (()->Void)? = nil
   ) -> some View {
     HStack {
@@ -115,7 +93,7 @@ struct TermsAgreementView: View {
         .renderingMode(.template)
         .foregroundStyle(isChecked ? Color.primaryDefault : Color.grayscaleLight1)
       
-      Text(isRequiredText(isRequrired) + label)
+      Text(isRequiredText(isRequired) + label)
         .pretendard(.body_M_R)
         .foregroundStyle(Color.grayscaleBlack)
       
