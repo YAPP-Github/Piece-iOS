@@ -11,9 +11,9 @@ import Observation
 
 @Observable
 final class PermissionRequestViewModel {
-  var isCameraPermissionGranted: Bool = false // 카메라 권한
-  var isNotificationPermissionGranted: Bool = false // 알림 권한
-  var isContactsPermissionGranted: Bool = false // 연락처 권한
+  private(set) var isCameraPermissionGranted: Bool = false // 카메라 권한
+  private(set) var isNotificationPermissionGranted: Bool = false // 알림 권한
+  private(set) var isContactsPermissionGranted: Bool = false // 연락처 권한
   var shouldShowSettingsAlert: Bool = false // 권한 요청 1회 거절 시 -> 설정창으로 보내기 위한 flag
   var nextButtonType: RoundedButton.ButtonType {
     isCameraPermissionGranted ? .solid : .disabled
