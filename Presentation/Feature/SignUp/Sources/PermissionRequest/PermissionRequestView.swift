@@ -11,7 +11,8 @@ import DesignSystem
 struct PermissionRequestView: View {
   @State var viewModel: PermissionRequestViewModel
   @Environment(\.dismiss) private var dismiss
-  
+  @Environment(\.scenePhase) private var scenePhase
+
   var body: some View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
@@ -52,6 +53,16 @@ struct PermissionRequestView: View {
       .padding(.horizontal, 20)
       .padding(.top, 20)
       .padding(.bottom, 10)
+    }
+    .task {
+       await viewModel.checkPermissions()
+    }
+    .onChange(of: scenePhase) {
+      if scenePhase == .active {
+        Task {
+          await viewModel.checkPermissions()
+        }
+      }
     }
     .navigationBarModifier {
       NavigationBar(
