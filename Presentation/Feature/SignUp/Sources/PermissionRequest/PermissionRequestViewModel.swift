@@ -12,10 +12,10 @@ import UseCase
 
 @Observable
 final class PermissionRequestViewModel {
-  private(set) var isCameraPermissionGranted: Bool = false // 카메라 권한
-  private(set) var isNotificationPermissionGranted: Bool = false // 알림 권한
-  private(set) var isContactsPermissionGranted: Bool = false // 연락처 권한
-  var shouldShowSettingsAlert: Bool = false // 권한 요청 1회 거절 시 -> 설정창으로 보내기 위한 flag
+  private(set) var isCameraPermissionGranted: Bool = false // 카메라 권한 여부
+  private(set) var isNotificationPermissionGranted: Bool = false // 알림 권한 여부
+  private(set) var isContactsPermissionGranted: Bool = false // 연락처 권한 여부
+  var shouldShowSettingsAlert: Bool = false // 카메라 권한 거절 상태에 설정창으로 보내기 위한 flag
   var nextButtonType: RoundedButton.ButtonType {
     isCameraPermissionGranted ? .solid : .disabled
   }
