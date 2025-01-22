@@ -138,6 +138,8 @@ struct PermissionRequestView: View {
   }
 }
 
+// MARK: - Preview
+
 #Preview("권한 요청 - 카메라 거절 상태") {
   PermissionRequestView(
     viewModel:PermissionRequestViewModel(
