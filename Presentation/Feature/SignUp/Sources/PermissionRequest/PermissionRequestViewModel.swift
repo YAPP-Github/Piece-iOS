@@ -28,6 +28,8 @@ final class PermissionRequestViewModel {
     case showShettingAlert
     case tapNextButton
     case tapBackButton
+    case cancelAlert
+  }
   
   init(
     requestCameraUseCase: RequestCameraUseCase,
@@ -41,8 +43,12 @@ final class PermissionRequestViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
+    case .showShettingAlert:
+      openSettings()
     case .tapBackButton:
       dismissAction?()
+    case .cancelAlert:
+      Task { await resetAlertState() }
     default: return
     }
   }
@@ -69,5 +75,20 @@ final class PermissionRequestViewModel {
   @MainActor
   private func updateSettingsAlertState() async {
     shouldShowSettingsAlert = !isCameraPermissionGranted
+  }
+  
+  @MainActor
+  private func resetAlertState() async {
+    shouldShowSettingsAlert = false
+    try? await Task.sleep(nanoseconds: 100_000_000)  // 0.1초 뒤에 설정 창이 뜨도록
+    shouldShowSettingsAlert = true
+  }
+  
+  private func openSettings() {
+    guard let settingUrl = URL(string: UIApplication.openSettingsURLString),
+          UIApplication.shared.canOpenURL(settingUrl) else {
+      return
+    }
+    UIApplication.shared.open(settingUrl)
   }
 }
