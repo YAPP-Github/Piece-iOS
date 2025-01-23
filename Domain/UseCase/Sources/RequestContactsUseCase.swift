@@ -20,6 +20,15 @@ public final class RequestContactsUseCaseImplementation: RequestContactsUseCase 
   }
   
   public func execute() async throws -> Bool {
-    try await contactStore.requestAccess(for: .contacts)
+    let status = CNContactStore.authorizationStatus(for: .contacts)
+    
+    switch status {
+    case .authorized:
+      return true
+    case .notDetermined:
+      return try await contactStore.requestAccess(for: .contacts)
+    default:
+      return false
+    }
   }
 }
