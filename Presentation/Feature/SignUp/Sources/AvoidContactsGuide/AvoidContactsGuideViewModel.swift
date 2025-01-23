@@ -16,6 +16,7 @@ final class AvoidContactsGuideViewModel {
     case tapDenyButton
   }
   
+  var showToast = false
   private var dismissAction: (() -> Void)?
   
   func handleAction(_ action: Action) {
@@ -29,5 +30,12 @@ final class AvoidContactsGuideViewModel {
   
   func setDismissAction(_ dismiss: @escaping () -> Void) {
     self.dismissAction = dismiss
+  }
+  
+  @MainActor
+  private func isToastVisible() async {
+    showToast = true
+    try? await Task.sleep(for: .seconds(3))
+    showToast = false
   }
 }
