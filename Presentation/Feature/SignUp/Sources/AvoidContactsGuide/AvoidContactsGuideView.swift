@@ -13,26 +13,32 @@ struct AvoidContactsGuideView: View {
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
-    VStack {
-      title
-      
-      Rectangle() // 일러스트 (임시)
-        .frame(width: 240, height: 240)
-      
-      Spacer()
-      
-      denyButton
-      
-      nextButton
-    }
-    .padding(.horizontal, 20)
-    .padding(.top, 20)
-    .padding(.bottom, 10)
-    .navigationBarModifier {
-      NavigationBar(
-        title: "",
-        leftButtonTap: { viewModel.handleAction(.tapBackButton) }
-      )
+    ZStack {
+      VStack {
+        title
+        
+        Rectangle() // 일러스트 (임시)
+          .fill(Color.blue)
+          .frame(width: 240, height: 240)
+        
+        Spacer()
+        
+        denyButton
+        
+        nextButton
+      }
+      .padding(.horizontal, 20)
+      .padding(.top, 20)
+      .padding(.bottom, 10)
+      .navigationBarModifier {
+        NavigationBar(
+          title: "",
+          leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+        )
+      }
+      toast
+        .opacity(viewModel.showToast ? 1 : 0)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
     }
     .onAppear {
       viewModel.setDismissAction { dismiss() }
@@ -68,6 +74,23 @@ struct AvoidContactsGuideView: View {
       type: .solid,
       buttonText: "아는사람 차단하기",
       action: { viewModel.handleAction(.tapBlockContactButton) }
+    )
+  }
+  
+  private var toast: some View {
+    VStack(spacing: 16) {
+      DesignSystemAsset.Icons.check80.swiftUIImage
+        .renderingMode(.template)
+      
+      Text("지인 차단 완료")
+        .pretendard(.heading_M_SB)
+    }
+    .foregroundStyle(Color.grayscaleWhite)
+    .background(
+      Rectangle()
+        .fill(Color.black.opacity(0.4))
+        .cornerRadius(20)
+        .frame(width: 200, height: 200)
     )
   }
 }
