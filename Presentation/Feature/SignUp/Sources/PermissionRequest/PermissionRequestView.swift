@@ -57,6 +57,7 @@ struct PermissionRequestView: View {
     }
     .task {
        await viewModel.checkPermissions()
+       viewModel.setDismissAction { dismiss() }
     }
     .onChange(of: scenePhase) {
       if scenePhase == .active {
@@ -80,9 +81,6 @@ struct PermissionRequestView: View {
       }
     } message: {
       Text("카메라 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
-    }
-    .onAppear {
-      viewModel.setDismissAction { dismiss() }
     }
   }
 
