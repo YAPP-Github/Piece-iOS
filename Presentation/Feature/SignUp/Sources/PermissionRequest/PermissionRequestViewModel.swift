@@ -8,7 +8,7 @@
 import SwiftUI
 import DesignSystem
 import Observation
-import UseCase
+import UseCases
 
 @Observable
 final class PermissionRequestViewModel {
