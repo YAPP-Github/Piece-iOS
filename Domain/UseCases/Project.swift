@@ -9,5 +9,5 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
-  name: Modules.Domain.UseCase.rawValue
+  name: Modules.Domain.UseCases.rawValue
 )

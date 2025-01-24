@@ -35,7 +35,7 @@ public extension Modules {
 public extension Modules {
   enum Domain: String {
     case Entities
-    case UseCase
+    case UseCases
     
     var path: String {
       switch self {
