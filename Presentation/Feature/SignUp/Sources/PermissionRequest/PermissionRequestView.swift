@@ -7,7 +7,7 @@
 
 import SwiftUI
 import DesignSystem
-import UseCase
+import UseCases
 
 struct PermissionRequestView: View {
   @State var viewModel: PermissionRequestViewModel
@@ -51,8 +51,7 @@ struct PermissionRequestView: View {
         
         nextButton
       }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
+      .padding([.horizontal, .top], 20)
       .padding(.bottom, 10)
     }
     .task {
