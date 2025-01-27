@@ -29,4 +29,8 @@ public final class Router {
   public func popToMain() {
     path.removeLast(path.count - 1)
   }
+  
+  public func presentSheet(destination: any Identifiable) {
+    presentedSheet = AnyIdentifiable(destination: destination)
+  }
 }
