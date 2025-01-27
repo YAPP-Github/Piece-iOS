@@ -13,6 +13,7 @@ public final class Router {
   public init() { }
   
   public var navigationPath = NavigationPath()
+  public var presentedSheet: AnyIdentifiable?
   
   public func push(to destination: any Hashable) {
     navigationPath.append(destination)
@@ -24,5 +25,9 @@ public final class Router {
   
   public func popToRoot() {
     navigationPath.removeLast(navigationPath.count)
+  }
+  
+  public func presentSheet(destination: any Identifiable) {
+    presentedSheet = AnyIdentifiable(destination: destination)
   }
 }
