@@ -8,7 +8,5 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
-  name: Modules.Presentation.Router.rawValue,
-  dependencies: [
-  ]
+  name: Modules.Presentation.Router.rawValue
 )
