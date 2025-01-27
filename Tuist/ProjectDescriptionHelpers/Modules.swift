@@ -52,7 +52,7 @@ public extension Modules {
   }
 }
 
-// MARK: - Extension
+// MARK: - Utility
 
 public extension Modules {
   enum Utility: String {
@@ -73,20 +73,22 @@ public extension Modules {
 public extension Modules {
   enum Presentation: String {
     case DesignSystem
+    case Router
+    case AppCoordinator
     case Login
     case MatchingMain
     
     var path: String {
       switch self {
-      case .DesignSystem: "Presentation/\(self.rawValue)"
+      case .DesignSystem, .Router, .AppCoordinator: "Presentation/\(self.rawValue)"
       default: "Presentation/Feature/\(self.rawValue)"
       }
     }
     
     var targetName: String {
       switch self {
-      case .DesignSystem: "\(self.rawValue)"
-      default: "\(self.rawValue)Feature"
+      case .DesignSystem, .Router, .AppCoordinator: "\(self.rawValue)"
+      default: "\(self.rawValue)"
       }
     }
   }
