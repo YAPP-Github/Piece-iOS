@@ -40,6 +40,7 @@ final class BasicInfoViewModel {
   init(dependencies: Dependencies) {
     self.getMatchProfileBasicUseCase = dependencies.getMatchProfileBasicUseCase
     self.matchingBasicInfoModel = BasicInfoModel(
+      id: -1,
       shortIntroduce: "",
       nickname: "",
       age: -1,
@@ -64,6 +65,7 @@ final class BasicInfoViewModel {
     do {
       let entity = try await getMatchProfileBasicUseCase.execute()
       matchingBasicInfoModel = BasicInfoModel(
+        id: entity.id,
         shortIntroduce: entity.shortIntroduce,
         nickname: entity.nickname,
         age: entity.age,

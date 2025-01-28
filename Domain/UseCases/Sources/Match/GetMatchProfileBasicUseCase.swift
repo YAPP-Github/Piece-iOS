@@ -15,6 +15,7 @@ final class GetMatchProfileBasicUseCaseImpl: GetMatchProfileBasicUseCase {
   func execute() async throws -> MatchProfileBasicModel {
     // TODO: - repository 구현 후 수정
     return MatchProfileBasicModel(
+      id: 0,
       shortIntroduce: "음악과 요리를 좋아하는",
       nickname: "수줍은 수달",
       age: 25,
