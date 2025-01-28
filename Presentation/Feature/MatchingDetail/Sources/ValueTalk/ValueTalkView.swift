@@ -48,8 +48,8 @@ struct ValueTalkView: View {
       
       if viewModel.isNameViewVisible {
         BasicInfoNameView(
-          description: valueTalkModel.description,
-          nickname: valueTalkModel.nickname,
+          shortIntroduce: viewModel.valueTalkModel.description,
+          nickname: viewModel.valueTalkModel.nickname,
           moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
         )
         .padding(20)

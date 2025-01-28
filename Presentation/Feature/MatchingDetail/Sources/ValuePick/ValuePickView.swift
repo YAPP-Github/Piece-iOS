@@ -41,8 +41,8 @@ struct ValuePickView: View {
       
       if viewModel.isNameViewVisible {
         BasicInfoNameView(
-          description: viewModel.description ?? "",
-          nickname: viewModel.nickname ?? ""
+          shortIntroduce: viewModel.description,
+          nickname: viewModel.nickname
         ) {
           viewModel.handleAction(.didTapMoreButton)
         }

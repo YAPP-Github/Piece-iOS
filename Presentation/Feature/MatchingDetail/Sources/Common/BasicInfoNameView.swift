@@ -10,18 +10,18 @@ import SwiftUI
 
 struct BasicInfoNameView: View {
   init(
-    description: String,
+    shortIntroduce: String,
     nickname: String,
     moreButtonAction: @escaping () -> Void
   ) {
-    self.description = description
+    self.shortIntroduce = shortIntroduce
     self.nickname = nickname
     self.moreButtonAction = moreButtonAction
   }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text(description)
+      Text(shortIntroduce)
         .pretendard(.body_M_R)
         .foregroundStyle(Color.grayscaleBlack)
       
@@ -41,14 +41,14 @@ struct BasicInfoNameView: View {
     }
   }
   
-  private let description: String
+  private let shortIntroduce: String
   private let nickname: String
   private let moreButtonAction: () -> Void
 }
 
 #Preview {
   BasicInfoNameView(
-    description: "음악과 요리를 좋아하는",
+    shortIntroduce: "음악과 요리를 좋아하는",
     nickname: "수줍은 수달",
     moreButtonAction: { }
   )

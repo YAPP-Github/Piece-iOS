@@ -5,11 +5,17 @@
 // Created by summercat on 2025/01/02.
 //
 
-import SwiftUI
 import DesignSystem
+import Entities
+import SwiftUI
+import UseCases
 
 struct MatchingDetailBasicInfoView: View {
   @State var viewModel: MatchingDetailBasicInfoViewModel
+  
+  init(dependencies: BasicInfoViewModel.Dependencies) {
+    _viewModel = .init(wrappedValue: BasicInfoViewModel(dependencies: dependencies))
+  }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -18,7 +24,11 @@ struct MatchingDetailBasicInfoView: View {
       VStack(alignment: .leading) {
         title
         Spacer()
-        name
+        BasicInfoNameView(
+          shortIntroduce: viewModel.matchingBasicInfoModel.shortIntroduce,
+          nickname: viewModel.matchingBasicInfoModel.nickname,
+          moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
+        )
       }
       .padding(.vertical, 20)
       basicInfoCards
@@ -84,8 +94,8 @@ struct MatchingDetailBasicInfoView: View {
       )
       ProfileCard(
         type: .matching,
-        category: "종교",
-        answer: { religionAnswer }
+        category: "몸무게",
+        answer: { weightAnswer }
       )
     }
   }
@@ -143,10 +153,15 @@ struct MatchingDetailBasicInfoView: View {
     }
   }
   
-  private var religionAnswer: some View {
-    Text(viewModel.matchingBasicInfoModel.religion)
-      .pretendard(.heading_S_SB)
-      .foregroundStyle(Color.grayscaleBlack)
+  private var weightAnswer: some View {
+    HStack(alignment: .center, spacing: 0) {
+      Text(viewModel.matchingBasicInfoModel.weight.description)
+        .pretendard(.heading_S_SB)
+        .foregroundStyle(Color.grayscaleBlack)
+      Text("kg")
+        .pretendard(.body_S_M)
+        .foregroundStyle(Color.grayscaleBlack)
+    }
   }
   
   private var regionAnswer: some View {
@@ -198,20 +213,22 @@ struct MatchingDetailBasicInfoView: View {
 }
 
 #Preview {
-  MatchingDetailBasicInfoView(
-    viewModel: MatchingDetailBasicInfoViewModel(
-      matchingBasicInfoModel:
-        MatchingBasicInfoModel(
-          description: "음악과 요리를 좋아하는",
-          nickname: "수줍은 수달",
-          age: 25,
-          birthYear: 00,
-          height: 180,
-          religion: "무교",
-          region: "세종특별자치시",
-          job: "프리랜서",
-          isSmoker: false
-        )
+  let mockUseCase = MockGetMatchProfileBasicUseCaseImpl()
+  BasicInfoView(dependencies: .init(getMatchProfileBasicUseCase: mockUseCase))
+}
+
+final class MockGetMatchProfileBasicUseCaseImpl: GetMatchProfileBasicUseCase {
+  func execute() async throws -> MatchProfileBasicModel {
+    return MatchProfileBasicModel(
+      shortIntroduce: "음악과 요리를 좋아하는",
+      nickname: "수줍은 수달",
+      age: 25,
+      birthYear: "00",
+      height: 180,
+      weight: 72,
+      region: "세종특별자치시",
+      job: "프리랜서",
+      isSmoker: false
     )
-  )
+  }
 }
