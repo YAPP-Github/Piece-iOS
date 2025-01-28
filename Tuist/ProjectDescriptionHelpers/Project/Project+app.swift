@@ -20,7 +20,7 @@ extension Project {
       bundleId: AppConstants.bundleId,
       deploymentTargets: AppConstants.deploymentTargets,
       infoPlist: .extendingDefault(with: [
-        "UILaunchScreen": "LaunchScreen"
+        "UILaunchStoryboardName": "LaunchScreen",
       ]),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
