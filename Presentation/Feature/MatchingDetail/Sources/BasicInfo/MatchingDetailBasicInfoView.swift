@@ -34,8 +34,16 @@ struct MatchingDetailBasicInfoView: View {
       basicInfoCards
       buttons
     }
+<<<<<<<< HEAD:Presentation/Feature/MatchingDetail/Sources/BasicInfo/MatchingDetailBasicInfoView.swift
     .padding(.horizontal, 20)
     .background(Color.primaryLight)
+========
+    .background(
+      DesignSystemAsset.Images.matchingDetailBG.swiftUIImage
+        .resizable()
+        .ignoresSafeArea()
+    )
+>>>>>>>> 4a58c07 ([PC-199] Chore: 매칭 기본 정보 화면 변경):Presentation/Feature/MatchingDetail/Sources/BasicInfo/Internal/BasicInfoView.swift
   }
   
   private var title: some View {
