@@ -11,6 +11,7 @@ import UseCases
 
 public struct BasicInfoCoordinator: View {
   private let dependencies: Dependencies
+  @Environment(Router.self) private var router: Router
   
   public init(dependencies: Dependencies) {
     self.dependencies = dependencies
@@ -22,6 +23,7 @@ public struct BasicInfoCoordinator: View {
         getMatchProfileBasicUseCase: dependencies.getMatchProfileBasicUseCase
       )
     )
+    .environment(router)
 //    .navigationDestination(for: Destination.self) { destination in
 //      switch destination {
 //      case .valueTalk:
