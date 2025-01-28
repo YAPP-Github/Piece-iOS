@@ -5,8 +5,9 @@
 //  Created by summercat on 1/28/25.
 //
 
-public struct MatchProfileBasicModel {
+public struct MatchProfileBasicModel: Identifiable {
   public init(
+    id: Int,
     shortIntroduce: String,
     nickname: String,
     age: Int,
@@ -17,6 +18,7 @@ public struct MatchProfileBasicModel {
     job: String,
     isSmoker: Bool
   ) {
+    self.id = id
     self.shortIntroduce = shortIntroduce
     self.nickname = nickname
     self.age = age
@@ -28,6 +30,7 @@ public struct MatchProfileBasicModel {
     self.isSmoker = isSmoker
   }
   
+  public let id: Int
   public let shortIntroduce: String
   public let nickname: String
   public let age: Int
