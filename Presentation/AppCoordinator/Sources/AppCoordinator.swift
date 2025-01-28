@@ -9,7 +9,7 @@ import Router
 import SwiftUI
 
 public struct AppCoordinator: View {
-  @State var router = Router()
+  @State private var router = Router()
   
   public init() { }
   
