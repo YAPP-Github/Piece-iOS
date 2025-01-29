@@ -10,7 +10,7 @@ import Router
 import SwiftUI
 import UseCases
 
-struct ValuePickView: View {
+public struct ValuePickView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
     static let accepetButtonText = "매칭 수락하기"
@@ -21,17 +21,17 @@ struct ValuePickView: View {
   @State private var contentOffset: CGFloat = 0
   @Environment(Router.self) private var router: Router
   
-  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
+  public init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
     _viewModel = .init(wrappedValue: .init(getMatchValuePickUseCase: getMatchValuePickUseCase))
   }
   
-  var body: some View {
+  public var body: some View {
     VStack(spacing: 0) {
       NavigationBar(
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
         rightButtonTap: {
-          viewModel.handleAction(.didTapCloseButton)
+          router.popToMain()
         },
         backgroundColor: .grayscaleWhite
       )

@@ -18,10 +18,7 @@ final class ValueTalkViewModel {
   
   enum Action {
     case contentOffsetDidChange(CGFloat)
-    case didTapCloseButton
     case didTapMoreButton
-    case didTapPreviousButton
-    case didTapNextButton
   }
   
   init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {

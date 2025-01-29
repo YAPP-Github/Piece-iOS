@@ -17,7 +17,9 @@ public struct Coordinator {
     case .matchProfileBasic:
       MatchProfileBasicView(getMatchProfileBasicUseCase: UseCaseFactory.createGetMatchProfileBasicUseCase())
     case .matchValueTalk:
-      EmptyView()
+      ValueTalkView(getMatchValueTalkUseCase: UseCaseFactory.createGetMatchValueTalkUseCase())
+    case .matchValuePick:
+      ValuePickView(getMatchValuePickUseCase: UseCaseFactory.createGetMatchValuePickUseCase())
     }
   }
 }
