@@ -1,5 +1,5 @@
 //
-// BasicInfoView.swift
+// MatchProfileBasicView.swift
 // MatchingDetail
 //
 // Created by summercat on 2025/01/02.
@@ -10,12 +10,12 @@ import Router
 import SwiftUI
 import UseCases
 
-public struct BasicInfoView: View {
+public struct MatchProfileBasicView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
   }
   
-  @State var viewModel: BasicInfoViewModel
+  @State var viewModel: MatchProfileBasicViewModel
   @Environment(Router.self) private var router: Router
   
   public init(
@@ -210,8 +210,8 @@ public struct BasicInfoView: View {
 }
 
 //#Preview {
-//  BasicInfoView(
-//    viewModel: BasicInfoViewModel(
+//  MatchProfileBasicView(
+//    viewModel: MatchProfileBasicViewModel(
 //      basicInfoModel:
 //        BasicInfoModel(
 //          description: "음악과 요리를 좋아하는",
