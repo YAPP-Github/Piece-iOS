@@ -9,7 +9,8 @@ import ProjectDescription
 
 extension Project {
   public static func app(
-    dependencies: [TargetDependency] = []
+    dependencies: [TargetDependency] = [],
+    packages: [Package] = []
   ) -> Project {
     let name = AppConstants.appName
     let target = Target.target(
@@ -43,7 +44,7 @@ extension Project {
         automaticSchemesOptions: .disabled,
         developmentRegion: "kor"
       ),
-      packages: [],
+      packages: packages,
       settings: .settings(),
 //          .settings(configurations: [
 //        .configuration(environment: .dev),
