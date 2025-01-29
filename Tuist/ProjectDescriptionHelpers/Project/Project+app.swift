@@ -18,7 +18,9 @@ extension Project {
       product: .app,
       bundleId: AppConstants.bundleId,
       deploymentTargets: AppConstants.deploymentTargets,
-      infoPlist: .default,
+      infoPlist: .extendingDefault(with: [
+        "UILaunchScreen": "LaunchScreen"
+      ]),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: dependencies,
