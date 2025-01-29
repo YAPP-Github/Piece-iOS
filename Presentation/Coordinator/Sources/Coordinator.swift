@@ -13,6 +13,11 @@ import UseCases
 public struct Coordinator {
   @ViewBuilder
   public static func view(for route: Route) -> some View {
+    switch route {
+    case .matchProfileBasic:
+      BasicInfoView(getMatchProfileBasicUseCase: UseCaseFactory.createGetMatchProfileBasicUseCase())
+    case .matchValueTalk:
       EmptyView()
+    }
   }
 }

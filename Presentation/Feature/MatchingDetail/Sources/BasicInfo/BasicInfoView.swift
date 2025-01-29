@@ -5,39 +5,56 @@
 // Created by summercat on 2025/01/02.
 //
 
-import SwiftUI
 import DesignSystem
+import Router
+import SwiftUI
+import UseCases
 
-struct BasicInfoView: View {
+public struct BasicInfoView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
   }
   
   @State var viewModel: BasicInfoViewModel
+  @Environment(Router.self) private var router: Router
   
-  var body: some View {
+  public init(
+    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
+  ) {
+    _viewModel = .init(wrappedValue: .init(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase))
+  }
+  
+  public var body: some View {
+    if let basicInfoModel = viewModel.basicInfoModel {
+      content(basicInfoModel: basicInfoModel)
+    } else {
+      EmptyView()
+    }
+  }
+  
+  private func content(basicInfoModel: BasicInfoModel) -> some View {
     VStack(alignment: .leading, spacing: 0) {
       NavigationBar(
         title: viewModel.navigationTitle,
         rightButtonTap: {
-        viewModel.handleAction(.didTapCloseButton)
-      })
+          viewModel.handleAction(.didTapCloseButton)
+        })
       
       VStack(alignment: .leading) {
         title
         Spacer()
         BasicInfoNameView(
-          description: viewModel.matchingBasicInfoModel.description,
-          nickname: viewModel.matchingBasicInfoModel.nickname,
+          description: basicInfoModel.description,
+          nickname: basicInfoModel.nickname,
           moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
         )
       }
       .padding(.horizontal, Constant.horizontalPadding)
       .padding(.vertical, 20)
       
-      basicInfoCards
+      basicInfoCards(basicInfoModel: basicInfoModel)
         .padding(.horizontal, Constant.horizontalPadding)
-
+      
       buttons
         .padding(.horizontal, Constant.horizontalPadding)
     }
@@ -52,81 +69,81 @@ struct BasicInfoView: View {
   
   // MARK: - Basic info card
   
-  private var basicInfoCards: some View {
+  private func basicInfoCards(basicInfoModel: BasicInfoModel) -> some View {
     VStack(spacing: 4) {
-      infoCardFirstRow
-      infoCardSecondRow
+      infoCardFirstRow(basicInfoModel: basicInfoModel)
+      infoCardSecondRow(basicInfoModel: basicInfoModel)
     }
     .padding(.vertical, 12)
   }
   
-  private var infoCardFirstRow: some View {
+  private func infoCardFirstRow(basicInfoModel: BasicInfoModel) -> some View {
     HStack(spacing: 4) {
       ProfileCard(
         type: .matching,
         category: "나이",
-        answer: { ageAnswer }
+        answer: { ageAnswer(basicInfoModel: basicInfoModel) }
       )
       .frame(width: 144)
       
       ProfileCard(
         type: .matching,
         category: "키",
-        answer: { heightAnswer }
+        answer: { heightAnswer(basicInfoModel: basicInfoModel) }
       )
       ProfileCard(
         type: .matching,
         category: "종교",
-        answer: { religionAnswer }
+        answer: { religionAnswer(basicInfoModel: basicInfoModel) }
       )
     }
   }
   
-  private var infoCardSecondRow: some View {
+  private func infoCardSecondRow(basicInfoModel: BasicInfoModel) -> some View  {
     HStack(spacing: 4) {
       ProfileCard(
         type: .matching,
         category: "활동 지역",
-        answer: { regionAnswer }
+        answer: { regionAnswer(basicInfoModel: basicInfoModel) }
       )
       .frame(width: 144)
       
       ProfileCard(
         type: .matching,
         category: "직업",
-        answer: { jobAnswer }
+        answer: { jobAnswer(basicInfoModel: basicInfoModel) }
       )
       ProfileCard(
         type: .matching,
         category: "흡연",
-        answer: { smokingAnswer }
+        answer: { smokingAnswer(basicInfoModel: basicInfoModel) }
       )
     }
   }
   
-  private var ageAnswer: some View {
+  private func ageAnswer(basicInfoModel: BasicInfoModel) -> some View {
     HStack(alignment: .center, spacing: 4) {
       Text("만")
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleBlack)
       HStack(alignment: .center, spacing: 0) {
-        Text("\(viewModel.matchingBasicInfoModel.age)")
+        Text("\(basicInfoModel.age)")
           .pretendard(.heading_S_SB)
           .foregroundStyle(Color.grayscaleBlack)
         Text("세")
           .pretendard(.body_S_M)
           .foregroundStyle(Color.grayscaleBlack)
       }
-      Text("\(viewModel.matchingBasicInfoModel.birthYear)년생")
+      Text("\(basicInfoModel.birthYear)년생")
         .lineLimit(1)
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark2)
     }
   }
   
-  private var heightAnswer: some View {
+  private func heightAnswer(basicInfoModel: BasicInfoModel) -> some View  {
     HStack(alignment: .center, spacing: 0) {
-      Text(viewModel.matchingBasicInfoModel.height.description)
+      Text(basicInfoModel.height.description)
         .pretendard(.heading_S_SB)
         .foregroundStyle(Color.grayscaleBlack)
       Text("cm")
@@ -135,28 +152,28 @@ struct BasicInfoView: View {
     }
   }
   
-  private var religionAnswer: some View {
-    Text(viewModel.matchingBasicInfoModel.religion)
+  private func religionAnswer(basicInfoModel: BasicInfoModel) -> some View  {
+    Text(basicInfoModel.religion)
       .pretendard(.heading_S_SB)
       .foregroundStyle(Color.grayscaleBlack)
   }
   
-  private var regionAnswer: some View {
-    Text(viewModel.matchingBasicInfoModel.region)
+  private func regionAnswer(basicInfoModel: BasicInfoModel) -> some View  {
+    Text(basicInfoModel.region)
       .pretendard(.heading_S_SB)
       .foregroundStyle(Color.grayscaleBlack)
   }
   
-  private var jobAnswer: some View {
-    Text(viewModel.matchingBasicInfoModel.job)
+  private func jobAnswer(basicInfoModel: BasicInfoModel) -> some View  {
+    Text(basicInfoModel.job)
       .lineLimit(1)
       .truncationMode(.tail)
       .pretendard(.heading_S_SB)
       .foregroundStyle(Color.grayscaleBlack)
   }
   
-  private var smokingAnswer: some View {
-    Text(viewModel.matchingBasicInfoModel.isSmoker ? "흡연" : "비흡연")
+  private func smokingAnswer(basicInfoModel: BasicInfoModel) -> some View  {
+    Text(basicInfoModel.isSmoker ? "흡연" : "비흡연")
       .pretendard(.heading_S_SB)
       .foregroundStyle(Color.grayscaleBlack)
   }
@@ -184,26 +201,29 @@ struct BasicInfoView: View {
     CircleButton(
       type: .solid,
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
-      action: { }
+      action: {
+        router.push(to: .matchValueTalk)
+//        viewModel.handleAction(.didTapNextButton)
+      }
     )
   }
 }
 
-#Preview {
-  BasicInfoView(
-    viewModel: BasicInfoViewModel(
-      matchingBasicInfoModel:
-        BasicInfoModel(
-          description: "음악과 요리를 좋아하는",
-          nickname: "수줍은 수달",
-          age: 25,
-          birthYear: 00,
-          height: 180,
-          religion: "무교",
-          region: "세종특별자치시",
-          job: "프리랜서",
-          isSmoker: false
-        )
-    )
-  )
-}
+//#Preview {
+//  BasicInfoView(
+//    viewModel: BasicInfoViewModel(
+//      basicInfoModel:
+//        BasicInfoModel(
+//          description: "음악과 요리를 좋아하는",
+//          nickname: "수줍은 수달",
+//          age: 25,
+//          birthYear: 00,
+//          height: 180,
+//          religion: "무교",
+//          region: "세종특별자치시",
+//          job: "프리랜서",
+//          isSmoker: false
+//        )
+//    )
+//  )
+//}

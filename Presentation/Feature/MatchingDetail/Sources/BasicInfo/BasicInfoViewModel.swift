@@ -6,6 +6,7 @@
 //
 
 import Observation
+import UseCases
 
 @Observable
 final class BasicInfoViewModel {
@@ -19,16 +20,16 @@ final class BasicInfoViewModel {
     case didTapMoreButton
     case didTapNextButton
   }
-  
+
   let navigationTitle = Constant.navigationTitle
   let title = Constant.title
-  private(set) var matchingBasicInfoModel: BasicInfoModel
+  private(set) var basicInfoModel: BasicInfoModel?
+  private let getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
   
-  init(matchingBasicInfoModel: BasicInfoModel) {
-    self.matchingBasicInfoModel = matchingBasicInfoModel
+  init(getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase) {
+    self.getMatchProfileBasicUseCase = getMatchProfileBasicUseCase
   }
   
   func handleAction(_ action: Action) {
-    
   }
 }
