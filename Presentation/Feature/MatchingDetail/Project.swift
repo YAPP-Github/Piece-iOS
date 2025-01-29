@@ -11,6 +11,7 @@ import ProjectDescriptionHelpers
 let project = Project.staticLibrary(
   name: Modules.Presentation.MatchingDetail.rawValue,
   dependencies: [
+    .domain(target: .UseCases),
     .presentation(target: .DesignSystem),
   ]
 )
