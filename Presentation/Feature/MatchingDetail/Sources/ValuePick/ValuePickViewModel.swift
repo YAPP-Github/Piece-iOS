@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Observation
+import UseCases
 
 @Observable
 final class ValuePickViewModel {
@@ -25,29 +27,22 @@ final class ValuePickViewModel {
     case didTapDenyButton
   }
   
-  init(
-    description: String,
-    nickname: String,
-    valuePicks: [ValuePickModel]
-  ) {
-    self.description = description
-    self.nickname = nickname
-    self.valuePicks = valuePicks
-    self.selectedTab = .all
-    self.displayedValuePicks = valuePicks
+  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
+    self.getMatchValuePickUseCase = getMatchValuePickUseCase
   }
   
   let tabs = ValuePickTab.allCases
   
   private(set) var navigationTitle: String = Constant.navigationTitle
-  private(set) var description: String
-  private(set) var nickname: String
+  private(set) var description: String?
+  private(set) var nickname: String?
   private(set) var contentOffset: CGFloat = 0
   private(set) var isNameViewVisible: Bool = true
-  private(set) var selectedTab: ValuePickTab
-  private(set) var displayedValuePicks: [ValuePickModel]
+  private(set) var selectedTab: ValuePickTab = .all
+  private(set) var displayedValuePicks: [ValuePickModel] = []
   
-  private var valuePicks: [ValuePickModel]
+  private var valuePicks: [ValuePickModel] = []
+  private let getMatchValuePickUseCase: GetMatchValuePickUseCase
 
   
   func handleAction(_ action: Action) {
