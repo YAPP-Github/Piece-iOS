@@ -74,6 +74,7 @@ public extension Modules {
   enum Presentation: String {
     case DesignSystem
     case Router
+    case Coordinator
     case Login
     case SignUp
     case MatchingMain
@@ -81,7 +82,7 @@ public extension Modules {
     
     var path: String {
       switch self {
-      case .DesignSystem, .Router: "Presentation/\(self.rawValue)"
+      case .DesignSystem, .Router, .Coordinator: "Presentation/\(self.rawValue)"
       default: "Presentation/Feature/\(self.rawValue)"
       }
     }
