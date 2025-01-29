@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import Router
 import SwiftUI
 import UseCases
 
@@ -17,8 +18,9 @@ public struct ValueTalkView: View {
   ]
   @State var viewModel: ValueTalkViewModel
   @State private var contentOffset: CGFloat = 0
+  @Environment(Router.self) private var router: Router
   
-  init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
+  public init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
     _viewModel = .init(wrappedValue: .init(getMatchValueTalkUseCase: getMatchValueTalkUseCase))
   }
   
@@ -36,7 +38,7 @@ public struct ValueTalkView: View {
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
         rightButtonTap: {
-          viewModel.handleAction(.didTapCloseButton)
+          router.popToMain()
         },
         backgroundColor: .grayscaleWhite
       )
@@ -116,7 +118,7 @@ public struct ValueTalkView: View {
     CircleButton(
       type: .solid,
       icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage,
-      action: { viewModel.handleAction(.didTapPreviousButton) }
+      action: { router.pop() }
     )
   }
   
@@ -124,7 +126,7 @@ public struct ValueTalkView: View {
     CircleButton(
       type: .solid,
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
-      action: { viewModel.handleAction(.didTapNextButton) }
+      action: { router.push(to: .matchValuePick) }
     )
   }
 }

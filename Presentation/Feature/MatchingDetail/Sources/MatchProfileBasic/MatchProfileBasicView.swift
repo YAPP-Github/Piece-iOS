@@ -37,7 +37,7 @@ public struct MatchProfileBasicView: View {
       NavigationBar(
         title: viewModel.navigationTitle,
         rightButtonTap: {
-          viewModel.handleAction(.didTapCloseButton)
+          router.popToMain()
         })
       
       VStack(alignment: .leading) {
@@ -203,7 +203,6 @@ public struct MatchProfileBasicView: View {
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
       action: {
         router.push(to: .matchValueTalk)
-//        viewModel.handleAction(.didTapNextButton)
       }
     )
   }

@@ -16,9 +16,7 @@ final class MatchProfileBasicViewModel {
   }
   
   enum Action {
-    case didTapCloseButton
     case didTapMoreButton
-    case didTapNextButton
   }
 
   let navigationTitle = Constant.navigationTitle

@@ -18,11 +18,9 @@ final class ValuePickViewModel {
   
   enum Action {
     case contentOffsetDidChange(CGFloat)
-    case didTapCloseButton
     case didTapMoreButton
     case didSelectTab(ValuePickTab)
     case didTapPhotoButton
-    case didTapPreviousButton
     case didTapAcceptButton
     case didTapDenyButton
   }
@@ -51,9 +49,6 @@ final class ValuePickViewModel {
       contentOffset = contentOffset
       isNameViewVisible = offset > Constant.nameVisibilityOffset
       
-    case .didTapCloseButton:
-      return
-      
     case .didTapMoreButton:
       return
       
@@ -62,9 +57,6 @@ final class ValuePickViewModel {
       // TODO: - API 확인 후 displayedValuePicks의 값을 변경하는 로직 추가
       
     case .didTapPhotoButton:
-      return
-      
-    case .didTapPreviousButton:
       return
       
     case .didTapAcceptButton:
