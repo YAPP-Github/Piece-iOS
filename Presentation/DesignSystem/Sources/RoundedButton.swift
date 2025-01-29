@@ -45,7 +45,7 @@ public struct RoundedButton: View {
   public init(
     type: ButtonType,
     buttonText: String,
-    icon: Image?,
+    icon: Image? = nil,
     height: CGFloat? = 52,
     rounding: Bool = false,
     action: @escaping () -> Void
