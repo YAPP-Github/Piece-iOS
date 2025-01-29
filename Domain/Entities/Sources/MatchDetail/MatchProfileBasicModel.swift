@@ -6,6 +6,30 @@
 //
 
 public struct MatchProfileBasicModel: Identifiable {
+  public init(
+    id: Int,
+    shortIntroduction: String,
+    nickname: String,
+    age: Int,
+    birthYear: String,
+    height: Int,
+    weight: Int,
+    location: String,
+    job: String,
+    smokingStatus: String
+  ) {
+    self.id = id
+    self.shortIntroduction = shortIntroduction
+    self.nickname = nickname
+    self.age = age
+    self.birthYear = birthYear
+    self.height = height
+    self.weight = weight
+    self.location = location
+    self.job = job
+    self.smokingStatus = smokingStatus
+  }
+  
   public let id: Int
   public let shortIntroduction: String
   public let nickname: String
