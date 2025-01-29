@@ -31,13 +31,13 @@ let package = Package(
 )
 
 enum ExternalDependency: String, CaseIterable {
-  case SwiftNavigation
+  case Kingfisher
 }
 
 extension ExternalDependency {
   var url: String {
     switch self {
-    case .SwiftNavigation: "https://github.com/pointfreeco/swift-navigation"
+    case .Kingfisher: "https://github.com/onevcat/Kingfisher"
     }
   }
 }
@@ -45,7 +45,7 @@ extension ExternalDependency {
 extension ExternalDependency {
   var version: PackageDescription.Version {
     switch self {
-    case .SwiftNavigation: "2.0.0"
+    case .Kingfisher: "8.1.4"
     }
   }
 }
