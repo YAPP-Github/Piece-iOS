@@ -15,4 +15,8 @@ public struct UseCaseFactory {
   public static func createGetMatchValueTalkUseCase() -> GetMatchValueTalkUseCase {
     GetMatchValueTalkUseCaseImpl()
   }
+  
+  public static func createGetMatchValuePickUseCase() -> GetMatchValuePickUseCase {
+    GetMatchValuePickUseCaseImpl()
+  }
 }
