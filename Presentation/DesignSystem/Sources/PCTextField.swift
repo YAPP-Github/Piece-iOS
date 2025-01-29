@@ -18,7 +18,7 @@ public struct PCTextField<FocusField: Hashable>: View {
       HStack(spacing: 8) {
         TextField("", text: $text)
           .focused(focusState, equals: focusField)
-          .onChange(of: text) { newValue in
+          .onChange(of: text) { _, newValue in
             text = newValue
             onChangeHandler?(newValue)
           }
