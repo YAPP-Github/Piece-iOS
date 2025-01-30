@@ -15,11 +15,14 @@ public struct Coordinator {
   public static func view(for route: Route) -> some View {
     switch route {
     case .matchProfileBasic:
-      MatchProfileBasicView(getMatchProfileBasicUseCase: UseCaseFactory.createGetMatchProfileBasicUseCase())
+      let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase()
+      MatchDetailViewFactory.createMatchProfileBasicView(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase)
     case .matchValueTalk:
-      ValueTalkView(getMatchValueTalkUseCase: UseCaseFactory.createGetMatchValueTalkUseCase())
+      let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase()
+      MatchDetailViewFactory.createMatchValueTalkView(getMatchValueTalkUseCase: getMatchValueTalkUseCase)
     case .matchValuePick:
-      ValuePickView(getMatchValuePickUseCase: UseCaseFactory.createGetMatchValuePickUseCase())
+      let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase()
+      MatchDetailViewFactory.createMatchValuePickView(getMatchValuePickUseCase: getMatchValuePickUseCase)
     }
   }
 }

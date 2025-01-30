@@ -10,7 +10,7 @@ import Router
 import SwiftUI
 import UseCases
 
-public struct ValueTalkView: View {
+struct ValueTalkView: View {
   private let images: [Image] = [
     DesignSystemAsset.Images.illustPuzzle01.swiftUIImage,
     DesignSystemAsset.Images.illustPuzzle02.swiftUIImage,
@@ -20,11 +20,11 @@ public struct ValueTalkView: View {
   @State private var contentOffset: CGFloat = 0
   @Environment(Router.self) private var router: Router
   
-  public init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
+  init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
     _viewModel = .init(wrappedValue: .init(getMatchValueTalkUseCase: getMatchValueTalkUseCase))
   }
   
-  public var body: some View {
+  var body: some View {
     if let valueTalkModel = viewModel.valueTalkModel {
       content(valueTalkModel: valueTalkModel)
     } else {
