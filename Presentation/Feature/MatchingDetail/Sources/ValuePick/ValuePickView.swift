@@ -74,6 +74,7 @@ struct ValuePickView: View {
       
       bottomButtons
     }
+    .toolbar(.hidden)
   }
   
   // MARK: - 탭
