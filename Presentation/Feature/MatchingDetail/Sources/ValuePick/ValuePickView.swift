@@ -6,7 +6,9 @@
 //
 
 import DesignSystem
+import Router
 import SwiftUI
+import UseCases
 
 struct ValuePickView: View {
   private enum Constant {
@@ -17,6 +19,11 @@ struct ValuePickView: View {
   
   @State var viewModel: ValuePickViewModel
   @State private var contentOffset: CGFloat = 0
+  @Environment(Router.self) private var router: Router
+  
+  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
+    _viewModel = .init(wrappedValue: .init(getMatchValuePickUseCase: getMatchValuePickUseCase))
+  }
   
   var body: some View {
     VStack(spacing: 0) {
@@ -24,7 +31,7 @@ struct ValuePickView: View {
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
         rightButtonTap: {
-          viewModel.handleAction(.didTapCloseButton)
+          router.popToMain()
         },
         backgroundColor: .grayscaleWhite
       )
@@ -34,8 +41,8 @@ struct ValuePickView: View {
       
       if viewModel.isNameViewVisible {
         BasicInfoNameView(
-          description: viewModel.description,
-          nickname: viewModel.nickname
+          description: viewModel.description ?? "",
+          nickname: viewModel.nickname ?? ""
         ) {
           viewModel.handleAction(.didTapMoreButton)
         }
@@ -144,7 +151,7 @@ struct ValuePickView: View {
         type: .solid,
         icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage
       ) {
-        viewModel.handleAction(.didTapPreviousButton)
+        router.pop()
       }
       
       RoundedButton(
@@ -163,67 +170,67 @@ struct ValuePickView: View {
   }
 }
 
-#Preview {
-  ValuePickView(
-    viewModel: ValuePickViewModel(
-      description: "음악과 요리를 좋아하는",
-      nickname: "수줍은 수달",
-      valuePicks: [
-        ValuePickModel(
-          id: 0,
-          category: "음주",
-          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
-          answers: [
-            ValuePickAnswerModel(
-              id: 1,
-              content: "함께 술을 즐기고 싶어요",
-              isSelected: false
-            ),
-            ValuePickAnswerModel(
-              id: 2,
-              content: "같이 술을 즐길 수 없어도 괜찮아요",
-              isSelected: true
-            ),
-          ],
-          isSame: true
-        ),
-        ValuePickModel(
-          id: 1,
-          category: "음주",
-          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
-          answers: [
-            ValuePickAnswerModel(
-              id: 1,
-              content: "함께 술을 즐기고 싶어요",
-              isSelected: true
-            ),
-            ValuePickAnswerModel(
-              id: 2,
-              content: "같이 술을 즐길 수 없어도 괜찮아요",
-              isSelected: false
-            ),
-          ],
-          isSame: true
-        ),
-        ValuePickModel(
-          id: 2,
-          category: "음주",
-          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
-          answers: [
-            ValuePickAnswerModel(
-              id: 1,
-              content: "함께 술을 즐기고 싶어요",
-              isSelected: true
-            ),
-            ValuePickAnswerModel(
-              id: 2,
-              content: "같이 술을 즐길 수 없어도 괜찮아요",
-              isSelected: false
-            ),
-          ],
-          isSame: false
-        )
-      ]
-    )
-  )
-}
+//#Preview {
+//  ValuePickView(
+//    viewModel: ValuePickViewModel(
+//      description: "음악과 요리를 좋아하는",
+//      nickname: "수줍은 수달",
+//      valuePicks: [
+//        ValuePickModel(
+//          id: 0,
+//          category: "음주",
+//          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
+//          answers: [
+//            ValuePickAnswerModel(
+//              id: 1,
+//              content: "함께 술을 즐기고 싶어요",
+//              isSelected: false
+//            ),
+//            ValuePickAnswerModel(
+//              id: 2,
+//              content: "같이 술을 즐길 수 없어도 괜찮아요",
+//              isSelected: true
+//            ),
+//          ],
+//          isSame: true
+//        ),
+//        ValuePickModel(
+//          id: 1,
+//          category: "음주",
+//          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
+//          answers: [
+//            ValuePickAnswerModel(
+//              id: 1,
+//              content: "함께 술을 즐기고 싶어요",
+//              isSelected: true
+//            ),
+//            ValuePickAnswerModel(
+//              id: 2,
+//              content: "같이 술을 즐길 수 없어도 괜찮아요",
+//              isSelected: false
+//            ),
+//          ],
+//          isSame: true
+//        ),
+//        ValuePickModel(
+//          id: 2,
+//          category: "음주",
+//          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
+//          answers: [
+//            ValuePickAnswerModel(
+//              id: 1,
+//              content: "함께 술을 즐기고 싶어요",
+//              isSelected: true
+//            ),
+//            ValuePickAnswerModel(
+//              id: 2,
+//              content: "같이 술을 즐길 수 없어도 괜찮아요",
+//              isSelected: false
+//            ),
+//          ],
+//          isSame: false
+//        )
+//      ]
+//    )
+//  )
+//}

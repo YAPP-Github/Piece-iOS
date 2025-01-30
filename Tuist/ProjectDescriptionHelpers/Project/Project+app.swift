@@ -9,7 +9,8 @@ import ProjectDescription
 
 extension Project {
   public static func app(
-    dependencies: [TargetDependency] = []
+    dependencies: [TargetDependency] = [],
+    packages: [Package] = []
   ) -> Project {
     let name = AppConstants.appName
     let target = Target.target(
@@ -18,7 +19,9 @@ extension Project {
       product: .app,
       bundleId: AppConstants.bundleId,
       deploymentTargets: AppConstants.deploymentTargets,
-      infoPlist: .default,
+      infoPlist: .extendingDefault(with: [
+        "UILaunchScreen": "LaunchScreen"
+      ]),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: dependencies,
@@ -41,7 +44,7 @@ extension Project {
         automaticSchemesOptions: .disabled,
         developmentRegion: "kor"
       ),
-      packages: [],
+      packages: packages,
       settings: .settings(),
 //          .settings(configurations: [
 //        .configuration(environment: .dev),

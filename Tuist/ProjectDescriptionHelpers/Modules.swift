@@ -35,24 +35,21 @@ public extension Modules {
 public extension Modules {
   enum Domain: String {
     case Entities
+    case UseCases
     
     var path: String {
       switch self {
-      case .Entities: "Domain/\(self.rawValue)"
-      default: "Domain/UseCase/\(self.rawValue)"
+      default: "Domain/\(self.rawValue)"
       }
     }
     
     var targetName: String {
-      switch self {
-      case .Entities:  "\(self.rawValue)"
-      default: "\(self.rawValue)UseCase"
-      }
+      "\(self.rawValue)"
     }
   }
 }
 
-// MARK: - Extension
+// MARK: - Utility
 
 public extension Modules {
   enum Utility: String {
@@ -73,6 +70,8 @@ public extension Modules {
 public extension Modules {
   enum Presentation: String {
     case DesignSystem
+    case Router
+    case Coordinator
     case Login
     case SignUp
     case MatchingMain
@@ -80,16 +79,13 @@ public extension Modules {
     
     var path: String {
       switch self {
-      case .DesignSystem: "Presentation/\(self.rawValue)"
+      case .DesignSystem, .Router, .Coordinator: "Presentation/\(self.rawValue)"
       default: "Presentation/Feature/\(self.rawValue)"
       }
     }
     
     var targetName: String {
-      switch self {
-      case .DesignSystem: "\(self.rawValue)"
-      default: "\(self.rawValue)Feature"
-      }
+      "\(self.rawValue)"
     }
   }
 }
