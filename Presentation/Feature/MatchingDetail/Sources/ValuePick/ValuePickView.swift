@@ -31,7 +31,7 @@ struct ValuePickView: View {
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
         rightButtonTap: {
-          router.popToMain()
+          router.popToRoot()
         },
         backgroundColor: .grayscaleWhite
       )
@@ -74,6 +74,7 @@ struct ValuePickView: View {
       
       bottomButtons
     }
+    .toolbar(.hidden)
   }
   
   // MARK: - 탭

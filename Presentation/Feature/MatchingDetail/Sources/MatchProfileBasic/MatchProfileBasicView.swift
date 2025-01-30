@@ -37,7 +37,7 @@ struct MatchProfileBasicView: View {
       NavigationBar(
         title: viewModel.navigationTitle,
         rightButtonTap: {
-          router.popToMain()
+          router.popToRoot()
         })
       
       VStack(alignment: .leading) {
