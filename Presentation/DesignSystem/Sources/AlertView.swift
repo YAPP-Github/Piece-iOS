@@ -88,6 +88,7 @@ private struct AlertBottomView: View {
         type: .outline,
         buttonText: firstButtonText,
         icon: nil,
+        width: .maxWidth,
         height: 52,
         action: firstButtonAction
       )
@@ -95,6 +96,7 @@ private struct AlertBottomView: View {
         type: .solid,
         buttonText: secondButtonText,
         icon: nil,
+        width: .maxWidth,
         height: 52,
         action: secondButtonAction
       )
