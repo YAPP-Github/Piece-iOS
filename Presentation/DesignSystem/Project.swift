@@ -25,5 +25,8 @@ private let infoPlist: [String: Plist.Value] = [
 
 let project = Project.dynamicResourceFramework(
   name: Modules.Presentation.DesignSystem.rawValue,
-  infoPlist: .extendingDefault(with: infoPlist)
+  infoPlist: .extendingDefault(with: infoPlist),
+  dependencies: [
+    .utility(target: .PCFoundationExtension),
+  ]
 )
