@@ -10,7 +10,7 @@ import Router
 import SwiftUI
 import UseCases
 
-public struct MatchProfileBasicView: View {
+struct MatchProfileBasicView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
   }
@@ -18,13 +18,13 @@ public struct MatchProfileBasicView: View {
   @State var viewModel: MatchProfileBasicViewModel
   @Environment(Router.self) private var router: Router
   
-  public init(
+  init(
     getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
   ) {
     _viewModel = .init(wrappedValue: .init(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase))
   }
   
-  public var body: some View {
+  var body: some View {
     if let basicInfoModel = viewModel.basicInfoModel {
       content(basicInfoModel: basicInfoModel)
     } else {
