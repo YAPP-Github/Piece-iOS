@@ -14,6 +14,7 @@ struct ContentView: View {
           Coordinator.view(for: route)
         }
     }
+    .toolbar(.hidden)
     .environment(router)
   }
 }
