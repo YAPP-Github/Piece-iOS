@@ -38,7 +38,7 @@ struct ValueTalkView: View {
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
         rightButtonTap: {
-          router.popToMain()
+          router.popToRoot()
         },
         backgroundColor: .grayscaleWhite
       )
