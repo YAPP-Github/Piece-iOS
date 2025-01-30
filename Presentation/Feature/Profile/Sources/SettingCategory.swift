@@ -56,6 +56,6 @@ struct SettingCategory: View {
     Text(descriptionText)
       .pretendard(.caption_M_M)
       .foregroundStyle(Color.grayscaleDark3)
-      .padding(.leading, 48)
+      .padding(.leading, 28)
   }
 }
