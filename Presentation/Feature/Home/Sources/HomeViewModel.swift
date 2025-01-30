@@ -8,12 +8,18 @@
 import DesignSystem
 import Observation
 import SwiftUI
+import UseCases
 
 @Observable
 final class HomeViewModel {
   enum Action { }
   
-  init() { }
+  init(
+    getProfileUseCase: GetProfileUseCase
+  ) {
+    self.getProfileUseCase = getProfileUseCase
+  }
   
   let tabbarViewModel = TabBarViewModel()
+  private(set) var getProfileUseCase: GetProfileUseCase
 }
