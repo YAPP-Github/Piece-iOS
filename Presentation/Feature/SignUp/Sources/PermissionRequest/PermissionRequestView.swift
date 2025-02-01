@@ -71,7 +71,7 @@ struct PermissionRequestView: View {
         leftButtonTap: { viewModel.handleAction(.tapBackButton) }
       )
     }
-    .alert("권한 설정", isPresented: $viewModel.shouldShowSettingsAlert) {
+    .alert("필수 권한 요청", isPresented: $viewModel.shouldShowSettingsAlert) {
       Button("설정으로 이동") {
         viewModel.handleAction(.showShettingAlert)
       }
@@ -79,7 +79,7 @@ struct PermissionRequestView: View {
         viewModel.handleAction(.cancelAlert)
       }
     } message: {
-      Text("카메라 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
+      Text("사진, 카메라 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
     }
   }
 
