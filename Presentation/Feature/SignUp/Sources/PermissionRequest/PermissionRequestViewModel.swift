@@ -12,17 +12,19 @@ import UseCases
 
 @Observable
 final class PermissionRequestViewModel {
-  private(set) var isCameraPermissionGranted: Bool = false // 카메라 권한 여부
-  private(set) var isNotificationPermissionGranted: Bool = false // 알림 권한 여부
-  private(set) var isContactsPermissionGranted: Bool = false // 연락처 권한 여부
+  private(set) var isCameraPermissionGranted: Bool = false
+  private(set) var isPhotoPermissionGranted: Bool = false
+  private(set) var isNotificationPermissionGranted: Bool = false
+  private(set) var isContactsPermissionGranted: Bool = false
   var shouldShowSettingsAlert: Bool = false // 카메라 권한 거절 상태에 설정창으로 보내기 위한 flag
   var nextButtonType: RoundedButton.ButtonType {
     isCameraPermissionGranted ? .solid : .disabled
   }
   private var dismissAction: (() -> Void)?
-  private let requestCameraUseCase: RequestCameraUseCase
-  private let requestContactsUseCase: RequestContactsUseCase
-  private let requestNotificationUseCase: RequestNotificationUseCase
+  private let cameraPermissionUseCase: CameraPermissionUseCase
+  private let photoPermissionUseCase: PhotoPermissionUseCase
+  private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let notificationPermissionUseCase: NotificationPermissionUseCase
   
   enum Action {
     case showShettingAlert
@@ -32,13 +34,15 @@ final class PermissionRequestViewModel {
   }
   
   init(
-    requestCameraUseCase: RequestCameraUseCase,
-    requestContactsUseCase: RequestContactsUseCase,
-    requestNotificationUseCase: RequestNotificationUseCase
+    cameraPermissionUseCase: CameraPermissionUseCase,
+    photoPermissionUseCase: PhotoPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase
   ) {
-    self.requestCameraUseCase = requestCameraUseCase
-    self.requestContactsUseCase = requestContactsUseCase
-    self.requestNotificationUseCase = requestNotificationUseCase
+    self.cameraPermissionUseCase = cameraPermissionUseCase
+    self.photoPermissionUseCase = photoPermissionUseCase
+    self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.notificationPermissionUseCase = notificationPermissionUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -64,9 +68,10 @@ final class PermissionRequestViewModel {
   
   private func fetchPermissions() async {
     do {
-      isCameraPermissionGranted = await requestCameraUseCase.execute()
-      isNotificationPermissionGranted = try await requestNotificationUseCase.execute()
-      isContactsPermissionGranted = try await requestContactsUseCase.execute()
+      isCameraPermissionGranted = await cameraPermissionUseCase.execute()
+      isPhotoPermissionGranted = await photoPermissionUseCase.execute()
+      isNotificationPermissionGranted = try await notificationPermissionUseCase.execute()
+      isContactsPermissionGranted = try await contactsPermissionUseCase.execute()
     } catch {
       print("Permission request error: \(error)")
     }

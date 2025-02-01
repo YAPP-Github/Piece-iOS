@@ -8,11 +8,11 @@
 import Foundation
 import UserNotifications
 
-public protocol RequestNotificationUseCase {
+public protocol NotificationPermissionUseCase {
   func execute() async throws -> Bool
 }
 
-public final class RequestNotificationUseCaseImplementation: RequestNotificationUseCase {
+public final class NotificationPermissionUseCaseImpl: NotificationPermissionUseCase {
   private let userNotificationCenter: UNUserNotificationCenter
   private let options : UNAuthorizationOptions
   
@@ -25,6 +25,17 @@ public final class RequestNotificationUseCaseImplementation: RequestNotification
   }
   
   public func execute() async throws -> Bool {
-    try await userNotificationCenter.requestAuthorization(options: options)
+    let status = await userNotificationCenter.notificationSettings().authorizationStatus
+    
+    switch status {
+    case .notDetermined:
+      return try await userNotificationCenter.requestAuthorization(options: options)
+    case .authorized, .provisional:
+      return true
+    case .denied, .ephemeral:
+      return false
+    @unknown default:
+      return false
+    }
   }
 }
