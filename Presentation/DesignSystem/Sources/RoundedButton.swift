@@ -47,12 +47,14 @@ public struct RoundedButton: View {
     buttonText: String,
     icon: Image? = nil,
     height: CGFloat? = 52,
+    rounding: Bool = false,
     action: @escaping () -> Void
   ) {
     self.type = type
     self.buttonText = buttonText
     self.icon = icon
     self.height = height
+    self.rounding = rounding
     self.action = action
   }
   
@@ -71,15 +73,36 @@ public struct RoundedButton: View {
           .foregroundStyle(type.contentColor)
       }
       .frame(height: height)
-      .frame(maxWidth: .infinity)
+      .padding(.horizontal, rounding ? 28 : 12)
       .background(
-        RoundedRectangle(cornerRadius: 8)
-          .foregroundStyle(type.backgroundColor)
+        backgroundView
       )
       .overlay(
-        RoundedRectangle(cornerRadius: 8)
-          .strokeBorder(type.borderColor, lineWidth: 1)
+        border
       )
+    }
+    .disabled(type == .disabled)
+  }
+  
+  @ViewBuilder
+  private var backgroundView: some View {
+    if rounding {
+      Capsule()
+        .foregroundStyle(type.backgroundColor)
+    } else {
+      RoundedRectangle(cornerRadius: 8)
+        .foregroundStyle(type.backgroundColor)
+    }
+  }
+  
+  @ViewBuilder
+  private var border: some View {
+    if rounding {
+      Capsule()
+        .strokeBorder(type.borderColor, lineWidth: 1)
+    } else {
+      RoundedRectangle(cornerRadius: 8)
+        .strokeBorder(type.borderColor, lineWidth: 1)
     }
   }
   
@@ -87,6 +110,7 @@ public struct RoundedButton: View {
   private let buttonText: String
   private let icon: Image?
   private let height: CGFloat?
+  private let rounding: Bool
   private let action: () -> Void
 }
 
@@ -96,6 +120,7 @@ public struct RoundedButton: View {
       type: .solid,
       buttonText: "Solid",
       icon: nil,
+      rounding: true,
       action: {
       })
     RoundedButton(
@@ -108,6 +133,13 @@ public struct RoundedButton: View {
       type: .outline,
       buttonText: "Outline w/ icon",
       icon: DesignSystemAsset.Icons.question20.swiftUIImage,
+      action: {
+      })
+    RoundedButton(
+      type: .outline,
+      buttonText: "Outline w/ icon",
+      icon: DesignSystemAsset.Icons.question20.swiftUIImage,
+      rounding: true,
       action: {
       })
     RoundedButton(

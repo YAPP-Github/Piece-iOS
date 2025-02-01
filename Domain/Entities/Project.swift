@@ -9,8 +9,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
-  name: Modules.Domain.UseCases.rawValue,
+  name: Modules.Domain.Entities.rawValue,
   dependencies: [
-    .domain(target: .Entities)
   ]
 )

@@ -1,16 +1,14 @@
 //
 //  Project.swift
-//  ProjectDescriptionHelpers
 //
-//  Created by summercat on 2025/01/30.
+//  Created by summercat on 12/22/24.
 //
 
 import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
-  name: Modules.Domain.UseCases.rawValue,
+  name: Modules.Presentation.Router.rawValue,
   dependencies: [
-    .domain(target: .Entities)
   ]
 )
