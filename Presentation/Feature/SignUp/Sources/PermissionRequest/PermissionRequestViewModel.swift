@@ -79,7 +79,7 @@ final class PermissionRequestViewModel {
   
   @MainActor
   private func updateSettingsAlertState() async {
-    shouldShowSettingsAlert = !isCameraPermissionGranted
+    shouldShowSettingsAlert = !(isCameraPermissionGranted && isPhotoPermissionGranted)
   }
   
   @MainActor
