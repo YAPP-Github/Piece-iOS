@@ -65,7 +65,9 @@ final class PermissionRequestViewModel {
     await fetchPermissions()
     await updateSettingsAlertState()
   }
-  
+}
+
+private extension PermissionRequestViewModel {
   private func fetchPermissions() async {
     do {
       isCameraPermissionGranted = await cameraPermissionUseCase.execute()
