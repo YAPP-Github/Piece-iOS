@@ -140,9 +140,10 @@ struct PermissionRequestView: View {
 #Preview("권한 요청 - 카메라 거절 상태") {
   PermissionRequestView(
     viewModel:PermissionRequestViewModel(
-      requestCameraUseCase: MockRequestCameraUseCase(isGranted: false),
-      requestContactsUseCase: MockRequestContactsUseCase(),
-      requestNotificationUseCase: MockRequestNotificationUseCase()
+      cameraPermissionUseCase: MockCameraPermissionUseCase(isGranted: false),
+      photoPermissionUseCase: MockPhotoPermissionUseCase(),
+      contactsPermissionUseCase: MockContactsPermissionUseCase(),
+      notificationPermissionUseCase: MockNotificationPermissionUseCase()
     )
   )
 }
@@ -150,14 +151,15 @@ struct PermissionRequestView: View {
 #Preview("권한 요청 - 카메라 허락 상태") {
   PermissionRequestView(
     viewModel: PermissionRequestViewModel(
-      requestCameraUseCase: MockRequestCameraUseCase(isGranted: true),
-      requestContactsUseCase: MockRequestContactsUseCase(),
-      requestNotificationUseCase: MockRequestNotificationUseCase()
+      cameraPermissionUseCase: MockCameraPermissionUseCase(isGranted: true),
+      photoPermissionUseCase: MockPhotoPermissionUseCase(),
+      contactsPermissionUseCase: MockContactsPermissionUseCase(),
+      notificationPermissionUseCase: MockNotificationPermissionUseCase()
     )
   )
 }
 
-class MockRequestCameraUseCase: RequestCameraUseCase {
+class MockCameraPermissionUseCase: CameraPermissionUseCase {
     var isGranted: Bool
     
     init(isGranted: Bool) {
@@ -169,10 +171,14 @@ class MockRequestCameraUseCase: RequestCameraUseCase {
     }
 }
 
-class MockRequestContactsUseCase: RequestContactsUseCase {
+class MockPhotoPermissionUseCase: PhotoPermissionUseCase {
+  func execute() async -> Bool { return true }
+}
+
+class MockContactsPermissionUseCase: ContactsPermissionUseCase {
   func execute() async throws -> Bool { return true }
 }
 
-class MockRequestNotificationUseCase: RequestNotificationUseCase {
+class MockNotificationPermissionUseCase: NotificationPermissionUseCase {
   func execute() async throws -> Bool { return true }
 }
