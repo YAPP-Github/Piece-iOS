@@ -8,11 +8,11 @@
 import Foundation
 import Contacts
 
-public protocol RequestContactsUseCase {
+public protocol ContactsPermissionUseCase {
   func execute() async throws -> Bool
 }
 
-public final class RequestContactsUseCaseImplementation: RequestContactsUseCase {
+public final class ContactsPermissionUseCaseImpl: ContactsPermissionUseCase {
   private let contactStore: CNContactStore
   
   public init(contactStore: CNContactStore = CNContactStore()) {
@@ -23,11 +23,13 @@ public final class RequestContactsUseCaseImplementation: RequestContactsUseCase 
     let status = CNContactStore.authorizationStatus(for: .contacts)
     
     switch status {
-    case .authorized:
-      return true
     case .notDetermined:
       return try await contactStore.requestAccess(for: .contacts)
-    default:
+    case .denied, .restricted:
+      return false
+    case .authorized, .limited:
+      return true
+    @unknown default:
       return false
     }
   }

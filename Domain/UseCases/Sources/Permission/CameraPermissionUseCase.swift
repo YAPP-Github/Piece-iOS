@@ -8,11 +8,11 @@
 import Foundation
 import AVFoundation
 
-public protocol RequestCameraUseCase {
+public protocol CameraPermissionUseCase {
   func execute() async -> Bool
 }
 
-public final class RequestCameraUseCaseImplementation: RequestCameraUseCase {
+public final class CameraPermissionUseCaseImpl: CameraPermissionUseCase {
   private let captureDevice: AVCaptureDevice.Type
   
   public init(captureDevice: AVCaptureDevice.Type = AVCaptureDevice.self) {
@@ -20,14 +20,16 @@ public final class RequestCameraUseCaseImplementation: RequestCameraUseCase {
   }
   
   public func execute() async -> Bool {
-    let status = AVCaptureDevice.authorizationStatus(for: .video)
+    let status = captureDevice.authorizationStatus(for: .video)
     
     switch status {
     case .authorized:
       return true
+    case .denied, .restricted:
+      return false
     case .notDetermined:
       return await captureDevice.requestAccess(for: .video)
-    default:
+    @unknown default:
       return false
     }
   }
