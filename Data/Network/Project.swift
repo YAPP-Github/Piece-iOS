@@ -11,5 +11,6 @@ import ProjectDescriptionHelpers
 let project = Project.dynamicFramework(
   name: Modules.Data.Network.rawValue,
   dependencies: [
+    .external(name: "Alamofire", condition: .none)
   ]
 )
