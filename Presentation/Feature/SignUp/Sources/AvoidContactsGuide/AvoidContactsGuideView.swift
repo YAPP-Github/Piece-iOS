@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DesignSystem
+import UseCases
 
 struct AvoidContactsGuideView: View {
   private enum Constant {
@@ -100,6 +101,14 @@ struct AvoidContactsGuideView: View {
 }
 
 #Preview {
-  AvoidContactsGuideView(viewModel: AvoidContactsGuideViewModel())
+  AvoidContactsGuideView(
+    viewModel: AvoidContactsGuideViewModel(
+      contactsPermissionUseCase: MockContactsPermissionUseCase()
+    )
+  )
+}
+
+private class MockContactsPermissionUseCase: ContactsPermissionUseCase {
+  func execute() async throws -> Bool { return true }
 }
 
