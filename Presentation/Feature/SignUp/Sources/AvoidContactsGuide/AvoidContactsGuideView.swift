@@ -9,6 +9,11 @@ import SwiftUI
 import DesignSystem
 
 struct AvoidContactsGuideView: View {
+  private enum Constant {
+    static let accepetButtonText = "아는사람 차단하기"
+    static let denyButtonText = "다음에 할래요"
+    static let toastText = "지인 차단 완료"
+  }
   @State var viewModel: AvoidContactsGuideViewModel
   @Environment(\.dismiss) private var dismiss
   
@@ -72,7 +77,7 @@ struct AvoidContactsGuideView: View {
   private var accepetButton: some View {
     RoundedButton(
       type: .solid,
-      buttonText: "아는사람 차단하기",
+      buttonText: Constant.accepetButtonText,
       action: { viewModel.handleAction(.tapAccepetButton) }
     )
   }
@@ -82,7 +87,7 @@ struct AvoidContactsGuideView: View {
       DesignSystemAsset.Icons.check80.swiftUIImage
         .renderingMode(.template)
       
-      Text("지인 차단 완료")
+      Text(Constant.toastText)
         .pretendard(.heading_M_SB)
     }
     .foregroundStyle(Color.grayscaleWhite)
