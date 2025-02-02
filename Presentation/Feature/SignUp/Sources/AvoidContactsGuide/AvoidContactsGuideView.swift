@@ -16,37 +16,51 @@ struct AvoidContactsGuideView: View {
     static let toastText = "지인 차단 완료"
   }
   @State var viewModel: AvoidContactsGuideViewModel
+  @State private var path = NavigationPath()
   @Environment(\.dismiss) private var dismiss
   
   var body: some View {
-    ZStack {
-      VStack {
-        title
+    NavigationStack(path: $path) {
+      ZStack {
+        VStack {
+          title
+          
+          Rectangle() // 일러스트 (임시)
+            .fill(Color.blue)
+            .frame(width: 240, height: 240)
+          
+          Spacer()
+          
+          denyButton
+          
+          accepetButton
+        }
+        .padding([.horizontal, .top], 20)
+        .padding(.bottom, 10)
+        .navigationBarModifier {
+          NavigationBar(
+            title: "",
+            leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+          )
+        }
+        .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
+              Button("설정으로 이동") {
+                viewModel.handleAction(.showShettingAlert)
+              }
+              Button("취소", role: .cancel) {
+                viewModel.handleAction(.cancelAlert)
+              }
+            } message: {
+              Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
+            }
         
-        Rectangle() // 일러스트 (임시)
-          .fill(Color.blue)
-          .frame(width: 240, height: 240)
-        
-        Spacer()
-        
-        denyButton
-        
-        accepetButton
+        toast
+          .opacity(viewModel.showToast ? 1 : 0)
+          .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
       }
-      .padding([.horizontal, .top], 20)
-      .padding(.bottom, 10)
-      .navigationBarModifier {
-        NavigationBar(
-          title: "",
-          leftButtonTap: { viewModel.handleAction(.tapBackButton) }
-        )
+      .onAppear {
+        viewModel.setDismissAction { dismiss() }
       }
-      toast
-        .opacity(viewModel.showToast ? 1 : 0)
-        .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
-    }
-    .onAppear {
-      viewModel.setDismissAction { dismiss() }
     }
   }
   
@@ -80,6 +94,7 @@ struct AvoidContactsGuideView: View {
       buttonText: Constant.accepetButtonText,
       action: { viewModel.handleAction(.tapAccepetButton) }
     )
+    .frame(maxWidth: .infinity)
   }
   
   private var toast: some View {
