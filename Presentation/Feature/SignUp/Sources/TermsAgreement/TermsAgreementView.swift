@@ -21,7 +21,7 @@ struct TermsAgreementView: View {
           Spacer()
             .frame(height: 120)
           
-          allTermsCheckBox
+          allTermsCheckableRow
           
           termsList
           
