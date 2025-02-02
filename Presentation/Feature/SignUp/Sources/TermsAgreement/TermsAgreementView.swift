@@ -21,7 +21,7 @@ struct TermsAgreementView: View {
           Spacer()
             .frame(height: 120)
           
-          allTermsCheckBox
+          allTermsCheckableRow
           
           termsList
           
@@ -88,7 +88,7 @@ struct TermsAgreementView: View {
       CheckableTermRow(
         label: term.title,
         isChecked: term.isChecked,
-        isRequrired: term.required,
+        isRequired: term.required,
         tapChevornButton: { viewModel.handleAction(.tapChevronButton(with: term)) }
       )
       .onTapGesture {
