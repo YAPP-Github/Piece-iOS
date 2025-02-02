@@ -11,7 +11,7 @@ import Observation
 @Observable
 final class AvoidContactsGuideViewModel {
   enum Action {
-    case tapBlockContactButton
+    case tapAccepetButton
     case tapBackButton
     case tapDenyButton
   }

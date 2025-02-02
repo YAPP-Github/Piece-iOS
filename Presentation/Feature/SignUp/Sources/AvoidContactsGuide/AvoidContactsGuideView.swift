@@ -25,7 +25,7 @@ struct AvoidContactsGuideView: View {
         
         denyButton
         
-        nextButton
+        accepetButton
       }
       .padding(.horizontal, 20)
       .padding(.top, 20)
@@ -62,18 +62,18 @@ struct AvoidContactsGuideView: View {
   }
   
   private var denyButton: some View {
-    PCTextButton(content: "다음에 할래요")
+    PCTextButton(content: Constant.denyButtonText)
       .onTapGesture {
         viewModel.handleAction(.tapDenyButton)
       }
       .padding(.bottom, 20)
   }
   
-  private var nextButton: some View {
+  private var accepetButton: some View {
     RoundedButton(
       type: .solid,
       buttonText: "아는사람 차단하기",
-      action: { viewModel.handleAction(.tapBlockContactButton) }
+      action: { viewModel.handleAction(.tapAccepetButton) }
     )
   }
   
