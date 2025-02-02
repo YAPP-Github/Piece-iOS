@@ -32,8 +32,7 @@ struct AvoidContactsGuideView: View {
         
         accepetButton
       }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
+      .padding([.horizontal, .top], 20)
       .padding(.bottom, 10)
       .navigationBarModifier {
         NavigationBar(
