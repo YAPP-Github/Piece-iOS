@@ -14,6 +14,7 @@ let project = Project.dynamicFramework(
     "BASE_URL": "$(BASE_URL)"
   ]),
   dependencies: [
-    .external(name: "Alamofire", condition: .none)
+    .external(name: "Alamofire", condition: .none),
+    .data(target: .LocalStorage)
   ]
 )
