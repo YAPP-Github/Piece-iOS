@@ -21,6 +21,7 @@ public extension Modules {
     case LocalStorage // 임시
     case Network
     case DTO
+    case Repository
     
     var path: String {
       "Data/\(self.rawValue)"
