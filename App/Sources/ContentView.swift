@@ -8,8 +8,7 @@ struct ContentView: View {
   var body: some View {
     // TODO: - Splash 화면으로 변경
     NavigationStack(path: $router.path) {
-      Rectangle()
-        .fill(.yellow)
+      Coordinator.view(for: .home)
         .navigationDestination(for: Route.self) { route in
           Coordinator.view(for: route)
         }
