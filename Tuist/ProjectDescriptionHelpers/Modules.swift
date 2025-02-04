@@ -39,6 +39,7 @@ public extension Modules {
   enum Domain: String {
     case Entities
     case UseCases
+    case RepositoryInterfaces
     
     var path: String {
       switch self {
