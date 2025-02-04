@@ -5,11 +5,12 @@
 //  Created by eunseou on 12/28/24.
 //
 
+import Observation
 import SwiftUI
 
 // MARK: - 탭바 뷰
 public struct TabBarView: View {
-  @ObservedObject private var viewModel: TabBarViewModel
+  @State private var viewModel: TabBarViewModel
   
   public init(
     viewModel: TabBarViewModel
@@ -60,8 +61,9 @@ public struct TabBarView: View {
 }
 
 // MARK: - 탭바 뷰모델 (임시)
-public class TabBarViewModel: ObservableObject {
-  @Published var selectedTab: Tab = .home
+@Observable
+public class TabBarViewModel {
+  public var selectedTab: Tab = .home
   
   public init() { }
   
