@@ -28,15 +28,6 @@ struct TermsAgreementView: View {
         
         nextButton
       }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
-      .padding(.bottom, 10)
-    }
-    .navigationBarModifier {
-      NavigationBar(
-        title: "",
-        leftButtonTap: { viewModel.handleAction(.tapBackButton) }
-      )
     }
   }
   
@@ -75,7 +66,7 @@ struct TermsAgreementView: View {
         label: term.title,
         isChecked: term.isChecked,
         isRequired: term.required,
-        tapChevornButton: { viewModel.handleAction(.tapTermURL(url: term.url)) }
+        tapChevornButton: { viewModel.handleAction(.tapChevronButton(with: term)) }
       )
       .onTapGesture {
         viewModel.handleAction(.toggleTerm(id: term.id))
@@ -136,18 +127,19 @@ struct TermsAgreementView: View {
         TermModel(
           id: 0,
           title: "서비스 이용약관 동의",
-          url: "",
+          url: "https://brassy-client-c0a.notion.site/16a2f1c4b966800f923cd499d8e07a97",
           required: true,
           isChecked: false
         ),
         TermModel(
           id: 1,
           title: "개인정보처리 방침 동의",
-          url: "",
+          url: "https://brassy-client-c0a.notion.site/16a2f1c4b96680f8b622e5925a394edf?pvs=4",
           required: true,
           isChecked: false
         )
-      ]
+      ],
+      navigationPath: NavigationPath()
     )
   )
 }
