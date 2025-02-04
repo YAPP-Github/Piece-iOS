@@ -92,9 +92,9 @@ struct AvoidContactsGuideView: View {
     RoundedButton(
       type: .solid,
       buttonText: Constant.accepetButtonText,
+      width: .maxWidth,
       action: { viewModel.handleAction(.tapAccepetButton) }
     )
-    .frame(maxWidth: .infinity)
   }
   
   private var toast: some View {
