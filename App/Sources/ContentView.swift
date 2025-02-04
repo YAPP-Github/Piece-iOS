@@ -12,7 +12,10 @@ struct ContentView: View {
         .navigationDestination(for: Route.self) { route in
           Coordinator.view(for: route)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea()
     }
+    .toolbar(.hidden, for: .navigationBar)
     .environment(router)
   }
 }
