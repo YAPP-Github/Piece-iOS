@@ -74,6 +74,7 @@ public extension Modules {
     case Coordinator
     case Login
     case SignUp
+    case Home
     case MatchingMain
     case MatchingDetail
     

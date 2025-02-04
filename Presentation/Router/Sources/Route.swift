@@ -6,6 +6,7 @@
 //
 
 public enum Route: Hashable {
+  case home
   case matchProfileBasic
   case matchValueTalk
   case matchValuePick
