@@ -35,8 +35,6 @@ public struct HomeNavigationBar: View {
         }
       }
     }
-    .frame(maxWidth: .infinity)
-    .frame(height: 60)
     .padding(.horizontal, 20)
     .padding(.vertical, 14)
     .background(Color.clear)
@@ -46,4 +44,20 @@ public struct HomeNavigationBar: View {
   public let foregroundColor: Color
   public let rightIcon: Image?
   public let rightIconTap: (() -> Void)?
+}
+
+#Preview {
+  ZStack(alignment: .top) {
+    Rectangle()
+      .fill(.red)
+    
+    HomeNavigationBar(
+      title: "Profile",
+      foregroundColor: .black,
+      rightIcon: DesignSystemAsset.Icons.alarm32.swiftUIImage
+    ) {
+      
+    }
+    .background(Color.yellow)
+  }
 }
