@@ -20,6 +20,7 @@ public extension Modules {
   enum Data: String {
     case LocalStorage // 임시
     case Network
+    case DTO
     
     var path: String {
       "Data/\(self.rawValue)"
