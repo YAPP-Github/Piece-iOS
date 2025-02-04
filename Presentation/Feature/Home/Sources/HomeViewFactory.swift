@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import UseCases
 
 public struct HomeViewFactory {
   @ViewBuilder
-  public static func createHomeView() -> some View {
-    HomeView(viewModel: HomeViewModel())
+  public static func createHomeView(getProfileUseCase: GetProfileUseCase) -> some View {
+    HomeView(getProfileUseCase: getProfileUseCase)
   }
 }
