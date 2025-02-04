@@ -171,14 +171,14 @@ class MockCameraPermissionUseCase: CameraPermissionUseCase {
     }
 }
 
-class MockPhotoPermissionUseCase: PhotoPermissionUseCase {
+private class MockPhotoPermissionUseCase: PhotoPermissionUseCase {
   func execute() async -> Bool { return true }
 }
 
-class MockContactsPermissionUseCase: ContactsPermissionUseCase {
+private class MockContactsPermissionUseCase: ContactsPermissionUseCase {
   func execute() async throws -> Bool { return true }
 }
 
-class MockNotificationPermissionUseCase: NotificationPermissionUseCase {
+private class MockNotificationPermissionUseCase: NotificationPermissionUseCase {
   func execute() async throws -> Bool { return true }
 }
