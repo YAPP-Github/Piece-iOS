@@ -32,8 +32,8 @@ struct ProfileView: View {
       
       matchingPiece
     }
-    .toolbar(.hidden)
-    .background(Color.grayscaleWhite)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .ignoresSafeArea(edges: .top)
   }
   
   private var navigationBar: some View {
@@ -98,7 +98,6 @@ struct ProfileView: View {
       infoCardFirstRow(userProfile: userProfile)
       infoCardSecondRow(userProfile: userProfile)
     }
-    .padding(.vertical, 12)
   }
   
   private func infoCardFirstRow(userProfile: UserProfile) -> some View {
