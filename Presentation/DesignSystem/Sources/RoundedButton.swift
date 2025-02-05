@@ -42,10 +42,16 @@ public struct RoundedButton: View {
     }
   }
   
+  public enum ButtonWidth: Equatable {
+    case contentSize
+    case maxWidth
+  }
+  
   public init(
     type: ButtonType,
     buttonText: String,
     icon: Image? = nil,
+    width: ButtonWidth = .contentSize,
     height: CGFloat? = 52,
     rounding: Bool = false,
     action: @escaping () -> Void
@@ -53,6 +59,7 @@ public struct RoundedButton: View {
     self.type = type
     self.buttonText = buttonText
     self.icon = icon
+    self.width = width
     self.height = height
     self.rounding = rounding
     self.action = action
@@ -72,6 +79,7 @@ public struct RoundedButton: View {
           .pretendard(.body_M_SB)
           .foregroundStyle(type.contentColor)
       }
+      .frame(maxWidth: width == .maxWidth ? .infinity : nil)
       .frame(height: height)
       .padding(.horizontal, rounding ? 28 : 12)
       .background(
@@ -109,6 +117,7 @@ public struct RoundedButton: View {
   private let type: ButtonType
   private let buttonText: String
   private let icon: Image?
+  private let width: ButtonWidth
   private let height: CGFloat?
   private let rounding: Bool
   private let action: () -> Void
@@ -120,6 +129,7 @@ public struct RoundedButton: View {
       type: .solid,
       buttonText: "Solid",
       icon: nil,
+      width: .maxWidth,
       rounding: true,
       action: {
       })
