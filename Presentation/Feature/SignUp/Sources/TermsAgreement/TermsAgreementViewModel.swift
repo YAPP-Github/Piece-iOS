@@ -21,12 +21,12 @@ final class TermsAgreementViewModel {
   }
   
   init(
-    terms: [TermModel],
-    navigationPath: NavigationPath,
+//    terms: [TermModel],
+   // navigationPath: NavigationPath,
     fetchTermsUseCase: FetchTermsUseCase
   ) {
-    self.terms = terms
-    self.navigationPath = navigationPath
+//    self.terms = terms
+  //  self.navigationPath = navigationPath
     self.fetchTermsUseCase = fetchTermsUseCase
 
     fetchTerms()
