@@ -33,7 +33,8 @@ class APIRequestInterceptor: RequestInterceptor {
     Task {
       do {
         // TODO: - refreshToken 메서드 적용
-        //let newToken = try await refreshAccessToken()
+        // 스웨거에 업데이트되고 넣어야할것같습니다!
+        //let newToken = try await refreshToken호출메서드()
         //keychain.save(.accessToken, value: newToken)
         completion(.retry)
       } catch {
