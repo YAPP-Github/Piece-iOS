@@ -6,8 +6,13 @@
 //
 
 import Foundation
+import Repository
 
 public struct UseCaseFactory {
+  public static func createFetchTermsUseCase() -> FetchTermsUseCase {
+    FetchTermsUseCaseImpl(repository: TermsRepository())
+  }
+  
   public static func createGetMatchProfileBasicUseCase() -> GetMatchProfileBasicUseCase {
     GetMatchProfileBasicUseCaseImpl()
   }
