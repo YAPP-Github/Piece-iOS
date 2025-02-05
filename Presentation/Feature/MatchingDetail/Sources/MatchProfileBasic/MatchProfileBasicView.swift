@@ -25,7 +25,7 @@ struct MatchProfileBasicView: View {
   }
   
   var body: some View {
-    if let basicInfoModel = viewModel.basicInfoModel {
+    if let basicInfoModel = viewModel.matchingBasicInfoModel {
       content(basicInfoModel: basicInfoModel)
         .toolbar(.hidden)
     } else {
@@ -45,7 +45,7 @@ struct MatchProfileBasicView: View {
         title
         Spacer()
         BasicInfoNameView(
-          description: basicInfoModel.description,
+          shortIntroduction: basicInfoModel.shortIntroduction,
           nickname: basicInfoModel.nickname,
           moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
         )
@@ -98,8 +98,8 @@ struct MatchProfileBasicView: View {
       )
       ProfileCard(
         type: .matching,
-        category: "종교",
-        answer: { religionAnswer(basicInfoModel: basicInfoModel) }
+        category: "몸무게",
+        answer: { weightAnswer(basicInfoModel: basicInfoModel) }
       )
     }
   }
@@ -157,10 +157,15 @@ struct MatchProfileBasicView: View {
     }
   }
   
-  private func religionAnswer(basicInfoModel: BasicInfoModel) -> some View  {
-    Text(basicInfoModel.religion)
-      .pretendard(.heading_S_SB)
-      .foregroundStyle(Color.grayscaleBlack)
+  private func weightAnswer(basicInfoModel: BasicInfoModel) -> some View  {
+    HStack(alignment: .center, spacing: 0) {
+      Text(basicInfoModel.weight.description)
+        .pretendard(.heading_S_SB)
+        .foregroundStyle(Color.grayscaleBlack)
+      Text("kg")
+        .pretendard(.body_S_M)
+        .foregroundStyle(Color.grayscaleBlack)
+    }
   }
   
   private func regionAnswer(basicInfoModel: BasicInfoModel) -> some View  {
@@ -178,7 +183,7 @@ struct MatchProfileBasicView: View {
   }
   
   private func smokingAnswer(basicInfoModel: BasicInfoModel) -> some View  {
-    Text(basicInfoModel.isSmoker ? "흡연" : "비흡연")
+    Text(basicInfoModel.smokingStatus)
       .pretendard(.heading_S_SB)
       .foregroundStyle(Color.grayscaleBlack)
   }
@@ -213,21 +218,3 @@ struct MatchProfileBasicView: View {
   }
 }
 
-//#Preview {
-//  MatchProfileBasicView(
-//    viewModel: MatchProfileBasicViewModel(
-//      basicInfoModel:
-//        BasicInfoModel(
-//          description: "음악과 요리를 좋아하는",
-//          nickname: "수줍은 수달",
-//          age: 25,
-//          birthYear: 00,
-//          height: 180,
-//          religion: "무교",
-//          region: "세종특별자치시",
-//          job: "프리랜서",
-//          isSmoker: false
-//        )
-//    )
-//  )
-//}
