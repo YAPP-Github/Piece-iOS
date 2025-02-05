@@ -11,6 +11,7 @@ import ProjectDescriptionHelpers
 let project = Project.dynamicFramework(
   name: Modules.Domain.UseCases.rawValue,
   dependencies: [
-    .domain(target: .Entities)
+    .domain(target: .Entities),
+    .data(target: .Repository)
   ]
 )
