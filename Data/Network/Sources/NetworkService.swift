@@ -25,18 +25,25 @@ public class NetworkService {
           case .success(let data):
             continuation.resume(returning: data)
           case .failure:
-            let statusCode = response.response?.statusCode ?? -1
-            let error: NetworkError = {
-              switch statusCode {
-              case 400: return .badRequest(error: nil)
-              case 401: return .unauthorized
-              case 403: return .forbidden
-              case 404: return .notFound
-              case 500: return .serverError
-              default: return .statusCode(statusCode)
-              }
-            }()
-            continuation.resume(throwing: error)
+            guard let statusCode = response.response?.statusCode else {
+              continuation.resume(throwing: NetworkError.decodingFailed)
+              return
+            }
+            switch statusCode {
+            case 400:
+              let apiError: APIError? = try? JSONDecoder().decode(APIError.self, from: response.data ?? Data())
+              continuation.resume(throwing: NetworkError.badRequest(error: apiError))
+            case 401:
+              continuation.resume(throwing: NetworkError.unauthorized)
+            case 403:
+              continuation.resume(throwing: NetworkError.forbidden)
+            case 404:
+              continuation.resume(throwing: NetworkError.notFound)
+            case 500:
+              continuation.resume(throwing: NetworkError.internalServerError)
+            default:
+              continuation.resume(throwing: NetworkError.statusCode(statusCode))
+            }
           }
         }
     }
