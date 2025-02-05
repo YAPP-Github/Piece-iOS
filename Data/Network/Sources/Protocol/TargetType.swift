@@ -35,7 +35,7 @@ extension TargetType {
     components?.queryItems = queryItems
     
     guard let finalURL = components?.url else {
-      throw NetworkError.invalidURL
+      throw NetworkError.notFound
     }
     
     var urlRequest = try URLRequest(url: finalURL, method: method)
