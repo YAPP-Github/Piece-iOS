@@ -16,15 +16,11 @@ public protocol TargetType: URLRequestConvertible {
   var requestType: RequestType { get }
 }
 
-extension TargetType {
+public extension TargetType {
   var baseURL: String {
     return NetworkConstants.baseURL
   }
-  
-  var headers: HTTPHeaders {
-    return [ HTTPHeader(name: NetworkHeader.contentType, value: NetworkHeader.applicationJson) ]
-  }
-  
+
   func asURLRequest() throws -> URLRequest {
     let baseURL = try baseURL.asURL()
     let url = baseURL.appendingPathComponent(path)
