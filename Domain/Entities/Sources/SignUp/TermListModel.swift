@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TermsListModel {
+public struct TermsListModel: Decodable {
   public let status: String
   public let message: String
   public let data: TermsItems
@@ -23,7 +23,7 @@ public struct TermsListModel {
   }
 }
 
-public struct TermsItems {
+public struct TermsItems: Decodable {
   public let responses: [TermItem]
   
   public init(responses: [TermItem]) {
@@ -31,12 +31,12 @@ public struct TermsItems {
   }
 }
 
-public struct TermItem {
-    let termId: Int
-    let title: String
-    let content: String
-    let required: Bool
-    let startDate: Date
+public struct TermItem: Decodable {
+  public let termId: Int
+  public let title: String
+  public let content: String
+  public let required: Bool
+  public  let startDate: Date
   
   public init(
     termId: Int,
