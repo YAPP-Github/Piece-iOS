@@ -59,7 +59,11 @@ struct MatchProfileBasicView: View {
       buttons
         .padding(.horizontal, Constant.horizontalPadding)
     }
-    .background(Color.primaryLight)
+    .background(
+      DesignSystemAsset.Images.matchingDetailBG.swiftUIImage
+        .resizable()
+        .ignoresSafeArea()
+    )
   }
   
   private var title: some View {
