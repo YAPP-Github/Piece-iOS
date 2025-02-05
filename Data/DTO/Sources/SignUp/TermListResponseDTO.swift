@@ -8,17 +8,17 @@
 import Foundation
 import Entities
 
-public struct TermsListResponseDTO: Decodable {
+public struct TermsListResponseDTO: Codable {
   public let status: String
   public let message: String
   public let data: TermsItemsResponseDTO
 }
 
-public struct TermsItemsResponseDTO: Decodable {
+public struct TermsItemsResponseDTO: Codable {
   public let responses: [TermItemResponseDTO]
 }
 
-public struct TermItemResponseDTO: Decodable {
+public struct TermItemResponseDTO: Codable {
   public let termId: Int
   public let title: String
   public let content: String
@@ -26,7 +26,7 @@ public struct TermItemResponseDTO: Decodable {
   public let startDate: Date
 }
 
-extension TermsListResponseDTO {
+public extension TermsListResponseDTO {
   func toDomain() -> TermsListModel {
     return TermsListModel(
       status: status,
@@ -36,14 +36,14 @@ extension TermsListResponseDTO {
   }
 }
 
-extension TermsItemsResponseDTO {
+public extension TermsItemsResponseDTO {
   func toDomain() -> TermsItems {
     return TermsItems(
       responses: responses.map { $0.toDomain()})
   }
 }
 
-extension TermItemResponseDTO {
+public extension TermItemResponseDTO {
   func toDomain() -> TermItem {
     return TermItem(
       termId: termId,
