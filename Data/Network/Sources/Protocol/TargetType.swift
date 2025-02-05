@@ -13,9 +13,7 @@ public protocol TargetType: URLRequestConvertible {
   var method: HTTPMethod { get }
   var path: String { get }
   var headers: [String: String] { get }
-  var parameters: String? { get }
-  var queryItems: [URLQueryItem]? { get }
-  var body: Data? { get }
+  var requestType: RequestType { get }
 }
 
 extension TargetType {
@@ -30,24 +28,40 @@ extension TargetType {
   func asURLRequest() throws -> URLRequest {
     let baseURL = try baseURL.asURL()
     let url = baseURL.appendingPathComponent(path)
-    
     var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-    components?.queryItems = queryItems
+    
+    switch requestType {
+    case .plain:
+      break
+      
+    case .query(let queryItems):
+      components?.queryItems = queryItems
+      
+    case .body(let body):
+      let jsonData = try body.encoded()
+      return requestAPI(url: url, httpBody: jsonData)
+      
+    case .queryAndBodyParameters(let queryItems, let body):
+      components?.queryItems = queryItems
+      guard let finalURL = components?.url else {
+        throw NetworkError.notFound
+      }
+      let jsonData = try body.encoded()
+      return requestAPI(url: finalURL, httpBody: jsonData)
+    }
     
     guard let finalURL = components?.url else {
       throw NetworkError.notFound
     }
     
-    var urlRequest = try URLRequest(url: finalURL, method: method)
-    
-    urlRequest.allHTTPHeaderFields = headers
-    urlRequest.httpBody = parameters?.data(using: .utf8)
-    
-    if method != .get {
-      urlRequest.httpBody = body
-    }
-    
-    return urlRequest
+    return requestAPI(url: finalURL, httpBody: nil)
   }
   
+  private func requestAPI(url: URL, httpBody: Data?) -> URLRequest {
+    var request = URLRequest(url: url)
+    request.httpMethod = method.rawValue
+    request.allHTTPHeaderFields = headers
+    request.httpBody = httpBody
+    return request
+  }
 }
