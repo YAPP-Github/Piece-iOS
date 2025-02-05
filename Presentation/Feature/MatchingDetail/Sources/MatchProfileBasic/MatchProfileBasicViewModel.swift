@@ -12,6 +12,7 @@ import UseCases
 final class MatchProfileBasicViewModel {
   enum Action {
     case didTapMoreButton
+    case didTapPhotoButton
   }
   
   private enum Constant {
@@ -21,15 +22,25 @@ final class MatchProfileBasicViewModel {
 
   @ObservationIgnored let navigationTitle = Constant.navigationTitle
   @ObservationIgnored let title = Constant.title
+  var isPhotoViewPresented: Bool = false
   
   private(set) var isLoading = true
   private(set) var error: Error?
   private(set) var matchingBasicInfoModel: BasicInfoModel?
+  private(set) var photoUri: String = ""
   private let getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
+  private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   
+  init(
+    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
     self.getMatchProfileBasicUseCase = getMatchProfileBasicUseCase
+    self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    
     Task {
       await fetchMatchingBasicInfo()
+      await fetchMatchPhoto()
     }
   }
   
@@ -37,6 +48,8 @@ final class MatchProfileBasicViewModel {
     switch action {
     case .didTapMoreButton:
       return
+    case .didTapPhotoButton:
+      isPhotoViewPresented = true
     }
   }
   
@@ -60,5 +73,14 @@ final class MatchProfileBasicViewModel {
       self.error = error
     }
     isLoading = false
+  }
+  
+  private func fetchMatchPhoto() async {
+    do {
+      let uri = try await getMatchPhotoUseCase.execute()
+      photoUri = uri
+    } catch {
+      self.error = error
+    }
   }
 }
