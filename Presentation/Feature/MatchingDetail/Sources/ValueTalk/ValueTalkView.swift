@@ -49,7 +49,7 @@ struct ValueTalkView: View {
       
       if viewModel.isNameViewVisible {
         BasicInfoNameView(
-          description: valueTalkModel.description,
+          shortIntroduction: valueTalkModel.description,
           nickname: valueTalkModel.nickname,
           moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
         )
