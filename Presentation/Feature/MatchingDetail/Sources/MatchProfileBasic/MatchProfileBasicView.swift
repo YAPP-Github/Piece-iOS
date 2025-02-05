@@ -19,9 +19,15 @@ struct MatchProfileBasicView: View {
   @Environment(Router.self) private var router: Router
   
   init(
-    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
+    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
   ) {
-    _viewModel = .init(wrappedValue: .init(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase))
+    _viewModel = .init(
+      wrappedValue: .init(
+        getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
+    )
   }
   
   var body: some View {
@@ -64,6 +70,9 @@ struct MatchProfileBasicView: View {
         .resizable()
         .ignoresSafeArea()
     )
+    .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
+      MatchDetailPhotoView(uri: viewModel.photoUri)
+    }
   }
   
   private var title: some View {
@@ -192,11 +201,22 @@ struct MatchProfileBasicView: View {
   
   private var buttons: some View {
     HStack(alignment: .center, spacing: 8) {
+      photoButton
       Spacer()
       backButton
       nextButton
     }
     .padding(.top, 12)
+  }
+  
+  private var photoButton: some View {
+    RoundedButton(
+      type: .outline,
+      buttonText: "사진 보기",
+      rounding: true
+    ) {
+      viewModel.handleAction(.didTapPhotoButton)
+    }
   }
   
   private var backButton: some View {
@@ -218,3 +238,10 @@ struct MatchProfileBasicView: View {
   }
 }
 
+#Preview {
+  MatchProfileBasicView(
+    getMatchProfileBasicUseCase: UseCaseFactory.createGetMatchProfileBasicUseCase(),
+    getMatchPhotoUseCase: UseCaseFactory.createGetMatchPhotoUseCase()
+  )
+  .environment(Router())
+}
