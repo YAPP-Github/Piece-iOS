@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import Router
 import DesignSystem
+import UseCases
+import Entities
 
 struct TermsAgreementView: View {
   @State var viewModel: TermsAgreementViewModel
+  @Environment(Router.self) private var router: Router
+  
+  init(
+    fetchTermsUseCase: FetchTermsUseCase
+  ) {
+    _viewModel = .init(wrappedValue: .init(fetchTermsUseCase: fetchTermsUseCase))
+  }
   
   var body: some View {
     ZStack {

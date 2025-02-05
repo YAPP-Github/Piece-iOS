@@ -8,6 +8,7 @@
 import SwiftUI
 import Observation
 import DesignSystem
+import UseCases
 
 @Observable
 final class TermsAgreementViewModel {
@@ -21,20 +22,26 @@ final class TermsAgreementViewModel {
   
   init(
     terms: [TermModel],
-    navigationPath: NavigationPath
+    navigationPath: NavigationPath,
+    fetchTermsUseCase: FetchTermsUseCase
   ) {
     self.terms = terms
     self.navigationPath = navigationPath
+    self.fetchTermsUseCase = fetchTermsUseCase
+
+    fetchTerms()
   }
   
   var terms: [TermModel]
   var navigationPath: NavigationPath
+
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
   }
   var nextButtonType: RoundedButton.ButtonType {
     isAllChecked ? .solid : .disabled
   }
+  private let fetchTermsUseCase: FetchTermsUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -51,6 +58,25 @@ final class TermsAgreementViewModel {
       navigationPath.append(term)
     default:
       return
+    }
+  }
+  
+  func fetchTerms() {
+    Task {
+      do {
+        let termsList = try await fetchTermsUseCase.execute()
+        terms = termsList.data.responses.map { term in
+          TermModel(
+            id: term.termId,
+            title: term.title,
+            url: term.content,
+            required: term.required,
+            isChecked: false
+          )
+        }
+      } catch {
+        print("❌ Error fetching terms: \(error.localizedDescription)")
+      }
     }
   }
 }
