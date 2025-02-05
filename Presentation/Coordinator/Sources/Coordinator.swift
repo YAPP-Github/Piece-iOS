@@ -6,7 +6,7 @@
 //
 
 import MatchingDetail
-import Home
+import SignUp
 import Router
 import SwiftUI
 import UseCases
@@ -15,8 +15,9 @@ public struct Coordinator {
   @ViewBuilder
   public static func view(for route: Route) -> some View {
     switch route {
-    case .home:
-      HomeViewFactory.createHomeView()
+    case .termsOfService:
+      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase()
+      SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
     case .matchProfileBasic:
       let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase()
       MatchDetailViewFactory.createMatchProfileBasicView(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase)
