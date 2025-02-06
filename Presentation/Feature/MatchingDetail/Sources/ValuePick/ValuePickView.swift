@@ -89,6 +89,19 @@ struct ValuePickView: View {
     .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
       MatchDetailPhotoView(uri: viewModel.photoUri)
     }
+    .pcAlert(isPresented: $viewModel.isMatchAcceptAlertPresented) {
+      AlertView(
+        title: "수줍은 수달님과의\n인연을 이어가시겠습니까?",
+        message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
+        firstButtonText: "뒤로",
+        secondButtonText: "매칭 수락하기"
+      ) {
+        viewModel.isMatchAcceptAlertPresented = false
+      } secondButtonAction: {
+        viewModel.isMatchAcceptAlertPresented = false
+        router.popToRoot()
+      }
+    }
   }
   
   // MARK: - 탭
@@ -156,7 +169,7 @@ struct ValuePickView: View {
       photoButton
       Spacer()
       backButton
-      nextButton
+      acceptButton
     }
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 20)
@@ -183,7 +196,7 @@ struct ValuePickView: View {
     }
   }
   
-  private var nextButton: some View {
+  private var acceptButton: some View {
     RoundedButton(
       type: .solid,
       buttonText: Constant.accepetButtonText,
