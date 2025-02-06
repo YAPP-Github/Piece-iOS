@@ -19,28 +19,42 @@ final class ValueTalkViewModel {
   enum Action {
     case contentOffsetDidChange(CGFloat)
     case didTapMoreButton
+    case didTapPhotoButton
   }
   
-  init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
+  init(
+    getMatchValueTalkUseCase: GetMatchValueTalkUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
     self.getMatchValueTalkUseCase = getMatchValueTalkUseCase
+    self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    
     Task {
       await fetchMatchValueTalk()
+      await fetchMatchPhoto()
     }
   }
   
-  var navigationTitle: String = Constant.navigationTitle
-  var contentOffset: CGFloat = 0
-  var isNameViewVisible: Bool = true
+  let navigationTitle: String = Constant.navigationTitle
+  var isPhotoViewPresented: Bool = false
+
   private(set) var valueTalkModel: ValueTalkModel?
+  private(set) var contentOffset: CGFloat = 0
+  private(set) var isNameViewVisible: Bool = true
   private(set) var isLoading = true
   private(set) var error: Error?
+  private(set) var photoUri: String = ""
   private let getMatchValueTalkUseCase: GetMatchValueTalkUseCase
+  private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   
   func handleAction(_ action: Action) {
     switch action {
     case let .contentOffsetDidChange(offset):
       contentOffset = offset
       isNameViewVisible = offset > Constant.nameVisibilityOffset
+      
+    case .didTapPhotoButton:
+      isPhotoViewPresented = true
       
     default: return
     }
@@ -67,5 +81,14 @@ final class ValueTalkViewModel {
       self.error = error
     }
     isLoading = false
+  }
+  
+  private func fetchMatchPhoto() async {
+    do {
+      let uri = try await getMatchPhotoUseCase.execute()
+      photoUri = uri
+    } catch {
+      self.error = error
+    }
   }
 }
