@@ -43,7 +43,10 @@ public struct MatchDetailViewFactory {
   }
   
   @ViewBuilder
-  public static func createMatchDetailPhotoView(uri: String) -> some View {
-    MatchDetailPhotoView(uri: uri)
+  public static func createMatchDetailPhotoView(
+    nickname: String,
+    uri: String
+  ) -> some View {
+    MatchDetailPhotoView(nickname: nickname, uri: uri)
   }
 }

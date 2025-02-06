@@ -42,6 +42,7 @@ final class ValuePickViewModel {
   let navigationTitle: String = Constant.navigationTitle
   var isPhotoViewPresented: Bool = false
   var isMatchAcceptAlertPresented: Bool = false
+  var isMatchDenyAlertPresented: Bool = false
   
   private(set) var valuePickModel: ValuePickModel?
   private(set) var isLoading = true
@@ -84,7 +85,7 @@ final class ValuePickViewModel {
       isMatchAcceptAlertPresented = true
       
     case .didTapDenyButton:
-      return
+      isMatchDenyAlertPresented = true
     }
   }
   

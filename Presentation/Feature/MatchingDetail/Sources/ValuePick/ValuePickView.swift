@@ -87,11 +87,17 @@ struct ValuePickView: View {
     }
     .toolbar(.hidden)
     .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
-      MatchDetailPhotoView(uri: viewModel.photoUri)
+      MatchDetailPhotoView(
+        nickname: viewModel.valuePickModel?.nickname ?? "",
+        uri: viewModel.photoUri
+      )
     }
     .pcAlert(isPresented: $viewModel.isMatchAcceptAlertPresented) {
       AlertView(
-        title: "수줍은 수달님과의\n인연을 이어가시겠습니까?",
+        title: {
+          Text("\(viewModel.valuePickModel?.nickname ?? "")").foregroundStyle(Color.primaryDefault) +
+          Text("님과의\n인연을 이어가시겠습니까?").foregroundStyle(Color.grayscaleBlack)
+        },
         message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
         firstButtonText: "뒤로",
         secondButtonText: "매칭 수락하기"
@@ -99,6 +105,24 @@ struct ValuePickView: View {
         viewModel.isMatchAcceptAlertPresented = false
       } secondButtonAction: {
         viewModel.isMatchAcceptAlertPresented = false
+        router.popToRoot()
+      }
+    }
+    .pcAlert(isPresented: $viewModel.isMatchDenyAlertPresented) {
+      AlertView(
+        title: {
+          Text("\(viewModel.valuePickModel?.nickname ?? "")님과의\n").foregroundStyle(Color.grayscaleBlack) +
+          Text("인연을 ").foregroundStyle(Color.grayscaleBlack) +
+          Text("거절").foregroundStyle(Color.systemError) +
+          Text("하시겠습니까?").foregroundStyle(Color.grayscaleBlack)
+        },
+        message: "매칭을 거절하면 이후에 되돌릴 수 없으니\n신중히 선택해 주세요.",
+        firstButtonText: "뒤로",
+        secondButtonText: "매칭 거절하기"
+      ) {
+        viewModel.isMatchDenyAlertPresented = false
+      } secondButtonAction: {
+        viewModel.isMatchDenyAlertPresented = false
         router.popToRoot()
       }
     }
