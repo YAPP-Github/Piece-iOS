@@ -28,6 +28,7 @@ struct ValueTalkCard: View {
       
       content
     }
+    .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.horizontal, 20)
     .padding(.top, 20)
     .padding(.bottom, 32)

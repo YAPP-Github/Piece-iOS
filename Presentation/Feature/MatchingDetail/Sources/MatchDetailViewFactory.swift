@@ -18,9 +18,13 @@ public struct MatchDetailViewFactory {
   
   @ViewBuilder
   public static func createMatchValueTalkView(
-    getMatchValueTalkUseCase: GetMatchValueTalkUseCase
+    getMatchValueTalkUseCase: GetMatchValueTalkUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
   ) -> some View {
-    ValueTalkView(getMatchValueTalkUseCase: getMatchValueTalkUseCase)
+    ValueTalkView(
+      getMatchValueTalkUseCase: getMatchValueTalkUseCase,
+      getMatchPhotoUseCase: getMatchPhotoUseCase
+    )
   }
   
   @ViewBuilder
