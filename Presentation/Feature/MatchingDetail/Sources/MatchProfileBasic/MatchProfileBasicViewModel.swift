@@ -20,8 +20,8 @@ final class MatchProfileBasicViewModel {
     static let title = "오늘의 매칭 조각"
   }
 
-  @ObservationIgnored let navigationTitle = Constant.navigationTitle
-  @ObservationIgnored let title = Constant.title
+  let navigationTitle = Constant.navigationTitle
+  let title = Constant.title
   var isPhotoViewPresented: Bool = false
   
   private(set) var isLoading = true
