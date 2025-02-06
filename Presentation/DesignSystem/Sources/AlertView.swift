@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-public struct AlertView: View {
+public struct AlertView<Title: View>: View {
   public init(
     icon: Image? = nil,
-    title: String,
+    @ViewBuilder title: () -> Title,
     message: String,
     firstButtonText: String,
     secondButtonText: String,
@@ -18,7 +18,7 @@ public struct AlertView: View {
     secondButtonAction: @escaping () -> Void
   ) {
     self.icon = icon
-    self.title = title
+    self.title = title()
     self.message = message
     self.firstButtonText = firstButtonText
     self.secondButtonText = secondButtonText
@@ -49,7 +49,7 @@ public struct AlertView: View {
   }
   
   private let icon: Image?
-  private let title: String
+  private let title: Title
   private let message: String
   private let firstButtonText: String
   private let secondButtonText: String
@@ -57,15 +57,14 @@ public struct AlertView: View {
   private let secondButtonAction: () -> Void
 }
 
-private struct AlertTopView: View {
+private struct AlertTopView<Title: View>: View {
   var body: some View {
     VStack(spacing: 8) {
       if let icon {
         icon
       }
-      Text(title)
-        .pretendard(.body_M_SB)
-        .foregroundColor(.grayscaleBlack)
+      title
+        .pretendard(.heading_M_SB)
       Text(message)
         .pretendard(.body_S_M)
         .foregroundColor(.grayscaleDark2)
@@ -77,7 +76,7 @@ private struct AlertTopView: View {
   }
   
   let icon: Image?
-  let title: String
+  let title: Title
   let message: String
 }
 
@@ -117,7 +116,7 @@ private struct AlertBottomView: View {
     Color.grayscaleBlack.ignoresSafeArea()
     VStack{
       AlertView(
-        title: "수줍은 수달님과의 인연을 이어가시겠습니까?",
+        title: { Text("수줍은 수달").foregroundColor(.primaryDefault) + Text("님과의\n인연을 이어가시겠습니까?") },
         message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
         firstButtonText: "뒤로",
         secondButtonText: "매칭 수락하기",
@@ -126,7 +125,7 @@ private struct AlertBottomView: View {
       )
       AlertView(
         icon: DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage,
-        title: "수줍은 수달님과의 인연을 이어가시겠습니까?",
+        title: { Text("수줍은 수달님과의 인연을 이어가시겠습니까?") },
         message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
         firstButtonText: "label",
         secondButtonText: "label",

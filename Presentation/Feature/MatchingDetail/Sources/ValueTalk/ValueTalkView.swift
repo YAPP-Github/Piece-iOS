@@ -84,7 +84,10 @@ struct ValueTalkView: View {
       buttons
     }
     .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
-      MatchDetailPhotoView(uri: viewModel.photoUri)
+      MatchDetailPhotoView(
+        nickname: viewModel.valueTalkModel?.nickname ?? "",
+        uri: viewModel.photoUri
+      )
     }
   }
   
