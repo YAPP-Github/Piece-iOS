@@ -108,7 +108,7 @@ struct AvoidContactsGuideView: View {
     .foregroundStyle(Color.grayscaleWhite)
     .background(
       Rectangle()
-        .fill(Color.black.opacity(0.4))
+        .fill(Color.grayscaleDark2)
         .cornerRadius(20)
         .frame(width: 200, height: 200)
     )
