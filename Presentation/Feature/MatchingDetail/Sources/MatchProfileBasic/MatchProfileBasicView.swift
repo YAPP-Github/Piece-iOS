@@ -27,6 +27,7 @@ struct MatchProfileBasicView: View {
   var body: some View {
     if let basicInfoModel = viewModel.basicInfoModel {
       content(basicInfoModel: basicInfoModel)
+        .toolbar(.hidden)
     } else {
       EmptyView()
     }
@@ -37,7 +38,7 @@ struct MatchProfileBasicView: View {
       NavigationBar(
         title: viewModel.navigationTitle,
         rightButtonTap: {
-          router.popToMain()
+          router.popToRoot()
         })
       
       VStack(alignment: .leading) {
