@@ -71,7 +71,10 @@ struct MatchProfileBasicView: View {
         .ignoresSafeArea()
     )
     .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
-      MatchDetailPhotoView(uri: viewModel.photoUri)
+      MatchDetailPhotoView(
+        nickname: viewModel.matchingBasicInfoModel?.nickname ?? "",
+        uri: viewModel.photoUri
+      )
     }
   }
   
