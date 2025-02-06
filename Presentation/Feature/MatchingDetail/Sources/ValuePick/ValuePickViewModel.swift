@@ -27,26 +27,32 @@ final class ValuePickViewModel {
   
   init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
     self.getMatchValuePickUseCase = getMatchValuePickUseCase
+    Task {
+      await fetchMatchValueTalk()
+    }
   }
   
   let tabs = ValuePickTab.allCases
   
   private(set) var navigationTitle: String = Constant.navigationTitle
-  private(set) var description: String?
-  private(set) var nickname: String?
+  private(set) var valuePickModel: ValuePickModel?
+  private(set) var isLoading = true
+  private(set) var error: Error?
   private(set) var contentOffset: CGFloat = 0
   private(set) var isNameViewVisible: Bool = true
   private(set) var selectedTab: ValuePickTab = .all
-  private(set) var displayedValuePicks: [ValuePickModel] = []
+  private(set) var displayedValuePicks: [ValuePickAnswerModel] = []
+  private(set) var sameWithMeCount: Int = 0
+  private(set) var differentFromMeCount: Int = 0
   
-  private var valuePicks: [ValuePickModel] = []
+  private var valuePicks: [ValuePickAnswerModel] = []
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
 
   
   func handleAction(_ action: Action) {
     switch action {
     case let .contentOffsetDidChange(offset):
-      contentOffset = contentOffset
+      contentOffset = offset
       isNameViewVisible = offset > Constant.nameVisibilityOffset
       
     case .didTapMoreButton:
@@ -54,7 +60,14 @@ final class ValuePickViewModel {
       
     case let .didSelectTab(tab):
       self.selectedTab = tab
-      // TODO: - API 확인 후 displayedValuePicks의 값을 변경하는 로직 추가
+      switch tab {
+      case .all:
+        displayedValuePicks = valuePicks
+      case .same:
+        displayedValuePicks = valuePicks.filter { $0.sameWithMe }
+      case .different:
+        displayedValuePicks = valuePicks.filter { !$0.sameWithMe }
+      }
       
     case .didTapPhotoButton:
       return
@@ -65,5 +78,35 @@ final class ValuePickViewModel {
     case .didTapDenyButton:
       return
     }
+  }
+  
+  func fetchMatchValueTalk() async {
+    do {
+      let entity = try await getMatchValuePickUseCase.execute()
+      let model = ValuePickModel(
+        id: entity.id,
+        shortIntroduction: entity.shortIntroduction,
+        nickname: entity.nickname,
+        valuePicks: entity.valuePicks.map {
+          ValuePickAnswerModel(
+            id: UUID(),
+            category: $0.category,
+            question: $0.question,
+            sameWithMe: $0.sameWithMe
+          )
+        }
+      )
+      valuePickModel = model
+      valuePicks = model.valuePicks
+      displayedValuePicks = model.valuePicks
+      sameWithMeCount = entity.valuePicks.filter { $0.sameWithMe }.count
+      differentFromMeCount = entity.valuePicks.filter { !$0.sameWithMe }.count
+      
+      error = nil
+    } catch {
+      self.error = error
+    }
+    
+    isLoading = false
   }
 }
