@@ -25,8 +25,4 @@ public final class Router {
   public func popToRoot() {
     path.removeLast(path.count)
   }
-  
-  public func popToMain() {
-    path.removeLast(path.count - 1)
-  }
 }

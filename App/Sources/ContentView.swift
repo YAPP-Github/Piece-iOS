@@ -15,7 +15,7 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
     }
-    .toolbar(.hidden, for: .navigationBar)
+    .toolbar(.hidden)
     .environment(router)
   }
 }

@@ -27,6 +27,7 @@ struct ValueTalkView: View {
   var body: some View {
     if let valueTalkModel = viewModel.valueTalkModel {
       content(valueTalkModel: valueTalkModel)
+        .toolbar(.hidden)
     } else {
       EmptyView()
     }
@@ -38,7 +39,7 @@ struct ValueTalkView: View {
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
         rightButtonTap: {
-          router.popToMain()
+          router.popToRoot()
         },
         backgroundColor: .grayscaleWhite
       )
