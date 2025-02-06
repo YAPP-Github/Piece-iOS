@@ -41,6 +41,7 @@ final class ValuePickViewModel {
   let tabs = ValuePickTab.allCases
   let navigationTitle: String = Constant.navigationTitle
   var isPhotoViewPresented: Bool = false
+  var isMatchAcceptAlertPresented: Bool = false
   
   private(set) var valuePickModel: ValuePickModel?
   private(set) var isLoading = true
@@ -80,7 +81,7 @@ final class ValuePickViewModel {
       isPhotoViewPresented = true
       
     case .didTapAcceptButton:
-      return
+      isMatchAcceptAlertPresented = true
       
     case .didTapDenyButton:
       return
