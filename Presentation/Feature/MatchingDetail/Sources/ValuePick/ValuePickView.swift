@@ -39,16 +39,18 @@ struct ValuePickView: View {
         Divider(weight: .normal, isVertical: false)
       }
       
-      if viewModel.isNameViewVisible {
-        BasicInfoNameView(
-          shortIntroduction: viewModel.description ?? "",
-          nickname: viewModel.nickname ?? ""
-        ) {
-          viewModel.handleAction(.didTapMoreButton)
+      if let valuePickModel = viewModel.valuePickModel {
+        if viewModel.isNameViewVisible {
+          BasicInfoNameView(
+            shortIntroduction: valuePickModel.shortIntroduction,
+            nickname: valuePickModel.nickname
+          ) {
+            viewModel.handleAction(.didTapMoreButton)
+          }
+          .padding(20)
+          .background(Color.grayscaleWhite)
+          .transition(.move(edge: .top).combined(with: .opacity))
         }
-        .padding(20)
-        .background(Color.grayscaleWhite)
-        .transition(.move(edge: .top).combined(with: .opacity))
       }
       
       tabs
@@ -90,12 +92,12 @@ struct ValuePickView: View {
             case .same:
               HStack(spacing: 6) {
                 Text(tab.description)
-                Text(7.description) // TODO: - API 확인 후 수정
+                Text("\(viewModel.sameWithMeCount)")
               }
             case .different:
               HStack(spacing: 6) {
                 Text(tab.description)
-                Text(3.description) // TODO: - API 확인 후 수정
+                Text("\(viewModel.differentFromMeCount)")
               }
             }
           }
