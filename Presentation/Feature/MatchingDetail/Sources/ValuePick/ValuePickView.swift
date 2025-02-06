@@ -21,8 +21,16 @@ struct ValuePickView: View {
   @State private var contentOffset: CGFloat = 0
   @Environment(Router.self) private var router: Router
   
-  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
-    _viewModel = .init(wrappedValue: .init(getMatchValuePickUseCase: getMatchValuePickUseCase))
+  init(
+    getMatchValuePickUseCase: GetMatchValuePickUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        getMatchValuePickUseCase: getMatchValuePickUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
+    )
   }
   
   var body: some View {
@@ -72,11 +80,15 @@ struct ValuePickView: View {
             .frame(height: 60)
         }
         .scrollIndicators(.never)
+        .frame(maxWidth: .infinity)
         .background(Color.grayscaleLight3)
       
-      bottomButtons
+      buttons
     }
     .toolbar(.hidden)
+    .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
+      MatchDetailPhotoView(uri: viewModel.photoUri)
+    }
   }
   
   // MARK: - 탭
@@ -139,37 +151,46 @@ struct ValuePickView: View {
   
   // MARK: - 하단 버튼
   
-  private var bottomButtons: some View {
+  private var buttons: some View {
     HStack(alignment: .center, spacing: 8) {
-      CircleButton(
-        type: .outline,
-        icon: DesignSystemAsset.Icons.photoLine32.swiftUIImage
-      ) {
-        viewModel.handleAction(.didTapPhotoButton)
-      }
-      
+      photoButton
       Spacer()
-      
-      CircleButton(
-        type: .solid,
-        icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage
-      ) {
-        router.pop()
-      }
-      
-      RoundedButton(
-        type: .solid,
-        buttonText: Constant.accepetButtonText,
-        icon: nil,
-        rounding: true,
-        action: { viewModel.handleAction(.didTapAcceptButton) }
-      )
+      backButton
+      nextButton
     }
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 20)
     .padding(.top, 12)
     .padding(.bottom, 10)
     .background(Color.grayscaleLight3)
+  }
+  
+  private var photoButton: some View {
+    CircleButton(
+      type: .outline,
+      icon: DesignSystemAsset.Icons.photoLine32.swiftUIImage
+    ) {
+      viewModel.handleAction(.didTapPhotoButton)
+    }
+  }
+  
+  private var backButton: some View {
+    CircleButton(
+      type: .solid,
+      icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage
+    ) {
+      router.pop()
+    }
+  }
+  
+  private var nextButton: some View {
+    RoundedButton(
+      type: .solid,
+      buttonText: Constant.accepetButtonText,
+      icon: nil,
+      rounding: true,
+      action: { viewModel.handleAction(.didTapAcceptButton) }
+    )
   }
 }
 

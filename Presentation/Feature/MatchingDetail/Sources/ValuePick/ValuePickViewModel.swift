@@ -25,16 +25,23 @@ final class ValuePickViewModel {
     case didTapDenyButton
   }
   
-  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
+  init(
+    getMatchValuePickUseCase: GetMatchValuePickUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
     self.getMatchValuePickUseCase = getMatchValuePickUseCase
+    self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    
     Task {
       await fetchMatchValueTalk()
+      await fetchMatchPhoto()
     }
   }
   
   let tabs = ValuePickTab.allCases
+  let navigationTitle: String = Constant.navigationTitle
+  var isPhotoViewPresented: Bool = false
   
-  private(set) var navigationTitle: String = Constant.navigationTitle
   private(set) var valuePickModel: ValuePickModel?
   private(set) var isLoading = true
   private(set) var error: Error?
@@ -44,10 +51,10 @@ final class ValuePickViewModel {
   private(set) var displayedValuePicks: [ValuePickAnswerModel] = []
   private(set) var sameWithMeCount: Int = 0
   private(set) var differentFromMeCount: Int = 0
-  
+  private(set) var photoUri: String = ""
   private var valuePicks: [ValuePickAnswerModel] = []
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
-
+  private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -70,7 +77,7 @@ final class ValuePickViewModel {
       }
       
     case .didTapPhotoButton:
-      return
+      isPhotoViewPresented = true
       
     case .didTapAcceptButton:
       return
@@ -108,5 +115,14 @@ final class ValuePickViewModel {
     }
     
     isLoading = false
+  }
+  
+  private func fetchMatchPhoto() async {
+    do {
+      let uri = try await getMatchPhotoUseCase.execute()
+      photoUri = uri
+    } catch {
+      self.error = error
+    }
   }
 }
