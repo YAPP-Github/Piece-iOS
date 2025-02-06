@@ -9,5 +9,8 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
-  name: Modules.Data.DTO.rawValue
+  name: Modules.Data.DTO.rawValue,
+  dependencies: [
+    .domain(target: .Entities)
+  ]
 )
