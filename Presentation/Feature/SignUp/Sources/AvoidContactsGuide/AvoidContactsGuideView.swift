@@ -39,7 +39,7 @@ struct AvoidContactsGuideView: View {
           
           denyButton
           
-          accepetButton
+          acceptButton
         }
         .padding([.horizontal, .top], 20)
         .padding(.bottom, 10)
@@ -91,7 +91,7 @@ struct AvoidContactsGuideView: View {
       .padding(.bottom, 20)
   }
   
-  private var accepetButton: some View {
+  private var acceptButton: some View {
     RoundedButton(
       type: .solid,
       buttonText: Constant.accepetButtonText,
