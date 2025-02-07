@@ -8,6 +8,10 @@
 import Foundation
 
 public struct UseCaseFactory {
+  public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
+    ContactsPermissionUseCaseImpl()
+  }
+  
   public static func createGetMatchProfileBasicUseCase() -> GetMatchProfileBasicUseCase {
     GetMatchProfileBasicUseCaseImpl()
   }

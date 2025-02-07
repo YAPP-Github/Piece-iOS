@@ -7,6 +7,7 @@
 
 import MatchingDetail
 import Home
+import SignUp
 import Router
 import SwiftUI
 import UseCases
@@ -26,6 +27,9 @@ public struct Coordinator {
     case .matchValuePick:
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase()
       MatchDetailViewFactory.createMatchValuePickView(getMatchValuePickUseCase: getMatchValuePickUseCase)
+    case .AvoidContactsGuide:
+      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
     }
   }
 }
