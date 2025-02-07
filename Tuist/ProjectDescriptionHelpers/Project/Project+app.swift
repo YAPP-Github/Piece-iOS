@@ -27,6 +27,9 @@ extension Project {
         "BASE_URL": "$(BASE_URL)",
         "NSAppTransportSecurity": [
           "NSAllowsArbitraryLoads": true
+        ],
+        "LSApplicationQueriesSchemes": [
+          "kakaokompassauth"
         ]
       ]),
       sources: ["Sources/**"],
