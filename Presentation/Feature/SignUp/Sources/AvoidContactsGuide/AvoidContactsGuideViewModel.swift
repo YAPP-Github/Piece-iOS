@@ -23,6 +23,10 @@ final class AvoidContactsGuideViewModel {
   private var navigationAction: (() -> Void)?
   private let contactsPermissionUseCase: ContactsPermissionUseCase
   
+  init(contactsPermissionUseCase: ContactsPermissionUseCase) {
+    self.contactsPermissionUseCase = contactsPermissionUseCase
+  }
+  
   func handleAction(_ action: Action) {
     switch action {
     case .tapAccepetButton:
@@ -36,12 +40,6 @@ final class AvoidContactsGuideViewModel {
     case .cancelAlert:
       isPresentedAlert = false
     }
-  }
-  
-  init(
-    contactsPermissionUseCase: ContactsPermissionUseCase
-  ) {
-    self.contactsPermissionUseCase = contactsPermissionUseCase
   }
   
   @MainActor

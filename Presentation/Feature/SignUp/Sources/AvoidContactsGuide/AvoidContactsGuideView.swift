@@ -9,6 +9,7 @@ import SwiftUI
 import DesignSystem
 import UseCases
 import Router
+import UseCases
 
 struct AvoidContactsGuideView: View {
   private enum Constant {
@@ -19,6 +20,10 @@ struct AvoidContactsGuideView: View {
   @State var viewModel: AvoidContactsGuideViewModel
   @State private var path = NavigationPath()
   @Environment(Router.self) private var router: Router
+  
+  init(contactsPermissionUseCase: ContactsPermissionUseCase) {
+    _viewModel = .init(wrappedValue: .init(contactsPermissionUseCase: contactsPermissionUseCase))
+  }
   
   var body: some View {
     NavigationStack(path: $path) {
