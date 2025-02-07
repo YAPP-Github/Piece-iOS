@@ -115,15 +115,15 @@ struct AvoidContactsGuideView: View {
   }
 }
 
-#Preview {
-  AvoidContactsGuideView(
-    viewModel: AvoidContactsGuideViewModel(
-      contactsPermissionUseCase: MockContactsPermissionUseCase()
-    )
-  )
-}
-
-private class MockContactsPermissionUseCase: ContactsPermissionUseCase {
-  func execute() async throws -> Bool { return true }
-}
-
+//#Preview {
+//  AvoidContactsGuideView(
+//    viewModel: AvoidContactsGuideViewModel(
+//      contactsPermissionUseCase: MockContactsPermissionUseCase()
+//    )
+//  )
+//}
+//
+//private class MockContactsPermissionUseCase: ContactsPermissionUseCase {
+//  func execute() async throws -> Bool { return true }
+//}
+//
