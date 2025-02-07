@@ -50,15 +50,15 @@ struct AvoidContactsGuideView: View {
           )
         }
         .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
-              Button("설정으로 이동") {
-                viewModel.handleAction(.showShettingAlert)
-              }
-              Button("취소", role: .cancel) {
-                viewModel.handleAction(.cancelAlert)
-              }
-            } message: {
-              Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
-            }
+          Button("설정으로 이동") {
+            viewModel.handleAction(.showShettingAlert)
+          }
+          Button("취소", role: .cancel) {
+            viewModel.handleAction(.cancelAlert)
+          }
+        } message: {
+          Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
+        }
         
         toast
           .opacity(viewModel.showToast ? 1 : 0)
