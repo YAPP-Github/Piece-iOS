@@ -36,14 +36,14 @@ public struct TermItem: Decodable {
   public let title: String
   public let content: String
   public let required: Bool
-  public  let startDate: Date
+  public let startDate: String
   
   public init(
     termId: Int,
     title: String,
     content: String,
     required: Bool,
-    startDate: Date
+    startDate: String
   ) {
     self.termId = termId
     self.title = title

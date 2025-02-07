@@ -23,7 +23,7 @@ public struct TermItemResponseDTO: Codable {
   public let title: String
   public let content: String
   public let required: Bool
-  public let startDate: Date
+  public let startDate: String
 }
 
 public extension TermsListResponseDTO {
