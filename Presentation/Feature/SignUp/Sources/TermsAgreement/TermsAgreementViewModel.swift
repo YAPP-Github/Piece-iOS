@@ -20,20 +20,12 @@ final class TermsAgreementViewModel {
     case tapBackButton
   }
   
-  init(
-//    terms: [TermModel],
-   // navigationPath: NavigationPath,
-    fetchTermsUseCase: FetchTermsUseCase
-  ) {
-//    self.terms = terms
-  //  self.navigationPath = navigationPath
+  init(fetchTermsUseCase: FetchTermsUseCase) {
     self.fetchTermsUseCase = fetchTermsUseCase
-
-    fetchTerms()
   }
   
-  var terms: [TermModel]
-  var navigationPath: NavigationPath
+  
+  var terms: [TermModel] = []
 
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
@@ -54,8 +46,6 @@ final class TermsAgreementViewModel {
       if let index = terms.firstIndex(where: { $0.id == id }) {
         terms[index].isChecked.toggle()
       }
-    case .tapChevronButton(let term):
-      navigationPath.append(term)
     default:
       return
     }

@@ -25,6 +25,11 @@ struct TermsAgreementView: View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
       VStack(alignment: .center, spacing: 0) {
+        NavigationBar(
+          title: "",
+          leftButtonTap: { router.pop() }
+        )
+        
         title
         
         Spacer()

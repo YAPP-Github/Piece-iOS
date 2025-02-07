@@ -7,7 +7,7 @@
 
 import Foundation
 import DTO
-import Network
+import PCNetwork
 import Entities
 import RepositoryInterfaces
 

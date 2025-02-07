@@ -14,6 +14,6 @@ let project = Project.dynamicFramework(
     .domain(target: .RepositoryInterfaces),
     .domain(target: .Entities),
     .data(target: .DTO),
-    .data(target: .Network)
+    .data(target: .PCNetwork)
   ]
 )

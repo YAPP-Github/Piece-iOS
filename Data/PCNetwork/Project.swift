@@ -9,7 +9,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
-  name: Modules.Data.Network.rawValue,
+  name: Modules.Data.PCNetwork.rawValue,
   infoPlist: .extendingDefault(with: [
     "BASE_URL": "$(BASE_URL)"
   ]),
