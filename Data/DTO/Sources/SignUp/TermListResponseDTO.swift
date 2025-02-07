@@ -9,12 +9,6 @@ import Foundation
 import Entities
 
 public struct TermsListResponseDTO: Codable {
-  public let status: String
-  public let message: String
-  public let data: TermsItemsResponseDTO
-}
-
-public struct TermsItemsResponseDTO: Codable {
   public let responses: [TermItemResponseDTO]
 }
 
@@ -29,16 +23,6 @@ public struct TermItemResponseDTO: Codable {
 public extension TermsListResponseDTO {
   func toDomain() -> TermsListModel {
     return TermsListModel(
-      status: status,
-      message: message,
-      data: data.toDomain()
-    )
-  }
-}
-
-public extension TermsItemsResponseDTO {
-  func toDomain() -> TermsItems {
-    return TermsItems(
       responses: responses.map { $0.toDomain()})
   }
 }

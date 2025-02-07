@@ -54,7 +54,7 @@ final class TermsAgreementViewModel {
     Task {
       do {
         let termsList = try await fetchTermsUseCase.execute()
-        terms = termsList.data.responses.map { term in
+        terms = termsList.responses.map { term in
           TermModel(
             id: term.termId,
             title: term.title,
