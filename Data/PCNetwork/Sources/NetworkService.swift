@@ -20,10 +20,10 @@ public class NetworkService {
     return try await withCheckedThrowingContinuation { continuation in
       session.request(endpoint)
         .validate()
-        .responseDecodable(of: T.self) { response in
+        .responseDecodable(of: APIResponse<T>.self) { response in
           switch response.result {
-          case .success(let data):
-            continuation.resume(returning: data)
+          case .success(let apiResponse):
+            continuation.resume(returning: apiResponse.data)
           case .failure:
             guard let statusCode = response.response?.statusCode else {
               continuation.resume(throwing: NetworkError.decodingFailed)
