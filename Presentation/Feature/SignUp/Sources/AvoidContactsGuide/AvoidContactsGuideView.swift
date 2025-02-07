@@ -86,7 +86,8 @@ struct AvoidContactsGuideView: View {
   private var denyButton: some View {
     PCTextButton(content: Constant.denyButtonText)
       .onTapGesture {
-        viewModel.handleAction(.tapDenyButton)
+        // TODO: - 다음 화면 라우터 제작 시, 연결
+        //   router.push(to: )
       }
       .padding(.bottom, 20)
   }
@@ -96,7 +97,11 @@ struct AvoidContactsGuideView: View {
       type: .solid,
       buttonText: Constant.accepetButtonText,
       width: .maxWidth,
-      action: { viewModel.handleAction(.tapAccepetButton) }
+      action: {
+        viewModel.handleAction(.tapAccepetButton)
+        // TODO: - 다음 화면 라우터 제작 시, 연결
+        //  router.push(to: )
+      }
     )
   }
   

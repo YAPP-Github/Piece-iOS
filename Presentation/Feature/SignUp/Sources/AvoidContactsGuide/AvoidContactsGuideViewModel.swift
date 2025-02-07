@@ -13,14 +13,12 @@ import UseCases
 final class AvoidContactsGuideViewModel {
   enum Action {
     case tapAccepetButton
-    case tapDenyButton
     case showShettingAlert
     case cancelAlert
   }
   
   private(set) var showToast = false
   var isPresentedAlert: Bool = false
-  private var navigationAction: (() -> Void)?
   private let contactsPermissionUseCase: ContactsPermissionUseCase
   
   init(contactsPermissionUseCase: ContactsPermissionUseCase) {
@@ -33,8 +31,6 @@ final class AvoidContactsGuideViewModel {
       Task {
         await handleAcceptButtonTap()
       }
-    case .tapDenyButton:
-      navigationAction?()
     case .showShettingAlert:
       openSettings()
     case .cancelAlert:
@@ -49,7 +45,6 @@ final class AvoidContactsGuideViewModel {
       
       if isAuthorized {
         await isToastVisible()
-        navigationAction?()
       } else {
         isPresentedAlert = true
       }
