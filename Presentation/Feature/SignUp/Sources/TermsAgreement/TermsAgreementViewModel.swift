@@ -22,6 +22,8 @@ final class TermsAgreementViewModel {
   
   init(fetchTermsUseCase: FetchTermsUseCase) {
     self.fetchTermsUseCase = fetchTermsUseCase
+    
+    fetchTerms()
   }
   
   
