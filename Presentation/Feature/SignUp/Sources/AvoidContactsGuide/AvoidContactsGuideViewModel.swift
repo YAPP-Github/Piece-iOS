@@ -63,7 +63,7 @@ final class AvoidContactsGuideViewModel {
   @MainActor
   private func isToastVisible() async {
     showToast = true
-    try? await Task.sleep(for: .seconds(3))
+    try? await Task.sleep(for: .seconds(2))
     showToast = false
   }
   
