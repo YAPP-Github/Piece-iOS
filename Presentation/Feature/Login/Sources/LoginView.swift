@@ -25,14 +25,15 @@ struct LoginView: View {
             .pretendard(.body_S_M)
             .foregroundStyle(Color.grayscaleDark3)
         }
+        .padding(.horizontal, 20)
         .pretendard(.heading_L_SB)
         .frame(maxWidth: .infinity, alignment: .leading)
         
         Spacer()
         
-        Rectangle() // 일러스트 (임시)
-          .fill(Color.grayscaleDark1)
-          .frame(width: 240, height: 240)
+        DesignSystemAsset.Images.imgLogin.swiftUIImage
+          .resizable()
+          .frame(maxWidth: .infinity)
         
         Spacer()
         
@@ -41,10 +42,10 @@ struct LoginView: View {
           kakaoLoginButton
           googleLoginButton
         }
+        .padding(.horizontal, 20)
       }
       .padding(.bottom, 10)
       .padding(.top, 80)
-      .padding(.horizontal, 20)
     }
   }
   
