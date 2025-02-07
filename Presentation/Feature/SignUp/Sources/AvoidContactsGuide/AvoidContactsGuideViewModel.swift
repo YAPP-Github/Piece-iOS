@@ -18,7 +18,7 @@ final class AvoidContactsGuideViewModel {
     case cancelAlert
   }
   
-  var showToast = false
+  private(set) var showToast = false
   var isPresentedAlert: Bool = false
   private var navigationAction: (() -> Void)?
   private let contactsPermissionUseCase: ContactsPermissionUseCase
