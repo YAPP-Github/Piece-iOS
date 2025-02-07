@@ -19,7 +19,7 @@ public enum Modules {
 public extension Modules {
   enum Data: String {
     case LocalStorage // 임시
-    case Network
+    case PCNetwork
     case DTO
     case Repository
     
