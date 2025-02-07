@@ -14,5 +14,6 @@ let project = Project.dynamicFramework(
     .presentation(target: .Router),
     .presentation(target: .Home),
     .presentation(target: .MatchingDetail),
+    .presentation(target: .SignUp)
   ]
 )
