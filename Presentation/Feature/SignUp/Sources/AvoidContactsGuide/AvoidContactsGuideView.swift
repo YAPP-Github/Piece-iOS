@@ -26,44 +26,42 @@ struct AvoidContactsGuideView: View {
   }
   
   var body: some View {
-    NavigationStack(path: $path) {
-      ZStack {
-        VStack {
-          title
-          
-          DesignSystemAsset.Images.imgBlock.swiftUIImage
-            .resizable()
-            .frame(width: 300, height: 300)
-          
-          Spacer()
-          
-          denyButton
-          
-          acceptButton
-        }
-        .padding([.horizontal, .top], 20)
-        .padding(.bottom, 10)
-        .navigationBarModifier {
-          NavigationBar(
-            title: "",
-            leftButtonTap: { router.pop() }
-          )
-        }
-        .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
-          Button("설정으로 이동") {
-            viewModel.handleAction(.showShettingAlert)
-          }
-          Button("취소", role: .cancel) {
-            viewModel.handleAction(.cancelAlert)
-          }
-        } message: {
-          Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
-        }
+    ZStack {
+      VStack {
+        title
         
-        toast
-          .opacity(viewModel.showToast ? 1 : 0)
-          .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
+        DesignSystemAsset.Images.imgBlock.swiftUIImage
+          .resizable()
+          .frame(width: 300, height: 300)
+        
+        Spacer()
+        
+        denyButton
+        
+        acceptButton
       }
+      .padding([.horizontal, .top], 20)
+      .padding(.bottom, 10)
+      .navigationBarModifier {
+        NavigationBar(
+          title: "",
+          leftButtonTap: { router.pop() }
+        )
+      }
+      .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
+        Button("설정으로 이동") {
+          viewModel.handleAction(.showShettingAlert)
+        }
+        Button("취소", role: .cancel) {
+          viewModel.handleAction(.cancelAlert)
+        }
+      } message: {
+        Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
+      }
+      
+      toast
+        .opacity(viewModel.showToast ? 1 : 0)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
     }
   }
   
