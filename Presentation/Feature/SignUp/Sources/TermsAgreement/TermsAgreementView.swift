@@ -99,7 +99,7 @@ struct TermsAgreementView: View {
       type: viewModel.nextButtonType,
       buttonText: "다음",
       width: .maxWidth,
-      action: { viewModel.handleAction(.tapNextButton) }
+      action: { router.push(to: .home) } //임시 추후 변경
     )
   }
   

@@ -16,8 +16,6 @@ final class TermsAgreementViewModel {
     case toggleAll
     case toggleTerm(id: Int)
     case tapChevronButton(with: TermModel)
-    case tapNextButton
-    case tapBackButton
   }
   
   init(fetchTermsUseCase: FetchTermsUseCase) {
@@ -27,8 +25,7 @@ final class TermsAgreementViewModel {
   }
   
   
-  var terms: [TermModel] = []
-
+  private(set) var terms: [TermModel] = []
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
   }
