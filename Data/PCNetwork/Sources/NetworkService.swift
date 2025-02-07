@@ -23,6 +23,7 @@ public class NetworkService {
         .responseDecodable(of: APIResponse<T>.self) { response in
           switch response.result {
           case .success(let apiResponse):
+            print("\(apiResponse.status): \(apiResponse.message)")
             continuation.resume(returning: apiResponse.data)
           case .failure:
             guard let statusCode = response.response?.statusCode else {
