@@ -8,7 +8,7 @@
 import Foundation
 
 public enum NetworkError: LocalizedError {
-  case badRequest(error: APIError?)  //400
+  case badRequest(error: APIErrorModel?)  //400
   case unauthorized //401
   case forbidden // 403
   case notFound //404

@@ -31,7 +31,7 @@ public class NetworkService {
             }
             switch statusCode {
             case 400:
-              let apiError: APIError? = try? JSONDecoder().decode(APIError.self, from: response.data ?? Data())
+              let apiError: APIErrorModel? = try? JSONDecoder().decode(APIErrorModel.self, from: response.data ?? Data())
               continuation.resume(throwing: NetworkError.badRequest(error: apiError))
             case 401:
               continuation.resume(throwing: NetworkError.unauthorized)
