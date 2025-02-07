@@ -8,22 +8,6 @@
 import Foundation
 
 public struct TermsListModel: Decodable {
-  public let status: String
-  public let message: String
-  public let data: TermsItems
-  
-  public init(
-    status: String,
-    message: String,
-    data: TermsItems
-  ) {
-    self.status = status
-    self.message = message
-    self.data = data
-  }
-}
-
-public struct TermsItems: Decodable {
   public let responses: [TermItem]
   
   public init(responses: [TermItem]) {
