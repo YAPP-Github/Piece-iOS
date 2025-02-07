@@ -26,9 +26,9 @@ struct AvoidContactsGuideView: View {
         VStack {
           title
           
-          Rectangle() // 일러스트 (임시)
-            .fill(Color.blue)
-            .frame(width: 240, height: 240)
+          DesignSystemAsset.Images.imgBlock.swiftUIImage
+            .resizable()
+            .frame(width: 300, height: 300)
           
           Spacer()
           
@@ -75,7 +75,7 @@ struct AvoidContactsGuideView: View {
     .pretendard(.heading_L_SB)
     .foregroundStyle(Color.grayscaleBlack)
     .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.bottom, 70)
+    .padding(.bottom, 60)
   }
   
   private var denyButton: some View {
