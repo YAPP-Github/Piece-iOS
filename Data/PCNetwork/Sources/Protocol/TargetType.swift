@@ -20,7 +20,7 @@ public extension TargetType {
   var baseURL: String {
     return NetworkConstants.baseURL
   }
-
+  
   func asURLRequest() throws -> URLRequest {
     let baseURL = try baseURL.asURL()
     let url = baseURL.appendingPathComponent(path)
@@ -28,10 +28,17 @@ public extension TargetType {
     
     switch requestType {
     case .plain:
-      break
+      guard let finalURL = components?.url else {
+        throw NetworkError.notFound
+      }
+      return requestAPI(url: finalURL, httpBody: nil)
       
     case .query(let queryItems):
       components?.queryItems = queryItems
+      guard let finalURL = components?.url else {
+        throw NetworkError.notFound
+      }
+      return requestAPI(url: finalURL, httpBody: nil)
       
     case .body(let body):
       let jsonData = try body.encoded()
@@ -45,12 +52,6 @@ public extension TargetType {
       let jsonData = try body.encoded()
       return requestAPI(url: finalURL, httpBody: jsonData)
     }
-    
-    guard let finalURL = components?.url else {
-      throw NetworkError.notFound
-    }
-    
-    return requestAPI(url: finalURL, httpBody: nil)
   }
   
   private func requestAPI(url: URL, httpBody: Data?) -> URLRequest {
