@@ -18,7 +18,7 @@ public struct Coordinator {
     switch route {
     case .home:
       HomeViewFactory.createHomeView()
-    case .termsOfService:
+    case .termsAgreement:
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase()
       SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
     case .matchProfileBasic:
