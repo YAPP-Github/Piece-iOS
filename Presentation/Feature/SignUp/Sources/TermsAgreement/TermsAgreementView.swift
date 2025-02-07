@@ -24,24 +24,29 @@ struct TermsAgreementView: View {
   var body: some View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
-      VStack(alignment: .center, spacing: 0) {
+      VStack {
         NavigationBar(
           title: "",
           leftButtonTap: { router.pop() }
         )
         
-        title
-        
-        Spacer()
-          .frame(height: 120)
-        
-        allTermsCheckableRow
-        
-        termsList
-        
-        Spacer()
-        
-        nextButton
+        VStack(alignment: .center, spacing: 0) {
+          
+          title
+          
+          Spacer()
+            .frame(height: 120)
+          
+          allTermsCheckableRow
+          
+          termsList
+          
+          Spacer()
+          
+          nextButton
+        }
+        .padding([.top, .horizontal], 20)
+        .padding(.bottom, 10)
       }
     }
   }
@@ -93,6 +98,7 @@ struct TermsAgreementView: View {
     RoundedButton(
       type: viewModel.nextButtonType,
       buttonText: "다음",
+      width: .maxWidth,
       action: { viewModel.handleAction(.tapNextButton) }
     )
   }
