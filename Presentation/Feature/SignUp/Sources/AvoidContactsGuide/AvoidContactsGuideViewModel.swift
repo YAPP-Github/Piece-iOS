@@ -13,7 +13,6 @@ import UseCases
 final class AvoidContactsGuideViewModel {
   enum Action {
     case tapAccepetButton
-    case tapBackButton
     case tapDenyButton
     case showShettingAlert
     case cancelAlert
@@ -21,7 +20,6 @@ final class AvoidContactsGuideViewModel {
   
   var showToast = false
   var isPresentedAlert: Bool = false
-  private var dismissAction: (() -> Void)?
   private var navigationAction: (() -> Void)?
   private let contactsPermissionUseCase: ContactsPermissionUseCase
   
@@ -31,8 +29,6 @@ final class AvoidContactsGuideViewModel {
       Task {
         await handleAcceptButtonTap()
       }
-    case .tapBackButton:
-      dismissAction?()
     case .tapDenyButton:
       navigationAction?()
     case .showShettingAlert:
@@ -43,15 +39,9 @@ final class AvoidContactsGuideViewModel {
   }
   
   init(
-    showToast: Bool = false,
     contactsPermissionUseCase: ContactsPermissionUseCase
   ) {
-    self.showToast = showToast
     self.contactsPermissionUseCase = contactsPermissionUseCase
-  }
-  
-  func setDismissAction(_ dismiss: @escaping () -> Void) {
-    self.dismissAction = dismiss
   }
   
   @MainActor

@@ -8,6 +8,7 @@
 import SwiftUI
 import DesignSystem
 import UseCases
+import Router
 
 struct AvoidContactsGuideView: View {
   private enum Constant {
@@ -17,7 +18,7 @@ struct AvoidContactsGuideView: View {
   }
   @State var viewModel: AvoidContactsGuideViewModel
   @State private var path = NavigationPath()
-  @Environment(\.dismiss) private var dismiss
+  @Environment(Router.self) private var router: Router
   
   var body: some View {
     NavigationStack(path: $path) {
@@ -40,7 +41,7 @@ struct AvoidContactsGuideView: View {
         .navigationBarModifier {
           NavigationBar(
             title: "",
-            leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+            leftButtonTap: { router.pop() }
           )
         }
         .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
@@ -57,9 +58,6 @@ struct AvoidContactsGuideView: View {
         toast
           .opacity(viewModel.showToast ? 1 : 0)
           .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
-      }
-      .onAppear {
-        viewModel.setDismissAction { dismiss() }
       }
     }
   }
