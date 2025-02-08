@@ -35,4 +35,8 @@ public extension TargetDependency {
       path: .relativeToRoot(target.path)
     )
   }
+  
+  static func externalDependency(dependency: ExternalDependencies) -> TargetDependency {
+    .external(name: dependency.name)
+  }
 }

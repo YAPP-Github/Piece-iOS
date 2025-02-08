@@ -32,12 +32,14 @@ let package = Package(
 
 enum ExternalDependency: String, CaseIterable {
   case Kingfisher
+  case Alamofire
 }
 
 extension ExternalDependency {
   var url: String {
     switch self {
     case .Kingfisher: "https://github.com/onevcat/Kingfisher"
+    case .Alamofire: "https://github.com/Alamofire/Alamofire"
     }
   }
 }
@@ -46,6 +48,7 @@ extension ExternalDependency {
   var version: PackageDescription.Version {
     switch self {
     case .Kingfisher: "8.1.4"
+    case .Alamofire: "5.10.2"
     }
   }
 }

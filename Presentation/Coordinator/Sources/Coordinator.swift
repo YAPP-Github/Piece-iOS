@@ -6,6 +6,7 @@
 //
 
 import MatchingDetail
+import SignUp
 import Home
 import SignUp
 import Router
@@ -13,20 +14,37 @@ import SwiftUI
 import UseCases
 
 public struct Coordinator {
+  public init() { }
+  
+  private let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase()
+  private let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase()
+  private let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase()
+  private let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase()
+  
   @ViewBuilder
-  public static func view(for route: Route) -> some View {
+  public func view(for route: Route) -> some View {
     switch route {
     case .home:
-      HomeViewFactory.createHomeView()
+      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase()
+      HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
+    case .termsAgreement:
+      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase()
+      SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
     case .matchProfileBasic:
-      let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase()
-      MatchDetailViewFactory.createMatchProfileBasicView(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase)
+      MatchDetailViewFactory.createMatchProfileBasicView(
+        getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
     case .matchValueTalk:
-      let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase()
-      MatchDetailViewFactory.createMatchValueTalkView(getMatchValueTalkUseCase: getMatchValueTalkUseCase)
+      MatchDetailViewFactory.createMatchValueTalkView(
+        getMatchValueTalkUseCase: getMatchValueTalkUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
     case .matchValuePick:
-      let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase()
-      MatchDetailViewFactory.createMatchValuePickView(getMatchValuePickUseCase: getMatchValuePickUseCase)
+      MatchDetailViewFactory.createMatchValuePickView(
+        getMatchValuePickUseCase: getMatchValuePickUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
     case .AvoidContactsGuide:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
       SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)

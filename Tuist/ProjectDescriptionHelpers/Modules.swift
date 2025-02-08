@@ -19,6 +19,9 @@ public enum Modules {
 public extension Modules {
   enum Data: String {
     case LocalStorage // 임시
+    case PCNetwork
+    case DTO
+    case Repository
     
     var path: String {
       "Data/\(self.rawValue)"
@@ -36,6 +39,7 @@ public extension Modules {
   enum Domain: String {
     case Entities
     case UseCases
+    case RepositoryInterfaces
     
     var path: String {
       switch self {
@@ -75,6 +79,7 @@ public extension Modules {
     case Login
     case SignUp
     case Home
+    case Profile
     case MatchingMain
     case MatchingDetail
     

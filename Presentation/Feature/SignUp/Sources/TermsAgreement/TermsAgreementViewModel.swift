@@ -8,6 +8,7 @@
 import SwiftUI
 import Observation
 import DesignSystem
+import UseCases
 
 @Observable
 final class TermsAgreementViewModel {
@@ -15,26 +16,23 @@ final class TermsAgreementViewModel {
     case toggleAll
     case toggleTerm(id: Int)
     case tapChevronButton(with: TermModel)
-    case tapNextButton
-    case tapBackButton
   }
   
-  init(
-    terms: [TermModel],
-    navigationPath: NavigationPath
-  ) {
-    self.terms = terms
-    self.navigationPath = navigationPath
+  init(fetchTermsUseCase: FetchTermsUseCase) {
+    self.fetchTermsUseCase = fetchTermsUseCase
+    
+    fetchTerms()
   }
   
-  var terms: [TermModel]
-  var navigationPath: NavigationPath
+  
+  private(set) var terms: [TermModel] = []
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
   }
   var nextButtonType: RoundedButton.ButtonType {
     isAllChecked ? .solid : .disabled
   }
+  private let fetchTermsUseCase: FetchTermsUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -47,10 +45,27 @@ final class TermsAgreementViewModel {
       if let index = terms.firstIndex(where: { $0.id == id }) {
         terms[index].isChecked.toggle()
       }
-    case .tapChevronButton(let term):
-      navigationPath.append(term)
     default:
       return
+    }
+  }
+  
+  func fetchTerms() {
+    Task {
+      do {
+        let termsList = try await fetchTermsUseCase.execute()
+        terms = termsList.responses.map { term in
+          TermModel(
+            id: term.termId,
+            title: term.title,
+            url: term.content,
+            required: term.required,
+            isChecked: false
+          )
+        }
+      } catch {
+        print("❌ Error fetching terms: \(error.localizedDescription)")
+      }
     }
   }
 }
