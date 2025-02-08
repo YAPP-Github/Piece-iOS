@@ -8,6 +8,12 @@
 import Foundation
 
 public struct UseCaseFactory {
+  // MARK: - 사용자 프로필
+  public static func createGetProfileUseCase() -> GetProfileUseCase {
+    GetProfileUseCaseImpl()
+  }
+  
+  // MARK: - 매칭 상세
   public static func createGetMatchProfileBasicUseCase() -> GetMatchProfileBasicUseCase {
     GetMatchProfileBasicUseCaseImpl()
   }
