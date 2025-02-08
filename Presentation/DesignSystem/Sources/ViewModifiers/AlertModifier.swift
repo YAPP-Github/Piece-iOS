@@ -15,13 +15,11 @@ public struct AlertModifier<Title: View>: ViewModifier {
   public func body(content: Content) -> some View {
     content
       .fullScreenCover(isPresented: $isPresented) {
-        ZStack {
-          Dimmer()
-          alert
-        }
-      }
-      .transaction { transaction in
-        transaction.disablesAnimations = true
+        alert
+          .background(
+            Dimmer()
+              .ignoresSafeArea()
+          )
       }
   }
 }
