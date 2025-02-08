@@ -20,8 +20,16 @@ struct ValueTalkView: View {
   @State private var contentOffset: CGFloat = 0
   @Environment(Router.self) private var router: Router
   
-  init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
-    _viewModel = .init(wrappedValue: .init(getMatchValueTalkUseCase: getMatchValueTalkUseCase))
+  init(
+    getMatchValueTalkUseCase: GetMatchValueTalkUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        getMatchValueTalkUseCase: getMatchValueTalkUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
+    )
   }
   
   var body: some View {
@@ -49,7 +57,7 @@ struct ValueTalkView: View {
       
       if viewModel.isNameViewVisible {
         BasicInfoNameView(
-          description: valueTalkModel.description,
+          shortIntroduction: valueTalkModel.description,
           nickname: valueTalkModel.nickname,
           moreButtonAction: { viewModel.handleAction(.didTapMoreButton) }
         )
@@ -74,6 +82,12 @@ struct ValueTalkView: View {
     .animation(.easeOut(duration: 0.3), value: viewModel.isNameViewVisible)
     .overlay(alignment: .bottom) {
       buttons
+    }
+    .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
+      MatchDetailPhotoView(
+        nickname: viewModel.valueTalkModel?.nickname ?? "",
+        uri: viewModel.photoUri
+      )
     }
   }
   
@@ -106,6 +120,7 @@ struct ValueTalkView: View {
   
   private var buttons: some View {
     HStack(alignment: .center, spacing: 8) {
+      photoButton
       Spacer()
       backButton
       nextButton
@@ -113,6 +128,15 @@ struct ValueTalkView: View {
     .padding(.horizontal, 20)
     .padding(.top, 12)
     .background(Color.grayscaleLight3)
+  }
+  
+  private var photoButton: some View {
+    CircleButton(
+      type: .outline,
+      icon: DesignSystemAsset.Icons.photoLine32.swiftUIImage
+    ) {
+      viewModel.handleAction(.didTapPhotoButton)
+    }
   }
   
   private var backButton: some View {

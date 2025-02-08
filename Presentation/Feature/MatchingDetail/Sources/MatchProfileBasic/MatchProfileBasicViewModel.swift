@@ -10,24 +10,77 @@ import UseCases
 
 @Observable
 final class MatchProfileBasicViewModel {
+  enum Action {
+    case didTapMoreButton
+    case didTapPhotoButton
+  }
+  
   private enum Constant {
     static let navigationTitle = ""
     static let title = "오늘의 매칭 조각"
   }
-  
-  enum Action {
-    case didTapMoreButton
-  }
 
   let navigationTitle = Constant.navigationTitle
   let title = Constant.title
-  private(set) var basicInfoModel: BasicInfoModel?
-  private let getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
+  var isPhotoViewPresented: Bool = false
   
-  init(getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase) {
+  private(set) var isLoading = true
+  private(set) var error: Error?
+  private(set) var matchingBasicInfoModel: BasicInfoModel?
+  private(set) var photoUri: String = ""
+  private let getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
+  private let getMatchPhotoUseCase: GetMatchPhotoUseCase
+  
+  init(
+    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
     self.getMatchProfileBasicUseCase = getMatchProfileBasicUseCase
+    self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    
+    Task {
+      await fetchMatchingBasicInfo()
+      await fetchMatchPhoto()
+    }
   }
   
   func handleAction(_ action: Action) {
+    switch action {
+    case .didTapMoreButton:
+      return
+    case .didTapPhotoButton:
+      isPhotoViewPresented = true
+    }
+  }
+  
+  private func fetchMatchingBasicInfo() async {
+    do {
+      let entity = try await getMatchProfileBasicUseCase.execute()
+      matchingBasicInfoModel = BasicInfoModel(
+        id: entity.id,
+        nickname: entity.nickname,
+        shortIntroduction: entity.shortIntroduction,
+        age: entity.age,
+        birthYear: entity.birthYear,
+        height: entity.height,
+        weight: entity.weight,
+        region: entity.location,
+        job: entity.job,
+        smokingStatus: entity.smokingStatus
+      )
+      error = nil
+    } catch {
+      self.error = error
+    }
+    isLoading = false
+  }
+  
+  private func fetchMatchPhoto() async {
+    do {
+      let uri = try await getMatchPhotoUseCase.execute()
+      photoUri = uri
+    } catch {
+      self.error = error
+    }
   }
 }

@@ -7,8 +7,7 @@
 
 struct ValuePickModel: Identifiable {
   let id: Int
-  let category: String
-  let question: String
-  let answers: [ValuePickAnswerModel]
-  let isSame: Bool
+  let shortIntroduction: String
+  let nickname: String
+  let valuePicks: [ValuePickAnswerModel]
 }

@@ -26,8 +26,8 @@ public struct PCMiniTab<Content: View>: View {
       .contentShape(Rectangle())
   }
   
-  @State var isSelected: Bool
-  @ViewBuilder let content: Content
+  let isSelected: Bool
+  let content: Content
 }
 
 #Preview {
