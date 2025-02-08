@@ -10,6 +10,12 @@ import UseCases
 
 public struct SignUpViewFactory {
   @ViewBuilder
+
+  public static func createAvoidContactsGuideView(
+    contactsPermissionUseCase: ContactsPermissionUseCase
+  ) -> some View {
+    AvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+
   public static func createTermsAgreementView(
     fetchTermsUseCase: FetchTermsUseCase
   ) -> some View {

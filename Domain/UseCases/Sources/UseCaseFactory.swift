@@ -9,6 +9,9 @@ import Foundation
 import Repository
 
 public struct UseCaseFactory {
+  public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
+    ContactsPermissionUseCaseImpl()
+  }
   public static func createFetchTermsUseCase() -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: TermsRepository())
   }
