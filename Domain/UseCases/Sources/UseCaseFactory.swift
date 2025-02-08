@@ -25,4 +25,8 @@ public struct UseCaseFactory {
   public static func createGetMatchValuePickUseCase() -> GetMatchValuePickUseCase {
     GetMatchValuePickUseCaseImpl()
   }
+  
+  public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
+    GetMatchPhotoUseCaseImpl()
+  }
 }

@@ -11,22 +11,42 @@ import UseCases
 public struct MatchDetailViewFactory {
   @ViewBuilder
   public static func createMatchProfileBasicView(
-    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase
+    getMatchProfileBasicUseCase: GetMatchProfileBasicUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
   ) -> some View {
-    MatchProfileBasicView(getMatchProfileBasicUseCase: getMatchProfileBasicUseCase)
+    MatchProfileBasicView(
+      getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
+      getMatchPhotoUseCase: getMatchPhotoUseCase
+    )
   }
   
   @ViewBuilder
   public static func createMatchValueTalkView(
-    getMatchValueTalkUseCase: GetMatchValueTalkUseCase
+    getMatchValueTalkUseCase: GetMatchValueTalkUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
   ) -> some View {
-    ValueTalkView(getMatchValueTalkUseCase: getMatchValueTalkUseCase)
+    ValueTalkView(
+      getMatchValueTalkUseCase: getMatchValueTalkUseCase,
+      getMatchPhotoUseCase: getMatchPhotoUseCase
+    )
   }
   
   @ViewBuilder
   public static func createMatchValuePickView(
-    getMatchValuePickUseCase: GetMatchValuePickUseCase
+    getMatchValuePickUseCase: GetMatchValuePickUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
   ) -> some View {
-    ValuePickView(getMatchValuePickUseCase: getMatchValuePickUseCase)
+    ValuePickView(
+      getMatchValuePickUseCase: getMatchValuePickUseCase,
+      getMatchPhotoUseCase: getMatchPhotoUseCase
+    )
+  }
+  
+  @ViewBuilder
+  public static func createMatchDetailPhotoView(
+    nickname: String,
+    uri: String
+  ) -> some View {
+    MatchDetailPhotoView(nickname: nickname, uri: uri)
   }
 }
