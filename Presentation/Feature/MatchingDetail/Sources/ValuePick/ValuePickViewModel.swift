@@ -25,28 +25,43 @@ final class ValuePickViewModel {
     case didTapDenyButton
   }
   
-  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
+  init(
+    getMatchValuePickUseCase: GetMatchValuePickUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
     self.getMatchValuePickUseCase = getMatchValuePickUseCase
+    self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    
+    Task {
+      await fetchMatchValueTalk()
+      await fetchMatchPhoto()
+    }
   }
   
   let tabs = ValuePickTab.allCases
+  let navigationTitle: String = Constant.navigationTitle
+  var isPhotoViewPresented: Bool = false
+  var isMatchAcceptAlertPresented: Bool = false
+  var isMatchDenyAlertPresented: Bool = false
   
-  private(set) var navigationTitle: String = Constant.navigationTitle
-  private(set) var description: String?
-  private(set) var nickname: String?
+  private(set) var valuePickModel: ValuePickModel?
+  private(set) var isLoading = true
+  private(set) var error: Error?
   private(set) var contentOffset: CGFloat = 0
   private(set) var isNameViewVisible: Bool = true
   private(set) var selectedTab: ValuePickTab = .all
-  private(set) var displayedValuePicks: [ValuePickModel] = []
-  
-  private var valuePicks: [ValuePickModel] = []
+  private(set) var displayedValuePicks: [ValuePickAnswerModel] = []
+  private(set) var sameWithMeCount: Int = 0
+  private(set) var differentFromMeCount: Int = 0
+  private(set) var photoUri: String = ""
+  private var valuePicks: [ValuePickAnswerModel] = []
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
-
+  private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   
   func handleAction(_ action: Action) {
     switch action {
     case let .contentOffsetDidChange(offset):
-      contentOffset = contentOffset
+      contentOffset = offset
       isNameViewVisible = offset > Constant.nameVisibilityOffset
       
     case .didTapMoreButton:
@@ -54,16 +69,62 @@ final class ValuePickViewModel {
       
     case let .didSelectTab(tab):
       self.selectedTab = tab
-      // TODO: - API 확인 후 displayedValuePicks의 값을 변경하는 로직 추가
+      switch tab {
+      case .all:
+        displayedValuePicks = valuePicks
+      case .same:
+        displayedValuePicks = valuePicks.filter { $0.sameWithMe }
+      case .different:
+        displayedValuePicks = valuePicks.filter { !$0.sameWithMe }
+      }
       
     case .didTapPhotoButton:
-      return
+      isPhotoViewPresented = true
       
     case .didTapAcceptButton:
-      return
+      isMatchAcceptAlertPresented = true
       
     case .didTapDenyButton:
-      return
+      isMatchDenyAlertPresented = true
+    }
+  }
+  
+  func fetchMatchValueTalk() async {
+    do {
+      let entity = try await getMatchValuePickUseCase.execute()
+      let model = ValuePickModel(
+        id: entity.id,
+        shortIntroduction: entity.shortIntroduction,
+        nickname: entity.nickname,
+        valuePicks: entity.valuePicks.map {
+          ValuePickAnswerModel(
+            id: UUID(),
+            category: $0.category,
+            question: $0.question,
+            sameWithMe: $0.sameWithMe
+          )
+        }
+      )
+      valuePickModel = model
+      valuePicks = model.valuePicks
+      displayedValuePicks = model.valuePicks
+      sameWithMeCount = entity.valuePicks.filter { $0.sameWithMe }.count
+      differentFromMeCount = entity.valuePicks.filter { !$0.sameWithMe }.count
+      
+      error = nil
+    } catch {
+      self.error = error
+    }
+    
+    isLoading = false
+  }
+  
+  private func fetchMatchPhoto() async {
+    do {
+      let uri = try await getMatchPhotoUseCase.execute()
+      photoUri = uri
+    } catch {
+      self.error = error
     }
   }
 }

@@ -79,6 +79,7 @@ public extension Modules {
     case Login
     case SignUp
     case Home
+    case Profile
     case MatchingMain
     case MatchingDetail
     
