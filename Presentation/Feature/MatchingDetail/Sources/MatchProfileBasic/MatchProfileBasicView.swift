@@ -76,6 +76,9 @@ struct MatchProfileBasicView: View {
         uri: viewModel.photoUri
       )
     }
+    .transaction { transaction in
+        transaction.disablesAnimations = true
+    }
   }
   
   private var title: some View {
