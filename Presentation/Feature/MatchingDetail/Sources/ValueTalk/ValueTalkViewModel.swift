@@ -19,17 +19,33 @@ final class ValueTalkViewModel {
   enum Action {
     case contentOffsetDidChange(CGFloat)
     case didTapMoreButton
+    case didTapPhotoButton
   }
   
-  init(getMatchValueTalkUseCase: GetMatchValueTalkUseCase) {
+  init(
+    getMatchValueTalkUseCase: GetMatchValueTalkUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
     self.getMatchValueTalkUseCase = getMatchValueTalkUseCase
+    self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    
+    Task {
+      await fetchMatchValueTalk()
+      await fetchMatchPhoto()
+    }
   }
   
-  var navigationTitle: String = Constant.navigationTitle
-  var valueTalkModel: ValueTalkModel?
-  var contentOffset: CGFloat = 0
-  var isNameViewVisible: Bool = true
+  let navigationTitle: String = Constant.navigationTitle
+  var isPhotoViewPresented: Bool = false
+
+  private(set) var valueTalkModel: ValueTalkModel?
+  private(set) var contentOffset: CGFloat = 0
+  private(set) var isNameViewVisible: Bool = true
+  private(set) var isLoading = true
+  private(set) var error: Error?
+  private(set) var photoUri: String = ""
   private let getMatchValueTalkUseCase: GetMatchValueTalkUseCase
+  private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -37,7 +53,42 @@ final class ValueTalkViewModel {
       contentOffset = offset
       isNameViewVisible = offset > Constant.nameVisibilityOffset
       
+    case .didTapPhotoButton:
+      isPhotoViewPresented = true
+      
     default: return
+    }
+  }
+  
+  private func fetchMatchValueTalk() async {
+    do {
+      let entity = try await getMatchValueTalkUseCase.execute()
+      valueTalkModel = ValueTalkModel(
+        description: entity.shortIntroduction,
+        nickname: entity.nickname,
+        valueTalks: entity.valueTalks.map {
+          ValueTalk(
+            id: UUID(),
+            topic: $0.category,
+            summary: $0.summary,
+            answer: $0.answer
+          )
+        }
+      )
+      
+      error = nil
+    } catch {
+      self.error = error
+    }
+    isLoading = false
+  }
+  
+  private func fetchMatchPhoto() async {
+    do {
+      let uri = try await getMatchPhotoUseCase.execute()
+      photoUri = uri
+    } catch {
+      self.error = error
     }
   }
 }

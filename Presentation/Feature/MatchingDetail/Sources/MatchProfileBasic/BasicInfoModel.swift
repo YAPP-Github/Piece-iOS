@@ -8,13 +8,14 @@
 import Observation
 
 struct BasicInfoModel {
-  let description: String
+  let id: Int
   let nickname: String
+  let shortIntroduction: String
   let age: Int
-  let birthYear: Int
+  let birthYear: String
   let height: Int
-  let religion: String
+  let weight: Int
   let region: String
   let job: String
-  let isSmoker: Bool
+  let smokingStatus: String
 }

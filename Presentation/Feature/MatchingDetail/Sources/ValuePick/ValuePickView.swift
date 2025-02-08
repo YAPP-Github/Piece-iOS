@@ -21,8 +21,16 @@ struct ValuePickView: View {
   @State private var contentOffset: CGFloat = 0
   @Environment(Router.self) private var router: Router
   
-  init(getMatchValuePickUseCase: GetMatchValuePickUseCase) {
-    _viewModel = .init(wrappedValue: .init(getMatchValuePickUseCase: getMatchValuePickUseCase))
+  init(
+    getMatchValuePickUseCase: GetMatchValuePickUseCase,
+    getMatchPhotoUseCase: GetMatchPhotoUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        getMatchValuePickUseCase: getMatchValuePickUseCase,
+        getMatchPhotoUseCase: getMatchPhotoUseCase
+      )
+    )
   }
   
   var body: some View {
@@ -39,16 +47,18 @@ struct ValuePickView: View {
         Divider(weight: .normal, isVertical: false)
       }
       
-      if viewModel.isNameViewVisible {
-        BasicInfoNameView(
-          description: viewModel.description ?? "",
-          nickname: viewModel.nickname ?? ""
-        ) {
-          viewModel.handleAction(.didTapMoreButton)
+      if let valuePickModel = viewModel.valuePickModel {
+        if viewModel.isNameViewVisible {
+          BasicInfoNameView(
+            shortIntroduction: valuePickModel.shortIntroduction,
+            nickname: valuePickModel.nickname
+          ) {
+            viewModel.handleAction(.didTapMoreButton)
+          }
+          .padding(20)
+          .background(Color.grayscaleWhite)
+          .transition(.move(edge: .top).combined(with: .opacity))
         }
-        .padding(20)
-        .background(Color.grayscaleWhite)
-        .transition(.move(edge: .top).combined(with: .opacity))
       }
       
       tabs
@@ -70,11 +80,52 @@ struct ValuePickView: View {
             .frame(height: 60)
         }
         .scrollIndicators(.never)
+        .frame(maxWidth: .infinity)
         .background(Color.grayscaleLight3)
       
-      bottomButtons
+      buttons
     }
     .toolbar(.hidden)
+    .fullScreenCover(isPresented: $viewModel.isPhotoViewPresented) {
+      MatchDetailPhotoView(
+        nickname: viewModel.valuePickModel?.nickname ?? "",
+        uri: viewModel.photoUri
+      )
+    }
+    .pcAlert(isPresented: $viewModel.isMatchAcceptAlertPresented) {
+      AlertView(
+        title: {
+          Text("\(viewModel.valuePickModel?.nickname ?? "")").foregroundStyle(Color.primaryDefault) +
+          Text("님과의\n인연을 이어가시겠습니까?").foregroundStyle(Color.grayscaleBlack)
+        },
+        message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
+        firstButtonText: "뒤로",
+        secondButtonText: "매칭 수락하기"
+      ) {
+        viewModel.isMatchAcceptAlertPresented = false
+      } secondButtonAction: {
+        viewModel.isMatchAcceptAlertPresented = false
+        router.popToRoot()
+      }
+    }
+    .pcAlert(isPresented: $viewModel.isMatchDenyAlertPresented) {
+      AlertView(
+        title: {
+          Text("\(viewModel.valuePickModel?.nickname ?? "")님과의\n").foregroundStyle(Color.grayscaleBlack) +
+          Text("인연을 ").foregroundStyle(Color.grayscaleBlack) +
+          Text("거절").foregroundStyle(Color.systemError) +
+          Text("하시겠습니까?").foregroundStyle(Color.grayscaleBlack)
+        },
+        message: "매칭을 거절하면 이후에 되돌릴 수 없으니\n신중히 선택해 주세요.",
+        firstButtonText: "뒤로",
+        secondButtonText: "매칭 거절하기"
+      ) {
+        viewModel.isMatchDenyAlertPresented = false
+      } secondButtonAction: {
+        viewModel.isMatchDenyAlertPresented = false
+        router.popToRoot()
+      }
+    }
   }
   
   // MARK: - 탭
@@ -90,12 +141,12 @@ struct ValuePickView: View {
             case .same:
               HStack(spacing: 6) {
                 Text(tab.description)
-                Text(7.description) // TODO: - API 확인 후 수정
+                Text("\(viewModel.sameWithMeCount)")
               }
             case .different:
               HStack(spacing: 6) {
                 Text(tab.description)
-                Text(3.description) // TODO: - API 확인 후 수정
+                Text("\(viewModel.differentFromMeCount)")
               }
             }
           }
@@ -137,37 +188,46 @@ struct ValuePickView: View {
   
   // MARK: - 하단 버튼
   
-  private var bottomButtons: some View {
+  private var buttons: some View {
     HStack(alignment: .center, spacing: 8) {
-      CircleButton(
-        type: .outline,
-        icon: DesignSystemAsset.Icons.photoLine32.swiftUIImage
-      ) {
-        viewModel.handleAction(.didTapPhotoButton)
-      }
-      
+      photoButton
       Spacer()
-      
-      CircleButton(
-        type: .solid,
-        icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage
-      ) {
-        router.pop()
-      }
-      
-      RoundedButton(
-        type: .solid,
-        buttonText: Constant.accepetButtonText,
-        icon: nil,
-        rounding: true,
-        action: { viewModel.handleAction(.didTapAcceptButton) }
-      )
+      backButton
+      acceptButton
     }
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 20)
     .padding(.top, 12)
     .padding(.bottom, 10)
     .background(Color.grayscaleLight3)
+  }
+  
+  private var photoButton: some View {
+    CircleButton(
+      type: .outline,
+      icon: DesignSystemAsset.Icons.photoLine32.swiftUIImage
+    ) {
+      viewModel.handleAction(.didTapPhotoButton)
+    }
+  }
+  
+  private var backButton: some View {
+    CircleButton(
+      type: .solid,
+      icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage
+    ) {
+      router.pop()
+    }
+  }
+  
+  private var acceptButton: some View {
+    RoundedButton(
+      type: .solid,
+      buttonText: Constant.accepetButtonText,
+      icon: nil,
+      rounding: true,
+      action: { viewModel.handleAction(.didTapAcceptButton) }
+    )
   }
 }
 

@@ -7,18 +7,15 @@
 
 import SwiftUI
 
-public struct AlertModifier: ViewModifier {
+public struct AlertModifier<Title: View>: ViewModifier {
   @Binding var isPresented: Bool
   
-  let alert: AlertView
+  let alert: AlertView<Title>
   
   public func body(content: Content) -> some View {
     content
       .fullScreenCover(isPresented: $isPresented) {
-        ZStack {
-          Dimmer()
-          alert
-        }
+        alert
       }
       .transaction { transaction in
         transaction.disablesAnimations = true
@@ -27,9 +24,9 @@ public struct AlertModifier: ViewModifier {
 }
 
 public extension View {
-  func pcAlert(
+  func pcAlert<Title: View>(
     isPresented: Binding<Bool>,
-    alert: @escaping () -> AlertView
+    alert: @escaping () -> AlertView<Title>
   ) -> some View {
     return modifier(AlertModifier(isPresented: isPresented, alert: alert()))
   }
