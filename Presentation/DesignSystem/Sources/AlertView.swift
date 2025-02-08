@@ -46,6 +46,12 @@ public struct AlertView<Title: View>: View {
         .fill(Color.grayscaleWhite)
         .cornerRadius(12)
     )
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .ignoresSafeArea()
+    .background(
+      Dimmer()
+        .ignoresSafeArea()
+    )
   }
   
   private let icon: Image?

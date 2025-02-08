@@ -16,10 +16,9 @@ public struct AlertModifier<Title: View>: ViewModifier {
     content
       .fullScreenCover(isPresented: $isPresented) {
         alert
-          .background(
-            Dimmer()
-              .ignoresSafeArea()
-          )
+      }
+      .transaction { transaction in
+        transaction.disablesAnimations = true
       }
   }
 }
