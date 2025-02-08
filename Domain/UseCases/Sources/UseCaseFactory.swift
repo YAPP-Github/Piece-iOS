@@ -12,7 +12,9 @@ public struct UseCaseFactory {
   public static func createFetchTermsUseCase() -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: TermsRepository())
   }
-  
+  public static func createGetProfileUseCase() -> GetProfileUseCase {
+    GetProfileUseCaseImpl()
+  }
   public static func createGetMatchProfileBasicUseCase() -> GetMatchProfileBasicUseCase {
     GetMatchProfileBasicUseCaseImpl()
   }
@@ -23,5 +25,9 @@ public struct UseCaseFactory {
   
   public static func createGetMatchValuePickUseCase() -> GetMatchValuePickUseCase {
     GetMatchValuePickUseCaseImpl()
+  }
+  
+  public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
+    GetMatchPhotoUseCaseImpl()
   }
 }

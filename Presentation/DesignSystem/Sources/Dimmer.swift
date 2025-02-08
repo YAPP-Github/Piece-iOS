@@ -2,22 +2,22 @@
 //  Dimmer.swift
 //  DesignSystem
 //
-//  Created by summercat on 1/30/25.
+//  Created by summercat on 2/8/25.
 //
 
 import SwiftUI
 
-public struct Dimmer: View {
+public struct Dimmer: UIViewRepresentable {
   public init() { }
   
-  public var body: some View {
-    Rectangle()
-      .fill(Color.alphaBlack40)
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .ignoresSafeArea()
+  public func makeUIView(context: Context) -> UIView {
+    let view = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    view.alpha = 0.8
+    DispatchQueue.main.async {
+      view.superview?.superview?.backgroundColor = .clear
+    }
+    return view
   }
-}
-
-#Preview {
-  Dimmer()
+  
+  public func updateUIView(_ uiView: UIView, context: Context) {}
 }
