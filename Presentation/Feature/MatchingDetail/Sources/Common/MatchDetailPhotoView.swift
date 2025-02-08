@@ -25,10 +25,11 @@ struct MatchDetailPhotoView: View {
   }
   
   var body: some View {
-    ZStack {
-      Dimmer()
-      content
-    }
+    content
+      .background(
+        Dimmer()
+          .ignoresSafeArea()
+      )
   }
   
   private var content: some View {
