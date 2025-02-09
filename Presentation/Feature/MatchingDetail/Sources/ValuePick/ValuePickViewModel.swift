@@ -94,7 +94,7 @@ final class ValuePickViewModel {
       let entity = try await getMatchValuePickUseCase.execute()
       let model = ValuePickModel(
         id: entity.id,
-        shortIntroduction: entity.shortIntroduction,
+        shortIntroduction: entity.description,
         nickname: entity.nickname,
         valuePicks: entity.valuePicks.map {
           ValuePickAnswerModel(
