@@ -12,6 +12,6 @@ let project = Project.dynamicFramework(
   name: Modules.Domain.UseCases.rawValue,
   dependencies: [
     .domain(target: .Entities),
-    .data(target: .Repository)
+    .domain(target: .RepositoryInterfaces),
   ]
 )
