@@ -8,18 +8,18 @@
 public struct MatchValueTalkModel: Identifiable {
   public init(
     id: Int,
-    shortIntroduction: String,
+    description: String,
     nickname: String,
     valueTalks: [ValueTalkModel]
   ) {
     self.id = id
-    self.shortIntroduction = shortIntroduction
+    self.description = description
     self.nickname = nickname
     self.valueTalks = valueTalks
   }
   
   public let id: Int
-  public let shortIntroduction: String
+  public let description: String
   public let nickname: String
   public let valueTalks: [ValueTalkModel]
 }

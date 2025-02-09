@@ -17,7 +17,10 @@ public struct ProfileModel {
     location: String,
     smokingStatus: String,
     snsActivityLevel: String,
-    imageUrl: String
+    imageUri: String,
+    contacts: [ContactModel],
+    valueTalks: [ValueTalkModel],
+    valuePicks: [ValuePickModel]
   ) {
     self.nickname = nickname
     self.description = description
@@ -29,7 +32,10 @@ public struct ProfileModel {
     self.location = location
     self.smokingStatus = smokingStatus
     self.snsActivityLevel = snsActivityLevel
-    self.imageUrl = imageUrl
+    self.imageUri = imageUri
+    self.contacts = contacts
+    self.valueTalks = valueTalks
+    self.valuePicks = valuePicks
   }
   
   public let nickname: String
@@ -42,6 +48,8 @@ public struct ProfileModel {
   public let location: String
   public let smokingStatus: String
   public let snsActivityLevel: String
-  public let imageUrl: String
-//  public let contacts // TODO: - 스키마 이름이 안 정해진 것 같음...
+  public let imageUri: String
+  public let contacts: [ContactModel]
+  public let valueTalks: [ValueTalkModel]
+  public let valuePicks: [ValuePickModel]
 }

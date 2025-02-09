@@ -1,14 +1,14 @@
 //
-//  MatchProfileBasicModel.swift
+//  ProfileBasicModel.swift
 //  Entities
 //
 //  Created by summercat on 1/30/25.
 //
 
-public struct MatchProfileBasicModel: Identifiable {
+public struct ProfileBasicModel: Identifiable {
   public init(
     id: Int,
-    shortIntroduction: String,
+    description: String,
     nickname: String,
     age: Int,
     birthYear: String,
@@ -19,7 +19,7 @@ public struct MatchProfileBasicModel: Identifiable {
     smokingStatus: String
   ) {
     self.id = id
-    self.shortIntroduction = shortIntroduction
+    self.description = description
     self.nickname = nickname
     self.age = age
     self.birthYear = birthYear
@@ -31,7 +31,7 @@ public struct MatchProfileBasicModel: Identifiable {
   }
   
   public let id: Int
-  public let shortIntroduction: String
+  public let description: String
   public let nickname: String
   public let age: Int
   public let birthYear: String
