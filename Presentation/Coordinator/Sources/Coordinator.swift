@@ -33,9 +33,7 @@ public struct Coordinator {
     case .home:
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase()
       HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
-    case .termsAgreement:
-      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase()
-      SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
+      
     case .matchProfileBasic:
       MatchDetailViewFactory.createMatchProfileBasicView(
         getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
@@ -51,6 +49,13 @@ public struct Coordinator {
         getMatchValuePickUseCase: getMatchValuePickUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
       )
+      
+      // MARK: - SignUp
+    case .termsAgreement:
+      let termsRepository = repositoryFactory.createTermsRepository()
+      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
+      SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
+      
     case .AvoidContactsGuide:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
       SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
