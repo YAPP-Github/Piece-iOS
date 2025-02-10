@@ -15,9 +15,11 @@ struct CreateProfileContainerView: View {
   @Environment(Router.self) private var router: Router
   
   init(
+    createProfileUseCase: CreateProfileUseCase
   ) {
     _viewModel = .init(
       .init(
+        createProfileUseCase: createProfileUseCase
       )
     )
   }

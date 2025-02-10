@@ -12,9 +12,9 @@ let project = Project.staticLibrary(
   name: Modules.Presentation.SignUp.rawValue,
   dependencies: [
     .presentation(target: .DesignSystem),
+    .presentation(target: .Router),
     .utility(target: .PCFoundationExtension),
     .domain(target: .UseCases),
-    .presentation(target: .Router)
   ]
 )
 

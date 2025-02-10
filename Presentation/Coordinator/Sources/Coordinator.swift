@@ -9,6 +9,8 @@ import MatchingDetail
 import SignUp
 import Home
 import SignUp
+import PCNetwork
+import Repository
 import Router
 import SwiftUI
 import UseCases
@@ -16,6 +18,10 @@ import UseCases
 public struct Coordinator {
   public init() { }
   
+  // MARK: - Repositories
+  private let repositoryFactory = RepositoryFactory(networkService: NetworkService())
+  
+  // MARK: - UseCases
   private let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase()
   private let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase()
   private let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase()
@@ -48,6 +54,13 @@ public struct Coordinator {
     case .AvoidContactsGuide:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
       SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+    case .createProfile:
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let createProfileUseCase = UseCaseFactory.createProfileUseCase(repository: profileRepository)
+      
+      SignUpViewFactory.createProfileContainerView(
+        createProfileUseCase: createProfileUseCase
+      )
     }
   }
 }
