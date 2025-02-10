@@ -30,6 +30,10 @@ public struct UseCaseFactory {
     GetMatchValuePickUseCaseImpl()
   }
   
+  public static func createProfileUseCase(repository: ProfileRepositoryInterface) -> CreateProfileUseCase {
+    CreateProfileUseCaseImpl(repository: repository)
+  }
+  
   public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
     GetMatchPhotoUseCaseImpl()
   }
