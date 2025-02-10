@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Repository
+import RepositoryInterfaces
 
 public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
