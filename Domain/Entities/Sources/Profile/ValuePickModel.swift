@@ -5,24 +5,24 @@
 //  Created by summercat on 1/30/25.
 //
 
-public struct ValuePickModel {
+public struct ValuePickModel: Hashable, Identifiable {
   public init(
-    profileValuePickId: Int,
+    id: Int,
     category: String,
     question: String,
     answers: [ValuePickAnswerModel],
-    selectedAnswer: Int
+    selectedAnswer: Int? = nil
   ) {
-    self.profileValuePickId = profileValuePickId
+    self.id = id
     self.category = category
     self.question = question
     self.answers = answers
     self.selectedAnswer = selectedAnswer
   }
   
-  public let profileValuePickId: Int
+  public let id: Int
   public let category: String
   public let question: String
   public let answers: [ValuePickAnswerModel]
-  public let selectedAnswer: Int
+  public var selectedAnswer: Int?
 }
