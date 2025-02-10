@@ -20,7 +20,7 @@ public final class TermsRepository: TermsRepositoryInterfaces {
   }
   
   public func fetchTermList() async throws -> TermsListModel {
-    let endpoint = TermsEndPoint.fetchTermList
+    let endpoint = TermsEndpoint.fetchTermList
     
     let responseDTO: TermsListResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
