@@ -5,12 +5,12 @@
 //  Created by summercat on 2/9/25.
 //
 
-public struct ValuePickAnswerModel {
+public struct ValuePickAnswerModel: Hashable, Identifiable {
   public init(number: Int, content: String) {
-    self.number = number
+    self.id = number
     self.content = content
   }
   
-  public let number: Int
+  public let id: Int
   public let content: String
 }

@@ -10,7 +10,7 @@ public struct MatchValuePickModel: Identifiable {
     id: Int,
     description: String,
     nickname: String,
-    valuePicks: [ValuePickModel]
+    valuePicks: [MatchValuePickItemModel]
   ) {
     self.id = id
     self.description = description
@@ -21,5 +21,5 @@ public struct MatchValuePickModel: Identifiable {
   public let id: Int
   public let description: String
   public let nickname: String
-  public let valuePicks: [ValuePickModel]
+  public let valuePicks: [MatchValuePickItemModel]
 }

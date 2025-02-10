@@ -10,7 +10,7 @@ public struct MatchValueTalkModel: Identifiable {
     id: Int,
     description: String,
     nickname: String,
-    valueTalks: [ValueTalkModel]
+    valueTalks: [MatchValueTalkItemModel]
   ) {
     self.id = id
     self.description = description
@@ -21,5 +21,5 @@ public struct MatchValueTalkModel: Identifiable {
   public let id: Int
   public let description: String
   public let nickname: String
-  public let valueTalks: [ValueTalkModel]
+  public let valueTalks: [MatchValueTalkItemModel]
 }
