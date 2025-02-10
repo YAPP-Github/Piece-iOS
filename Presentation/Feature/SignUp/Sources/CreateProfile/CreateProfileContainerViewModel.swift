@@ -33,8 +33,8 @@ final class CreateProfileContainerViewModel {
     self.createProfileUseCase = createProfileUseCase
   }
   
-  func handleAction(_ action: Action) {
-    
+  func handleAction(_ action: Action) { }
+  
   private func createProfile() {
     Task {
       do {
