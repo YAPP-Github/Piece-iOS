@@ -12,8 +12,8 @@ public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
-  public static func createFetchTermsUseCase() -> FetchTermsUseCase {
-    FetchTermsUseCaseImpl(repository: TermsRepository())
+  public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
+    FetchTermsUseCaseImpl(repository: repository)
   }
   public static func createGetProfileUseCase() -> GetProfileUseCase {
     GetProfileUseCaseImpl()
