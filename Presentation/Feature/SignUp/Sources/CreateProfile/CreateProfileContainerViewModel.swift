@@ -22,12 +22,15 @@ final class CreateProfileContainerViewModel {
   
   var presentedStep: [Step] = []
   let profileCreator = ProfileCreator()
+  private let createProfileUseCase: CreateProfileUseCase
   private(set) var currentStep: Step = .basicInfo
   private(set) var isProfileCreated: Bool = false
   private(set) var error: Error?
   
   init(
+    createProfileUseCase: CreateProfileUseCase
   ) {
+    self.createProfileUseCase = createProfileUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -36,6 +39,7 @@ final class CreateProfileContainerViewModel {
     Task {
       do {
         let profile = profileCreator.createProfile()
+        let response = try await createProfileUseCase.execute(profile: profile)
         // TODO: - accessToken, refreshToken 저장이 필요한 경우 여기서 처리해주세요
         isProfileCreated = true
         error = nil

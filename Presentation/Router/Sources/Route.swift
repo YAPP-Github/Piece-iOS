@@ -12,4 +12,5 @@ public enum Route: Hashable {
   case matchProfileBasic
   case matchValueTalk
   case matchValuePick
+  case createProfile
 }

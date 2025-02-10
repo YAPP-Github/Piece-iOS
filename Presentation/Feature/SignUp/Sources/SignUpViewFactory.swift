@@ -21,4 +21,11 @@ public struct SignUpViewFactory {
   ) -> some View {
     TermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
   }
+  public static func createProfileContainerView(
+    createProfileUseCase: CreateProfileUseCase
+  ) -> some View {
+    CreateProfileContainerView(
+      createProfileUseCase: createProfileUseCase
+    )
+  }
 }
