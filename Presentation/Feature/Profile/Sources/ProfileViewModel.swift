@@ -38,7 +38,7 @@ final class ProfileViewModel {
         job: entity.job,
         location: entity.location,
         smokingStatus: entity.smokingStatus,
-        imageUri: entity.imageUrl
+        imageUri: entity.imageUri
       )
       error = nil
     } catch {

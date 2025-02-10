@@ -8,15 +8,15 @@
 import Entities
 
 public protocol GetMatchProfileBasicUseCase {
-  func execute() async throws -> MatchProfileBasicModel
+  func execute() async throws -> ProfileBasicModel
 }
 
 final class GetMatchProfileBasicUseCaseImpl: GetMatchProfileBasicUseCase {
-  func execute() async throws -> MatchProfileBasicModel {
+  func execute() async throws -> ProfileBasicModel {
     // TODO: - API 연결 후 수정
-    return MatchProfileBasicModel(
+    return ProfileBasicModel(
       id: 0,
-      shortIntroduction: "안녕하세요",
+      description: "안녕하세요",
       nickname: "티모",
       age: 28,
       birthYear: "00",
