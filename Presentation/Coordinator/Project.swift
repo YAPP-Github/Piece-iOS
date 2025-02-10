@@ -11,6 +11,8 @@ let project = Project.dynamicFramework(
   name: Modules.Presentation.Coordinator.rawValue,
   dependencies: [
     .domain(target: .UseCases),
+    .data(target: .PCNetwork),
+    .data(target: .Repository),
     .presentation(target: .Router),
     .presentation(target: .Home),
     .presentation(target: .Profile),
