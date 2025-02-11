@@ -71,6 +71,7 @@ struct CreateBasicInfoView: View {
             
             Button {
               viewModel.isSNSSheetPresented = true
+              viewModel.contacts.append("")
             } label: {
               HStack(spacing: 4) {
                 Text("연락처 추가하기")
@@ -230,7 +231,7 @@ struct CreateBasicInfoView: View {
     .rightText("kg")
     .infoText( viewModel.showWeightError ?
                Constant.textFieldInfoText : "",
-      color: .systemError
+               color: .systemError
     )
   }
   
@@ -296,11 +297,22 @@ struct CreateBasicInfoView: View {
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
       PCTextEditor(
-        text: $viewModel.contact,
+        text: $viewModel.contacts[0],
         image: DesignSystemAsset.Icons.kakao20.swiftUIImage,
         showDeleteButton: false,
         action: { }
       )
+      if viewModel.contacts.count > 1 {
+        ForEach(viewModel.contacts.indices.dropFirst(), id: \.self) { index in
+          PCTextEditor(
+            text: $viewModel.contacts[index],
+            image: DesignSystemAsset.Icons.kakao20.swiftUIImage,
+            showDeleteButton: true,
+            tapDeleteButton: { viewModel.contacts.remove(at: index) },
+            action: {}
+          )
+        }
+      }
     }
   }
   
@@ -323,8 +335,17 @@ struct CreateBasicInfoView: View {
         viewModel.isJobSheetPresented = false
       }
     ) {
-      VStack {
-        ///
+      ScrollView{
+        VStack(alignment: .leading) {
+          ForEach(viewModel.jobs, id: \.self) { job in
+            cellItem(
+              text: job,
+              isSelected: true,
+              action: {}
+            )
+          }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
   }
@@ -340,7 +361,18 @@ struct CreateBasicInfoView: View {
       }
     ) {
       VStack {
-        ///
+        ScrollView{
+          VStack(alignment: .leading) {
+            ForEach(viewModel.locations, id: \.self) { location in
+              cellItem(
+                text: location,
+                isSelected: true,
+                action: {}
+              )
+            }
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+        }
       }
     }
   }
@@ -356,8 +388,46 @@ struct CreateBasicInfoView: View {
       }
     ) {
       VStack {
-        ///
+        ScrollView{
+          VStack(alignment: .leading) {
+            ForEach(viewModel.snsContacts) { contacts in
+              cellItem(
+                image: contacts.icon,
+                text: contacts.placeholder,
+                isSelected: true,
+                action: {}
+              )
+            }
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+        }
       }
+    }
+  }
+  
+  private func cellItem(
+    image: Image? = nil,
+    text: String,
+    isSelected: Bool = false,
+    action: @escaping () -> Void
+  ) -> some View {
+    Button(action: action) {
+      HStack {
+        if let image {
+          image
+        }
+        Text(text)
+          .pretendard(.body_M_M)
+          .foregroundStyle(Color.grayscaleBlack)
+        Spacer()
+        if  isSelected {
+          DesignSystemAsset.Icons.check24.swiftUIImage
+            .renderingMode(.template)
+            .foregroundStyle(Color.primaryDefault)
+        }
+      }
+      .padding(.vertical, 12)
+      .frame(maxWidth: .infinity)
     }
   }
   
