@@ -25,5 +25,6 @@ let project = Project.dynamicFramework(
     .presentation(target: .Withdraw),
     .presentation(target: .Login),
     .presentation(target: .Splash),
+    .presentation(target: .BlockUser),
   ]
 )

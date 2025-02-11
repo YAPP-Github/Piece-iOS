@@ -9,6 +9,7 @@ import Withdraw
 import EditValuePick
 import EditValueTalk
 import Login
+import BlockUser
 import MatchingDetail
 import Home
 import Onboarding
@@ -156,6 +157,8 @@ public struct Coordinator {
         getServerStatusUseCase: getServerStatusUseCase,
         socialLoginUseCase: socialLoginUseCase
       )
+    case .blockUser:
+      BlockUserViewFactory.createBlockUserView()
     }
   }
 }
