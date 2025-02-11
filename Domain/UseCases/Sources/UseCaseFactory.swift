@@ -44,4 +44,8 @@ public struct UseCaseFactory {
   public static func createGetValueTalksUseCase(repository: ValueTalksRepositoryInterface) -> GetValueTalksUseCase {
     GetValueTalksUseCaseImpl(repository: repository)
   }
+  
+  public static func createGetValuePicksUseCase(repository: ValuePicksRepositoryInterface) -> GetValuePicksUseCase {
+    GetValuePicksUseCaseImpl(repository: repository)
+  }
 }
