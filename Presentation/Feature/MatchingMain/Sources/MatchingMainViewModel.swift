@@ -5,6 +5,7 @@
 //  Created by eunseou on 1/4/25.
 //
 
+import Router
 import SwiftUI
 import Observation
 import DesignSystem
@@ -38,6 +39,15 @@ final class MatchingMainViewModel {
           .disabled
       }
     }
+    
+    var destination: Route? {
+      switch self { // TODO: - 매칭 심사중일 때 내 프로필 확인하기 화면
+      case .checkMatchingPiece: .matchProfileBasic
+      case .acceptMatching: nil
+      case .responseComplete: nil
+      case .checkContact: nil // TODO: - 연락처 확인 화면으로 변경
+      }
+    }
   }
   
   enum Action {
@@ -56,6 +66,9 @@ final class MatchingMainViewModel {
   }
   var buttonStatus: RoundedButton.ButtonType {
     matchingButtonState.buttonType
+  }
+  var matchingButtonDestination: Route? {
+    matchingButtonState.destination
   }
   var matchingButtonState: MatchingButtonState
   var matchingStatus: MatchingAnswer.MatchingStatus
@@ -89,8 +102,8 @@ final class MatchingMainViewModel {
   }
   
   private func handleMatchingButtonTap() {
-    switch MatchingButtonState.self {
-    default: return
+    if matchingButtonDestination == nil {
+      // TODO: - 매칭 버튼 수락하기 시 얼럿 띄우기 처리
     }
   }
 }
