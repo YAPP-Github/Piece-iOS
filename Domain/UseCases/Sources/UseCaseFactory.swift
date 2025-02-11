@@ -17,6 +17,10 @@ public struct UseCaseFactory {
     FetchTermsUseCaseImpl(repository: repository)
   }
   
+  public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
+    AcceptMatchUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - Profile
   
   public static func createGetProfileUseCase(repository: ProfileRepositoryInterface) -> GetProfileUseCase {

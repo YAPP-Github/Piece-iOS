@@ -34,11 +34,13 @@ public struct MatchDetailViewFactory {
   @ViewBuilder
   public static func createMatchValuePickView(
     getMatchValuePickUseCase: GetMatchValuePickUseCase,
-    getMatchPhotoUseCase: GetMatchPhotoUseCase
+    getMatchPhotoUseCase: GetMatchPhotoUseCase,
+    acceptMatchUseCase: AcceptMatchUseCase
   ) -> some View {
     ValuePickView(
       getMatchValuePickUseCase: getMatchValuePickUseCase,
-      getMatchPhotoUseCase: getMatchPhotoUseCase
+      getMatchPhotoUseCase: getMatchPhotoUseCase,
+      acceptMatchUseCase: acceptMatchUseCase
     )
   }
   

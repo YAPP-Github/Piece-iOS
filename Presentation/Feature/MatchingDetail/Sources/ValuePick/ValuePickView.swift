@@ -23,12 +23,14 @@ struct ValuePickView: View {
   
   init(
     getMatchValuePickUseCase: GetMatchValuePickUseCase,
-    getMatchPhotoUseCase: GetMatchPhotoUseCase
+    getMatchPhotoUseCase: GetMatchPhotoUseCase,
+    acceptMatchUseCase: AcceptMatchUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
-        getMatchPhotoUseCase: getMatchPhotoUseCase
+        getMatchPhotoUseCase: getMatchPhotoUseCase,
+        acceptMatchUseCase: acceptMatchUseCase
       )
     )
   }
@@ -104,6 +106,7 @@ struct ValuePickView: View {
       ) {
         viewModel.isMatchAcceptAlertPresented = false
       } secondButtonAction: {
+        viewModel.handleAction(.didAcceptMatch)
         viewModel.isMatchAcceptAlertPresented = false
         router.popToRoot()
       }
