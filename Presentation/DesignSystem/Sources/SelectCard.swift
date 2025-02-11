@@ -42,10 +42,10 @@ public struct SelectCard: View {
         .background(
           RoundedRectangle(cornerRadius: 8)
             .foregroundStyle(isSelected ? Color.primaryLight : Color.grayscaleLight3)
-            .overlay( // 테두리 추가 (조건부 적용)
+            .overlay(
               hasBorder ? RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.primaryDefault, lineWidth: 1) : nil
-                    )
+            )
         )
         .overlay(border)
     }
