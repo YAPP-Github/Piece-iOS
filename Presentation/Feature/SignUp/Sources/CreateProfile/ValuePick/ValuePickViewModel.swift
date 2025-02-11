@@ -19,6 +19,9 @@ final class ValuePickViewModel {
   }
   
   let profileCreator: ProfileCreator
+  var showToast: Bool = false
+  
+  private let getValuePicksUseCase: GetValuePicksUseCase
   
   init(
     profileCreator: ProfileCreator,
@@ -35,6 +38,14 @@ final class ValuePickViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .didTapCreateProfileButton:
+      // TODO: - 모두 선택했는지 로직 처리
+      let isValid = valuePicks.allSatisfy { $0.selectedAnswer != nil }
+      
+      if isValid {
+        profileCreator.updateValuePicks(valuePicks)
+      } else {
+        showToast = true
+      }
       return
       
     case let .updateValuePick(model):
