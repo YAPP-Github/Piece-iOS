@@ -43,6 +43,21 @@ struct BlockUserView: View {
         viewModel.handleAction(.didTapBlockUserAlertBlockUserButton)
       }
     }
+    .pcAlert(isPresented: $viewModel.isBlockUserCompleteAlertPresented) {
+      AlertView(
+        title: {
+          // TODO: - 닉네임 추가
+          Text("님을 차단했습니다.")
+            .pretendard(.heading_M_SB)
+            .foregroundStyle(Color.grayscaleBlack)
+        },
+        message: "매칭이 즉시 종료되며,\n상대방에게 차단 사실을 알리지 않습니다.",
+        secondButtonText: "홈으로"
+      ) {
+        viewModel.handleAction(.didTapBlockUserCompleteButton)
+        router.popToRoot()
+      }
+    }
   }
   
   private var content: some View {
