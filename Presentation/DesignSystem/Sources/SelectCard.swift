@@ -8,19 +8,27 @@
 import SwiftUI
 
 public struct SelectCard: View {
+  /// SelectCard
+  /// - Parameters:
+  ///   - isEditing: 기본값 false. 편집 상태일 경우 true.
+  ///   - isSelected: 선택한 응답인지
+  ///   - text: 응답 텍스트
+  ///   - tapAction: 탭 액션
   public init(
+    isEditing: Bool = false,
     isSelected: Bool,
     text: String,
-    action: (() -> Void)? = nil
+    tapAction: (() -> Void)? = nil
   ) {
     self.isSelected = isSelected
+    self.isEditing = isEditing
     self.text = text
-    self.action = action
+    self.tapAction = tapAction
   }
   
   public var body: some View {
     Button {
-      action?()
+      tapAction?()
     } label: {
       Text(text)
         .pretendard(.body_S_SB)
@@ -31,17 +39,30 @@ public struct SelectCard: View {
           RoundedRectangle(cornerRadius: 8)
             .foregroundStyle(isSelected ? Color.primaryLight : Color.grayscaleLight2)
         )
+        .overlay(border)
     }
   }
   
+  @ViewBuilder
+  private var border: some View {
+    if isEditing && isSelected {
+      RoundedRectangle(cornerRadius: 8)
+        .stroke(Color.primaryDefault, lineWidth: 1)
+    } else {
+      EmptyView()
+    }
+  }
+  
+  private let isEditing: Bool // 편집 상태일때만 true
   private let isSelected: Bool
   private let text: String
-  private let action: (() -> Void)?
+  private let tapAction: (() -> Void)?
 }
 
 #Preview {
   VStack {
     SelectCard(isSelected: true, text: "selected")
+    SelectCard(isEditing: true, isSelected: true, text: "selected editing")
     SelectCard(isSelected: false, text: "unselected")
   }
 }
