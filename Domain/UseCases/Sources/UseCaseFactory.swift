@@ -37,4 +37,8 @@ public struct UseCaseFactory {
   public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
     GetMatchPhotoUseCaseImpl()
   }
+  
+  public static func createGetValueTalksUseCase(repository: ValueTalksRepositoryInterface) -> GetValueTalksUseCase {
+    GetValueTalksUseCaseImpl(repository: repository)
+  }
 }
