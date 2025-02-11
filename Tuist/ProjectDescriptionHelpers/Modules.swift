@@ -92,6 +92,7 @@ public extension Modules {
     case EditValueTalk
     case EditValuePick
     case Withdraw
+    case BlockUser
     
     var path: String {
       switch self {
