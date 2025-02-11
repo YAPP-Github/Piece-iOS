@@ -75,6 +75,10 @@ struct ValueTalkCard: View {
           }
         }
         .focused($isEditing)
+      
+      if !viewModel.localAnswer.isEmpty || isEditing {
+        TextCountIndicator(count: .constant(viewModel.localAnswer.count))
+      }
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 10) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
