@@ -1,5 +1,5 @@
 //
-//  TermEndPoint.swift
+//  TermsEndpoint.swift
 //  Network
 //
 //  Created by eunseou on 2/5/25.
@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-public enum TermsEndPoint: TargetType {
+public enum TermsEndpoint: TargetType {
   case fetchTermList
   
   public var headers: [String : String] {

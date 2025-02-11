@@ -7,7 +7,7 @@
 
 import Foundation
 import Entities
-import Repository
+import RepositoryInterfaces
 
 public protocol FetchTermsUseCase {
   func execute() async throws -> TermsListModel
@@ -15,9 +15,9 @@ public protocol FetchTermsUseCase {
 
 final class FetchTermsUseCaseImpl: FetchTermsUseCase {
   
-  private let repository: TermsRepository
+  private let repository: TermsRepositoryInterfaces
   
-  init(repository: TermsRepository) {
+  init(repository: TermsRepositoryInterfaces) {
     self.repository = repository
   }
   

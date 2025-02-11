@@ -59,7 +59,7 @@ final class MatchProfileBasicViewModel {
       matchingBasicInfoModel = BasicInfoModel(
         id: entity.id,
         nickname: entity.nickname,
-        shortIntroduction: entity.shortIntroduction,
+        shortIntroduction: entity.description,
         age: entity.age,
         birthYear: entity.birthYear,
         height: entity.height,
