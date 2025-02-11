@@ -25,4 +25,10 @@ final class MatchesRepository: MatchesRepositoryInterface {
     let responseDTO: MatchProfileBasicResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
+  
+  func getMatchValueTalks() async throws -> MatchValueTalkModel {
+    let endpoint = MatchesEndpoint.valueTalks
+    let responseDTO: MatchValueTalksResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
 }
