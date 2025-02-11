@@ -31,7 +31,8 @@ public struct Coordinator {
   public func view(for route: Route) -> some View {
     switch route {
     case .home:
-      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase()
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
       
     case .matchProfileBasic:
@@ -59,14 +60,22 @@ public struct Coordinator {
     case .AvoidContactsGuide:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
       SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      
+    case .signUp:
+      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      
     case .createProfile:
       let profileRepository = repositoryFactory.createProfileRepository()
       let valueTalksRepository = repositoryFactory.createValueTalksRepository()
+      let valuePicksRepository = repositoryFactory.createValuePicksRepository()
       let createProfileUseCase = UseCaseFactory.createProfileUseCase(repository: profileRepository)
       let getValueTalksUseCase = UseCaseFactory.createGetValueTalksUseCase(repository: valueTalksRepository)
+      let getValuePicksUseCase = UseCaseFactory.createGetValuePicksUseCase(repository: valuePicksRepository)
       
       SignUpViewFactory.createProfileContainerView(
         getValueTalksUseCase: getValueTalksUseCase,
+        getValuePicksUseCase: getValuePicksUseCase,
         createProfileUseCase: createProfileUseCase
       )
     }

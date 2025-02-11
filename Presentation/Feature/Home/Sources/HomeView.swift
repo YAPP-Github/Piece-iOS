@@ -46,7 +46,3 @@ struct HomeView: View {
     }
   }
 }
-
-#Preview {
-  HomeView(getProfileUseCase: UseCaseFactory.createGetProfileUseCase())
-}
