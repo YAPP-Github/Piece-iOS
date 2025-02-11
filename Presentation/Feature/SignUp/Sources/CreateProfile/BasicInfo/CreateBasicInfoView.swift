@@ -7,11 +7,10 @@
 
 import SwiftUI
 import DesignSystem
+import _PhotosUI_SwiftUI
+import Entities
 
 struct CreateBasicInfoView: View {
-  private enum Constant {
-    static let textFieldInfoText: String = "필수 항목을 입력해 주세요"
-  }
   @State var viewModel: CreateBasicInfoViewModel = CreateBasicInfoViewModel()
   @FocusState private var focusField: String?
   
@@ -24,21 +23,36 @@ struct CreateBasicInfoView: View {
             
             // 프로필 이미지
             Button {
-              viewModel.isPhotoSheetPresented = true
+              viewModel.isProfileImageSheetPresented = true
             } label: {
               profileImage
             }
-            .actionSheet(isPresented: $viewModel.isPhotoSheetPresented) {
+            .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
               ActionSheet(
                 title: Text("프로필 사진 선택"),
                 buttons: [
                   .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
                   .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
-                  .cancel()
+                  .cancel(Text("취소"))
                 ]
               )
             }
-            
+            .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
+              CameraPicker {
+                viewModel.setImageFromCamera($0)
+              }
+            }
+            .photosPicker(
+              isPresented: $viewModel.isPhotoSheetPresented,
+              selection: Binding(
+                get: { viewModel.selectedItem },
+                set: {
+                  viewModel.selectedItem = $0
+                  Task { await viewModel.loadImage() }
+                }
+              ),
+              matching: .images
+            )
             // 닉네임
             nicknameTextField
             
@@ -71,7 +85,6 @@ struct CreateBasicInfoView: View {
             
             Button {
               viewModel.isSNSSheetPresented = true
-              viewModel.contacts.append("")
             } label: {
               HStack(spacing: 4) {
                 Text("연락처 추가하기")
@@ -100,9 +113,14 @@ struct CreateBasicInfoView: View {
       if viewModel.isSNSSheetPresented {
         snsBottomSheet
       }
-      if viewModel.showToast {
-        toast
-        //   .transition(.move(edge: .top))
+      VStack {
+        Spacer()
+        if viewModel.showToast {
+          toast
+            .padding(.bottom, 84)
+            .opacity(viewModel.showToast ? 1 : 0)
+            .animation(.easeInOut(duration: 0.5), value: viewModel.showToast)
+        }
       }
     }
   }
@@ -122,22 +140,32 @@ struct CreateBasicInfoView: View {
   }
   
   private var profileImage: some View {
-    DesignSystemAsset.Images.profileImageNodata.swiftUIImage
-      .overlay(alignment: .bottomTrailing) {
-        DesignSystemAsset.Icons.plus24.swiftUIImage
-          .renderingMode(.template)
-          .foregroundStyle(Color.grayscaleWhite)
-          .background(
-            Circle()
-              .frame(width: 33, height: 33)
-              .foregroundStyle(Color.primaryDefault)
-              .overlay(
-                Circle()
-                  .stroke(Color.white, lineWidth: 3)
-              )
-          )
+    Group {
+      if let image = viewModel.profileImage {
+        Image(uiImage: image)
+          .resizable()
+          .scaledToFill()
+          .frame(width: 120, height: 120)
+          .clipShape(Circle())
+      } else {
+        DesignSystemAsset.Images.profileImageNodata.swiftUIImage
       }
-      .padding(.bottom, 8)
+    }
+    .overlay(alignment: .bottomTrailing) {
+      DesignSystemAsset.Icons.plus24.swiftUIImage
+        .renderingMode(.template)
+        .foregroundStyle(Color.grayscaleWhite)
+        .background(
+          Circle()
+            .frame(width: 33, height: 33)
+            .foregroundStyle(Color.primaryDefault)
+            .overlay(
+              Circle()
+                .stroke(Color.white, lineWidth: 3)
+            )
+        )
+    }
+    .padding(.bottom, 8)
   }
   
   private var nicknameTextField: some View {
@@ -156,9 +184,10 @@ struct CreateBasicInfoView: View {
       )
     )
     .infoText(
-      viewModel.showNicknameError ? Constant.textFieldInfoText : "",
+      viewModel.nicknameInfoText,
       color: .systemError
     )
+    .textMaxLength(6)
   }
   
   private var descriptionTextField: some View {
@@ -170,9 +199,10 @@ struct CreateBasicInfoView: View {
       placeholder: "수식어 형태로 작성해 주세요"
     )
     .infoText(
-      viewModel.showIntroductionError ? Constant.textFieldInfoText : "",
+      viewModel.descriptionInfoText,
       color: .systemError
     )
+    .textMaxLength(20)
   }
   
   private var birthdateTextField: some View {
@@ -184,9 +214,13 @@ struct CreateBasicInfoView: View {
       placeholder: "8자리(YYYYMMDD) 형식으로 입력해 주세요"
     )
     .infoText(
-      viewModel.showBirthDateError ? Constant.textFieldInfoText : "",
+      viewModel.birthDateInfoText,
       color: .systemError
     )
+    .onChange { newValue in
+      viewModel.birthDate = String(newValue.filter { $0.isNumber }.prefix(8))
+    }
+    .textContentType(.birthdate)
   }
   
   private var locationTextField: some View {
@@ -197,8 +231,7 @@ struct CreateBasicInfoView: View {
       focusField: "location"
     )
     .rightImage(DesignSystemAsset.Icons.chevronDown24.swiftUIImage)
-    .infoText( viewModel.showLocationError ?
-               Constant.textFieldInfoText : "",
+    .infoText( viewModel.locationInfoText,
                color: .systemError
     )
     .disabled(true)
@@ -215,10 +248,12 @@ struct CreateBasicInfoView: View {
       focusField: "height"
     )
     .rightText("cm")
-    .infoText( viewModel.showHeightError ?
-               Constant.textFieldInfoText : "",
-               color: .systemError
+    .infoText(viewModel.heightInfoText,
+              color: .systemError
     )
+    .onChange { newValue in
+      viewModel.height = newValue.filter { $0.isNumber }
+    }
   }
   
   private var weightTextField: some View {
@@ -229,10 +264,12 @@ struct CreateBasicInfoView: View {
       focusField: "weight"
     )
     .rightText("kg")
-    .infoText( viewModel.showWeightError ?
-               Constant.textFieldInfoText : "",
+    .infoText( viewModel.weightInfoText,
                color: .systemError
     )
+    .onChange { newValue in
+      viewModel.weight = newValue.filter { $0.isNumber }
+    }
   }
   
   private var jobTextField: some View {
@@ -243,9 +280,9 @@ struct CreateBasicInfoView: View {
       focusField: "job"
     )
     .rightImage(DesignSystemAsset.Icons.chevronDown24.swiftUIImage)
-    .infoText( viewModel.showJobError ?
-               Constant.textFieldInfoText : "",
-               color: .systemError
+    .infoText(
+      viewModel.jobInfoText,
+      color: .systemError
     )
     .disabled(true)
     .onTapGesture {
@@ -259,14 +296,14 @@ struct CreateBasicInfoView: View {
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
       HStack {
-        SelectCard(isEditing:  viewModel.smokingStatus == "흡연", isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
+        SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
           viewModel.smokingStatus = "흡연"
         }
-        SelectCard(isEditing: viewModel.smokingStatus == "비흡연", isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
+        SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
           viewModel.smokingStatus = "비흡연"
         }
       }
-      Text( viewModel.showSmokingError ? Constant.textFieldInfoText : "")
+      Text( viewModel.smokingInfoText)
         .pretendard(.body_S_M)
         .foregroundStyle(Color.systemError)
     }
@@ -278,14 +315,22 @@ struct CreateBasicInfoView: View {
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
       HStack {
-        SelectCard(isEditing: viewModel.snsActivityLevel == "활동", isSelected: viewModel.snsActivityLevel == "활동", text: "활동") {
+        SelectCard(
+          isEditing: true,
+          isSelected: viewModel.snsActivityLevel == "활동",
+          text: "활동"
+        ) {
           viewModel.snsActivityLevel = "활동"
         }
-        SelectCard(isEditing: viewModel.snsActivityLevel == "비활동", isSelected: viewModel.snsActivityLevel == "비활동", text: "비활동"){
+        SelectCard(
+          isEditing: true,
+          isSelected: viewModel.snsActivityLevel == "비활동",
+          text: "비활동"
+        ){
           viewModel.snsActivityLevel = "비활동"
         }
       }
-      Text(viewModel.showSNSError ?  Constant.textFieldInfoText : "")
+      Text(viewModel.snsInfoText)
         .pretendard(.body_S_M)
         .foregroundStyle(Color.systemError)
     }
@@ -296,22 +341,17 @@ struct CreateBasicInfoView: View {
       Text("연락처")
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
-      PCTextEditor(
-        text: $viewModel.contacts[0],
-        image: DesignSystemAsset.Icons.kakao20.swiftUIImage,
-        showDeleteButton: false,
-        action: { }
-      )
-      if viewModel.contacts.count > 1 {
-        ForEach(viewModel.contacts.indices.dropFirst(), id: \.self) { index in
-          PCTextEditor(
-            text: $viewModel.contacts[index],
-            image: DesignSystemAsset.Icons.kakao20.swiftUIImage,
-            showDeleteButton: true,
-            tapDeleteButton: { viewModel.contacts.remove(at: index) },
-            action: {}
-          )
-        }
+      ForEach(viewModel.contacts.indices, id: \.self) { index in
+        PCTextEditor(
+          text: Binding(
+            get: { viewModel.contacts[index].value },
+            set: { viewModel.contacts[index].value = $0 }
+          ),
+          image: iconFor(contactType: viewModel.contacts[index].type),
+          showDeleteButton: index != 0,
+          tapDeleteButton: { viewModel.removeContact(at: index) },
+          action: { }
+        )
       }
     }
   }
@@ -321,8 +361,41 @@ struct CreateBasicInfoView: View {
       type: .solid,
       buttonText: "다음",
       width: .maxWidth,
-      action: { }
+      action: { viewModel.handleAction(.tapNextButton) }
     )
+  }
+  
+  private var locationBottomSheet: some View {
+    PCBottomSheet(
+      isPresented: $viewModel.isLocationSheetPresented,
+      height: 623,
+      titleText: "활동지역 선택",
+      buttonText: "저장하기",
+      buttonAction: { viewModel.saveSelectedLocation() }
+    ) {
+      VStack {
+        ScrollView{
+          ForEach(viewModel.contacts) { contact in
+            PCTextEditor(
+              text: Binding(
+                get: { contact.value },
+                set: { newValue in
+                  if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
+                    viewModel.contacts[index].value = newValue
+                  }
+                }
+              ),
+              image: iconFor(contactType: contact.type),
+              showDeleteButton: viewModel.contacts.first?.id != contact.id,
+              tapDeleteButton: { },
+              action: { }
+            )
+          }
+          
+          .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+    }
   }
   
   private var jobBottomSheet: some View {
@@ -332,7 +405,7 @@ struct CreateBasicInfoView: View {
       titleText: "직업 선택",
       buttonText: "저장하기",
       buttonAction: {
-        viewModel.isJobSheetPresented = false
+        viewModel.saveSelectedJob()
       }
     ) {
       ScrollView{
@@ -340,39 +413,12 @@ struct CreateBasicInfoView: View {
           ForEach(viewModel.jobs, id: \.self) { job in
             cellItem(
               text: job,
-              isSelected: true,
-              action: {}
+              isSelected: viewModel.selectedJob == job || viewModel.job == job,
+              action: { viewModel.selectedJob = job }
             )
           }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-      }
-    }
-  }
-  
-  private var locationBottomSheet: some View {
-    PCBottomSheet(
-      isPresented: $viewModel.isLocationSheetPresented,
-      height: 623,
-      titleText: "활동지역 선택",
-      buttonText: "저장하기",
-      buttonAction: {
-        viewModel.isLocationSheetPresented = false
-      }
-    ) {
-      VStack {
-        ScrollView{
-          VStack(alignment: .leading) {
-            ForEach(viewModel.locations, id: \.self) { location in
-              cellItem(
-                text: location,
-                isSelected: true,
-                action: {}
-              )
-            }
-          }
-          .frame(maxWidth: .infinity, alignment: .leading)
-        }
       }
     }
   }
@@ -384,24 +430,53 @@ struct CreateBasicInfoView: View {
       titleText: "연락처 추가",
       buttonText: "추가하기",
       buttonAction: {
-        viewModel.isSNSSheetPresented = false
+        viewModel.saveSelectedSNSItem()
       }
     ) {
       VStack {
         ScrollView{
           VStack(alignment: .leading) {
-            ForEach(viewModel.snsContacts) { contacts in
-              cellItem(
-                image: contacts.icon,
-                text: contacts.placeholder,
-                isSelected: true,
-                action: {}
-              )
-            }
+            cellItem(
+              image: DesignSystemAsset.Icons.kakao32.swiftUIImage,
+              text: "카카오톡 아이디",
+              isSelected: viewModel.selectedSNSContactType == .kakao,
+              action: { viewModel.selectedSNSContactType = .kakao  }
+            )
+            cellItem(
+              image: DesignSystemAsset.Icons.kakaoOpenchat32.swiftUIImage,
+              text: "카카오톡 오픈 채팅방",
+              isSelected: viewModel.selectedSNSContactType == .openKakao,
+              action: { viewModel.selectedSNSContactType = .openKakao }
+            )
+            cellItem(
+              image: DesignSystemAsset.Icons.instagram32.swiftUIImage,
+              text: "인스타 아이디",
+              isSelected: viewModel.selectedSNSContactType == .instagram,
+              action: { viewModel.selectedSNSContactType = .instagram }
+            )
+            cellItem(
+              image: DesignSystemAsset.Icons.cellFill32.swiftUIImage,
+              text: "전화번호",
+              isSelected: viewModel.selectedSNSContactType == .phone,
+              action: { viewModel.selectedSNSContactType = .phone }
+            )
           }
           .frame(maxWidth: .infinity, alignment: .leading)
         }
       }
+    }
+  }
+  
+  private func iconFor(contactType: ContactModel.ContactType) -> Image {
+    switch contactType {
+    case .kakao:
+      return DesignSystemAsset.Icons.kakao32.swiftUIImage
+    case .openKakao:
+      return DesignSystemAsset.Icons.kakaoOpenchat32.swiftUIImage
+    case .instagram:
+      return DesignSystemAsset.Icons.instagram32.swiftUIImage
+    case .phone:
+      return DesignSystemAsset.Icons.cellFill32.swiftUIImage
     }
   }
   
@@ -415,12 +490,14 @@ struct CreateBasicInfoView: View {
       HStack {
         if let image {
           image
+            .renderingMode(.template)
+            .foregroundStyle(isSelected ? Color.primaryDefault : Color.grayscaleBlack)
         }
         Text(text)
           .pretendard(.body_M_M)
-          .foregroundStyle(Color.grayscaleBlack)
+          .foregroundStyle(isSelected ? Color.primaryDefault : Color.grayscaleBlack)
         Spacer()
-        if  isSelected {
+        if isSelected {
           DesignSystemAsset.Icons.check24.swiftUIImage
             .renderingMode(.template)
             .foregroundStyle(Color.primaryDefault)
