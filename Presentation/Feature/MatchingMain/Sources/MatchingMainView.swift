@@ -5,12 +5,15 @@
 //  Created by eunseou on 12/28/24.
 //
 
+import Router
 import SwiftUI
 import DesignSystem
 
 struct MatchingMainView: View {
   @Bindable var matchingTimerViewModel: MatchingTimerViewModel
   @Bindable var matchingMainViewModel: MatchingMainViewModel
+  
+  @Environment(Router.self) private var router: Router
   
   public var body: some View {
     ZStack {
@@ -108,6 +111,9 @@ struct MatchingMainView: View {
       icon: nil,
       action: {
         matchingMainViewModel.handleAction(.tapMatchingButton)
+        if let route = matchingMainViewModel.matchingButtonDestination {
+          router.push(to: route)
+        }
       }
     )
   }
