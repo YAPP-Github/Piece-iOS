@@ -54,7 +54,7 @@ public struct RoundedButton: View {
     width: ButtonWidth = .contentSize,
     height: CGFloat? = 52,
     rounding: Bool = false,
-    action: @escaping () -> Void
+    action: (() -> Void)?
   ) {
     self.type = type
     self.buttonText = buttonText
@@ -67,7 +67,7 @@ public struct RoundedButton: View {
   
   public var body: some View {
     Button {
-      action()
+      action?()
     } label: {
       HStack(alignment: .center, spacing: 8) {
         if let icon {
@@ -120,7 +120,7 @@ public struct RoundedButton: View {
   private let width: ButtonWidth
   private let height: CGFloat?
   private let rounding: Bool
-  private let action: () -> Void
+  private let action: (() -> Void)?
 }
 
 #Preview {
