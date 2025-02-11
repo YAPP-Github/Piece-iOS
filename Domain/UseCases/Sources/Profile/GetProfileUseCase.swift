@@ -25,7 +25,10 @@ final class GetProfileUseCaseImpl: GetProfileUseCase {
       location: "세종특별자치시",
       smokingStatus: "비흡연",
       snsActivityLevel: "",
-      imageUrl: "https://www.thesprucepets.com/thmb/AyzHgPQM_X8OKhXEd8XTVIa-UT0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-145577979-d97e955b5d8043fd96747447451f78b7.jpg"
+      imageUri: "https://www.thesprucepets.com/thmb/AyzHgPQM_X8OKhXEd8XTVIa-UT0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-145577979-d97e955b5d8043fd96747447451f78b7.jpg",
+      contacts: [],
+      valueTalks: [],
+      valuePicks: []
     )
   }
 }

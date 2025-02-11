@@ -8,18 +8,18 @@
 public struct MatchValuePickModel: Identifiable {
   public init(
     id: Int,
-    shortIntroduction: String,
+    description: String,
     nickname: String,
-    valuePicks: [ValuePickModel]
+    valuePicks: [MatchValuePickItemModel]
   ) {
     self.id = id
-    self.shortIntroduction = shortIntroduction
+    self.description = description
     self.nickname = nickname
     self.valuePicks = valuePicks
   }
   
   public let id: Int
-  public let shortIntroduction: String
+  public let description: String
   public let nickname: String
-  public let valuePicks: [ValuePickModel]
+  public let valuePicks: [MatchValuePickItemModel]
 }

@@ -15,6 +15,7 @@ let project = Project.dynamicFramework(
   ]),
   dependencies: [
     .externalDependency(dependency: .Alamofire),
-    .data(target: .LocalStorage)
+    .data(target: .LocalStorage),
+    .data(target: .DTO),
   ]
 )

@@ -6,14 +6,14 @@
 //
 
 import Foundation
-import Repository
+import RepositoryInterfaces
 
 public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
-  public static func createFetchTermsUseCase() -> FetchTermsUseCase {
-    FetchTermsUseCaseImpl(repository: TermsRepository())
+  public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
+    FetchTermsUseCaseImpl(repository: repository)
   }
   public static func createGetProfileUseCase() -> GetProfileUseCase {
     GetProfileUseCaseImpl()
@@ -28,6 +28,10 @@ public struct UseCaseFactory {
   
   public static func createGetMatchValuePickUseCase() -> GetMatchValuePickUseCase {
     GetMatchValuePickUseCaseImpl()
+  }
+  
+  public static func createProfileUseCase(repository: ProfileRepositoryInterface) -> CreateProfileUseCase {
+    CreateProfileUseCaseImpl(repository: repository)
   }
   
   public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
