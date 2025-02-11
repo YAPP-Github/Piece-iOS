@@ -31,7 +31,8 @@ public struct Coordinator {
   public func view(for route: Route) -> some View {
     switch route {
     case .home:
-      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase()
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
       
     case .matchProfileBasic:
