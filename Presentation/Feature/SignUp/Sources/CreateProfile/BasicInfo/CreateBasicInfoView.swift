@@ -259,10 +259,10 @@ struct CreateBasicInfoView: View {
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
       HStack {
-        SelectCard(isSelected:  viewModel.smokingStatus == "흡연", text: "흡연", hasBorder: viewModel.smokingStatus == "흡연") {
+        SelectCard(isEditing:  viewModel.smokingStatus == "흡연", isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
           viewModel.smokingStatus = "흡연"
         }
-        SelectCard(isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연", hasBorder:  viewModel.smokingStatus == "비흡연") {
+        SelectCard(isEditing: viewModel.smokingStatus == "비흡연", isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
           viewModel.smokingStatus = "비흡연"
         }
       }
@@ -278,10 +278,10 @@ struct CreateBasicInfoView: View {
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
       HStack {
-        SelectCard(isSelected: viewModel.snsActivityLevel == "활동", text: "활동", hasBorder: viewModel.snsActivityLevel == "활동") {
+        SelectCard(isEditing: viewModel.snsActivityLevel == "활동", isSelected: viewModel.snsActivityLevel == "활동", text: "활동") {
           viewModel.snsActivityLevel = "활동"
         }
-        SelectCard(isSelected: viewModel.snsActivityLevel == "비활동", text: "비활동", hasBorder:  viewModel.snsActivityLevel == "비활동"){
+        SelectCard(isEditing: viewModel.snsActivityLevel == "비활동", isSelected: viewModel.snsActivityLevel == "비활동", text: "비활동"){
           viewModel.snsActivityLevel = "비활동"
         }
       }
