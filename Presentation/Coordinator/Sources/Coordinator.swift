@@ -22,7 +22,6 @@ public struct Coordinator {
   private let repositoryFactory = RepositoryFactory(networkService: NetworkService())
   
   // MARK: - UseCases
-  private let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase()
   private let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase()
   private let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase()
   private let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase()
@@ -36,6 +35,8 @@ public struct Coordinator {
       HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
       
     case .matchProfileBasic:
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchProfileBasicView(
         getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
