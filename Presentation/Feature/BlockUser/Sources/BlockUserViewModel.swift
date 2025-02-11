@@ -13,11 +13,13 @@ final class BlockUserViewModel {
     case didTapBottomButton
     case didTapBlockUserAlertBackButton
     case didTapBlockUserAlertBlockUserButton
+    case didTapBlockUserCompleteButton
   }
   
   init() { }
   
   var isBlockUserAlertPresented: Bool = false
+  var isBlockUserCompleteAlertPresented: Bool = false
   
   func handleAction(_ action: Action) {
     switch action {
@@ -29,7 +31,11 @@ final class BlockUserViewModel {
       
     case .didTapBlockUserAlertBlockUserButton:
       isBlockUserAlertPresented = false
-      // TODO: - API 요청
+      // TODO: - API 요청 - 응답 후
+      isBlockUserCompleteAlertPresented = true
+      
+    case .didTapBlockUserCompleteButton:
+      isBlockUserCompleteAlertPresented = false
     }
   }
 }
