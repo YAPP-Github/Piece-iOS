@@ -12,6 +12,7 @@ import UseCases
 @Observable
 final class CreateProfileContainerViewModel {
   enum Action {
+    case didTapCreateProfileButton
   }
   
   enum Step {
@@ -23,6 +24,8 @@ final class CreateProfileContainerViewModel {
   var presentedStep: [Step] = []
   let profileCreator = ProfileCreator()
   let getValueTalksUseCase: GetValueTalksUseCase
+  let getValuePicksUseCase: GetValuePicksUseCase
+  
   private let createProfileUseCase: CreateProfileUseCase
   private(set) var currentStep: Step = .basicInfo
   private(set) var isProfileCreated: Bool = false
@@ -30,14 +33,23 @@ final class CreateProfileContainerViewModel {
   
   init(
     getValueTalksUseCase: GetValueTalksUseCase,
+    getValuePicksUseCase: GetValuePicksUseCase,
     createProfileUseCase: CreateProfileUseCase
   ) {
     self.getValueTalksUseCase = getValueTalksUseCase
+    self.getValuePicksUseCase = getValuePicksUseCase
     self.createProfileUseCase = createProfileUseCase
   }
   
-  func handleAction(_ action: Action) { }
-  
+  func handleAction(_ action: Action) {
+    switch action {
+    case .didTapCreateProfileButton:
+      if profileCreator.isProfileValid() {
+        createProfile()
+      }
+    }
+  }
+    
   private func createProfile() {
     Task {
       do {

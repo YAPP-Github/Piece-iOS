@@ -16,11 +16,13 @@ struct CreateProfileContainerView: View {
   
   init(
     getValueTalksUseCase: GetValueTalksUseCase,
+    getValuePicksUseCase: GetValuePicksUseCase,
     createProfileUseCase: CreateProfileUseCase
   ) {
     _viewModel = .init(
       .init(
         getValueTalksUseCase: getValueTalksUseCase,
+        getValuePicksUseCase: getValuePicksUseCase,
         createProfileUseCase: createProfileUseCase
       )
     )
@@ -38,6 +40,21 @@ struct CreateProfileContainerView: View {
               didTapBackButton: { viewModel.presentedStep.removeLast() },
               didTapNextButton: { viewModel.presentedStep.append(.valuePick) }
             )
+            
+          case .valuePick:
+            ValuePickView(
+              profileCreator: viewModel.profileCreator,
+              getValuePicksUseCase: viewModel.getValuePicksUseCase,
+              didTapBackButton: { viewModel.presentedStep.removeLast() },
+              didTapCreateProfileButton: {
+                viewModel.handleAction(.didTapCreateProfileButton)
+                
+                if viewModel.isProfileCreated {
+                  // TODO: - AI 요약 생성중 화면으로 라우팅 처리
+                }
+              }
+            )
+            .navigationBarHidden(true)
             
           default: EmptyView()
           }
