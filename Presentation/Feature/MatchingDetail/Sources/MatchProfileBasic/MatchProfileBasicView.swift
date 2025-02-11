@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import Entities
 import Router
 import SwiftUI
 import UseCases
@@ -34,6 +35,10 @@ struct MatchProfileBasicView: View {
     if let basicInfoModel = viewModel.matchingBasicInfoModel {
       content(basicInfoModel: basicInfoModel)
         .toolbar(.hidden)
+        .sheet(isPresented: $viewModel.isBottomSheetPresented) { // TODO: - 바텀시트 커스텀 컴포넌트화
+          bottomSheetContent
+            .presentationDetents([.height(160)])
+        }
     } else {
       EmptyView()
     }
@@ -241,5 +246,65 @@ struct MatchProfileBasicView: View {
         router.push(to: .matchValueTalk)
       }
     )
+  }
+  
+  // MARK: - 바텀시트
+  private var bottomSheetContent: some View {
+    VStack(spacing: 0) {
+      bottomSheetContentRow(text: "차단하기") {
+        viewModel.isBottomSheetPresented = false
+        router.push(to: .blockUser)
+      }
+      bottomSheetContentRow(text: "신고하기") {
+        
+      }
+    }
+  }
+  
+  private func bottomSheetContentRow(
+    text: String,
+    tapAction: @escaping () -> Void
+  ) -> some View {
+    Button {
+      tapAction()
+    } label: {
+      Text(text)
+        .pretendard(.body_M_M)
+        .foregroundStyle(Color.grayscaleBlack)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+    }
+  }
+}
+
+#Preview {
+  MatchProfileBasicView(
+    getMatchProfileBasicUseCase: DummyGetMatchProfileUseCase(),
+    getMatchPhotoUseCase: DummyGetMatchPhotoUseCase()
+  )
+  .environment(Router())
+}
+
+private final class DummyGetMatchProfileUseCase: GetMatchProfileBasicUseCase {
+  func execute() async throws -> Entities.MatchProfileBasicModel {
+    return MatchProfileBasicModel(
+      id: 0,
+      description: "음악과 요리를 좋아하는",
+      nickname: "수줍은 수달",
+      age: 25,
+      birthYear: "00",
+      height: 180,
+      weight: 72,
+      location: "세종특별자치시",
+      job: "프리랜서",
+      smokingStatus: "비흡연"
+    )
+  }
+}
+
+private final class DummyGetMatchPhotoUseCase: GetMatchPhotoUseCase {
+  func execute() async throws -> String {
+    return "https://www.thesprucepets.com/thmb/AyzHgPQM_X8OKhXEd8XTVIa-UT0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-145577979-d97e955b5d8043fd96747447451f78b7.jpg"
   }
 }

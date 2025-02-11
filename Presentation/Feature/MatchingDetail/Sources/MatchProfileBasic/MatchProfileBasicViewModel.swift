@@ -23,6 +23,7 @@ final class MatchProfileBasicViewModel {
   let navigationTitle = Constant.navigationTitle
   let title = Constant.title
   var isPhotoViewPresented: Bool = false
+  var isBottomSheetPresented: Bool = false
   
   private(set) var isLoading = true
   private(set) var error: Error?
@@ -47,7 +48,7 @@ final class MatchProfileBasicViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .didTapMoreButton:
-      return
+      isBottomSheetPresented = true
     case .didTapPhotoButton:
       isPhotoViewPresented = true
     }
