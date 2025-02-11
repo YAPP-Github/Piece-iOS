@@ -15,8 +15,11 @@ public struct UseCaseFactory {
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: repository)
   }
-  public static func createGetProfileUseCase() -> GetProfileUseCase {
-    GetProfileUseCaseImpl()
+  
+  // MARK: - Profile
+  
+  public static func createGetProfileUseCase(repository: ProfileRepositoryInterface) -> GetProfileUseCase {
+    GetProfileUseCaseImpl(repository: repository)
   }
   public static func createGetMatchProfileBasicUseCase() -> GetMatchProfileBasicUseCase {
     GetMatchProfileBasicUseCaseImpl()
@@ -40,5 +43,9 @@ public struct UseCaseFactory {
   
   public static func createGetValueTalksUseCase(repository: ValueTalksRepositoryInterface) -> GetValueTalksUseCase {
     GetValueTalksUseCaseImpl(repository: repository)
+  }
+  
+  public static func createGetValuePicksUseCase(repository: ValuePicksRepositoryInterface) -> GetValuePicksUseCase {
+    GetValuePicksUseCaseImpl(repository: repository)
   }
 }

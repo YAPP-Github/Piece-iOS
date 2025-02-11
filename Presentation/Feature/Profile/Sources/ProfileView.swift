@@ -246,8 +246,3 @@ struct ProfileView: View {
     }
   }
 }
-
-#Preview {
-  ProfileView(getProfileUseCase: UseCaseFactory.createGetProfileUseCase())
-    .environment(Router())
-}
