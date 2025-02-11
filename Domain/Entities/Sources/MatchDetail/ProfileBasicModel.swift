@@ -1,11 +1,11 @@
 //
-//  ProfileBasicModel.swift
+//  MatchProfileBasicModel.swift
 //  Entities
 //
 //  Created by summercat on 1/30/25.
 //
 
-public struct ProfileBasicModel: Identifiable {
+public struct MatchProfileBasicModel: Identifiable {
   public init(
     id: Int,
     description: String,

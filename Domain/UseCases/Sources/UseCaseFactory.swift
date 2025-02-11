@@ -12,6 +12,7 @@ public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
+  
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: repository)
   }
@@ -20,9 +21,6 @@ public struct UseCaseFactory {
   
   public static func createGetProfileUseCase(repository: ProfileRepositoryInterface) -> GetProfileUseCase {
     GetProfileUseCaseImpl(repository: repository)
-  }
-  public static func createGetMatchProfileBasicUseCase() -> GetMatchProfileBasicUseCase {
-    GetMatchProfileBasicUseCaseImpl()
   }
   
   public static func createGetMatchValueTalkUseCase() -> GetMatchValueTalkUseCase {
@@ -37,15 +35,20 @@ public struct UseCaseFactory {
     CreateProfileUseCaseImpl(repository: repository)
   }
   
-  public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
-    GetMatchPhotoUseCaseImpl()
-  }
-  
   public static func createGetValueTalksUseCase(repository: ValueTalksRepositoryInterface) -> GetValueTalksUseCase {
     GetValueTalksUseCaseImpl(repository: repository)
   }
   
   public static func createGetValuePicksUseCase(repository: ValuePicksRepositoryInterface) -> GetValuePicksUseCase {
     GetValuePicksUseCaseImpl(repository: repository)
+  }
+  
+  // MARK: - 매칭 상세
+  public static func createGetMatchProfileBasicUseCase(repository: MatchesRepositoryInterface) -> GetMatchProfileBasicUseCase {
+    GetMatchProfileBasicUseCaseImpl(repository: repository)
+  }
+  
+  public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
+    GetMatchPhotoUseCaseImpl()
   }
 }
