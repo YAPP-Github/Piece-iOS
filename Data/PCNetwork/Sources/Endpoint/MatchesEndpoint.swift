@@ -12,11 +12,13 @@ import Foundation
 public enum MatchesEndpoint: TargetType {
   case profileBasic
   case valueTalks
+  case valuePicks
   
   public var method: HTTPMethod {
     switch self {
     case .profileBasic: .get
     case .valueTalks: .get
+    case .valuePicks: .get
     }
   }
   
@@ -24,6 +26,7 @@ public enum MatchesEndpoint: TargetType {
     switch self {
     case .profileBasic: "api/matches/profiles/basic"
     case .valueTalks: "api/matches/values/talks"
+    case .valuePicks: "api/matches/values/picks"
     }
   }
   
@@ -31,6 +34,7 @@ public enum MatchesEndpoint: TargetType {
     switch self {
     case .profileBasic: [:]
     case .valueTalks: [:]
+    case .valuePicks: [:]
     }
   }
   
@@ -38,6 +42,7 @@ public enum MatchesEndpoint: TargetType {
     switch self {
     case .profileBasic: .plain
     case .valueTalks: .plain
+    case .valuePicks: .plain
     }
   }
 }
