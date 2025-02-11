@@ -47,6 +47,7 @@ final class ValuePickViewModel {
   let tabs = ValuePickTab.allCases
   let navigationTitle: String = Constant.navigationTitle
   var isPhotoViewPresented: Bool = false
+  var isBottomSheetPresented: Bool = false
   var isMatchAcceptAlertPresented: Bool = false
   var isMatchDeclineAlertPresented: Bool = false
   
@@ -73,7 +74,7 @@ final class ValuePickViewModel {
       isNameViewVisible = offset > Constant.nameVisibilityOffset
       
     case .didTapMoreButton:
-      return
+      isBottomSheetPresented = true
       
     case let .didSelectTab(tab):
       self.selectedTab = tab
