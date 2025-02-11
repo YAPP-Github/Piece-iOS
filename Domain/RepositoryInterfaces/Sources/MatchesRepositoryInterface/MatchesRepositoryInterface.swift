@@ -9,4 +9,5 @@ import Entities
 
 public protocol MatchesRepositoryInterface {
   func getMatchesProfileBasic() async throws -> MatchProfileBasicModel
+  func getMatchValueTalks() async throws -> MatchValueTalkModel
 }
