@@ -16,7 +16,7 @@ public struct PCBottomSheet<Content: View>: View {
   private let buttonAction: (() -> Void)?
   private let content: Content
   
-  init(
+  public init(
     isPresented: Binding<Bool>,
     height: CGFloat,
     titleText: String,
