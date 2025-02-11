@@ -49,9 +49,11 @@ public struct Coordinator {
     case .matchValuePick:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase(repository: matchesRepository)
+      let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchValuePickView(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
-        getMatchPhotoUseCase: getMatchPhotoUseCase
+        getMatchPhotoUseCase: getMatchPhotoUseCase,
+        acceptMatchUseCase: acceptMatchUseCase
       )
       
       // MARK: - SignUp
