@@ -22,4 +22,8 @@ public struct RepositoryFactory {
   public func createProfileRepository() -> ProfileRepositoryInterface {
     ProfileRepository(networkService: networkService)
   }
+  
+  public func createValueTalksRepository() -> ValueTalksRepositoryInterface {
+    ValueTalksRepository(networkService: networkService)
+  }
 }

@@ -61,9 +61,12 @@ public struct Coordinator {
       SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
     case .createProfile:
       let profileRepository = repositoryFactory.createProfileRepository()
+      let valueTalksRepository = repositoryFactory.createValueTalksRepository()
       let createProfileUseCase = UseCaseFactory.createProfileUseCase(repository: profileRepository)
+      let getValueTalksUseCase = UseCaseFactory.createGetValueTalksUseCase(repository: valueTalksRepository)
       
       SignUpViewFactory.createProfileContainerView(
+        getValueTalksUseCase: getValueTalksUseCase,
         createProfileUseCase: createProfileUseCase
       )
     }

@@ -22,9 +22,11 @@ public struct SignUpViewFactory {
   }
   
   public static func createProfileContainerView(
+    getValueTalksUseCase: GetValueTalksUseCase,
     createProfileUseCase: CreateProfileUseCase
   ) -> some View {
     CreateProfileContainerView(
+      getValueTalksUseCase: getValueTalksUseCase,
       createProfileUseCase: createProfileUseCase
     )
   }
