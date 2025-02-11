@@ -6,12 +6,19 @@
 //
 
 import Entities
+import RepositoryInterfaces
 
 public protocol GetProfileUseCase {
   func execute() async throws -> ProfileModel
 }
 
 final class GetProfileUseCaseImpl: GetProfileUseCase {
+  private let repository: ProfileRepositoryInterface
+  
+  init(repository: ProfileRepositoryInterface) {
+    self.repository = repository
+  }
+  
   func execute() async throws -> ProfileModel {
     // TODO: - 네트워크 모듈 작업 후 수정
     return ProfileModel(
