@@ -18,7 +18,7 @@ public struct SelectCard: View {
     isEditing: Bool = false,
     isSelected: Bool,
     text: String,
-    tapAction: (() -> Void)? = nil
+    tapAction: (() -> Void)? = nil,
     hasBorder: Bool = false,
     action: (() -> Void)? = nil
   ) {
