@@ -243,11 +243,3 @@ struct MatchProfileBasicView: View {
     )
   }
 }
-
-#Preview {
-  MatchProfileBasicView(
-    getMatchProfileBasicUseCase: UseCaseFactory.createGetMatchProfileBasicUseCase(),
-    getMatchPhotoUseCase: UseCaseFactory.createGetMatchPhotoUseCase()
-  )
-  .environment(Router())
-}

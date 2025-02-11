@@ -30,4 +30,8 @@ public struct RepositoryFactory {
   public func createValuePicksRepository() -> ValuePicksRepositoryInterface {
     ValuePicksRepository(networkService: networkService)
   }
+  
+  public func createMatchesRepository() -> MatchesRepositoryInterface {
+    MatchesRepository(networkService: networkService)
+  }
 }
