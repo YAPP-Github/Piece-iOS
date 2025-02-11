@@ -11,14 +11,25 @@ import SwiftUI
 import UseCases
 
 struct ValueTalkView: View {
+  @State var viewModel: ValueTalkViewModel
+  @State private var contentOffset: CGFloat = 0
+  @Environment(Router.self) private var router: Router
+  
   private let images: [Image] = [
     DesignSystemAsset.Images.illustPuzzle01.swiftUIImage,
     DesignSystemAsset.Images.illustPuzzle02.swiftUIImage,
     DesignSystemAsset.Images.illustPuzzle03.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle04.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle05.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle06.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle07.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle08.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle09.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle10.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle11.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle12.swiftUIImage,
+    DesignSystemAsset.Images.illustPuzzle13.swiftUIImage,
   ]
-  @State var viewModel: ValueTalkViewModel
-  @State private var contentOffset: CGFloat = 0
-  @Environment(Router.self) private var router: Router
   
   init(
     getMatchValueTalkUseCase: GetMatchValueTalkUseCase,
@@ -94,12 +105,7 @@ struct ValueTalkView: View {
   private func talkCards(valueTalkModel: ValueTalkModel) -> some View {
     VStack(spacing: 20) {
       ForEach(
-        Array(
-          zip(
-            valueTalkModel.valueTalks.indices,
-            valueTalkModel.valueTalks
-          )
-        ),
+        Array(zip(valueTalkModel.valueTalks.indices,valueTalkModel.valueTalks)),
         id: \.0
       ) { index, valueTalk in
         ValueTalkCard(
