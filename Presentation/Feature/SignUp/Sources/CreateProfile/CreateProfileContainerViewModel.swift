@@ -22,14 +22,17 @@ final class CreateProfileContainerViewModel {
   
   var presentedStep: [Step] = []
   let profileCreator = ProfileCreator()
+  let getValueTalksUseCase: GetValueTalksUseCase
   private let createProfileUseCase: CreateProfileUseCase
   private(set) var currentStep: Step = .basicInfo
   private(set) var isProfileCreated: Bool = false
   private(set) var error: Error?
   
   init(
+    getValueTalksUseCase: GetValueTalksUseCase,
     createProfileUseCase: CreateProfileUseCase
   ) {
+    self.getValueTalksUseCase = getValueTalksUseCase
     self.createProfileUseCase = createProfileUseCase
   }
   
