@@ -37,6 +37,7 @@ final class ValueTalkViewModel {
   
   let navigationTitle: String = Constant.navigationTitle
   var isPhotoViewPresented: Bool = false
+  var isBottomSheetPresented: Bool = false
 
   private(set) var valueTalkModel: ValueTalkModel?
   private(set) var contentOffset: CGFloat = 0
@@ -53,10 +54,11 @@ final class ValueTalkViewModel {
       contentOffset = offset
       isNameViewVisible = offset > Constant.nameVisibilityOffset
       
+    case .didTapMoreButton:
+      isBottomSheetPresented = true
+      
     case .didTapPhotoButton:
       isPhotoViewPresented = true
-      
-    default: return
     }
   }
   
