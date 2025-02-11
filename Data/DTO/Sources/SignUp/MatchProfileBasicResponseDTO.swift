@@ -5,6 +5,7 @@
 //  Created by summercat on 2/11/25.
 //
 
+import Entities
 import Foundation
 
 public struct MatchProfileBasicResponseDTO: Decodable {
@@ -41,5 +42,22 @@ public struct MatchProfileBasicResponseDTO: Decodable {
     self.location = location
     self.job = job
     self.smokingStatus = smokingStatus
+  }
+}
+
+public extension MatchProfileBasicResponseDTO {
+  func toDomain() -> MatchProfileBasicModel {
+    MatchProfileBasicModel(
+      id: matchId,
+      description: description,
+      nickname: nickname,
+      age: age,
+      birthYear: birthYear,
+      height: height,
+      weight: weight,
+      location: location,
+      job: job,
+      smokingStatus: smokingStatus
+    )
   }
 }
