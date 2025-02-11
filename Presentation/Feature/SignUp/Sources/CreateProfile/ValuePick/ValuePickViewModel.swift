@@ -1,0 +1,55 @@
+//
+//  ValuePickViewModel.swift
+//  SignUp
+//
+//  Created by summercat on 2/10/25.
+//
+
+import Entities
+import Observation
+import UseCases
+
+@Observable
+final class ValuePickViewModel {
+  var valuePicks: [ValuePickModel] = []
+  
+  enum Action {
+    case didTapCreateProfileButton
+    case updateValuePick(ValuePickModel)
+  }
+  
+  let profileCreator: ProfileCreator
+  
+  init(
+    profileCreator: ProfileCreator,
+    getValuePicksUseCase: GetValuePicksUseCase
+  ) {
+    self.profileCreator = profileCreator
+    self.getValuePicksUseCase = getValuePicksUseCase
+    
+    Task {
+      await fetchValuePicks()
+    }
+  }
+  
+  func handleAction(_ action: Action) {
+    switch action {
+    case .didTapCreateProfileButton:
+      return
+      
+    case let .updateValuePick(model):
+      if let index = valuePicks.firstIndex(where: { $0.id == model.id }) {
+        valuePicks[index] = model
+      }
+    }
+  }
+  
+  private func fetchValuePicks() async {
+    do {
+      let valuePicks = try await getValuePicksUseCase.execute()
+      self.valuePicks = valuePicks
+    } catch {
+      print(error)
+    }
+  }
+}
