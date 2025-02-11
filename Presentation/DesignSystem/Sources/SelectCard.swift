@@ -19,11 +19,15 @@ public struct SelectCard: View {
     isSelected: Bool,
     text: String,
     tapAction: (() -> Void)? = nil
+    hasBorder: Bool = false,
+    action: (() -> Void)? = nil
   ) {
     self.isSelected = isSelected
     self.isEditing = isEditing
     self.text = text
     self.tapAction = tapAction
+    self.hasBorder = hasBorder
+    self.action = action
   }
   
   public var body: some View {
@@ -37,7 +41,11 @@ public struct SelectCard: View {
         .padding(.vertical, 12)
         .background(
           RoundedRectangle(cornerRadius: 8)
-            .foregroundStyle(isSelected ? Color.primaryLight : Color.grayscaleLight2)
+            .foregroundStyle(isSelected ? Color.primaryLight : Color.grayscaleLight3)
+            .overlay( // 테두리 추가 (조건부 적용)
+              hasBorder ? RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.primaryDefault, lineWidth: 1) : nil
+                    )
         )
         .overlay(border)
     }
@@ -57,6 +65,8 @@ public struct SelectCard: View {
   private let isSelected: Bool
   private let text: String
   private let tapAction: (() -> Void)?
+  private let hasBorder: Bool
+  private let action: (() -> Void)?
 }
 
 #Preview {
@@ -64,5 +74,6 @@ public struct SelectCard: View {
     SelectCard(isSelected: true, text: "selected")
     SelectCard(isEditing: true, isSelected: true, text: "selected editing")
     SelectCard(isSelected: false, text: "unselected")
+    SelectCard(isSelected: true, text: "selected", hasBorder: true)
   }
 }
