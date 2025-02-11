@@ -6,20 +6,20 @@
 //
 
 import Entities
+import RepositoryInterfaces
 
 public protocol GetMatchValueTalkUseCase {
   func execute() async throws -> MatchValueTalkModel
 }
 
 final class GetMatchValueTalkUseCaseImpl: GetMatchValueTalkUseCase {
+  private let repository: MatchesRepositoryInterface
+  
+  init(repository: MatchesRepositoryInterface) {
+    self.repository = repository
+  }
+  
   func execute() async throws -> MatchValueTalkModel {
-    // TODO: - API 연결 후 수정
-    MatchValueTalkModel(
-      id: 0,
-      description: "안녕하세요",
-      nickname: "닉네임",
-      valueTalks: [
-      ]
-    )
+    try await repository.getMatchValueTalks()
   }
 }
