@@ -26,6 +26,23 @@ struct BlockUserView: View {
       content
     }
     .frame(maxWidth: .infinity)
+    .pcAlert(isPresented: $viewModel.isBlockUserAlertPresented) {
+      AlertView(
+        title: {
+          // TODO: - 닉네임 추가
+          Text("님을\n차단하시겠습니까?")
+            .pretendard(.heading_M_SB)
+            .foregroundStyle(Color.grayscaleBlack)
+        },
+        message: "차단하면 상대방을 영영 만날 수 없게 되며,\n되돌릴 수 없습니다.",
+        firstButtonText: "취소",
+        secondButtonText: "차단하기"
+      ) {
+        viewModel.handleAction(.didTapBlockUserAlertBackButton)
+      } secondButtonAction: {
+        viewModel.handleAction(.didTapBlockUserAlertBlockUserButton)
+      }
+    }
   }
   
   private var content: some View {
