@@ -19,6 +19,14 @@ public struct RepositoryFactory {
     TermsRepository(networkService: networkService)
   }
   
+  public func createCheckNicknameRepository() -> CheckNinknameRepositoryInterface {
+    CheckNicknameRepository(networkService: networkService)
+  }
+  
+  public func createUploadProfileImageRepository() -> ProfileRepositoryInterface {
+    ProfileRepository(networkService: networkService)
+  }
+  
   public func createProfileRepository() -> ProfileRepositoryInterface {
     ProfileRepository(networkService: networkService)
   }
