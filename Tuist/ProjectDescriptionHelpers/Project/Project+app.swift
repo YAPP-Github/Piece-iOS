@@ -30,6 +30,10 @@ extension Project {
         ],
         "LSApplicationQueriesSchemes": [
           "kakaokompassauth"
+        ],
+        "GIDClientID": "$(GIDClientID)",
+        "CFBundleURLSchemes": [
+          "YOUR_DOT_REVERSED_IOS_CLIENT_ID"
         ]
       ]),
       sources: ["Sources/**"],

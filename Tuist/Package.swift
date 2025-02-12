@@ -34,6 +34,7 @@ enum ExternalDependency: String, CaseIterable {
   case Kingfisher
   case Alamofire
   case KakaoOpenSDK
+  case GoogleSignIn
 }
 
 extension ExternalDependency {
@@ -42,6 +43,7 @@ extension ExternalDependency {
     case .Kingfisher: "https://github.com/onevcat/Kingfisher"
     case .Alamofire: "https://github.com/Alamofire/Alamofire"
     case .KakaoOpenSDK: "https://github.com/kakao/kakao-ios-sdk"
+    case .GoogleSignIn: "https://github.com/google/GoogleSignIn-iOS"
     }
   }
 }
@@ -52,6 +54,7 @@ extension ExternalDependency {
     case .Kingfisher: "8.1.4"
     case .Alamofire: "5.10.2"
     case .KakaoOpenSDK: "2.23.0"
+    case .GoogleSignIn: "7.0.0"
     }
   }
 }
