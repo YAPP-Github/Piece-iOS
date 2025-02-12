@@ -95,6 +95,7 @@ public struct NavigationBar: View {
     leftButtonTap: @escaping () -> Void,
     rightButtonTap: (() -> Void)? = nil,
     label: String,
+    labelColor: Color = .primaryDefault,
     backgroundColor: Color? = .clear
   ) {
     self.init(
@@ -104,6 +105,7 @@ public struct NavigationBar: View {
       leftButtonTap: leftButtonTap,
       rightButtonTap: rightButtonTap,
       label: label,
+      labelColor: labelColor,
       backgroundColor: backgroundColor
     )
   }
@@ -117,6 +119,7 @@ public struct NavigationBar: View {
     rightButtonTap: (() -> Void)? = nil,
     rightIcon: Image? = nil,
     label: String? = nil,
+    labelColor: Color = .primaryDefault,
     backgroundColor: Color? = .clear
   ) {
     self.type = type
@@ -126,6 +129,7 @@ public struct NavigationBar: View {
     self.rightButtonTap = rightButtonTap
     self.rightIcon = rightIcon
     self.label = label
+    self.labelColor = labelColor
     self.backgroundColor = backgroundColor
   }
   
@@ -157,7 +161,7 @@ public struct NavigationBar: View {
                 .foregroundColor(titleColor ?? .none)
             } else if let label = label {
               Text(label)
-                .foregroundColor(.primaryDefault)
+                .foregroundColor(labelColor)
             } else {
               Image(.close32)
                 .renderingMode(.template)
@@ -191,6 +195,7 @@ public struct NavigationBar: View {
   private let rightButtonTap: (() -> Void)?
   private let leftButtonTap: (() -> Void)?
   private let label: String?
+  private let labelColor: Color
   private let backgroundColor: Color?
 }
 

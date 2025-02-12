@@ -5,6 +5,7 @@
 //  Created by summercat on 1/30/25.
 //
 
+import EditValuePick
 import MatchingDetail
 import SignUp
 import Home
@@ -49,9 +50,11 @@ public struct Coordinator {
     case .matchValuePick:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase(repository: matchesRepository)
+      let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchValuePickView(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
-        getMatchPhotoUseCase: getMatchPhotoUseCase
+        getMatchPhotoUseCase: getMatchPhotoUseCase,
+        acceptMatchUseCase: acceptMatchUseCase
       )
       
       // MARK: - SignUp
@@ -79,13 +82,22 @@ public struct Coordinator {
       let createProfileUseCase = UseCaseFactory.createProfileUseCase(repository: profileRepository)
       let getValueTalksUseCase = UseCaseFactory.createGetValueTalksUseCase(repository: valueTalksRepository)
       let getValuePicksUseCase = UseCaseFactory.createGetValuePicksUseCase(repository: valuePicksRepository)
-      
       SignUpViewFactory.createProfileContainerView(
         checkNicknameUseCase: checkNicknameUseCase,
         uploadProfileImageUseCase: uploadProfileImageUseCase,
         getValueTalksUseCase: getValueTalksUseCase,
         getValuePicksUseCase: getValuePicksUseCase,
         createProfileUseCase: createProfileUseCase
+      )
+      
+      // MARK: - Profile
+    case .editValuePick:
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getMatchValuePicksUseCase = UseCaseFactory.createGetMatchValuePicksUseCase(repository: profileRepository)
+      let updateMatchValuePicksUseCase = UseCaseFactory.createUpdateMatchValuePicksUseCase(repository: profileRepository)
+      EditValuePickViewFactory.createEditValuePickViewFactory(
+        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
+        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
       )
     }
   }

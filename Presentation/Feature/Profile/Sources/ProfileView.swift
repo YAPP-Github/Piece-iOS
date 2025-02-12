@@ -19,21 +19,26 @@ struct ProfileView: View {
   }
   
   var body: some View {
-    VStack(spacing :0) {
-      navigationBar
-      
-      if let userProfile = viewModel.userProfile {
-        profile(userProfile: userProfile)
-      } else {
-        EmptyView()
+    ScrollView {
+      VStack(spacing :0) {
+        navigationBar
+        
+        if let userProfile = viewModel.userProfile {
+          profile(userProfile: userProfile)
+        } else {
+          EmptyView()
+        }
+        
+        Divider(weight: .thick, isVertical: false)
+        
+        matchingPiece
+        
+        Spacer()
       }
-      
-      Divider(weight: .thick, isVertical: false)
-      
-      matchingPiece
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(Color.grayscaleWhite)
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .ignoresSafeArea(edges: .top)
+    .scrollIndicators(.hidden)
   }
   
   private var navigationBar: some View {
@@ -219,7 +224,7 @@ struct ProfileView: View {
     .background(Color.grayscaleWhite)
     .padding(.horizontal, 20)
     .padding(.top, 24)
-    .padding(.bottom, 60)
+    .padding(.bottom, 100) // 작은 디바이스(SE3)에서 가려지는 이슈로 인해 디자인가이드보다 크게 설정
   }
   
   private var settingCategories: some View {
@@ -241,7 +246,7 @@ struct ProfileView: View {
       )
       .contentShape(Rectangle())
       .onTapGesture {
-        // TODO: - 가치관 Pick 편집 화면으로 이동
+        router.push(to: .editValuePick)
       }
     }
   }

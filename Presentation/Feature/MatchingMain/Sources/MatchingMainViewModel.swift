@@ -5,10 +5,12 @@
 //  Created by eunseou on 1/4/25.
 //
 
+
+import DesignSystem
 import Router
 import SwiftUI
 import Observation
-import DesignSystem
+import UseCases
 
 @Observable
 final class MatchingMainViewModel {
@@ -53,7 +55,10 @@ final class MatchingMainViewModel {
   enum Action {
     case tapProfileInfo
     case tapMatchingButton
+    case didAcceptMatch
   }
+  
+  var isMatchAcceptAlertPresented: Bool = false
   
   private(set) var description: String
   private(set) var name: String
@@ -61,6 +66,9 @@ final class MatchingMainViewModel {
   private(set) var location: String
   private(set) var job: String
   private(set) var tags: [String]
+  private(set) var error: Error?
+  private let acceptMatchUseCase: AcceptMatchUseCase
+  
   var buttonTitle: String {
     matchingButtonState.title
   }
@@ -81,7 +89,8 @@ final class MatchingMainViewModel {
     job: String,
     tags: [String],
     matchingButtonState: MatchingButtonState,
-    matchingStatus: MatchingAnswer.MatchingStatus
+    matchingStatus: MatchingAnswer.MatchingStatus,
+    acceptMatchUseCase: AcceptMatchUseCase
   ) {
     self.description = description
     self.name = name
@@ -91,19 +100,35 @@ final class MatchingMainViewModel {
     self.tags = tags
     self.matchingButtonState = matchingButtonState
     self.matchingStatus = matchingStatus
+    self.acceptMatchUseCase = acceptMatchUseCase
   }
   
   func handleAction(_ action: Action) {
     switch action {
     case .tapMatchingButton:
       handleMatchingButtonTap()
+      
+    case .didAcceptMatch:
+      Task { await acceptMatch() }
     default: return
     }
   }
   
   private func handleMatchingButtonTap() {
     if matchingButtonDestination == nil {
-      // TODO: - 매칭 버튼 수락하기 시 얼럿 띄우기 처리
+      switch matchingButtonState {
+      case .acceptMatching:
+        isMatchAcceptAlertPresented = true
+      default: return
+      }
+    }
+  }
+  
+  private func acceptMatch() async {
+    do {
+      _ = try await acceptMatchUseCase.execute()
+    } catch {
+      self.error = error
     }
   }
 }
