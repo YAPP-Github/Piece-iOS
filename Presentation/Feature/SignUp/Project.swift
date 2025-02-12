@@ -13,6 +13,7 @@ let project = Project.staticLibrary(
   dependencies: [
     .presentation(target: .DesignSystem),
     .presentation(target: .Router),
+    .presentation(target: .PCWebView),
     .utility(target: .PCFoundationExtension),
     .domain(target: .UseCases),
   ]
