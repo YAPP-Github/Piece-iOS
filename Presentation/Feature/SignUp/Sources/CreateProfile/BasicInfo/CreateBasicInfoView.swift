@@ -9,10 +9,25 @@ import SwiftUI
 import DesignSystem
 import _PhotosUI_SwiftUI
 import Entities
+import UseCases
 
 struct CreateBasicInfoView: View {
-  @State var viewModel: CreateBasicInfoViewModel = CreateBasicInfoViewModel()
+  @State var viewModel: CreateBasicInfoViewModel
   @FocusState private var focusField: String?
+  
+  init(
+    profileCreator: ProfileCreator,
+    checkNicknameUseCase: CheckNicknameUseCase,
+    uploadProfileImageUseCase: UploadProfileImageUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        profileCreator: profileCreator,
+        checkNicknameUseCase: checkNicknameUseCase,
+        uploadProfileImageUseCase: uploadProfileImageUseCase
+      )
+    )
+  }
   
   var body: some View {
     ZStack {
@@ -185,7 +200,7 @@ struct CreateBasicInfoView: View {
     )
     .infoText(
       viewModel.nicknameInfoText,
-      color: .systemError
+      color: viewModel.nicknameInfoTextColor
     )
     .textMaxLength(6)
   }
@@ -526,6 +541,6 @@ struct CreateBasicInfoView: View {
   }
 }
 
-#Preview {
-  CreateBasicInfoView()
-}
+//#Preview {
+//  CreateBasicInfoView()
+//}
