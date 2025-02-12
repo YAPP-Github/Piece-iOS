@@ -11,6 +11,7 @@ import UseCases
 import DesignSystem
 import _PhotosUI_SwiftUI
 import Entities
+import PCFoundationExtension
 
 @Observable
 final class CreateBasicInfoViewModel {
@@ -53,6 +54,9 @@ final class CreateBasicInfoViewModel {
     !description.isEmpty && description.count <= 20
   }
   var isValidBirthDate: Bool { isValidBirthDateFormat(birthDate) }
+  var isContactsValid: Bool {
+    return contacts.allSatisfy { !$0.value.isEmpty }
+  }
   var isNextButtonEnabled: Bool {
     return isValidProfileImage &&
     didCheckDuplicates && isValidNickname &&
@@ -64,7 +68,7 @@ final class CreateBasicInfoViewModel {
     !height.isEmpty &&
     !weight.isEmpty &&
     !job.isEmpty &&
-    !contacts.isEmpty
+    isContactsValid
   }
 
   // TextField InfoMessage
@@ -193,16 +197,21 @@ final class CreateBasicInfoViewModel {
   }
   
   private func handleTapNextButton() async {
-    if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || contacts.isEmpty {
+    print("isNextButtonEnabled: \(isNextButtonEnabled)")
+
+    if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
       didTapnextButton = true
       await isToastVisible()
     } else if isNextButtonEnabled {
       do {
-        guard let imageData = profileImage?.jpegData(compressionQuality: 0.8) else {
+        guard let profileImage = profileImage else { return }
+        guard let imageData = profileImage.resizedAndCompressedData(targetSize: CGSize(width: 400, height: 400), compressionQuality: 0.5) else {
           print("이미지 데이터 변환 실패")
           return
         }
+        
         let imageURL = try await uploadProfileImageUseCase.execute(image: imageData)
+        print("이미지 업로드 성공: \(imageURL)")
         
         let basicInfo = ProfileModel(
           nickname: nickname,
@@ -220,10 +229,11 @@ final class CreateBasicInfoViewModel {
           valueTalks: [],
           valuePicks: []
         )
-        let profile = profileCreator.createProfile()
+        
+        profileCreator.updateBasicInfo(basicInfo)
+        print("ProfileCreator에 기본 정보 주입 완료")
       } catch {
-        didTapnextButton = true
-        await isToastVisible()
+        print(error.localizedDescription)
       }
     }
   }
@@ -320,6 +330,7 @@ final class CreateBasicInfoViewModel {
       if let data = try await selectedItem.loadTransferable(type: Data.self),
          let image = UIImage(data: data) {
         self.profileImage = image  // UIImage로 저장
+        self.isValidProfileImage = true
       } else {
         print("이미지 데이터를 로드할 수 없습니다.")
       }
@@ -330,5 +341,6 @@ final class CreateBasicInfoViewModel {
   
   func setImageFromCamera(_ image: UIImage) {
     self.profileImage = image
+    self.isValidProfileImage = true
   }
 }

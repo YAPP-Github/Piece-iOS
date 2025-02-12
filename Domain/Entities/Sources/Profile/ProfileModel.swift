@@ -53,3 +53,22 @@ public struct ProfileModel {
   public let valueTalks: [ValueTalkModel]
   public let valuePicks: [ValuePickModel]
 }
+
+public extension ProfileModel {
+  static let empty = ProfileModel(
+    nickname: "",
+    description: "",
+    age: 0,
+    birthdate: "",
+    height: 0,
+    weight: 0,
+    job: "",
+    location: "",
+    smokingStatus: "",
+    snsActivityLevel: "",
+    imageUri: "",
+    contacts: [],
+    valueTalks: [],
+    valuePicks: []
+  )
+}
