@@ -30,8 +30,13 @@ public struct Coordinator {
     switch route {
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
+      let termsRepository = repositoryFactory.createTermsRepository()
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
-      HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
+      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
+      HomeViewFactory.createHomeView(
+        getProfileUseCase: getProfileUseCase,
+        fetchTermsUseCase: fetchTermsUseCase
+      )
       
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
