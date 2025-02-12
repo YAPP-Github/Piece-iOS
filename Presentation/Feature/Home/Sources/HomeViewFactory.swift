@@ -10,7 +10,13 @@ import UseCases
 
 public struct HomeViewFactory {
   @ViewBuilder
-  public static func createHomeView(getProfileUseCase: GetProfileUseCase) -> some View {
-    HomeView(getProfileUseCase: getProfileUseCase)
+  public static func createHomeView(
+    getProfileUseCase: GetProfileUseCase,
+    fetchTermsUseCase: FetchTermsUseCase
+  ) -> some View {
+    HomeView(
+      getProfileUseCase: getProfileUseCase,
+      fetchTermsUseCase: fetchTermsUseCase
+    )
   }
 }

@@ -7,16 +7,25 @@
 
 import DesignSystem
 import MatchingMain
-import Router
 import Profile
+import Router
+import Settings
 import SwiftUI
 import UseCases
 
 struct HomeView: View {
   @State private var viewModel: HomeViewModel
   
-  init(getProfileUseCase: GetProfileUseCase) {
-    _viewModel = .init(wrappedValue: .init(getProfileUseCase: getProfileUseCase))
+  init(
+    getProfileUseCase: GetProfileUseCase,
+    fetchTermsUseCase: FetchTermsUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        getProfileUseCase: getProfileUseCase,
+        fetchTermsUseCase: fetchTermsUseCase
+      )
+    )
   }
 
   var body: some View {
@@ -39,9 +48,9 @@ struct HomeView: View {
       Rectangle()
         .fill(Color.red)
     case .settings:
-      // TODO: - SettingsView
-      Rectangle()
-        .fill(Color.blue)
+      SettingsViewFactory.createSettingsView(
+        fetchTermsUseCase: viewModel.fetchTermsUseCase
+      )
     }
   }
 }
