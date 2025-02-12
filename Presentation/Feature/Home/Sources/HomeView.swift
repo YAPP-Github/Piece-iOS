@@ -25,7 +25,6 @@ struct HomeView: View {
       TabBarView(viewModel: viewModel.tabbarViewModel)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .ignoresSafeArea()
   }
   
   @ViewBuilder
