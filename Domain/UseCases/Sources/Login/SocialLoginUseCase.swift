@@ -7,17 +7,17 @@
 
 import SwiftUI
 import Entities
-import Repository
 import DTO
+import RepositoryInterfaces
 
 public protocol SocialLoginUseCase {
   func execute(providerName: SocialLoginType, token: String) async throws -> SocialLoginModel
 }
 
 final class SocialLoginUseCaseImpl: SocialLoginUseCase {
-  private let repository: LoginRepository
+  private let repository: LoginRepositoryInterfaces
 
-  init(repository: LoginRepository) {
+  init(repository: LoginRepositoryInterfaces) {
     self.repository = repository
   }
   
