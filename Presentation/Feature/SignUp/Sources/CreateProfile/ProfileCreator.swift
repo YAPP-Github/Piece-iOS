@@ -12,6 +12,12 @@ final class ProfileCreator {
   private(set) var valueTalks: [ValueTalkModel] = []
   private(set) var valuePicks: [ValuePickModel] = []
   private(set) var isValuePicksValid: Bool = false
+  private var basicInfo: ProfileModel = ProfileModel.empty
+  
+  func updateBasicInfo(_ profile: ProfileModel) {
+    print(profile)
+    self.basicInfo = profile
+  }
   
   func updateValueTalks(_ valueTalks: [ValueTalkModel]) {
     self.valueTalks = valueTalks
@@ -29,19 +35,19 @@ final class ProfileCreator {
   }
   
   func createProfile() -> ProfileModel {
-    ProfileModel(
-      nickname: "애플",
-      description: "iOS 테스트",
-      age: 100,
-      birthdate: "2000-10-01",
-      height: 180,
-      weight: 70,
-      job: "개발자",
-      location: "서울",
-      smokingStatus: "흡연",
-      snsActivityLevel: "활동",
-      imageUri: "",
-      contacts: [],
+    return ProfileModel(
+      nickname: basicInfo.nickname,
+      description: basicInfo.description,
+      age: basicInfo.age,
+      birthdate: basicInfo.birthdate,
+      height: basicInfo.height,
+      weight: basicInfo.weight,
+      job: basicInfo.job,
+      location: basicInfo.location,
+      smokingStatus: basicInfo.smokingStatus,
+      snsActivityLevel: basicInfo.snsActivityLevel,
+      imageUri: basicInfo.imageUri,
+      contacts: basicInfo.contacts,
       valueTalks: valueTalks,
       valuePicks: valuePicks
     )
