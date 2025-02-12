@@ -34,6 +34,7 @@ struct ProfileView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .ignoresSafeArea(edges: .top)
+    .background(Color.grayscaleWhite)
   }
   
   private var navigationBar: some View {
