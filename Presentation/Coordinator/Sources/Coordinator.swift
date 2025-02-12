@@ -7,6 +7,7 @@
 
 import EditValuePick
 import MatchingDetail
+import Settings
 import SignUp
 import Home
 import SignUp
@@ -37,6 +38,12 @@ public struct Coordinator {
         getProfileUseCase: getProfileUseCase,
         fetchTermsUseCase: fetchTermsUseCase
       )
+      
+      // MARK: - 설정
+    case let .settingsWebView(title, uri):
+      SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
+      
+      // MARK: - 매칭 상세
       
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
