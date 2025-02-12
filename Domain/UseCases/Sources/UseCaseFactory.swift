@@ -39,6 +39,10 @@ public struct UseCaseFactory {
     GetValuePicksUseCaseImpl(repository: repository)
   }
   
+  public static func createGetMatchValuePicksUseCase(repository: ProfileRepositoryInterface) -> GetMatchValuePicksUseCase {
+    GetMatchValuePicksUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - 매칭 상세
   public static func createGetMatchProfileBasicUseCase(repository: MatchesRepositoryInterface) -> GetMatchProfileBasicUseCase {
     GetMatchProfileBasicUseCaseImpl(repository: repository)
