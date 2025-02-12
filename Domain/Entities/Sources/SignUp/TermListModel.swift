@@ -8,14 +8,14 @@
 import Foundation
 
 public struct TermsListModel: Decodable {
-  public let responses: [TermItem]
+  public let responses: [TermItemModel]
   
-  public init(responses: [TermItem]) {
+  public init(responses: [TermItemModel]) {
     self.responses = responses
   }
 }
 
-public struct TermItem: Decodable {
+public struct TermItemModel: Decodable {
   public let termId: Int
   public let title: String
   public let content: String
