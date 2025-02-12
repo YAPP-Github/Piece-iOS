@@ -125,7 +125,7 @@ struct CreateBasicInfoView: View {
       if viewModel.isLocationSheetPresented {
         locationBottomSheet
       }
-      if viewModel.isSNSSheetPresented {
+      if viewModel.isSNSSheetPresented || viewModel.isContactTypeChangeSheetPresented {
         snsBottomSheet
       }
       VStack {
@@ -195,7 +195,7 @@ struct CreateBasicInfoView: View {
       RoundedButton(
         type: .solid,
         buttonText: "중복검사",
-        action: {}
+        action: { viewModel.handleAction(.tapVaildNickName)}
       )
     )
     .infoText(
@@ -356,16 +356,27 @@ struct CreateBasicInfoView: View {
       Text("연락처")
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
-      ForEach(viewModel.contacts.indices, id: \.self) { index in
+      ForEach(viewModel.contacts, id: \.id) { contact in
         PCTextEditor(
           text: Binding(
-            get: { viewModel.contacts[index].value },
-            set: { viewModel.contacts[index].value = $0 }
+            get: { contact.value },
+            set: { newValue in
+              if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
+                viewModel.contacts[index].value = newValue
+              }
+            }
           ),
-          image: iconFor(contactType: viewModel.contacts[index].type),
-          showDeleteButton: index != 0,
-          tapDeleteButton: { viewModel.removeContact(at: index) },
-          action: { }
+          image: iconFor(contactType: contact.type),
+          showDeleteButton: viewModel.contacts.first != contact,
+          tapDeleteButton: {
+            if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
+              viewModel.removeContact(at: index)
+            }
+          },
+          action: {
+            viewModel.selectedContactForIconChange = contact
+            viewModel.isContactTypeChangeSheetPresented = true
+          }
         )
       }
     }
@@ -390,23 +401,13 @@ struct CreateBasicInfoView: View {
     ) {
       VStack {
         ScrollView{
-          ForEach(viewModel.contacts) { contact in
-            PCTextEditor(
-              text: Binding(
-                get: { contact.value },
-                set: { newValue in
-                  if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
-                    viewModel.contacts[index].value = newValue
-                  }
-                }
-              ),
-              image: iconFor(contactType: contact.type),
-              showDeleteButton: viewModel.contacts.first?.id != contact.id,
-              tapDeleteButton: { },
-              action: { }
+          ForEach(viewModel.locations, id: \.self) { location in
+            cellItem(
+              text: location,
+              isSelected: viewModel.selectedLocation == location || viewModel.location == location,
+              action: { viewModel.selectedLocation = location }
             )
           }
-          
           .frame(maxWidth: .infinity, alignment: .leading)
         }
       }
@@ -419,9 +420,7 @@ struct CreateBasicInfoView: View {
       height: 431,
       titleText: "직업 선택",
       buttonText: "저장하기",
-      buttonAction: {
-        viewModel.saveSelectedJob()
-      }
+      buttonAction: {  viewModel.saveSelectedJob() }
     ) {
       ScrollView{
         VStack(alignment: .leading) {
@@ -440,7 +439,13 @@ struct CreateBasicInfoView: View {
   
   private var snsBottomSheet: some View {
     PCBottomSheet(
-      isPresented: $viewModel.isSNSSheetPresented,
+      isPresented:  Binding(
+        get: { viewModel.isSNSSheetPresented || viewModel.isContactTypeChangeSheetPresented },
+        set: { isPresented in
+          viewModel.isSNSSheetPresented = isPresented
+          viewModel.isContactTypeChangeSheetPresented = isPresented
+        }
+      ),
       height: 479,
       titleText: "연락처 추가",
       buttonText: "추가하기",
