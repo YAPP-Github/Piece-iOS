@@ -9,10 +9,18 @@ import ProjectDescription
 
 public enum ExternalDependencies {
   case Alamofire
+  case KakaoSDKCommon
+  case KakaoSDKAuth
+  case KakaoSDKUser
+  case GoogleSignIn
   
   public var name: String {
     switch self {
     case .Alamofire: "Alamofire"
+    case .GoogleSignIn: "GoogleSignIn"
+    case .KakaoSDKCommon: "KakaoSDKCommon"
+    case .KakaoSDKAuth: "KakaoSDKAuth"
+    case .KakaoSDKUser: "KakaoSDKUser"
     }
   }
 }

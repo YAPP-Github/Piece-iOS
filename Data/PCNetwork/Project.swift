@@ -17,10 +17,9 @@ let project = Project.dynamicFramework(
     .externalDependency(dependency: .Alamofire),
     .data(target: .LocalStorage),
     .data(target: .DTO),
-    .external(name: "Alamofire", condition: .none),
-    .external(name:"KakaoSDKCommon", condition: .none),
-    .external(name:"KakaoSDKAuth", condition: .none),
-    .external(name:"KakaoSDKUser", condition: .none),
-    .external(name: "GoogleSignIn", condition: .none)
+    .externalDependency(dependency: .KakaoSDKCommon),
+    .externalDependency(dependency: .KakaoSDKAuth),
+    .externalDependency(dependency: .KakaoSDKUser),
+    .externalDependency(dependency: .GoogleSignIn)
   ]
 )
