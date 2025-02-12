@@ -66,11 +66,7 @@ final class CreateBasicInfoViewModel {
     !job.isEmpty &&
     !contacts.isEmpty
   }
-  
-  var selectedItem: PhotosPickerItem? = nil
-  var didCheckDuplicates: Bool = false
-  var didTapnextButton: Bool = false
-  
+
   // TextField InfoMessage
   var nicknameInfoText: String {
     if nickname.isEmpty && didTapnextButton {
@@ -161,6 +157,11 @@ final class CreateBasicInfoViewModel {
   var selectedLocation: String? = nil
   var selectedJob: String? = nil
   var selectedSNSContactType: ContactModel.ContactType? = nil
+  var selectedContactForIconChange: ContactModel? = nil
+  var isContactTypeChangeSheetPresented: Bool = false
+  var selectedItem: PhotosPickerItem? = nil
+  var didCheckDuplicates: Bool = false
+  var didTapnextButton: Bool = false
   
   var locations: [String] = ["서울특별시", "경기도", "부산광역시", "대전광역시", "울산광역시", "세종특별자치시", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도", "기타"]
   var jobs: [String] = ["학생", "직장인", "전문직", "사업가", "프리랜서", "기타"]
@@ -280,20 +281,42 @@ final class CreateBasicInfoViewModel {
     isLocationSheetPresented = false
   }
   
+  func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
+          if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
+              contacts[index].type = newType
+          }
+      }
+      
   func saveSelectedSNSItem() {
-    guard let selectedType = selectedSNSContactType else {
-      return
+    if let selectedType = selectedSNSContactType {
+      if let contact = selectedContactForIconChange {
+        // 아이콘 변경 시 처리
+        updateContactType(for: contact, newType: selectedType)
+      } else {
+        // 새 연락처 추가 시 처리
+        contacts.append(ContactModel(type: selectedType, value: ""))
+      }
     }
-    contacts.append(ContactModel(type: selectedType, value: ""))
+    
+    // 상태 초기화
     isSNSSheetPresented = false
+    isContactTypeChangeSheetPresented = false
     selectedSNSContactType = nil
+    selectedContactForIconChange = nil
   }
   
+//  func saveSelectedSNSItem() {
+//    guard let selectedType = selectedSNSContactType else {
+//      return
+//    }
+//    contacts.append(ContactModel(type: selectedType, value: ""))
+//    isSNSSheetPresented = false
+//    selectedSNSContactType = nil
+//  }
+  
   func removeContact(at index: Int) {
-    func removeContact(_ contact: ContactModel) {
-      guard contacts.count > 1 else { return } // 최소 1개는 유지
-      contacts.removeAll { $0.id == contact.id }
-    }
+    guard contacts.indices.contains(index), index != 0 else { return }
+    contacts.remove(at: index)
   }
   
   func loadImage() async {

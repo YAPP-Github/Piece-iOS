@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ContactModel: Identifiable {
+public struct ContactModel: Identifiable, Equatable {
   public enum ContactType: String {
     case kakao = "KAKAO_TALK_ID"
     case openKakao = "OPEN_CHAT_URL"
@@ -16,7 +16,7 @@ public struct ContactModel: Identifiable {
   }
   
   public let id = UUID()
-  public let type: ContactType
+  public var type: ContactType
   public var value: String
   
   public init(type: ContactType, value: String) {
