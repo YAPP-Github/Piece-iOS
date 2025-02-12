@@ -20,6 +20,7 @@ let project = Project.dynamicFramework(
     .external(name: "Alamofire", condition: .none),
     .external(name:"KakaoSDKCommon", condition: .none),
     .external(name:"KakaoSDKAuth", condition: .none),
-    .external(name:"KakaoSDKUser", condition: .none)
+    .external(name:"KakaoSDKUser", condition: .none),
+    .external(name: "GoogleSignIn", condition: .none)
   ]
 )
