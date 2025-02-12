@@ -25,4 +25,10 @@ final class ProfileRepository: ProfileRepositoryInterface {
     let responseDto: PostProfileResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDto.toDomain()
   }
+  
+  func uploadProfileImage(_ imageData: Data) async throws -> URL {
+    let endpoint = ProfileEndpoint.postUploadImage(imageData)
+    
+    return try await networkService.uploadImage(endpoint: endpoint, imageData: imageData)
+  }
 }

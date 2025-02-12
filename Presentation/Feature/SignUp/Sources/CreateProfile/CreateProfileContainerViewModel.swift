@@ -23,6 +23,8 @@ final class CreateProfileContainerViewModel {
   
   var presentedStep: [Step] = []
   let profileCreator = ProfileCreator()
+  let checkNicknameUseCase: CheckNicknameUseCase
+  let uploadProfileImageUseCase: UploadProfileImageUseCase
   let getValueTalksUseCase: GetValueTalksUseCase
   let getValuePicksUseCase: GetValuePicksUseCase
   
@@ -32,10 +34,14 @@ final class CreateProfileContainerViewModel {
   private(set) var error: Error?
   
   init(
+    checkNicknameUseCase: CheckNicknameUseCase,
+    uploadProfileImageUseCase: UploadProfileImageUseCase,
     getValueTalksUseCase: GetValueTalksUseCase,
     getValuePicksUseCase: GetValuePicksUseCase,
     createProfileUseCase: CreateProfileUseCase
   ) {
+    self.checkNicknameUseCase = checkNicknameUseCase
+    self.uploadProfileImageUseCase = uploadProfileImageUseCase
     self.getValueTalksUseCase = getValueTalksUseCase
     self.getValuePicksUseCase = getValuePicksUseCase
     self.createProfileUseCase = createProfileUseCase
