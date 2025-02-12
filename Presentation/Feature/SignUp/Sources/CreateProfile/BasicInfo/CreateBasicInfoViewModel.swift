@@ -305,15 +305,6 @@ final class CreateBasicInfoViewModel {
     selectedContactForIconChange = nil
   }
   
-//  func saveSelectedSNSItem() {
-//    guard let selectedType = selectedSNSContactType else {
-//      return
-//    }
-//    contacts.append(ContactModel(type: selectedType, value: ""))
-//    isSNSSheetPresented = false
-//    selectedSNSContactType = nil
-//  }
-  
   func removeContact(at index: Int) {
     guard contacts.indices.contains(index), index != 0 else { return }
     contacts.remove(at: index)
