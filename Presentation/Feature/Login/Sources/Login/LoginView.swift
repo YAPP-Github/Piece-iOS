@@ -8,9 +8,16 @@
 import SwiftUI
 import DesignSystem
 import PCFoundationExtension
+import UseCases
 
 struct LoginView: View {
-  @State var loginViewModel: LoginViewModel
+  @State var viewModel: LoginViewModel
+  
+  init(
+    socialLoginUseCase: SocialLoginUseCase
+  ) {
+    _viewModel = .init(wrappedValue: .init(socialLoginUseCase: socialLoginUseCase))
+  }
   
   var body: some View {
     ZStack {
@@ -55,7 +62,7 @@ struct LoginView: View {
       title: "애플로 시작하기",
       titleColor: .grayscaleWhite,
       backgroundColor: .grayscaleBlack,
-      action: { loginViewModel.handleAction(.tapAppleLoginButton) }
+      action: { viewModel.handleAction(.tapAppleLoginButton) }
     )
   }
   
@@ -65,7 +72,7 @@ struct LoginView: View {
       title: "카카오로 시작하기",
       titleColor: .grayscaleBlack,
       backgroundColor: Color(hex: 0xFFE812),
-      action: { loginViewModel.handleAction(.tapKakaoLoginButton) }
+      action: { viewModel.handleAction(.tapKakaoLoginButton) }
     )
   }
   
@@ -76,7 +83,7 @@ struct LoginView: View {
       titleColor: .grayscaleBlack,
       backgroundColor: .grayscaleWhite,
       borderColor: .grayscaleLight1,
-      action: { loginViewModel.handleAction(.tapGoogleLoginButton) }
+      action: { viewModel.handleAction(.tapGoogleLoginButton) }
     )
   }
   
@@ -107,6 +114,6 @@ struct LoginView: View {
   }
 }
 
-#Preview {
-  LoginView(loginViewModel: LoginViewModel())
-}
+//#Preview {
+//  LoginView(viewModel: LoginViewModel())
+//}

@@ -11,6 +11,12 @@ import RepositoryInterfaces
 public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
+  public static func createSocialLoginUseCase() -> SocialLoginUseCase {
+    SocialLoginUseCaseImpl(repository: LoginRepository())
+  }
+  
+  public static func createFetchTermsUseCase() -> FetchTermsUseCase {
+    FetchTermsUseCaseImpl(repository: TermsRepository())
   }
   
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {

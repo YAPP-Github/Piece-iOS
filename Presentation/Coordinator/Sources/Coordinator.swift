@@ -5,7 +5,7 @@
 //  Created by summercat on 1/30/25.
 //
 
-import EditValuePick
+import Login
 import MatchingDetail
 import SignUp
 import Home
@@ -32,7 +32,12 @@ public struct Coordinator {
       let profileRepository = repositoryFactory.createProfileRepository()
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
-      
+    case .login:
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase()
+      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+    case .termsAgreement:
+      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase()
+      SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
