@@ -34,9 +34,13 @@ public struct Coordinator {
       let termsRepository = repositoryFactory.createTermsRepository()
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
+      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
       HomeViewFactory.createHomeView(
         getProfileUseCase: getProfileUseCase,
-        fetchTermsUseCase: fetchTermsUseCase
+        fetchTermsUseCase: fetchTermsUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase
       )
       
       // MARK: - 설정

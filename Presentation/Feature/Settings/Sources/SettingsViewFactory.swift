@@ -9,8 +9,16 @@ import SwiftUI
 import UseCases
 
 public struct SettingsViewFactory {
-  public static func createSettingsView(fetchTermsUseCase: FetchTermsUseCase) -> some View {
-    SettingsView(fetchTermsUseCase: fetchTermsUseCase)
+  public static func createSettingsView(
+    fetchTermsUseCase: FetchTermsUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase
+  ) -> some View {
+    SettingsView(
+      fetchTermsUseCase: fetchTermsUseCase,
+      notificationPermissionUseCase: notificationPermissionUseCase,
+      contactsPermissionUseCase: contactsPermissionUseCase
+    )
   }
   
   public static func createSettingsWebView(title: String, uri: String) -> some View {

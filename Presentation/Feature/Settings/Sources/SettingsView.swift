@@ -14,8 +14,18 @@ struct SettingsView: View {
   @State var viewModel: SettingsViewModel
   @Environment(Router.self) var router
   
-  init(fetchTermsUseCase: FetchTermsUseCase) {
-    _viewModel = .init(wrappedValue: .init(fetchTermsUseCase: fetchTermsUseCase))
+  init(
+    fetchTermsUseCase: FetchTermsUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        fetchTermsUseCase: fetchTermsUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase
+      )
+    )
   }
   
   var body: some View {
@@ -68,16 +78,17 @@ struct SettingsView: View {
       SettingsNotificationSettingSectionView(
         title: section.title,
         isMatchingNotificationOn: $viewModel.isMatchingNotificationOn,
-        isPushNotificationOn: $viewModel.isPushNotificationOn
+        isPushNotificationOn: $viewModel.isPushNotificationEnabled,
+        matchingNotificationToggled: { isEnabled in viewModel.handleAction(.matchingNotificationToggled(isEnabled)) },
+        pushNotificationToggled: { isEnabled in viewModel.handleAction(.pushNotificationToggled(isEnabled)) }
       )
     case .system:
       SettingsSystemSettingSectionView(
         title: section.title,
-        isBlockingFriends: $viewModel.isBlockingFriends,
-        date: $viewModel.date,
-        didTapRefreshButton: {
-          viewModel.handleAction(.synchronizeContactsButtonTapped)
-        }
+        isBlockingFriends: $viewModel.isBlockContactsEnabled,
+        date: $viewModel.updatedDate,
+        blockContactsToggled: { isEnabled in viewModel.handleAction(.blockContactsToggled(isEnabled)) },
+        didTapRefreshButton: { viewModel.handleAction(.synchronizeContactsButtonTapped) }
       )
     case .ask:
       SettingsAskSectionView(

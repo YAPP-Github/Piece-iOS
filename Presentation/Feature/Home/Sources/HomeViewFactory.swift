@@ -12,11 +12,15 @@ public struct HomeViewFactory {
   @ViewBuilder
   public static func createHomeView(
     getProfileUseCase: GetProfileUseCase,
-    fetchTermsUseCase: FetchTermsUseCase
+    fetchTermsUseCase: FetchTermsUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase
   ) -> some View {
     HomeView(
       getProfileUseCase: getProfileUseCase,
-      fetchTermsUseCase: fetchTermsUseCase
+      fetchTermsUseCase: fetchTermsUseCase,
+      notificationPermissionUseCase: notificationPermissionUseCase,
+      contactsPermissionUseCase: contactsPermissionUseCase
     )
   }
 }
