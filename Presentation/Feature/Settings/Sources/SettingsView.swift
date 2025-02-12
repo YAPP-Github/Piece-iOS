@@ -6,11 +6,13 @@
 //
 
 import DesignSystem
+import Router
 import SwiftUI
 import UseCases
 
 struct SettingsView: View {
   @State var viewModel: SettingsViewModel
+  @Environment(Router.self) var router
   
   init(fetchTermsUseCase: FetchTermsUseCase) {
     _viewModel = .init(wrappedValue: .init(fetchTermsUseCase: fetchTermsUseCase))
@@ -25,6 +27,16 @@ struct SettingsView: View {
       Divider(weight: .normal, isVertical: false)
       ScrollView(showsIndicators: false) {
         VStack(spacing: 16) {
+          ForEach(
+            Array(zip(viewModel.sections.indices, viewModel.sections)),
+            id: \.1.id
+          ) { index, section in
+            makeSections(section)
+            if index != viewModel.sections.count - 1 {
+              Divider(weight: .normal, isVertical: false)
+            }
+          }
+          
           PCTextButton(content: "탈퇴하기")
             .onTapGesture {
               viewModel.handleAction(.withdrawButtonTapped)
@@ -40,6 +52,67 @@ struct SettingsView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .onAppear {
       viewModel.handleAction(.onAppear)
+    }
+  }
+  
+  @ViewBuilder
+  private func makeSections(_ section: SettingSection) -> some View {
+    switch section.id {
+    case .loginInformation:
+      SettingsLoginInformationSectionView(
+        title: section.title,
+        loginInformationImage: $viewModel.loginInformationImage,
+        loginEmail: $viewModel.loginEmail
+      )
+    case .notification:
+      SettingsNotificationSettingSectionView(
+        title: section.title,
+        isMatchingNotificationOn: $viewModel.isMatchingNotificationOn,
+        isPushNotificationOn: $viewModel.isPushNotificationOn
+      )
+    case .system:
+      SettingsSystemSettingSectionView(
+        title: section.title,
+        isBlockingFriends: $viewModel.isBlockingFriends,
+        date: $viewModel.date,
+        didTapRefreshButton: {
+          viewModel.handleAction(.synchronizeContactsButtonTapped)
+        }
+      )
+    case .ask:
+      SettingsAskSectionView(
+        title: section.title,
+        askTitle: "문의하기",
+        didTapAskView: {
+          router.push(to: .settingsWebView(title: "문의하기", uri: viewModel.inquiriesUri))
+        }
+      )
+    case .information:
+      SettingsInformationSectionView(
+        title: "안내",
+        termsItems: $viewModel.termsItems,
+        version: viewModel.version,
+        didTapNoticeItem: {
+          router.push(to: .settingsWebView(title: "공지사항", uri: viewModel.noticeUri))
+        },
+        didTapTermsItem: {
+          viewModel.handleAction(.termsItemTapped(id: $0))
+          if let tappedTermItem = viewModel.tappedTermItem {
+            router.push(to: .settingsWebView(
+              title: tappedTermItem.title,
+              uri: tappedTermItem.content
+            ))
+          }
+        }
+      )
+    case .etc:
+      SettingsEtcSectionview(
+        title: "기타",
+        logoutTitle: "로그아웃",
+        didTapLogoutItem: {
+          viewModel.handleAction(.logoutItemTapped)
+        }
+      )
     }
   }
 }

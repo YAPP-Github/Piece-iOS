@@ -15,5 +15,6 @@ let project = Project.staticLibrary(
     .presentation(target: .Router),
     .presentation(target: .Profile),
     .presentation(target: .MatchingMain),
+    .presentation(target: .Settings),
   ]
 )
