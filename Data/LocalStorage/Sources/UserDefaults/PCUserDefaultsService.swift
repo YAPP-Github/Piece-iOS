@@ -23,6 +23,11 @@ public final class PCUserDefaultsService {
 }
 
 public extension PCUserDefaultsService {
+  // 로그아웃 시 UserDefaults 초기화 메서드
+  func initialize() {
+    blockContactsLastUpdatedDate = nil
+  }
+  
   func getBlockContactsLastUpdatedDate() -> Date? {
     blockContactsLastUpdatedDate
   }
