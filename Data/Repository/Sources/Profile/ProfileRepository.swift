@@ -21,8 +21,15 @@ final class ProfileRepository: ProfileRepositoryInterface {
   func postProfile(_ profile: ProfileModel) async throws -> PostProfileResultModel {
     let dto = profile.toDto()
     let endpoint = ProfileEndpoint.postProfile(dto)
-    
     let responseDto: PostProfileResponseDTO = try await networkService.request(endpoint: endpoint)
+    
     return responseDto.toDomain()
+  }
+  
+  func getProfileValuePicks() async throws -> [ValuePickModel] {
+    let endpoint = ProfileEndpoint.getValuePicks
+    let responseDto: ProfileValuePicksResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return responseDto.responses.map { $0.toDomain() }
   }
 }
