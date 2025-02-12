@@ -84,6 +84,7 @@ public extension Modules {
     case SignUp
     case Home
     case Profile
+    case Settings
     case MatchingMain
     case MatchingDetail
     case EditValuePick
