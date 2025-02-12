@@ -15,12 +15,16 @@ struct CreateProfileContainerView: View {
   @Environment(Router.self) private var router: Router
   
   init(
+    checkNicknameUseCase: CheckNicknameUseCase,
+    uploadProfileImageUseCase: UploadProfileImageUseCase,
     getValueTalksUseCase: GetValueTalksUseCase,
     getValuePicksUseCase: GetValuePicksUseCase,
     createProfileUseCase: CreateProfileUseCase
   ) {
     _viewModel = .init(
       .init(
+        checkNicknameUseCase: checkNicknameUseCase,
+        uploadProfileImageUseCase: uploadProfileImageUseCase,
         getValueTalksUseCase: getValueTalksUseCase,
         getValuePicksUseCase: getValuePicksUseCase,
         createProfileUseCase: createProfileUseCase
@@ -30,7 +34,11 @@ struct CreateProfileContainerView: View {
   
   var body: some View {
     NavigationStack(path: $viewModel.presentedStep) {
-      Rectangle() // TODO: - 프로필 기본정보 화면으로 변경
+      CreateBasicInfoView(
+        profileCreator: viewModel.profileCreator,
+        checkNicknameUseCase: viewModel.checkNicknameUseCase,
+        uploadProfileImageUseCase: viewModel.uploadProfileImageUseCase
+      ) // TODO: - 프로필 기본정보 화면으로 변경
         .navigationDestination(for: CreateProfileContainerViewModel.Step.self) { step in
           switch step {
           case .valueTalk:
