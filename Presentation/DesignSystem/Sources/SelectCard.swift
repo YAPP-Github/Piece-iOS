@@ -37,7 +37,7 @@ public struct SelectCard: View {
         .padding(.vertical, 12)
         .background(
           RoundedRectangle(cornerRadius: 8)
-            .foregroundStyle(isSelected ? Color.primaryLight : Color.grayscaleLight2)
+            .foregroundStyle(isSelected ? Color.primaryLight : Color.grayscaleLight3)
         )
         .overlay(border)
     }

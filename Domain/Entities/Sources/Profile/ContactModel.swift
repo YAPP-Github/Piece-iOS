@@ -5,7 +5,9 @@
 //  Created by summercat on 2/9/25.
 //
 
-public struct ContactModel {
+import Foundation
+
+public struct ContactModel: Identifiable, Equatable {
   public enum ContactType: String {
     case kakao = "KAKAO_TALK_ID"
     case openKakao = "OPEN_CHAT_URL"
@@ -13,8 +15,9 @@ public struct ContactModel {
     case phone = "PHONE_NUMBER"
   }
   
-  public let type: ContactType
-  public let value: String
+  public let id = UUID()
+  public var type: ContactType
+  public var value: String
   
   public init(type: ContactType, value: String) {
     self.type = type

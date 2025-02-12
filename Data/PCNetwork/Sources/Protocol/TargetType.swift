@@ -51,6 +51,11 @@ public extension TargetType {
       }
       let jsonData = try body.encoded()
       return requestAPI(url: finalURL, httpBody: jsonData)
+    case .multipart:
+      guard let finalURL = components?.url else {
+        throw NetworkError.notFound
+      }
+      return requestAPI(url: finalURL, httpBody: nil)
     }
   }
   

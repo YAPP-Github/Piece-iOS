@@ -16,4 +16,5 @@ public enum RequestType {
     query: [URLQueryItem],
     body: Encodable
   )
+  case multipart(Data)
 }
