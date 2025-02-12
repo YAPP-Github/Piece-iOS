@@ -6,7 +6,9 @@
 //
 
 import Entities
+import SwiftUI
 
 public protocol ProfileRepositoryInterface {
   func postProfile(_ profile: ProfileModel) async throws -> PostProfileResultModel
+  func uploadProfileImage(_ imageData: Data) async throws -> URL
 }
