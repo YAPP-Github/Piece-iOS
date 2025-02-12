@@ -1,3 +1,4 @@
+import DesignSystem
 import Router
 import SwiftUI
 
@@ -6,6 +7,7 @@ struct PieceApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
+        .preventScreenshot() 
     }
   }
 }

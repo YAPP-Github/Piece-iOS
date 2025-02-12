@@ -5,5 +5,6 @@ let project = Project.app(
   dependencies: [
     .presentation(target: .Router),
     .presentation(target: .Coordinator),
+    .presentation(target: .DesignSystem),
   ]
 )
