@@ -14,10 +14,14 @@ struct EditValuePickView: View {
   @State var viewModel: EditValuePickViewModel
   @Environment(Router.self) var router: Router
   
-  init(getMatchValuePicksUseCase: GetMatchValuePicksUseCase) {
+  init(
+    getMatchValuePicksUseCase: GetMatchValuePicksUseCase,
+    updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
+  ) {
     _viewModel = .init(
       wrappedValue: .init(
-        getMatchValuePicksUseCase: getMatchValuePicksUseCase
+        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
+        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
       )
     )
   }
@@ -27,7 +31,7 @@ struct EditValuePickView: View {
       NavigationBar(
         title: "가치관 Pick",
         leftButtonTap: { router.pop() },
-        rightButtonTap: { viewModel.isEditing.toggle() /*TODO: - 상태에 따라 수정*/ },
+        rightButtonTap: { handleNavigationRightButtonTap() },
         label: viewModel.isEditing ? "저장": "수정",
         labelColor: viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault,
         backgroundColor: .clear
@@ -57,6 +61,14 @@ struct EditValuePickView: View {
       if index < viewModel.valuePicks.count - 1 {
         Divider(weight: .thick)
       }
+    }
+  }
+  
+  private func handleNavigationRightButtonTap() {
+    if viewModel.isEditing {
+      if viewModel.isEdited { viewModel.handleAction(.didTapSaveButton) }
+    } else {
+      viewModel.isEditing = true
     }
   }
 }

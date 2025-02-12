@@ -88,7 +88,11 @@ public struct Coordinator {
     case .editValuePick:
       let profileRepository = repositoryFactory.createProfileRepository()
       let getMatchValuePicksUseCase = UseCaseFactory.createGetMatchValuePicksUseCase(repository: profileRepository)
-      EditValuePickViewFactory.createEditValuePickViewFactory(getMatchValuePicksUseCase: getMatchValuePicksUseCase)
+      let updateMatchValuePicksUseCase = UseCaseFactory.createUpdateMatchValuePicksUseCase(repository: profileRepository)
+      EditValuePickViewFactory.createEditValuePickViewFactory(
+        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
+        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+      )
     }
   }
 }

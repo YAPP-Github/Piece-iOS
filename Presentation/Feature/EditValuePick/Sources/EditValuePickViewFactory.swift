@@ -9,7 +9,13 @@ import SwiftUI
 import UseCases
 
 public struct EditValuePickViewFactory {
-  public static func createEditValuePickViewFactory(getMatchValuePicksUseCase: GetMatchValuePicksUseCase) -> some View {
-    EditValuePickView(getMatchValuePicksUseCase: getMatchValuePicksUseCase)
+  public static func createEditValuePickViewFactory(
+    getMatchValuePicksUseCase: GetMatchValuePicksUseCase,
+    updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
+  ) -> some View {
+    EditValuePickView(
+      getMatchValuePicksUseCase: getMatchValuePicksUseCase,
+      updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+    )
   }
 }
