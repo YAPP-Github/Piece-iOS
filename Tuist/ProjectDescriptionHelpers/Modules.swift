@@ -82,6 +82,7 @@ public extension Modules {
     case Profile
     case MatchingMain
     case MatchingDetail
+    case EditValuePick
     
     var path: String {
       switch self {

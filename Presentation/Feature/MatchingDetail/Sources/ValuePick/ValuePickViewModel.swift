@@ -23,14 +23,17 @@ final class ValuePickViewModel {
     case didTapPhotoButton
     case didTapAcceptButton
     case didTapDenyButton
+    case didAcceptMatch
   }
   
   init(
     getMatchValuePickUseCase: GetMatchValuePickUseCase,
-    getMatchPhotoUseCase: GetMatchPhotoUseCase
+    getMatchPhotoUseCase: GetMatchPhotoUseCase,
+    acceptMatchUseCase: AcceptMatchUseCase
   ) {
     self.getMatchValuePickUseCase = getMatchValuePickUseCase
     self.getMatchPhotoUseCase = getMatchPhotoUseCase
+    self.acceptMatchUseCase = acceptMatchUseCase
     
     Task {
       await fetchMatchValueTalk()
@@ -57,6 +60,7 @@ final class ValuePickViewModel {
   private var valuePicks: [ValuePickAnswerModel] = []
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
   private let getMatchPhotoUseCase: GetMatchPhotoUseCase
+  private let acceptMatchUseCase: AcceptMatchUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -86,6 +90,9 @@ final class ValuePickViewModel {
       
     case .didTapDenyButton:
       isMatchDenyAlertPresented = true
+      
+    case .didAcceptMatch:
+      Task { await acceptMatch() }
     }
   }
   
@@ -123,6 +130,14 @@ final class ValuePickViewModel {
     do {
       let uri = try await getMatchPhotoUseCase.execute()
       photoUri = uri
+    } catch {
+      self.error = error
+    }
+  }
+  
+  private func acceptMatch() async {
+    do {
+      _ = try await acceptMatchUseCase.execute()
     } catch {
       self.error = error
     }
