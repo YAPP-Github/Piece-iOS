@@ -32,4 +32,12 @@ final class ProfileRepository: ProfileRepositoryInterface {
     
     return responseDto.responses.map { $0.toDomain() }
   }
+  
+  func updateProfileValuePicks(_ valuePicks: [ValuePickModel]) async throws -> VoidModel {
+    let requestDto = valuePicks.map { ValuePickRequestDTO(valuePickId: $0.id, selectedAnswer: $0.selectedAnswer ?? 0) }
+    let endpoint = ProfileEndpoint.updateValuePicks(requestDto)
+    let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return responseDto.toDomain()
+  }
 }

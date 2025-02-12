@@ -8,6 +8,11 @@
 import Foundation
 
 public struct ValuePickRequestDTO: Encodable {
-  let valuePickId: Int
-  let selectedAnswer: Int
+  public let valuePickId: Int
+  public let selectedAnswer: Int
+  
+  public init(valuePickId: Int, selectedAnswer: Int) {
+    self.valuePickId = valuePickId
+    self.selectedAnswer = selectedAnswer
+  }
 }
