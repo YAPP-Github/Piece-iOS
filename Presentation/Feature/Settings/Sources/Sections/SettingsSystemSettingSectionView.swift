@@ -11,14 +11,15 @@ import SwiftUI
 struct SettingsSystemSettingSectionView: View {
   let title: String
   @Binding var isBlockingFriends: Bool
-  @Binding var date: Date
+  @Binding var date: Date?
+  let blockContactsToggled: ((Bool) -> Void)?
   let didTapRefreshButton: () -> Void
 
   var body: some View {
     VStack(spacing: 8) {
       SettingsSectionHeaderTitleView(title: title)
       VStack(spacing: 0) {
-        SettingsToggleView(title: "지인 차단", isOn: $isBlockingFriends)
+        SettingsToggleView(title: "지인 차단", isOn: $isBlockingFriends, onToggle: blockContactsToggled)
         if isBlockingFriends {
           SettingsSynchronizeContactView(
             title: "연락처 동기화",

@@ -18,12 +18,16 @@ struct HomeView: View {
   
   init(
     getProfileUseCase: GetProfileUseCase,
-    fetchTermsUseCase: FetchTermsUseCase
+    fetchTermsUseCase: FetchTermsUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         getProfileUseCase: getProfileUseCase,
-        fetchTermsUseCase: fetchTermsUseCase
+        fetchTermsUseCase: fetchTermsUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase
       )
     )
   }
@@ -49,7 +53,9 @@ struct HomeView: View {
         .fill(Color.red)
     case .settings:
       SettingsViewFactory.createSettingsView(
-        fetchTermsUseCase: viewModel.fetchTermsUseCase
+        fetchTermsUseCase: viewModel.fetchTermsUseCase,
+        notificationPermissionUseCase: viewModel.notificationPermissionUseCase,
+        contactsPermissionUseCase: viewModel.contactsPermissionUseCase
       )
     }
   }
