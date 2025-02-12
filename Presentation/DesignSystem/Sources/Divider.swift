@@ -22,7 +22,7 @@ public struct Divider: View {
   
   public init(
     weight: Weight,
-    isVertical: Bool
+    isVertical: Bool = false
   ) {
     self.weight = weight.value
     self.isVertical = isVertical

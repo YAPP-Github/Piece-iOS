@@ -9,4 +9,6 @@ import Entities
 
 public protocol ProfileRepositoryInterface {
   func postProfile(_ profile: ProfileModel) async throws -> PostProfileResultModel
+  func getProfileValuePicks() async throws -> [ValuePickModel]
+  func updateProfileValuePicks(_ valuePicks: [ValuePickModel]) async throws -> VoidModel
 }

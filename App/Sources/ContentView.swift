@@ -14,9 +14,7 @@ struct ContentView: View {
           coordinator.view(for: route)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea()
     }
-    .toolbar(.hidden)
     .environment(router)
   }
 }
