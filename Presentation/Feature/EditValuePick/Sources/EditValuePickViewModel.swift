@@ -13,17 +13,25 @@ import UseCases
 final class EditValuePickViewModel {
   enum Action {
     case updateValuePick(ValuePickModel)
+    case didTapSaveButton
   }
   
   var valuePicks: [ValuePickModel] = []
   var isEditing: Bool = false
-  var isEdited: Bool = false
+  var isEdited: Bool {
+    initialValuePicks == valuePicks
+  }
   
   private(set) var initialValuePicks: [ValuePickModel] = []
   private let getMatchValuePicksUseCase: GetMatchValuePicksUseCase
+  private let updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
   
-  init(getMatchValuePicksUseCase: GetMatchValuePicksUseCase) {
+  init(
+    getMatchValuePicksUseCase: GetMatchValuePicksUseCase,
+    updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
+  ) {
     self.getMatchValuePicksUseCase = getMatchValuePicksUseCase
+    self.updateMatchValuePicksUseCase = updateMatchValuePicksUseCase
     
     Task {
       await fetchValuePicks()
@@ -36,6 +44,11 @@ final class EditValuePickViewModel {
       if let index = valuePicks.firstIndex(where: { $0.id == model.id }) {
         valuePicks[index] = model
       }
+      
+    case .didTapSaveButton:
+      Task {
+        await updateMatchValuePicks()
+      }
     }
   }
   
@@ -45,6 +58,16 @@ final class EditValuePickViewModel {
       initialValuePicks = valuePicks
       self.valuePicks = valuePicks
       print(valuePicks)
+    } catch {
+      print(error)
+    }
+  }
+  
+  private func updateMatchValuePicks() async {
+    do {
+      _ = try await updateMatchValuePicksUseCase.execute(valuePicks: valuePicks)
+      initialValuePicks = valuePicks
+      isEditing = false
     } catch {
       print(error)
     }
