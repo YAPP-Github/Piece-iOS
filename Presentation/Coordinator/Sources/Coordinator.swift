@@ -5,6 +5,7 @@
 //  Created by summercat on 1/30/25.
 //
 
+import Withdraw
 import EditValuePick
 import MatchingDetail
 import SignUp
@@ -99,6 +100,9 @@ public struct Coordinator {
         getMatchValuePicksUseCase: getMatchValuePicksUseCase,
         updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
       )
+        
+    case .withDraw:
+        WithdrawViewFactory.createWithdrawView()
     }
   }
 }
