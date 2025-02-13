@@ -7,11 +7,10 @@
 
 import SwiftUI
 import Entities
-import DTO
 import RepositoryInterfaces
 
 public protocol SocialLoginUseCase {
-  func execute(providerName: SocialLoginType, token: String) async throws -> SocialLoginModel
+  func execute(providerName: SocialLoginType, token: String) async throws -> SocialLoginResultModel
 }
 
 final class SocialLoginUseCaseImpl: SocialLoginUseCase {
@@ -21,7 +20,7 @@ final class SocialLoginUseCaseImpl: SocialLoginUseCase {
     self.repository = repository
   }
   
-  func execute(providerName: SocialLoginType, token: String) async throws -> SocialLoginModel {
+  func execute(providerName: SocialLoginType, token: String) async throws -> SocialLoginResultModel {
     return try await repository.socialLogin(providerName: providerName, token: token)
   }
 }

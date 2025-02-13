@@ -2,30 +2,23 @@
 //  SocialLoginModel.swift
 //  Entities
 //
-//  Created by eunseou on 2/7/25.
+//  Created by eunseou on 2/13/25.
 //
 
 import SwiftUI
 
-public enum RoleType: String {
-  case NONE
-  case REGISTER
-  case PENDING
-  case USER
+public enum SocialLoginType: String, Encodable {
+  case apple
+  case kakao
+  case google
 }
 
-public struct SocialLoginModel {
-  public let role: RoleType
-  public let accessToken: String
-  public let refreshToken: String
+public struct SocialLoginModel: Encodable {
+  public let providerName: SocialLoginType
+  public let token: String
   
-  public init(
-    role: RoleType,
-    accessToken: String,
-    refreshToken: String
-  ) {
-    self.role = role
-    self.accessToken = accessToken
-    self.refreshToken = refreshToken
+  public init(providerName: SocialLoginType, token: String) {
+    self.providerName = providerName
+    self.token = token
   }
 }

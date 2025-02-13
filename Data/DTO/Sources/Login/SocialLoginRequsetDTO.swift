@@ -6,12 +6,7 @@
 //
 
 import SwiftUI
-
-public enum SocialLoginType: String, Encodable {
-  case apple
-  case kakao
-  case google
-}
+import Entities
 
 public struct SocialLoginRequsetDTO: Encodable {
   public let providerName: SocialLoginType
