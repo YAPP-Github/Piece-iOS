@@ -11,6 +11,11 @@ import DesignSystem
 struct WithdrawView: View {
   @State var viewModel: WithdrawViewModel
   
+  @FocusState
+  private var focusState: Bool
+  @Namespace
+  private var textEditorId
+  
   init(viewModel: WithdrawViewModel) {
     self.viewModel = viewModel
     UITextView.appearance().textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -28,13 +33,23 @@ struct WithdrawView: View {
         .frame(height: 1)
         .padding(.horizontal, 0)
       
-      ScrollView {
-        scrollContent
-          .padding(.horizontal, 20)
-          .padding(.top, 20)
+      ScrollViewReader { proxy in
+        ScrollView {
+          scrollContent
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, focusState ? 100 : 0)
+            .onChange(of: focusState) { oldValue, newValue in
+              guard newValue else { return }
+              Task {
+                try? await Task.sleep(for: .milliseconds(50))
+                withAnimation {
+                  proxy.scrollTo(textEditorId, anchor: .top)
+                }
+              }
+            }
+        }
       }
-      
-      Spacer()
       
       RoundedButton(
         type: viewModel.isValid ? .solid : .disabled,
@@ -107,6 +122,7 @@ private extension WithdrawView {
         get: { viewModel.editorText ?? "" },
         set: { viewModel.handleAction(.bindingEditorText($0)) }
       ))
+      .focused($focusState)
       .autocorrectionDisabled()
       .textInputAutocapitalization(.never)
       .scrollContentBackground(.hidden)
@@ -128,6 +144,7 @@ private extension WithdrawView {
     .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     .clipped()
     .frame(minHeight: 160)
+    .id(textEditorId)
   }
   
   var textCount: some View {
