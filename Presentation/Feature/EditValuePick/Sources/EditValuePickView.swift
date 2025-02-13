@@ -31,7 +31,7 @@ struct EditValuePickView: View {
       NavigationBar(
         title: "가치관 Pick",
         leftButtonTap: { router.pop() },
-        rightButtonTap: { handleNavigationRightButtonTap() },
+        rightButtonTap: { viewModel.handleAction(.didTapSaveButton) },
         label: viewModel.isEditing ? "저장": "수정",
         labelColor: viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault,
         backgroundColor: .clear
@@ -61,14 +61,6 @@ struct EditValuePickView: View {
       if index < viewModel.valuePicks.count - 1 {
         Divider(weight: .thick)
       }
-    }
-  }
-  
-  private func handleNavigationRightButtonTap() {
-    if viewModel.isEditing {
-      if viewModel.isEdited { viewModel.handleAction(.didTapSaveButton) }
-    } else {
-      viewModel.isEditing = true
     }
   }
 }
