@@ -15,6 +15,7 @@ import Repository
 import Router
 import SwiftUI
 import UseCases
+import EditValuePick
 
 public struct Coordinator {
   public init() { }
@@ -33,10 +34,12 @@ public struct Coordinator {
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
     case .login:
-      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase()
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
       LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
     case .termsAgreement:
-      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase()
+      let termsRepository = repositoryFactory.createTermsRepository()
+      let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
