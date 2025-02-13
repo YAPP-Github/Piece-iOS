@@ -19,7 +19,7 @@ public struct ProfileValueTalkResponseDTO: Decodable {
 public extension ProfileValueTalkResponseDTO {
   func toDomain() -> ProfileValueTalkModel {
     ProfileValueTalkModel(
-      profileValueTalkId: profileValueTalkId,
+      id: profileValueTalkId,
       title: title,
       category: category,
       summary: summary,

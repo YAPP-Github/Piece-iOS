@@ -19,7 +19,7 @@ public struct ProfileModel {
     snsActivityLevel: String,
     imageUri: String,
     contacts: [ContactModel],
-    valueTalks: [ProfileValueTalkModel],
+    valueTalks: [ValueTalkModel],
     valuePicks: [ProfileValuePickModel]
   ) {
     self.nickname = nickname
@@ -50,7 +50,7 @@ public struct ProfileModel {
   public let snsActivityLevel: String
   public let imageUri: String
   public let contacts: [ContactModel]
-  public let valueTalks: [ProfileValueTalkModel]
+  public let valueTalks: [ValueTalkModel]
   public let valuePicks: [ProfileValuePickModel]
 }
 
