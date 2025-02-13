@@ -5,7 +5,7 @@
 //  Created by summercat on 1/30/25.
 //
 
-import EditValuePick
+import Login
 import MatchingDetail
 import Settings
 import SignUp
@@ -16,6 +16,7 @@ import Repository
 import Router
 import SwiftUI
 import UseCases
+import EditValuePick
 
 public struct Coordinator {
   public init() { }
@@ -48,7 +49,6 @@ public struct Coordinator {
       SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
       
       // MARK: - 매칭 상세
-      
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)

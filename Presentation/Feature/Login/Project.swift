@@ -12,6 +12,8 @@ let project = Project.staticLibrary(
   name: Modules.Presentation.Login.rawValue,
   dependencies: [
     .presentation(target: .DesignSystem),
-    .utility(target: .PCFoundationExtension)
+    .utility(target: .PCFoundationExtension),
+    .domain(target: .UseCases),
+    .presentation(target: .Router)
   ]
 )
