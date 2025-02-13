@@ -11,7 +11,7 @@ public protocol UpdateProfileValuePicksUseCase {
   func execute(valuePicks: [ProfileValuePickModel]) async throws -> VoidModel
 }
 
-final class UpdateMatchValuePicksUseCaseImpl: UpdateProfileValuePicksUseCase {
+final class UpdateProfileValuePicksUseCaseImpl: UpdateProfileValuePicksUseCase {
   private let repository: ProfileRepositoryInterface
   
   init(repository: ProfileRepositoryInterface) {
