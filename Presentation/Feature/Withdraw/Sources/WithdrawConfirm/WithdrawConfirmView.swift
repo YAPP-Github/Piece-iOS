@@ -17,7 +17,7 @@ struct WithdrawConfirmView: View {
   var body: some View {
     VStack(spacing: 0) {
       NavigationBar(
-        title: "탈퇴하기",
+        title: "탈퇴할래요",
         leftButtonTap: { router.pop() }
       )
       
