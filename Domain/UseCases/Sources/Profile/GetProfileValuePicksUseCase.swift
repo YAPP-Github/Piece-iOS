@@ -23,4 +23,3 @@ final class GetProfileValuePicksUseCaseImpl: GetProfileValuePicksUseCase {
     try await repository.getProfileValuePicks()
   }
 }
-

@@ -52,12 +52,20 @@ public struct UseCaseFactory {
     GetValuePicksUseCaseImpl(repository: repository)
   }
   
+  public static func createGetProfileValueTalksUseCase(repository: ProfileRepositoryInterface) -> GetProfileValueTalksUseCase {
+    GetProfileValueTalksUseCaseImpl(repository: repository)
+  }
+  
+  public static func createUpdateProfileValueTalksUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileValueTalksUseCase {
+    UpdateProfileValueTalksUseCaseImpl(repository: repository)
+  }
+  
   public static func createGetProfileValuePicksUseCase(repository: ProfileRepositoryInterface) -> GetProfileValuePicksUseCase {
     GetProfileValuePicksUseCaseImpl(repository: repository)
   }
   
   public static func createUpdateProfileValuePicksUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileValuePicksUseCase {
-    UpdateMatchValuePicksUseCaseImpl(repository: repository)
+    UpdateProfileValuePicksUseCaseImpl(repository: repository)
   }
   
   // MARK: - 매칭 상세
