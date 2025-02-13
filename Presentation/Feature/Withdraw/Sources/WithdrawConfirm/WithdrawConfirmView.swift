@@ -1,0 +1,70 @@
+//
+//  WithdrawConfirmView.swift
+//  Withdraw
+//
+//  Created by 김도형 on 2/13/25.
+//
+
+import SwiftUI
+import DesignSystem
+import PCFoundationExtension
+import Router
+
+struct WithdrawConfirmView: View {
+  @Environment(Router.self)
+  private var router: Router
+  
+  var body: some View {
+    VStack(spacing: 0) {
+      NavigationBar(
+        title: "탈퇴하기",
+        leftButtonTap: { router.pop() }
+      )
+      
+      Rectangle()
+        .foregroundStyle(Color.grayscaleLight2)
+        .frame(height: 1)
+        .padding(.horizontal, 0)
+      
+      title
+        .padding(.top, 20)
+        .padding(.horizontal, 20)
+      
+      DesignSystemAsset.Images.imgLeave.swiftUIImage
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 300, height: 300)
+        .padding(.top, 60)
+      
+      Spacer()
+      
+      RoundedButton(
+        type: .solid,
+        buttonText: "탈퇴하기",
+        width: .maxWidth,
+        action: { }
+      )
+      .padding(.horizontal, 20)
+      .padding(.vertical, 12)
+    }
+    .toolbar(.hidden)
+  }
+}
+
+private extension WithdrawConfirmView {
+  var title: some View {
+    HStack {
+      VStack(alignment: .leading, spacing: 12) {
+        Text("정말 탈퇴하시겠어요?")
+          .pretendard(.heading_L_SB)
+          .foregroundStyle(.grayscaleBlack)
+        
+        Text("탈퇴하면 계정과 관련된 모든 정보가 삭제되며\n복구할 수 없습니다. 탈퇴하시겠습니까?")
+          .pretendard(.body_S_M)
+          .foregroundStyle(.grayscaleDark3)
+      }
+      
+      Spacer()
+    }
+  }
+}
