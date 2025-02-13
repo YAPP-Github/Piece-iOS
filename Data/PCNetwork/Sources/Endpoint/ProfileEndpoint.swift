@@ -13,6 +13,8 @@ public enum ProfileEndpoint: TargetType {
   case postProfile(PostProfileRequestDTO)
   case postCheckNickname(String)
   case postUploadImage(Data)
+  case getValueTalks
+  case updateValueTalks(ProfileValueTalksRequestDTO)
   case getValuePicks
   case updateValuePicks(ProfileValuePicksRequestDTO)
   
@@ -21,6 +23,8 @@ public enum ProfileEndpoint: TargetType {
     case .postProfile: .post
     case .postCheckNickname: .post
     case .postUploadImage: .post
+    case .getValueTalks: .get
+    case .updateValueTalks: .put
     case .getValuePicks: .get
     case .updateValuePicks: .put
     }
@@ -31,6 +35,8 @@ public enum ProfileEndpoint: TargetType {
     case .postProfile: "api/profiles"
     case .postCheckNickname: "api/profiles/check-nickname"
     case .postUploadImage: "api/profiles/images"
+    case .getValueTalks: "api/profiles/valueTalks"
+    case .updateValueTalks: "api/profiles/valueTalks"
     case .getValuePicks: "api/profiles/valuePicks"
     case .updateValuePicks: "api/profiles/valuePicks"
     }
@@ -41,6 +47,8 @@ public enum ProfileEndpoint: TargetType {
     case .postProfile: [:]
     case .postCheckNickname: [NetworkHeader.accept : NetworkHeader.all]
     case .postUploadImage: [NetworkHeader.contentType : NetworkHeader.multipartFormData]
+    case .getValueTalks: [:]
+    case .updateValueTalks: [:]
     case .getValuePicks: [:]
     case .updateValuePicks: [:]
     }
@@ -51,6 +59,8 @@ public enum ProfileEndpoint: TargetType {
     case let .postProfile(dto): .body(dto)
     case let .postCheckNickname(string): .query([URLQueryItem(name: "nickname", value: string)])
     case let .postUploadImage(data): .multipart(data)
+    case .getValueTalks: .plain
+    case let .updateValueTalks(dto): .body(dto)
     case .getValuePicks: .plain
     case let .updateValuePicks(dto): .body(dto)
     }
