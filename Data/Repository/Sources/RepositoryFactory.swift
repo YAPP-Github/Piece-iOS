@@ -15,6 +15,10 @@ public struct RepositoryFactory {
     self.networkService = networkService
   }
   
+  public func createLoginRepository() -> LoginRepositoryInterfaces {
+    LoginRepository(networkService: networkService)
+  }
+  
   public func createTermsRepository() -> TermsRepositoryInterfaces {
     TermsRepository(networkService: networkService)
   }

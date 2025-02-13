@@ -19,7 +19,7 @@ public final class LoginRepository: LoginRepositoryInterfaces {
     self.networkService = networkService
   }
   
-  public func socialLogin(providerName: SocialLoginType, token: String) async throws -> SocialLoginModel {
+  public func socialLogin(providerName: SocialLoginType, token: String) async throws -> SocialLoginResultModel {
     let body = SocialLoginRequsetDTO(providerName: providerName, token: token)
     let endpoint = LoginEndpoint.loginWithOAuth(body: body)
     

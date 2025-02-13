@@ -15,9 +15,9 @@ public struct SocialLoginResponseDTO: Decodable {
 }
 
 public extension SocialLoginResponseDTO {
-  func toDomain() -> SocialLoginModel {
-    return SocialLoginModel(
-      role: role,
+  func toDomain() -> SocialLoginResultModel {
+    return SocialLoginResultModel(
+      role: RoleType(rawValue: role) ?? .NONE,
       accessToken: accessToken,
       refreshToken: refreshToken
     )
