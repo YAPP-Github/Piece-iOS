@@ -1,26 +1,27 @@
 //
-//  HomeViewFactory.swift
-//  Home
+//  SettingsViewFactory.swift
+//  Settings
 //
-//  Created by summercat on 1/30/25.
+//  Created by summercat on 2/12/25.
 //
 
 import SwiftUI
 import UseCases
 
-public struct HomeViewFactory {
-  @ViewBuilder
-  public static func createHomeView(
-    getProfileUseCase: GetProfileUseCase,
+public struct SettingsViewFactory {
+  public static func createSettingsView(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
     contactsPermissionUseCase: ContactsPermissionUseCase
   ) -> some View {
-    HomeView(
-      getProfileUseCase: getProfileUseCase,
+    SettingsView(
       fetchTermsUseCase: fetchTermsUseCase,
       notificationPermissionUseCase: notificationPermissionUseCase,
       contactsPermissionUseCase: contactsPermissionUseCase
     )
+  }
+  
+  public static func createSettingsWebView(title: String, uri: String) -> some View {
+    SettingsWebView(title: title, uri: uri)
   }
 }
