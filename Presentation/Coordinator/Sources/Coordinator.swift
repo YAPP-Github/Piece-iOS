@@ -7,6 +7,7 @@
 
 import Login
 import MatchingDetail
+import Settings
 import SignUp
 import Home
 import SignUp
@@ -31,16 +32,23 @@ public struct Coordinator {
     switch route {
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
-      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
-      HomeViewFactory.createHomeView(getProfileUseCase: getProfileUseCase)
-    case .login:
-      let loginRepository = repositoryFactory.createLoginRepository()
-      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
-      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
-    case .termsAgreement:
       let termsRepository = repositoryFactory.createTermsRepository()
+      let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
-      SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
+      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      HomeViewFactory.createHomeView(
+        getProfileUseCase: getProfileUseCase,
+        fetchTermsUseCase: fetchTermsUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase
+      )
+      
+      // MARK: - 설정
+    case let .settingsWebView(title, uri):
+      SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
+      
+      // MARK: - 매칭 상세
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
