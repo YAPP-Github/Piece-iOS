@@ -47,7 +47,7 @@ struct LoginView: View {
         VStack(spacing: 10) {
           appleLoginButton
           kakaoLoginButton
-          googleLoginButton
+          //googleLoginButton
         }
         .padding(.horizontal, 20)
       }
