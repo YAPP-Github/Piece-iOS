@@ -11,6 +11,7 @@ import SwiftUI
 public protocol ProfileRepositoryInterface {
   func postProfile(_ profile: ProfileModel) async throws -> PostProfileResultModel
   func uploadProfileImage(_ imageData: Data) async throws -> URL
-  func getProfileValuePicks() async throws -> [ValuePickModel]
-  func updateProfileValuePicks(_ valuePicks: [ValuePickModel]) async throws -> VoidModel
+  func getProfileValueTalks() async throws -> [ProfileValueTalkModel]
+  func getProfileValuePicks() async throws -> [ProfileValuePickModel]
+  func updateProfileValuePicks(_ valuePicks: [ProfileValuePickModel]) async throws -> VoidModel
 }

@@ -63,12 +63,12 @@ public extension ProfileModel {
     
     var valueTalkDtos: [ValueTalkRequestDTO] = []
     valueTalks.forEach { model in
-      valueTalkDtos.append(ValueTalkRequestDTO(valueTalkId: model.id, answer: model.answer ?? ""))
+      valueTalkDtos.append(ValueTalkRequestDTO(valueTalkId: model.profileValueTalkId, answer: model.answer))
     }
     
     var valuePickDtos: [ValuePickRequestDTO] = []
     valuePicks.forEach { model in
-      valuePickDtos.append(ValuePickRequestDTO(valuePickId: model.id, selectedAnswer: model.selectedAnswer ?? 0))
+      valuePickDtos.append(ValuePickRequestDTO(valuePickId: model.id, selectedAnswer: model.selectedAnswer))
     }
     
     return PostProfileRequestDTO(

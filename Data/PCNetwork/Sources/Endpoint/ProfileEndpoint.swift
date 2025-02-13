@@ -14,7 +14,7 @@ public enum ProfileEndpoint: TargetType {
   case postCheckNickname(String)
   case postUploadImage(Data)
   case getValuePicks
-  case updateValuePicks([ValuePickRequestDTO])
+  case updateValuePicks(ProfileValuePicksRequestDTO)
   
   public var method: HTTPMethod {
     switch self {
