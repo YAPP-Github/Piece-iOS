@@ -9,7 +9,7 @@ import SwiftUI
 import Alamofire
 import DTO
 
-public enum LoginEndPoint: TargetType {
+public enum LoginEndpoint: TargetType {
   case loginWithOAuth(body: SocialLoginRequsetDTO)
   
   public var headers: [String : String] {
