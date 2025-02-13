@@ -6,5 +6,10 @@ let project = Project.app(
     .presentation(target: .Router),
     .presentation(target: .Coordinator),
     .presentation(target: .DesignSystem),
+    .externalDependency(dependency: .KakaoSDKCommon),
+    .externalDependency(dependency: .KakaoSDKAuth),
+    .externalDependency(dependency: .KakaoSDKUser),
+    .externalDependency(dependency: .GoogleSignIn),
+    .externalDependency(dependency: .GoogleSignInSwift)
   ]
 )

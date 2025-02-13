@@ -13,6 +13,10 @@ public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
+
+  public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
+    SocialLoginUseCaseImpl(repository: repository)
+  }
   
   public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
     NotificationPermissionUseCaseImpl()
@@ -29,6 +33,10 @@ public struct UseCaseFactory {
   
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
     AcceptMatchUseCaseImpl(repository: repository)
+  }
+  
+  public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
+    CheckNicknameUseCaseImpl(repository: repository)
   }
   
   // MARK: - Profile
