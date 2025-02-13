@@ -66,6 +66,9 @@ struct WithdrawView: View {
       .padding(.vertical, 12)
     }
     .toolbar(.hidden)
+    .onTapGesture {
+        focusState = false
+    }
   }
 }
 
