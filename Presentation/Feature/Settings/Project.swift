@@ -1,21 +1,21 @@
 //
-//  Project.swift
-//  ProjectDescriptionHelpers
+// Project.swift
+// Settings
 //
-//  Created by eunseou on 1/12/25.
+// Created by summercat on 2025/02/12.
 //
 
 import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.staticLibrary(
-  name: Modules.Presentation.SignUp.rawValue,
+  name: Modules.Presentation.Settings.rawValue,
   dependencies: [
+    .domain(target: .Entities),
+    .domain(target: .UseCases),
     .presentation(target: .DesignSystem),
     .presentation(target: .Router),
     .presentation(target: .PCWebView),
-    .utility(target: .PCFoundationExtension),
-    .domain(target: .UseCases),
+    .data(target: .LocalStorage),
   ]
 )
-
