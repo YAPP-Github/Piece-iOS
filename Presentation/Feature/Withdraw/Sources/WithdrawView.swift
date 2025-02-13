@@ -43,7 +43,7 @@ struct WithdrawView: View {
             .padding(.horizontal, 20)
             .padding(.top, 20)
             .padding(.bottom, focusState ? 100 : 0)
-            .onChange(of: focusState) { oldValue, newValue in
+            .onChange(of: focusState) { _, newValue in
               guard newValue else { return }
               Task {
                 try? await Task.sleep(for: .milliseconds(50))
@@ -104,7 +104,7 @@ private extension WithdrawView {
   
   func radioListCell(type: WithdrawType) -> some View {
     HStack(spacing: 12) {
-      PCRadio(isSelected: Binding<Bool>(
+      PCRadio(isSelected: Binding(
         get: { viewModel.currentWithdraw == type },
         set: { viewModel.handleAction(.bindingWithdraw($0 ? type : nil)) }
       ))
