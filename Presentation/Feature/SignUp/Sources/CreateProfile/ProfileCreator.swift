@@ -10,7 +10,7 @@ import Entities
 final class ProfileCreator {
   private(set) var isBasicInfoValid: Bool = false
   private(set) var valueTalks: [ValueTalkModel] = []
-  private(set) var valuePicks: [ValuePickModel] = []
+  private(set) var valuePicks: [ProfileValuePickModel] = []
   private(set) var isValuePicksValid: Bool = false
   private var basicInfo: ProfileModel = ProfileModel.empty
   
@@ -24,7 +24,7 @@ final class ProfileCreator {
     print(valueTalks)
   }
   
-  func updateValuePicks(_ valuePicks: [ValuePickModel]) {
+  func updateValuePicks(_ valuePicks: [ProfileValuePickModel]) {
     print(valuePicks)
     self.valuePicks = valuePicks
     isValuePicksValid = true

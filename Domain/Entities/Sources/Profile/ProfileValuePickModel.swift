@@ -13,7 +13,7 @@ public struct ProfileValuePickModel: Identifiable, Hashable {
     category: String,
     question: String,
     answers: [ValuePickAnswerModel],
-    selectedAnswer: Int
+    selectedAnswer: Int?
   ) {
     self.id = id
     self.category = category
@@ -26,5 +26,5 @@ public struct ProfileValuePickModel: Identifiable, Hashable {
   public let category: String
   public let question: String
   public let answers: [ValuePickAnswerModel]
-  public var selectedAnswer: Int
+  public var selectedAnswer: Int?
 }

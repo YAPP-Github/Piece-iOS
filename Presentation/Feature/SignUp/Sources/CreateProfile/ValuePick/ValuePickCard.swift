@@ -12,14 +12,14 @@ import SwiftUI
 struct ValuePickCard: View {
   @State var viewModel: ValuePickCardViewModel
   init(
-    valuePick: ValuePickModel,
-    onModelUpdate: @escaping (ValuePickModel) -> Void
+    valuePick: ProfileValuePickModel,
+    onModelUpdate: @escaping (ProfileValuePickModel) -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         model: valuePick,
         onModelUpdate: onModelUpdate
-      )
+      ) 
     )
   }
   

@@ -5,21 +5,21 @@
 //  Created by summercat on 2/13/25.
 //
 
-public struct ProfileValueTalkModel {
-  public let profileValueTalkId: Int
+public struct ProfileValueTalkModel: Identifiable, Hashable {
+  public let id: Int
   public let title: String
   public let category: String
   public let summary: String
   public let answer: String
   
   public init(
-    profileValueTalkId: Int,
+    id: Int,
     title: String,
     category: String,
     summary: String,
     answer: String
   ) {
-    self.profileValueTalkId = profileValueTalkId
+    self.id = id
     self.title = title
     self.category = category
     self.summary = summary
