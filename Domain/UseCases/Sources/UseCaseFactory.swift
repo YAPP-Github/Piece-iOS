@@ -9,16 +9,26 @@ import Foundation
 import RepositoryInterfaces
 
 public struct UseCaseFactory {
+  // MARK: - 권한
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
-  
+
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
   
+  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
+    NotificationPermissionUseCaseImpl()
+  }
+  
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: repository)
+  }
+  
+
+  public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
+    CheckNicknameUseCaseImpl(repository: repository)
   }
   
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
