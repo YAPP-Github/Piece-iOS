@@ -18,9 +18,20 @@ struct WithdrawView: View {
   
   var body: some View {
     VStack(spacing: 0) {
+      NavigationBar(
+        title: "탈퇴하기",
+        leftButtonTap: { }
+      )
+      
+      Rectangle()
+        .foregroundStyle(Color.grayscaleLight2)
+        .frame(height: 1)
+        .padding(.horizontal, 0)
+      
       ScrollView {
         scrollContent
           .padding(.horizontal, 20)
+          .padding(.top, 20)
       }
       
       Spacer()
