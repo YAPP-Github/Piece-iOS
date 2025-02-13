@@ -30,6 +30,8 @@ public class NetworkService {
               continuation.resume(throwing: NetworkError.decodingFailed)
               return
             }
+            print(response.response?.statusCode ?? 0)
+            print(response.result)
             switch statusCode {
             case 400:
               let apiError: APIErrorModel? = try? JSONDecoder().decode(APIErrorModel.self, from: response.data ?? Data())

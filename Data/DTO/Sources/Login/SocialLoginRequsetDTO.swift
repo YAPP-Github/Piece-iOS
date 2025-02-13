@@ -10,10 +10,10 @@ import Entities
 
 public struct SocialLoginRequsetDTO: Encodable {
   public let providerName: SocialLoginType
-  public let token: String
+  public let oauthCredential: String
   
   public init(providerName: SocialLoginType, token: String) {
     self.providerName = providerName
-    self.token = token
+    self.oauthCredential = token
   }
 }
