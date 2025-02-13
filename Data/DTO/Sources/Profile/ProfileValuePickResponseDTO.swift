@@ -17,8 +17,8 @@ public struct ProfileValuePickResponseDTO: Decodable {
 }
 
 public extension ProfileValuePickResponseDTO {
-  func toDomain() -> ValuePickModel {
-    return ValuePickModel(
+  func toDomain() -> ProfileValuePickModel {
+    return ProfileValuePickModel(
       id: profileValuePickId,
       category: category,
       question: question,

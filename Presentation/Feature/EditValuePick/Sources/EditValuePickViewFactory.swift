@@ -10,12 +10,12 @@ import UseCases
 
 public struct EditValuePickViewFactory {
   public static func createEditValuePickViewFactory(
-    getMatchValuePicksUseCase: GetMatchValuePicksUseCase,
-    updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
+    getProfileValuePicksUseCase: GetProfileValuePicksUseCase,
+    updateProfileValuePicksUseCase: UpdateProfileValuePicksUseCase
   ) -> some View {
     EditValuePickView(
-      getMatchValuePicksUseCase: getMatchValuePicksUseCase,
-      updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+      getProfileValuePicksUseCase: getProfileValuePicksUseCase,
+      updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
     )
   }
 }

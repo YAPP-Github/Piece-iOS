@@ -52,11 +52,11 @@ public struct UseCaseFactory {
     GetValuePicksUseCaseImpl(repository: repository)
   }
   
-  public static func createGetMatchValuePicksUseCase(repository: ProfileRepositoryInterface) -> GetMatchValuePicksUseCase {
-    GetMatchValuePicksUseCaseImpl(repository: repository)
+  public static func createGetProfileValuePicksUseCase(repository: ProfileRepositoryInterface) -> GetProfileValuePicksUseCase {
+    GetProfileValuePicksUseCaseImpl(repository: repository)
   }
   
-  public static func createUpdateMatchValuePicksUseCase(repository: ProfileRepositoryInterface) -> UpdateMatchValuePicksUseCase {
+  public static func createUpdateProfileValuePicksUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileValuePicksUseCase {
     UpdateMatchValuePicksUseCaseImpl(repository: repository)
   }
   

@@ -109,11 +109,11 @@ public struct Coordinator {
       // MARK: - Profile
     case .editValuePick:
       let profileRepository = repositoryFactory.createProfileRepository()
-      let getMatchValuePicksUseCase = UseCaseFactory.createGetMatchValuePicksUseCase(repository: profileRepository)
-      let updateMatchValuePicksUseCase = UseCaseFactory.createUpdateMatchValuePicksUseCase(repository: profileRepository)
+      let getProfileValuePicksUseCase = UseCaseFactory.createGetProfileValuePicksUseCase(repository: profileRepository)
+      let updateProfileValuePicksUseCase = UseCaseFactory.createUpdateProfileValuePicksUseCase(repository: profileRepository)
       EditValuePickViewFactory.createEditValuePickViewFactory(
-        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
-        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+        getProfileValuePicksUseCase: getProfileValuePicksUseCase,
+        updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
     }
   }

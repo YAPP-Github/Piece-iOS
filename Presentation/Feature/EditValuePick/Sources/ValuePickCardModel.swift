@@ -14,14 +14,14 @@ final class ValuePickCardViewModel {
     case didTapAnswer(id: Int)
   }
   
-  let onModelUpdate: (ValuePickModel) -> Void
+  let onModelUpdate: (ProfileValuePickModel) -> Void
   let isEditing: Bool
-  var model: ValuePickModel
+  var model: ProfileValuePickModel
   
   init(
-    model: ValuePickModel,
+    model: ProfileValuePickModel,
     isEditing: Bool,
-    onModelUpdate: @escaping (ValuePickModel) -> Void
+    onModelUpdate: @escaping (ProfileValuePickModel) -> Void
   ) {
     self.model = model
     self.isEditing = isEditing

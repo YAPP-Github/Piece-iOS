@@ -15,13 +15,13 @@ struct EditValuePickView: View {
   @Environment(Router.self) var router: Router
   
   init(
-    getMatchValuePicksUseCase: GetMatchValuePicksUseCase,
-    updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
+    getProfileValuePicksUseCase: GetProfileValuePicksUseCase,
+    updateProfileValuePicksUseCase: UpdateProfileValuePicksUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
-        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
-        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+        getProfileValuePicksUseCase: getProfileValuePicksUseCase,
+        updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
     )
   }
