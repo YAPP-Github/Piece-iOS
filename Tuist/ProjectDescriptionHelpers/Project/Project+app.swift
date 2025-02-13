@@ -19,23 +19,29 @@ extension Project {
       product: .app,
       bundleId: AppConstants.bundleId,
       deploymentTargets: AppConstants.deploymentTargets,
-      infoPlist: .extendingDefault(with: [
-        "UILaunchScreen": "LaunchScreen",
-        "NSCameraUsageDescription": "프로필 생성 시 사진 첨부를 위해 카메라 접근 권한이 필요합니다.",
-        "NSPhotoLibraryUsageDescription": "프로필 생성 시 사진 첨부를 위해 앨범 접근 권한이 필요합니다.",
-        "NSContactsUsageDescription": "사용자가 원할 경우, 사용자의 연락처에 있는 상대에게 사용자가 노출되지 않도록 하기 위해 연락처 정보를 수집합니다.",
-        "BASE_URL": "$(BASE_URL)",
-        "NSAppTransportSecurity": [
-          "NSAllowsArbitraryLoads": true
-        ],
-        "LSApplicationQueriesSchemes": [
-          "kakaokompassauth"
-        ],
-        "GIDClientID": "$(GIDClientID)",
-        "CFBundleURLSchemes": [
-          "YOUR_DOT_REVERSED_IOS_CLIENT_ID"
+      infoPlist: .extendingDefault(
+        with: [
+          "UILaunchScreen": "LaunchScreen",
+          "NSCameraUsageDescription": "프로필 생성 시 사진 첨부를 위해 카메라 접근 권한이 필요합니다.",
+          "NSPhotoLibraryUsageDescription": "프로필 생성 시 사진 첨부를 위해 앨범 접근 권한이 필요합니다.",
+          "NSContactsUsageDescription": "사용자가 원할 경우, 사용자의 연락처에 있는 상대에게 사용자가 노출되지 않도록 하기 위해 연락처 정보를 수집합니다.",
+          "BASE_URL": "$(BASE_URL)",
+          "NATIVE_APP_KEY": "$(NATIVE_APP_KEY)",
+          "NSAppTransportSecurity": [
+            "NSAllowsArbitraryLoads": true
+          ],
+          "LSApplicationQueriesSchemes": [
+            "kakaokompassauth"
+          ],
+          "GIDClientID": "$(GIDClientID)",
+          "CFBundleURLSchemes": [
+            "CFBundleURLSchemes": [
+              "kakao$(NATIVE_APP_KEY)",
+              "YOUR_DOT_REVERSED_IOS_CLIENT_ID"
+            ]
+          ]
         ]
-      ]),
+      ),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: dependencies,
