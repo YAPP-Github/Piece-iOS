@@ -101,8 +101,10 @@ public struct Coordinator {
         updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
       )
         
-    case .withDraw:
+    case .withdraw:
         WithdrawViewFactory.createWithdrawView()
+    case .withdrawConfirm:
+        WithdrawViewFactory.createWithdrawConfirm()
     }
   }
 }

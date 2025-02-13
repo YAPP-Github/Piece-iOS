@@ -11,4 +11,8 @@ public struct WithdrawViewFactory {
     public static func createWithdrawView() -> some View {
         WithdrawView(viewModel: WithdrawViewModel())
     }
+    
+    public static func createWithdrawConfirm() -> some View {
+        WithdrawConfirmView()
+    }
 }

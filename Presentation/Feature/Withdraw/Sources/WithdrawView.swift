@@ -7,8 +7,12 @@
 
 import SwiftUI
 import DesignSystem
+import Router
 
 struct WithdrawView: View {
+  @Environment(Router.self)
+  private var router: Router
+  
   @State var viewModel: WithdrawViewModel
   
   @FocusState
@@ -25,7 +29,7 @@ struct WithdrawView: View {
     VStack(spacing: 0) {
       NavigationBar(
         title: "탈퇴하기",
-        leftButtonTap: { }
+        leftButtonTap: { router.pop() }
       )
       
       Rectangle()
@@ -55,12 +59,13 @@ struct WithdrawView: View {
         type: viewModel.isValid ? .solid : .disabled,
         buttonText: "다음",
         width: .maxWidth,
-        action: { }
+        action: { router.push(to: .withdrawConfirm) }
       )
       .animation(.easeInOut, value: viewModel.isValid)
       .padding(.horizontal, 20)
       .padding(.vertical, 12)
     }
+    .toolbar(.hidden)
   }
 }
 
