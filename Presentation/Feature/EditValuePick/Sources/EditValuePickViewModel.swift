@@ -46,9 +46,19 @@ final class EditValuePickViewModel {
       }
       
     case .didTapSaveButton:
-      Task {
-        await updateProfileValuePicks()
+      didTapSaveButton()
+    }
+  }
+  
+  private func didTapSaveButton() {
+    if isEditing {
+      if isEdited {
+        Task {
+          await updateProfileValuePicks()
+        }
       }
+    } else {
+      isEditing = true
     }
   }
   
