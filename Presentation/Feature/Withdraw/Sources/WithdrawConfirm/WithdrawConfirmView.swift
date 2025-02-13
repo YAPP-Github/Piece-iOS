@@ -17,7 +17,7 @@ struct WithdrawConfirmView: View {
   var body: some View {
     VStack(spacing: 0) {
       NavigationBar(
-        title: "탈퇴할래요",
+        title: "탈퇴하기",
         leftButtonTap: { router.pop() }
       )
       
@@ -40,7 +40,7 @@ struct WithdrawConfirmView: View {
       
       RoundedButton(
         type: .solid,
-        buttonText: "탈퇴하기",
+        buttonText: "탈퇴할래요",
         width: .maxWidth,
         action: { }
       )
