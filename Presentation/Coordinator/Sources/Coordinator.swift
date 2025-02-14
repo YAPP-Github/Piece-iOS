@@ -5,6 +5,8 @@
 //  Created by summercat on 1/30/25.
 //
 
+import Withdraw
+import EditValuePick
 import Login
 import MatchingDetail
 import Settings
@@ -115,6 +117,11 @@ public struct Coordinator {
         getMatchValuePicksUseCase: getMatchValuePicksUseCase,
         updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
       )
+        
+    case .withdraw:
+        WithdrawViewFactory.createWithdrawView()
+    case .withdrawConfirm:
+        WithdrawViewFactory.createWithdrawConfirm()
     }
   }
 }
