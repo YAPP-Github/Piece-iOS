@@ -1,5 +1,5 @@
 //
-//  ValuePickCardModel.swift
+//  EditValuePickCardModel.swift
 //  EditValuePick
 //
 //  Created by summercat on 2/12/25.
@@ -9,19 +9,19 @@ import Entities
 import Observation
 
 @Observable
-final class ValuePickCardViewModel {
+final class EditValuePickCardViewModel {
   enum Action {
     case didTapAnswer(id: Int)
   }
   
-  let onModelUpdate: (ValuePickModel) -> Void
+  let onModelUpdate: (ProfileValuePickModel) -> Void
   let isEditing: Bool
-  var model: ValuePickModel
+  var model: ProfileValuePickModel
   
   init(
-    model: ValuePickModel,
+    model: ProfileValuePickModel,
     isEditing: Bool,
-    onModelUpdate: @escaping (ValuePickModel) -> Void
+    onModelUpdate: @escaping (ProfileValuePickModel) -> Void
   ) {
     self.model = model
     self.isEditing = isEditing

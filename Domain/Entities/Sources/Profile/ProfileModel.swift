@@ -20,7 +20,7 @@ public struct ProfileModel {
     imageUri: String,
     contacts: [ContactModel],
     valueTalks: [ValueTalkModel],
-    valuePicks: [ValuePickModel]
+    valuePicks: [ProfileValuePickModel]
   ) {
     self.nickname = nickname
     self.description = description
@@ -51,7 +51,7 @@ public struct ProfileModel {
   public let imageUri: String
   public let contacts: [ContactModel]
   public let valueTalks: [ValueTalkModel]
-  public let valuePicks: [ValuePickModel]
+  public let valuePicks: [ProfileValuePickModel]
 }
 
 public extension ProfileModel {

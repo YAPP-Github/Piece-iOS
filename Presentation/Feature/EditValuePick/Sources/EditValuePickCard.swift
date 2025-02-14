@@ -1,5 +1,5 @@
 //
-//  ValuePickCard.swift
+//  EditValuePickCard.swift
 //  EditValuePick
 //
 //  Created by summercat on 2/12/25.
@@ -9,12 +9,12 @@ import DesignSystem
 import Entities
 import SwiftUI
 
-struct ValuePickCard: View {
-  @State var viewModel: ValuePickCardViewModel
+struct EditValuePickCard: View {
+  @State var viewModel: EditValuePickCardViewModel
   init(
-    valuePick: ValuePickModel,
+    valuePick: ProfileValuePickModel,
     isEditing: Bool,
-    onModelUpdate: @escaping (ValuePickModel) -> Void
+    onModelUpdate: @escaping (ProfileValuePickModel) -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(

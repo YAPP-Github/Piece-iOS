@@ -7,6 +7,7 @@
 
 import Withdraw
 import EditValuePick
+import EditValueTalk
 import Login
 import MatchingDetail
 import Settings
@@ -109,13 +110,22 @@ public struct Coordinator {
       )
       
       // MARK: - Profile
+    case .editValueTalk:
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileValueTalksUseCase = UseCaseFactory.createGetProfileValueTalksUseCase(repository: profileRepository)
+      let updateProfileValueTalksUseCase = UseCaseFactory.createUpdateProfileValueTalksUseCase(repository: profileRepository)
+      EditValueTalkViewFactory.createEditValueTalkViewFactory(
+        getProfileValueTalksUseCase: getProfileValueTalksUseCase,
+        updateProfileValueTalksUseCase: updateProfileValueTalksUseCase
+      )
+      
     case .editValuePick:
       let profileRepository = repositoryFactory.createProfileRepository()
-      let getMatchValuePicksUseCase = UseCaseFactory.createGetMatchValuePicksUseCase(repository: profileRepository)
-      let updateMatchValuePicksUseCase = UseCaseFactory.createUpdateMatchValuePicksUseCase(repository: profileRepository)
+      let getProfileValuePicksUseCase = UseCaseFactory.createGetProfileValuePicksUseCase(repository: profileRepository)
+      let updateProfileValuePicksUseCase = UseCaseFactory.createUpdateProfileValuePicksUseCase(repository: profileRepository)
       EditValuePickViewFactory.createEditValuePickViewFactory(
-        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
-        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+        getProfileValuePicksUseCase: getProfileValuePicksUseCase,
+        updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
         
     case .withdraw:

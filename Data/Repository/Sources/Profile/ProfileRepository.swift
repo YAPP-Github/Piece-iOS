@@ -26,15 +26,37 @@ final class ProfileRepository: ProfileRepositoryInterface {
     return responseDto.toDomain()
   }
   
-  func getProfileValuePicks() async throws -> [ValuePickModel] {
+  func getProfileValueTalks() async throws -> [ProfileValueTalkModel] {
+    let endpoint = ProfileEndpoint.getValueTalks
+    let responseDto: ProfileValueTalksResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return responseDto.responses.map { $0.toDomain() }
+  }
+  
+  func updateProfileValueTalks(_ valueTalks: [ProfileValueTalkModel]) async throws -> VoidModel {
+    let requests = valueTalks.map { ProfileValueTalkRequestDTO(profileValueTalkId: $0.id, answer: $0.answer, summary: $0.summary) }
+    let requestDto = ProfileValueTalksRequestDTO(profileValueTalkUpdateRequests: requests)
+    let endpoint = ProfileEndpoint.updateValueTalks(requestDto)
+    let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return responseDto.toDomain()
+  }
+  
+  func getProfileValuePicks() async throws -> [ProfileValuePickModel] {
     let endpoint = ProfileEndpoint.getValuePicks
     let responseDto: ProfileValuePicksResponseDTO = try await networkService.request(endpoint: endpoint)
     
     return responseDto.responses.map { $0.toDomain() }
   }
   
-  func updateProfileValuePicks(_ valuePicks: [ValuePickModel]) async throws -> VoidModel {
-    let requestDto = valuePicks.map { ValuePickRequestDTO(valuePickId: $0.id, selectedAnswer: $0.selectedAnswer ?? 0) }
+  func updateProfileValuePicks(_ valuePicks: [ProfileValuePickModel]) async throws -> VoidModel {
+    let requests = valuePicks.map {
+      ProfileValuePickRequestDTO(
+        profileValuePickId: $0.id,
+        selectedAnswer: $0.selectedAnswer ?? 0
+      )
+    }
+    let requestDto = ProfileValuePicksRequestDTO(profileValuePickUpdateRequests: requests)
     let endpoint = ProfileEndpoint.updateValuePicks(requestDto)
     let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     

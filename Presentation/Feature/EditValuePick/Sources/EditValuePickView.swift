@@ -15,13 +15,13 @@ struct EditValuePickView: View {
   @Environment(Router.self) var router: Router
   
   init(
-    getMatchValuePicksUseCase: GetMatchValuePicksUseCase,
-    updateMatchValuePicksUseCase: UpdateMatchValuePicksUseCase
+    getProfileValuePicksUseCase: GetProfileValuePicksUseCase,
+    updateProfileValuePicksUseCase: UpdateProfileValuePicksUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
-        getMatchValuePicksUseCase: getMatchValuePicksUseCase,
-        updateMatchValuePicksUseCase: updateMatchValuePicksUseCase
+        getProfileValuePicksUseCase: getProfileValuePicksUseCase,
+        updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
     )
   }
@@ -31,7 +31,7 @@ struct EditValuePickView: View {
       NavigationBar(
         title: "가치관 Pick",
         leftButtonTap: { router.pop() },
-        rightButtonTap: { handleNavigationRightButtonTap() },
+        rightButtonTap: { viewModel.handleAction(.didTapSaveButton) },
         label: viewModel.isEditing ? "저장": "수정",
         labelColor: viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault,
         backgroundColor: .clear
@@ -52,7 +52,7 @@ struct EditValuePickView: View {
       Array(zip(viewModel.valuePicks.indices, viewModel.valuePicks)),
       id: \.1
     ) { index, valuePick in
-      ValuePickCard(
+      EditValuePickCard(
         valuePick: valuePick,
         isEditing: viewModel.isEditing
       ) { model in
@@ -61,14 +61,6 @@ struct EditValuePickView: View {
       if index < viewModel.valuePicks.count - 1 {
         Divider(weight: .thick)
       }
-    }
-  }
-  
-  private func handleNavigationRightButtonTap() {
-    if viewModel.isEditing {
-      if viewModel.isEdited { viewModel.handleAction(.didTapSaveButton) }
-    } else {
-      viewModel.isEditing = true
     }
   }
 }

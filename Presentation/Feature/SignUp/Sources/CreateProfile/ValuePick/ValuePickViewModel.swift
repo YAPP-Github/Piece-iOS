@@ -11,11 +11,11 @@ import UseCases
 
 @Observable
 final class ValuePickViewModel {
-  var valuePicks: [ValuePickModel] = []
+  var valuePicks: [ProfileValuePickModel] = []
   
   enum Action {
     case didTapCreateProfileButton
-    case updateValuePick(ValuePickModel)
+    case updateValuePick(ProfileValuePickModel)
   }
   
   let profileCreator: ProfileCreator
@@ -55,7 +55,15 @@ final class ValuePickViewModel {
   private func fetchValuePicks() async {
     do {
       let valuePicks = try await getValuePicksUseCase.execute()
-      self.valuePicks = valuePicks
+      self.valuePicks = valuePicks.map {
+        ProfileValuePickModel(
+          id: $0.id,
+          category: $0.category,
+          question: $0.question,
+          answers: $0.answers,
+          selectedAnswer: nil
+        )
+      }
     } catch {
       print(error)
     }
