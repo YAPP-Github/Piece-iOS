@@ -17,6 +17,8 @@ public enum ProfileEndpoint: TargetType {
   case updateValueTalks(ProfileValueTalksRequestDTO)
   case getValuePicks
   case updateValuePicks(ProfileValuePicksRequestDTO)
+  case postCheckNickname(String)
+  case postUploadImage(Data)
   
   public var method: HTTPMethod {
     switch self {
@@ -27,6 +29,8 @@ public enum ProfileEndpoint: TargetType {
     case .updateValueTalks: .put
     case .getValuePicks: .get
     case .updateValuePicks: .put
+    case .postCheckNickname: .post
+    case .postUploadImage: .post
     }
   }
   
@@ -39,6 +43,8 @@ public enum ProfileEndpoint: TargetType {
     case .updateValueTalks: "api/profiles/valueTalks"
     case .getValuePicks: "api/profiles/valuePicks"
     case .updateValuePicks: "api/profiles/valuePicks"
+    case .postCheckNickname: "api/profiles/check-nickname"
+    case .postUploadImage: "api/profiles/images"
     }
   }
   
@@ -51,6 +57,8 @@ public enum ProfileEndpoint: TargetType {
     case .updateValueTalks: [:]
     case .getValuePicks: [:]
     case .updateValuePicks: [:]
+    case .postCheckNickname: [NetworkHeader.accept : NetworkHeader.all]
+    case .postUploadImage: [NetworkHeader.contentType : NetworkHeader.multipartFormData]
     }
   }
   
@@ -63,6 +71,8 @@ public enum ProfileEndpoint: TargetType {
     case let .updateValueTalks(dto): .body(dto)
     case .getValuePicks: .plain
     case let .updateValuePicks(dto): .body(dto)
+    case let .postCheckNickname(string): .query([URLQueryItem(name: "nickname", value: string)])
+    case let .postUploadImage(data): .multipart(data)
     }
   }
 }

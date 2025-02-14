@@ -89,6 +89,7 @@ public extension Modules {
     case MatchingDetail
     case EditValueTalk
     case EditValuePick
+    case Withdraw
     
     var path: String {
       switch self {

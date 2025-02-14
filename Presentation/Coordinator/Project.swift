@@ -21,5 +21,7 @@ let project = Project.dynamicFramework(
     .presentation(target: .SignUp),
     .presentation(target: .EditValueTalk),
     .presentation(target: .EditValuePick),
+    .presentation(target: .Withdraw),
+    .presentation(target: .Login),
   ]
 )
