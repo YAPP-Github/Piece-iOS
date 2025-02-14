@@ -28,8 +28,8 @@ public extension TermsListResponseDTO {
 }
 
 public extension TermItemResponseDTO {
-  func toDomain() -> TermItem {
-    return TermItem(
+  func toDomain() -> TermItemModel {
+    return TermItemModel(
       termId: termId,
       title: title,
       content: content,

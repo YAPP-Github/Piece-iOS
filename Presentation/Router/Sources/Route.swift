@@ -8,6 +8,7 @@
 public enum Route: Hashable {
   case home
   case AvoidContactsGuide
+  case login
   case termsAgreement
   case matchProfileBasic
   case matchValueTalk
@@ -17,4 +18,5 @@ public enum Route: Hashable {
   case editValuePick
   case withdraw
   case withdrawConfirm
+  case settingsWebView(title: String, uri: String)
 }
