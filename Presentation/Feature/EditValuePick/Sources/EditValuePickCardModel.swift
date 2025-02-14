@@ -1,5 +1,5 @@
 //
-//  ValuePickCardModel.swift
+//  EditValuePickCardModel.swift
 //  EditValuePick
 //
 //  Created by summercat on 2/12/25.
@@ -9,7 +9,7 @@ import Entities
 import Observation
 
 @Observable
-final class ValuePickCardViewModel {
+final class EditValuePickCardViewModel {
   enum Action {
     case didTapAnswer(id: Int)
   }
