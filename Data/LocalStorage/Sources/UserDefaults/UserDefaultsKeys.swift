@@ -6,6 +6,5 @@
 //
 
 public enum UserDefaultsKeys: String {
-  case isBlockContactsEnabled
   case blockContactsLastUpdatedDate
 }

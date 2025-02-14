@@ -5,8 +5,9 @@
 //  Created by eunseou on 1/17/25.
 //
 
-import SwiftUI
 import DesignSystem
+import PCWebView
+import SwiftUI
 
 struct TermsWebView: View {
   @State var viewModel: TermsWebViewModel
@@ -14,7 +15,7 @@ struct TermsWebView: View {
   
   var body: some View {
     ZStack {
-      WebView(urlString: viewModel.term.url)
+      PCWebView(uri: viewModel.term.url)
         .padding(.bottom, 74)
       
       VStack {
@@ -23,6 +24,7 @@ struct TermsWebView: View {
         RoundedButton(
           type: .solid,
           buttonText: "동의하기",
+          width: .maxWidth,
           action: { viewModel.handleAction(.tapAgreementButton) }
         )
       }

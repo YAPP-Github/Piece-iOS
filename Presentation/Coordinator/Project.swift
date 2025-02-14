@@ -16,9 +16,11 @@ let project = Project.dynamicFramework(
     .presentation(target: .Router),
     .presentation(target: .Home),
     .presentation(target: .Profile),
+    .presentation(target: .Settings),
     .presentation(target: .MatchingDetail),
     .presentation(target: .SignUp),
     .presentation(target: .EditValuePick),
-    .presentation(target: .Withdraw)
+    .presentation(target: .Withdraw),
+    .presentation(target: .Login),
   ]
 )
