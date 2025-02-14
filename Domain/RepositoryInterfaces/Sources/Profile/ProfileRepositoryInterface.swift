@@ -15,4 +15,5 @@ public protocol ProfileRepositoryInterface {
   func updateProfileValueTalks(_ valueTalks: [ProfileValueTalkModel]) async throws -> VoidModel
   func getProfileValuePicks() async throws -> [ProfileValuePickModel]
   func updateProfileValuePicks(_ valuePicks: [ProfileValuePickModel]) async throws -> VoidModel
+  func uploadProfileImage(_ imageData: Data) async throws -> URL
 }
