@@ -6,6 +6,7 @@
 //
 
 import EditValuePick
+import EditValueTalk
 import MatchingDetail
 import Settings
 import SignUp
@@ -107,6 +108,15 @@ public struct Coordinator {
       )
       
       // MARK: - Profile
+    case .editValueTalk:
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileValueTalksUseCase = UseCaseFactory.createGetProfileValueTalksUseCase(repository: profileRepository)
+      let updateProfileValueTalksUseCase = UseCaseFactory.createUpdateProfileValueTalksUseCase(repository: profileRepository)
+      EditValueTalkViewFactory.createEditValueTalkViewFactory(
+        getProfileValueTalksUseCase: getProfileValueTalksUseCase,
+        updateProfileValueTalksUseCase: updateProfileValueTalksUseCase
+      )
+      
     case .editValuePick:
       let profileRepository = repositoryFactory.createProfileRepository()
       let getProfileValuePicksUseCase = UseCaseFactory.createGetProfileValuePicksUseCase(repository: profileRepository)

@@ -14,6 +14,7 @@ public enum Route: Hashable {
   case matchValuePick
   case signUp
   case createProfile
+  case editValueTalk
   case editValuePick
   case settingsWebView(title: String, uri: String)
 }
