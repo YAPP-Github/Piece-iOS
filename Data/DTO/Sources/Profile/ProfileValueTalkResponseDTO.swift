@@ -14,6 +14,8 @@ public struct ProfileValueTalkResponseDTO: Decodable {
   public let category: String
   public let summary: String
   public let answer: String
+  public let placeholder: String
+  public let guides: [String]
 }
 
 public extension ProfileValueTalkResponseDTO {
@@ -23,7 +25,9 @@ public extension ProfileValueTalkResponseDTO {
       title: title,
       category: category,
       summary: summary,
-      answer: answer
+      answer: answer,
+      placeholder: placeholder,
+      guides: guides
     )
   }
 }
