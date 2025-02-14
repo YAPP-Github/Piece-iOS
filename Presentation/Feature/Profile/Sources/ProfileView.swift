@@ -236,7 +236,7 @@ struct ProfileView: View {
       )
       .contentShape(Rectangle())
       .onTapGesture {
-        // TODO: - 가치관 Talk 편집 화면으로 이동
+        router.push(to: .editValueTalk)
       }
       Divider(weight: .normal, isVertical: false)
       SettingCategory(
