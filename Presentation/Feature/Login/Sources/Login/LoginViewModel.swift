@@ -161,12 +161,11 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
     
     Task {
       do {
-        let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: identityToken)
+        let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
       } catch {
         print("Apple Login Error: \(error.localizedDescription)")
       }
     }
   }
-  
 }
