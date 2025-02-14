@@ -5,14 +5,17 @@
 //  Created by summercat on 2/9/25.
 //
 
-import DesignSystem
 import SwiftUI
 
-struct TextCountIndicator: View {
-  @Binding var count: Int
+public struct TextCountIndicator: View {
+  @Binding public var count: Int
   private let maxCount = 300
   
-  var body: some View {
+  public init(count: Binding<Int>) {
+    self._count = count
+  }
+  
+  public var body: some View {
     HStack(spacing: 0) {
       Text(count.description)
         .pretendard(.body_S_M)
