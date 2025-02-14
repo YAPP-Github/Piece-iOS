@@ -52,7 +52,7 @@ struct EditValuePickView: View {
       Array(zip(viewModel.valuePicks.indices, viewModel.valuePicks)),
       id: \.1
     ) { index, valuePick in
-      ValuePickCard(
+      EditValuePickCard(
         valuePick: valuePick,
         isEditing: viewModel.isEditing
       ) { model in
