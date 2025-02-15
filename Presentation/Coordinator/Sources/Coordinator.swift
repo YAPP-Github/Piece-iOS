@@ -110,9 +110,24 @@ public struct Coordinator {
     case let .termsWebView(title, url):
       SignUpViewFactory.createTermsWebView(title: title, url: url)
       
+    case .checkPremission:
+      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      let cameraPermissionUseCase = UseCaseFactory.createCameraPermissionUseCase()
+      let photoPermissionUseCase = UseCaseFactory.createPhotoPermissionUseCase()
+      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      SignUpViewFactory.createPermissionRequestView(
+        cameraPermissionUseCase: cameraPermissionUseCase,
+        photoPermissionUseCase: photoPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase
+      )
+      
     case .AvoidContactsGuide:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
       SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      
+    case .completeSignUp:
+      SignUpViewFactory.createCompleteSignUpView()
       
     case .signUp:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()

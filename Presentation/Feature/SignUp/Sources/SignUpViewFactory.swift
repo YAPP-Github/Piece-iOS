@@ -25,6 +25,24 @@ public struct SignUpViewFactory {
     TermsWebView(title: title, url: url)
   }
   
+  public static func createPermissionRequestView(
+    cameraPermissionUseCase: CameraPermissionUseCase,
+    photoPermissionUseCase: PhotoPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase
+  ) -> some View {
+    PermissionRequestView(
+      cameraPermissionUseCase: cameraPermissionUseCase,
+      photoPermissionUseCase: photoPermissionUseCase,
+      contactsPermissionUseCase: contactsPermissionUseCase,
+      notificationPermissionUseCase: notificationPermissionUseCase
+    )
+  }
+  
+  public static func createCompleteSignUpView() -> some View {
+    CompleteSignUpView()
+  }
+  
   public static func createProfileContainerView(
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase,

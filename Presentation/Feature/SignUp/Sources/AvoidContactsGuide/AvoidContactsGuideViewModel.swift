@@ -18,6 +18,7 @@ final class AvoidContactsGuideViewModel {
   }
   
   private(set) var showToast = false
+  private(set) var moveToCompleteSignUp: Bool = false
   var isPresentedAlert: Bool = false
   private let contactsPermissionUseCase: ContactsPermissionUseCase
   
@@ -58,6 +59,7 @@ final class AvoidContactsGuideViewModel {
     showToast = true
     try? await Task.sleep(for: .seconds(2))
     showToast = false
+    moveToCompleteSignUp = true
   }
   
   private func openSettings() {
