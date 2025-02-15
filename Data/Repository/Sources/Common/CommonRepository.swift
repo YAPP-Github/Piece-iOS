@@ -10,10 +10,10 @@ import Entities
 import PCNetwork
 import RepositoryInterfaces
 
-public final class CommonRepository: CommonRepositoryInterface {
+final class CommonRepository: CommonRepositoryInterface {
   private let networkService: NetworkService
 
-  public init(networkService: NetworkService) {
+  init(networkService: NetworkService) {
     self.networkService = networkService
   }
   
