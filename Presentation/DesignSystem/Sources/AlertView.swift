@@ -89,7 +89,8 @@ private struct AlertTopView<Title: View>: View {
 private struct AlertBottomView: View {
   var body: some View {
     HStack {
-      if let firstButtonText = firstButtonText {
+      if let firstButtonText,
+         let firstButtonAction {
         RoundedButton(
           type: .outline,
           buttonText: firstButtonText,
@@ -140,11 +141,13 @@ private struct AlertBottomView: View {
         firstButtonAction: {},
         secondButtonAction: {}
       )
+      
       AlertView(
+        icon: DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage,
         title: { Text("수줍은 수달님과의 인연을 이어가시겠습니까?") },
-        message: "테스트트트트",
-        secondButtonText: "네!!",
-        secondButtonAction: { }
+        message: "서로 매칭을 수락하면, 연락처가 공개됩니다.",
+        secondButtonText: "label",
+        secondButtonAction: {}
       )
     }
   }
