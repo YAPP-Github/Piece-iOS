@@ -49,6 +49,11 @@ struct TermsAgreementView: View {
         .padding(.bottom, 10)
       }
     }
+    .onChange(of: viewModel.isShowWebView) { _, newValue in
+      if newValue, let term = viewModel.selectedTerm {
+        router.push(to: .termsWebView(title: term.title, url: term.url))
+      }
+    }
     .toolbar(.hidden, for: .navigationBar)
   }
   
@@ -100,8 +105,7 @@ struct TermsAgreementView: View {
       type: viewModel.nextButtonType,
       buttonText: "다음",
       width: .maxWidth,
-      action: { router.push(to: .home) } //임시 추후 변경
-      action: { router.push(to: .home) } 
+      action: { router.push(to: .checkPremission) } 
     )
   }
   

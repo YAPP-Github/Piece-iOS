@@ -63,6 +63,9 @@ struct AvoidContactsGuideView: View {
         .opacity(viewModel.showToast ? 1 : 0)
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
     }
+    .onChange(of: viewModel.moveToCompleteSignUp) { _, newValue in
+      router.push(to: .completeSignUp)
+    }
   }
   
   private var title: some View {
@@ -97,8 +100,6 @@ struct AvoidContactsGuideView: View {
       width: .maxWidth,
       action: {
         viewModel.handleAction(.tapAccepetButton)
-        // TODO: - 다음 화면 라우터 제작 시, 연결
-        //  router.push(to: )
       }
     )
   }

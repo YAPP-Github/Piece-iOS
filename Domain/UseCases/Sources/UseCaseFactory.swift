@@ -18,6 +18,14 @@ public struct UseCaseFactory {
     NotificationPermissionUseCaseImpl()
   }
   
+  public static func createCameraPermissionUseCase() -> CameraPermissionUseCase {
+    CameraPermissionUseCaseImpl()
+  }
+  
+  public static func createPhotoPermissionUseCase() -> PhotoPermissionUseCase {
+    PhotoPermissionUseCaseImpl()
+  }
+  
   // MARK: - 로그인
 
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
