@@ -21,6 +21,10 @@ public struct SignUpViewFactory {
     TermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
   }
   
+  public static func createTermsWebView(title: String, url: String) -> some View {
+    TermsWebView(title: title, url: url)
+  }
+  
   public static func createProfileContainerView(
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase,

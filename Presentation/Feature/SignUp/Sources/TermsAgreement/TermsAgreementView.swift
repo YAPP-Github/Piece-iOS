@@ -101,6 +101,7 @@ struct TermsAgreementView: View {
       buttonText: "다음",
       width: .maxWidth,
       action: { router.push(to: .home) } //임시 추후 변경
+      action: { router.push(to: .home) } 
     )
   }
   

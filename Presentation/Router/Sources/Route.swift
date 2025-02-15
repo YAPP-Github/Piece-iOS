@@ -10,6 +10,7 @@ public enum Route: Hashable {
   case AvoidContactsGuide
   case login
   case termsAgreement
+  case termsWebView(title: String, url: String)
   case matchMain
   case matchProfileBasic
   case matchValueTalk
