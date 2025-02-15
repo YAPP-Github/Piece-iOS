@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import PCFoundationExtension
 import SwiftUI
 
 struct SettingsSynchronizeContactView: View {
@@ -37,7 +38,7 @@ struct SettingsSynchronizeContactView: View {
               .pretendard(.caption_M_M)
               .foregroundStyle(Color.grayscaleDark3)
             if let date {
-              Text(date, format: .dateTime)
+              Text(date.formatted())
                 .pretendard(.caption_M_M)
                 .foregroundStyle(Color.grayscaleDark1)
             }
