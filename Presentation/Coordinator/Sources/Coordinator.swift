@@ -10,17 +10,17 @@ import EditValuePick
 import EditValueTalk
 import Login
 import MatchingDetail
-import Settings
-import SignUp
 import Home
-import SignUp
+import Onboarding
 import PCNetwork
 import Repository
 import Router
+import SignUp
 import SwiftUI
 import UseCases
 import EditValuePick
 import Splash
+import Settings
 
 public struct Coordinator {
   public init() { }
@@ -48,6 +48,9 @@ public struct Coordinator {
         contactsPermissionUseCase: contactsPermissionUseCase
       )
       
+    case .onboarding:
+      OnboardingViewFactory.createOnboardingView()
+      
       // MARK: - 설정
     case let .settingsWebView(title, uri):
       SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
@@ -60,6 +63,7 @@ public struct Coordinator {
         getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
       )
+      
     case .matchValueTalk:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase(repository: matchesRepository)
@@ -67,6 +71,7 @@ public struct Coordinator {
         getMatchValueTalkUseCase: getMatchValueTalkUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
       )
+      
     case .matchValuePick:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase(repository: matchesRepository)
