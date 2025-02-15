@@ -19,7 +19,7 @@ public enum CommonEndpoint: TargetType {
   
   public var path: String {
     switch self {
-    case .healthCheck: "/api/common/health"
+    case .healthCheck: "api/common/health"
     }
   }
   
