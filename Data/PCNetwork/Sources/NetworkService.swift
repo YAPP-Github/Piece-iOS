@@ -11,6 +11,11 @@ import Alamofire
 public class NetworkService {
   public static let shared = NetworkService()
   private let session: Session
+  private let decoder: JSONDecoder = {
+      let decoder = JSONDecoder()
+      decoder.dateDecodingStrategy = .iso8601
+      return decoder
+  }()
   
   private init() {
     let interceptor = APIRequestInterceptor()
@@ -21,7 +26,7 @@ public class NetworkService {
     return try await withCheckedThrowingContinuation { continuation in
       session.request(endpoint)
         .validate()
-        .responseDecodable(of: APIResponse<T>.self) { response in
+        .responseDecodable(of: APIResponse<T>.self, decoder: decoder) { response in
           switch response.result {
           case .success(let apiResponse):
             print("\(apiResponse.status): \(apiResponse.message)")
