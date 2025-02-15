@@ -93,6 +93,7 @@ final class LoginViewModel: NSObject {
         print("Social login success: \(socialLoginResponse)")
         KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
         KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        KeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
         await MainActor.run {
           isLoginSuccessful = true
         }
@@ -170,6 +171,7 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         print("Apple Login Success: \(socialLoginResponse)")
         KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
         KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        KeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
         await MainActor.run {
           isLoginSuccessful = true
         }
