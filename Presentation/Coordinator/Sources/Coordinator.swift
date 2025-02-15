@@ -25,7 +25,7 @@ public struct Coordinator {
   public init() { }
   
   // MARK: - Repositories
-  private let repositoryFactory = RepositoryFactory(networkService: NetworkService())
+  private let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
   
   // MARK: - UseCases
   private let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase()
