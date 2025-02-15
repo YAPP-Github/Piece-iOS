@@ -9,9 +9,13 @@ import SwiftUI
 import DesignSystem
 import PCFoundationExtension
 import UseCases
+import Router
+import LocalStorage
 
 struct LoginView: View {
   @State var viewModel: LoginViewModel
+  
+  @Environment(Router.self) private var router: Router
   
   init(
     socialLoginUseCase: SocialLoginUseCase
@@ -53,6 +57,9 @@ struct LoginView: View {
       }
       .padding(.bottom, 10)
       .padding(.top, 80)
+    }
+    .onChange(of: viewModel.isLoginSuccessful) { _, newValue in
+      router.push(to: .verifyContact)
     }
   }
   

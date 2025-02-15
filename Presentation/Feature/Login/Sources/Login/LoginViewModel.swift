@@ -29,7 +29,7 @@ final class LoginViewModel: NSObject {
   }
   
   private let socialLoginUseCase: SocialLoginUseCase
-  
+  private(set) var isLoginSuccessful: Bool = false
   func handleAction(_ action: Action) {
     switch action {
     case .tapAppleLoginButton:
@@ -91,6 +91,11 @@ final class LoginViewModel: NSObject {
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
         print("Social login success: \(socialLoginResponse)")
+        KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
+        KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        await MainActor.run {
+          isLoginSuccessful = true
+        }
       } catch {
         print("Social login failed: \(error.localizedDescription)")
       }
@@ -99,13 +104,13 @@ final class LoginViewModel: NSObject {
   
   private func handleGoogleLoginButton() {
     // TODO: - Google Login Action
-    guard let rootViewController = UIApplication.shared.connectedScenes
-      .compactMap({ $0 as? UIWindowScene })
-      .flatMap({ $0.windows })
-      .first(where: { $0.isKeyWindow }) else {
-      print("❌ RootViewController를 찾을 수 없습니다.")
-      return
-    }
+//    guard let rootViewController = UIApplication.shared.connectedScenes
+//      .compactMap({ $0 as? UIWindowScene })
+//      .flatMap({ $0.windows })
+//      .first(where: { $0.isKeyWindow }) else {
+//      print("❌ RootViewController를 찾을 수 없습니다.")
+//      return
+//    }
     
 //    GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signInResult, error in
 //      if let error = error {
@@ -163,6 +168,11 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
+        KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
+        KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        await MainActor.run {
+          isLoginSuccessful = true
+        }
       } catch {
         print("Apple Login Error: \(error.localizedDescription)")
       }
