@@ -27,6 +27,9 @@ struct OnboardingView: View {
     }
     .frame(maxHeight: .infinity)
     .background(Color.grayscaleWhite)
+    .onAppear {
+      viewModel.handleAction(.onAppear)
+    }
   }
   
   private var topBar: some View {

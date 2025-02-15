@@ -12,6 +12,7 @@ import Observation
 @Observable
 final class OnboardingViewModel {
   enum Action {
+    case onAppear
     case didTapNextButton
   }
   
@@ -35,6 +36,9 @@ final class OnboardingViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
+    case .onAppear:
+      PCUserDefaultsService.shared.setDidSeeOnboarding(true)
+      
     case .didTapNextButton:
       contentTabIndex += 1
     }
