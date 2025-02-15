@@ -14,7 +14,7 @@ import RepositoryInterfaces
 final class ProfileRepository: ProfileRepositoryInterface {
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   

@@ -16,7 +16,7 @@ import RepositoryInterfaces
 final class MatchesRepository: MatchesRepositoryInterface {
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   

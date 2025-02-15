@@ -20,12 +20,13 @@ import Router
 import SwiftUI
 import UseCases
 import EditValuePick
+import Splash
 
 public struct Coordinator {
   public init() { }
   
   // MARK: - Repositories
-  private let repositoryFactory = RepositoryFactory(networkService: NetworkService())
+  private let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
   
   // MARK: - UseCases
   private let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase()
@@ -130,8 +131,24 @@ public struct Coordinator {
         
     case .withdraw:
         WithdrawViewFactory.createWithdrawView()
+      
     case .withdrawConfirm:
         WithdrawViewFactory.createWithdrawConfirm()
+      
+    case .login:
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      
+    case .splash:
+      let commonRepository = repositoryFactory.createCommonRepository()
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      SplashViewFactory.createSplashView(
+        getServerStatusUseCase: getServerStatusUseCase,
+        socialLoginUseCase: socialLoginUseCase
+      )
     }
   }
 }
