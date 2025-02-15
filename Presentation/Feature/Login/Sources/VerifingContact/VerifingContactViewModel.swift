@@ -9,6 +9,7 @@ import SwiftUI
 import Observation
 import DesignSystem
 import PCFoundationExtension
+import UseCases
 
 @Observable
 final class VerifingContactViewModel {
@@ -23,6 +24,9 @@ final class VerifingContactViewModel {
     case checkCertificationNumber
     case tapNextButton
   }
+  
+  private let sendSMSCodeUseCase: SendSMSCodeUseCase
+  private let verifySMSCodeUseCase: VerifySMSCodeUseCase
   
   private(set) var showVerificationField: Bool = false
   private(set) var isActiveNextButton: Bool = false
@@ -52,20 +56,17 @@ final class VerifingContactViewModel {
   }
   
   init(
-    phoneNumber: String,
-    verificationCode: String
+    sendSMSCodeUseCase: SendSMSCodeUseCase,
+    verifySMSCodeUseCase: VerifySMSCodeUseCase
   ) {
-    self.phoneNumber = phoneNumber
-    self.verificationCode = verificationCode
+    self.sendSMSCodeUseCase = sendSMSCodeUseCase
+    self.verifySMSCodeUseCase = verifySMSCodeUseCase
   }
   
   func handleAction(_ action: Action) {
     switch action {
     case .reciveCertificationNumber:
-      showVerificationField = true
-      recivedCertificationNumberButtonText = "인증번호 재전송"
-      recivedCertificationNumberButtonWidth = Constants.buttonExpandedWidth
-      startTimer()
+      Task { await handleReceiveCertificationNumber() }
     case .checkCertificationNumber:
       isActiveNextButton = true
     case .tapNextButton:
@@ -75,6 +76,17 @@ final class VerifingContactViewModel {
   
   private func buttonType(for isEnabled: Bool) -> RoundedButton.ButtonType {
     isEnabled ? .solid : .disabled
+  }
+  
+  private func handleReceiveCertificationNumber() async {
+    do {
+      showVerificationField = try await sendSMSCodeUseCase.execute(phoneNumber: phoneNumber)
+      recivedCertificationNumberButtonText = "인증번호 재전송"
+      recivedCertificationNumberButtonWidth = Constants.buttonExpandedWidth
+      startTimer()
+    } catch {
+      print(error.localizedDescription)
+    }
   }
   
   private func startTimer() {

@@ -7,10 +7,26 @@
 
 import SwiftUI
 import DesignSystem
+import Router
+import UseCases
 
 struct VerifingContactView: View {
   @State var viewModel: VerifingContactViewModel
   @FocusState private var isFocused: Bool
+  
+  @Environment(Router.self) private var router: Router
+  
+  init(
+    sendSMSCodeUseCase: SendSMSCodeUseCase,
+    verifySMSCodeUseCase: VerifySMSCodeUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        sendSMSCodeUseCase: sendSMSCodeUseCase,
+        verifySMSCodeUseCase: verifySMSCodeUseCase
+      )
+    )
+  }
   
   var body: some View {
     ZStack {
@@ -81,6 +97,7 @@ struct VerifingContactView: View {
           type: viewModel.nextButtonType,
           buttonText: "다음",
           icon: nil,
+          width: .maxWidth,
           action: {
             viewModel.handleAction(.tapNextButton)
           }
@@ -89,20 +106,14 @@ struct VerifingContactView: View {
       .padding(.bottom, 10)
       .padding(.horizontal, 20)
     }
-    .navigationBarModifier {
-      NavigationBar(
-        title: "",
-        rightIcon: DesignSystemAsset.Icons.close32.swiftUIImage
-      )
-    }
   }
 }
-
-#Preview {
-  VerifingContactView(
-    viewModel: VerifingContactViewModel(
-      phoneNumber: "01012345678",
-      verificationCode: ""
-    )
-  )
-}
+//
+//#Preview {
+//  VerifingContactView(
+//    viewModel: VerifingContactViewModel(
+//      phoneNumber: "01012345678",
+//      verificationCode: ""
+//    )
+//  )
+//}

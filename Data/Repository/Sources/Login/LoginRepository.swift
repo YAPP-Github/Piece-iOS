@@ -12,7 +12,7 @@ import Entities
 import RepositoryInterfaces
 
 public final class LoginRepository: LoginRepositoryInterfaces {
-  
+
   private let networkService: NetworkService
   
   public init (networkService: NetworkService = NetworkService()) {
@@ -23,6 +23,19 @@ public final class LoginRepository: LoginRepositoryInterfaces {
     let body = SocialLoginRequsetDTO(providerName: providerName, token: token)
     let endpoint = LoginEndpoint.loginWithOAuth(body: body)
     
+    let responseDTO: SocialLoginResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
+  
+  public func sendSMSCode(phoneNumber: String) async throws -> Bool {
+    let body = SMSCodeRequestDTO(phoneNumber: phoneNumber)
+    let endpoint = LoginEndpoint.sendSMSCode(body: body)
+    return try await networkService.request(endpoint: endpoint)
+  }
+  
+  public func verifySMSCode(phoneNumber: String, code: String) async throws -> SocialLoginResultModel {
+    let body = VerifySMSCodeRequestDTO(phoneNumber: phoneNumber, code: code)
+    let endpoint = LoginEndpoint.verifySMSCode(body: body)
     let responseDTO: SocialLoginResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }

@@ -34,10 +34,19 @@ public struct Coordinator {
   @ViewBuilder
   public func view(for route: Route) -> some View {
     switch route {
+      // MARK: - 로그인
     case .login:
       let socialLoginRepository = repositoryFactory.createLoginRepository()
       let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: socialLoginRepository)
       LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+    case .verifyContact:
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let sendSMSCodeUseCase = UseCaseFactory.createSendSMSCodeUseCase(repository: loginRepository)
+      let verifySMSCodeUseCase = UseCaseFactory.createVerifySMSCodeUseCase(repository: loginRepository)
+      LoginViewFactory.createVerifingContactView(
+        sendSMSCodeUseCase: sendSMSCodeUseCase,
+        verifySMSCodeUseCase: verifySMSCodeUseCase
+      )
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
       let termsRepository = repositoryFactory.createTermsRepository()
