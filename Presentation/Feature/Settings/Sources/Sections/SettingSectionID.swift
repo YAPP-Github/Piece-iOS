@@ -6,7 +6,6 @@
 //
 
 enum SettingSectionID {
-  case loginInformation
   case notification
   case system
   case ask
@@ -15,8 +14,6 @@ enum SettingSectionID {
   
   var title: String {
     switch self {
-    case .loginInformation:
-      return "로그인 계정"
     case .notification:
       return "알림"
     case .system:

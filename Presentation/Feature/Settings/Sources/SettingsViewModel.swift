@@ -60,7 +60,6 @@ final class SettingsViewModel {
     switch action {
     case .onAppear:
       sections = [
-        .init(id: .loginInformation),
         .init(id: .notification),
         .init(id: .system),
         .init(id: .ask),
