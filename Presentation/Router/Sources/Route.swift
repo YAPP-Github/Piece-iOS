@@ -28,6 +28,7 @@ public enum Route: Hashable {
   case withdraw
   case withdrawConfirm
   case settingsWebView(title: String, uri: String)
+  case reportUser(nickname: String)
   case blockUser(matchId: Int, nickname: String)
   case waitingAISummary
   case completeCreateProfile
