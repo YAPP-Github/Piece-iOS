@@ -129,6 +129,10 @@ public struct UseCaseFactory {
     GetMatchPhotoUseCaseImpl()
   }
   
+  public static func createReportUserUseCase(repository: ReportsRepositoryInterface) -> ReportUserUseCase {
+    ReportUserUseCaseImpl(repository: repository)
+}
+
   public static func createBlockUserUseCase(repository: MatchesRepositoryInterface) -> BlockUserUseCase {
     BlockUserUseCaseImpl(repository: repository)
 
