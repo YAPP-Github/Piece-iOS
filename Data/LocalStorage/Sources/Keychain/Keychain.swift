@@ -10,4 +10,5 @@ import Foundation
 public enum Keychain: String, CaseIterable {
   case accessToken
   case refreshToken
+  case role
 }
