@@ -8,12 +8,26 @@
 import Router
 import SwiftUI
 import DesignSystem
+import UseCases
 
 struct MatchingMainView: View {
   @Bindable var matchingTimerViewModel: MatchingTimerViewModel
   @Bindable var matchingMainViewModel: MatchingMainViewModel
   
   @Environment(Router.self) private var router: Router
+  
+  init(
+    acceptMatchUseCase: AcceptMatchUseCase,
+    getMatchesProfileBasicUsecase: GetMatchProfileBasicUseCase
+  ) {
+    _matchingMainViewModel = .init(
+      wrappedValue: .init(
+        acceptMatchUseCase: acceptMatchUseCase,
+        getMatchesProfileBasicUseCase: getMatchesProfileBasicUsecase
+      )
+    )
+    _matchingTimerViewModel = .init(wrappedValue: .init())
+  }
   
   public var body: some View {
     ZStack {
@@ -125,6 +139,7 @@ struct MatchingMainView: View {
       type: matchingMainViewModel.matchingButtonState.buttonType,
       buttonText: matchingMainViewModel.matchingButtonState.title,
       icon: nil,
+      width: .maxWidth,
       action: {
         matchingMainViewModel.handleAction(.tapMatchingButton)
         if let route = matchingMainViewModel.matchingButtonDestination {

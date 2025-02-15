@@ -20,7 +20,7 @@ final class MatchesRepository: MatchesRepositoryInterface {
     self.networkService = networkService
   }
   
-  func getMatchesProfileBasic() async throws -> Entities.MatchProfileBasicModel {
+  func getMatchesProfileBasic() async throws -> MatchProfileBasicModel {
     let endpoint = MatchesEndpoint.profileBasic
     let responseDTO: MatchProfileBasicResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
