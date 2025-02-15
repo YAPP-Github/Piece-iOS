@@ -33,6 +33,10 @@ public struct Coordinator {
   @ViewBuilder
   public func view(for route: Route) -> some View {
     switch route {
+    case .login:
+      let socialLoginRepository = repositoryFactory.createLoginRepository()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: socialLoginRepository)
+      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
       let termsRepository = repositoryFactory.createTermsRepository()
