@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import LocalStorage
 import Observation
 
 @Observable
@@ -16,7 +17,7 @@ final class OnboardingViewModel {
   
   let onboardingContent = [
     OnboardingContent(
-      image: DesignSystemAsset.Images.imgNoscreenshot.swiftUIImage, // TODO: - 이미지 수정
+      image: DesignSystemAsset.Images.imgMatching300.swiftUIImage,
       title: "하루 한 번,\n1:1로 만나는 특별한 인연",
       description: "매일 밤 10시, 새로운 매칭 조각이 도착해요.\n천천히 프로필을 살펴보고, 맞춰볼지 결정해보세요."
     ),

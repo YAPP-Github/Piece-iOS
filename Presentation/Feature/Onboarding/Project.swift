@@ -13,5 +13,6 @@ let project = Project.staticLibrary(
   dependencies: [
     .presentation(target: .DesignSystem),
     .presentation(target: .Router),
+    .data(target: .LocalStorage),
   ]
 )
