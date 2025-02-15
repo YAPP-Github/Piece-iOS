@@ -9,6 +9,10 @@ import Foundation
 import RepositoryInterfaces
 
 public struct UseCaseFactory {
+  public static func createGetServerStatusUseCase(repository: CommonRepositoryInterface) -> GetServerStatusUseCase {
+    GetServerStatusUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - 권한
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
