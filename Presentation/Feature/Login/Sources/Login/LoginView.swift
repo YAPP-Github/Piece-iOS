@@ -61,6 +61,7 @@ struct LoginView: View {
     .onChange(of: viewModel.isLoginSuccessful) { _, newValue in
       router.push(to: .verifyContact)
     }
+    .toolbar(.hidden, for: .navigationBar)
   }
   
   private var appleLoginButton: some View {
