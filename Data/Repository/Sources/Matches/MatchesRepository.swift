@@ -49,4 +49,10 @@ final class MatchesRepository: MatchesRepositoryInterface {
     let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
+  
+  func blockUser(userId: Int) async throws -> VoidModel {
+    let endpoint = MatchesEndpoint.block(userId: userId)
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
 }
