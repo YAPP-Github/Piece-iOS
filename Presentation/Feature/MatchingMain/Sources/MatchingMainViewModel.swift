@@ -60,14 +60,15 @@ final class MatchingMainViewModel {
   
   var isMatchAcceptAlertPresented: Bool = false
   
-  private(set) var description: String
-  private(set) var name: String
-  private(set) var age: String
-  private(set) var location: String
-  private(set) var job: String
-  private(set) var tags: [String]
+  private(set) var name: String = ""
+  private(set) var description: String = ""
+  private(set) var age: String = ""
+  private(set) var location: String = ""
+  private(set) var job: String = ""
+  private(set) var tags: [String] = []
   private(set) var error: Error?
   private let acceptMatchUseCase: AcceptMatchUseCase
+  private let getMatchesProfileBasicUseCase: GetMatchProfileBasicUseCase
   
   var buttonTitle: String {
     matchingButtonState.title
@@ -78,29 +79,17 @@ final class MatchingMainViewModel {
   var matchingButtonDestination: Route? {
     matchingButtonState.destination
   }
-  var matchingButtonState: MatchingButtonState
-  var matchingStatus: MatchingAnswer.MatchingStatus
+  var matchingButtonState: MatchingButtonState = .acceptMatching
+  var matchingStatus: MatchingAnswer.MatchingStatus = .before
   
   init(
-    description: String,
-    name: String,
-    age: String,
-    location: String,
-    job: String,
-    tags: [String],
-    matchingButtonState: MatchingButtonState,
-    matchingStatus: MatchingAnswer.MatchingStatus,
-    acceptMatchUseCase: AcceptMatchUseCase
+    acceptMatchUseCase: AcceptMatchUseCase,
+    getMatchesProfileBasicUseCase: GetMatchProfileBasicUseCase
   ) {
-    self.description = description
-    self.name = name
-    self.age = age
-    self.location = location
-    self.job = job
-    self.tags = tags
-    self.matchingButtonState = matchingButtonState
-    self.matchingStatus = matchingStatus
     self.acceptMatchUseCase = acceptMatchUseCase
+    self.getMatchesProfileBasicUseCase = getMatchesProfileBasicUseCase
+    
+    fetchInfo()
   }
   
   func handleAction(_ action: Action) {
@@ -120,6 +109,21 @@ final class MatchingMainViewModel {
       case .acceptMatching:
         isMatchAcceptAlertPresented = true
       default: return
+      }
+    }
+  }
+  
+  private func fetchInfo() {
+    Task {
+      do {
+        let basicInfo = try await getMatchesProfileBasicUseCase.execute()
+        name = basicInfo.nickname
+        description = basicInfo.description
+        age = String(basicInfo.age)
+        location = basicInfo.location
+        job = basicInfo.job
+      } catch {
+        print(error.localizedDescription)
       }
     }
   }

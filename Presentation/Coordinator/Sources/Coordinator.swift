@@ -20,6 +20,7 @@ import Router
 import SwiftUI
 import UseCases
 import EditValuePick
+import MatchingMain
 
 public struct Coordinator {
   public init() { }
@@ -54,6 +55,16 @@ public struct Coordinator {
       // MARK: - 설정
     case let .settingsWebView(title, uri):
       SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
+      
+      // MARK: - 매칭 메인
+    case .matchMain:
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let getMatchMainUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
+      let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
+      MatchMainViewFactory.createMatchMainView(
+        getMatchProfileBasicUseCase: getMatchMainUseCase,
+        acceptMatchUseCase: acceptMatchUseCase
+      )
       
       // MARK: - 매칭 상세
     case .matchProfileBasic:
