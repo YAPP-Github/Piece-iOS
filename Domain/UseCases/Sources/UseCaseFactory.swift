@@ -35,10 +35,6 @@ public struct UseCaseFactory {
     AcceptMatchUseCaseImpl(repository: repository)
   }
   
-  public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
-    CheckNicknameUseCaseImpl(repository: repository)
-  }
-  
   // MARK: - Profile
   public static func createUploadProfileImageUseCase(repository: ProfileRepositoryInterface) -> UploadProfileImageUseCase {
     UploadProfileImageUseCaseImpl(repository: repository)
