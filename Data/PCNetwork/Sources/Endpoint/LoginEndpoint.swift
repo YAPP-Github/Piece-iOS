@@ -20,9 +20,15 @@ public enum LoginEndpoint: TargetType {
     case .loginWithOAuth:
       [NetworkHeader.contentType: NetworkHeader.applicationJson]
     case .sendSMSCode:
-      [NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")]
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")
+      ]
     case .verifySMSCode:
-      [NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")]
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")
+      ]
     }
   }
   
