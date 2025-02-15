@@ -35,10 +35,6 @@ public struct UseCaseFactory {
     CheckNicknameUseCaseImpl(repository: repository)
   }
   
-  public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
-    AcceptMatchUseCaseImpl(repository: repository)
-  }
-  
   // MARK: - Profile
   public static func createUploadProfileImageUseCase(repository: ProfileRepositoryInterface) -> UploadProfileImageUseCase {
     UploadProfileImageUseCaseImpl(repository: repository)
@@ -74,6 +70,16 @@ public struct UseCaseFactory {
   
   public static func createUpdateProfileValuePicksUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileValuePicksUseCase {
     UpdateProfileValuePicksUseCaseImpl(repository: repository)
+  }
+  
+  // MARK: - 매칭
+  
+  public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
+    AcceptMatchUseCaseImpl(repository: repository)
+  }
+  
+  public static func createRefuseMatchUseCase(repository: MatchesRepositoryInterface) -> RefuseMatchUseCase {
+    RefuseMatchUseCaseImpl(repository: repository)
   }
   
   // MARK: - 매칭 상세
