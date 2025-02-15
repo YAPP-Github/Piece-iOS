@@ -36,7 +36,7 @@ struct OnboardingView: View {
       PCTextButton(content: "건너뛰기")
         .opacity(viewModel.isSkipButtonVisible ? 1 : 0)
         .onTapGesture {
-          // TODO: - 건너뛰기 버튼 액션 확인
+          router.push(to: .login)
         }
     }
     .frame(maxWidth: .infinity)
@@ -83,10 +83,8 @@ struct OnboardingView: View {
       width: .maxWidth
     ) {
       withAnimation {
-        // TODO: - tabIndex에 따라 action 다름
         if viewModel.isLastTab {
-          // TODO: - 간편 로그인 화면으로 이동
-          // router.push(to: <#T##Route#>)
+          router.push(to: .login)
         } else {
           viewModel.handleAction(.didTapNextButton)
         }
