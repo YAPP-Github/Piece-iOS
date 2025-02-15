@@ -76,10 +76,12 @@ public struct Coordinator {
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase(repository: matchesRepository)
       let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
+      let refuseMatchUseCase = UseCaseFactory.createRefuseMatchUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchValuePickView(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase,
-        acceptMatchUseCase: acceptMatchUseCase
+        acceptMatchUseCase: acceptMatchUseCase,
+        refuseMatchUseCase: refuseMatchUseCase
       )
       
       // MARK: - SignUp
