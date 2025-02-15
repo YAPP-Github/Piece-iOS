@@ -9,9 +9,10 @@ import Foundation
 import Alamofire
 
 public class NetworkService {
+  public static let shared = NetworkService()
   private let session: Session
   
-  public init() {
+  private init() {
     let interceptor = APIRequestInterceptor()
     self.session = Session(interceptor: interceptor)
   }
