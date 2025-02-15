@@ -1,5 +1,5 @@
 //
-//  KeychainManager.swift
+//  PCKeychainManager.swift
 //  LocalStorage
 //
 //  Created by eunseou on 2/2/25.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-public class KeychainManager {
-  public static let shared = KeychainManager()
+public class PCKeychainManager {
+  public static let shared = PCKeychainManager()
   
   public init() { }
   
-  public func save(_ key: Keychain, value: String) {
+  public func save(_ key: PCKeychain, value: String) {
     guard let data = value.data(using: .utf8) else {
       return
     }
@@ -27,7 +27,7 @@ public class KeychainManager {
     SecItemAdd(query, nil)
   }
   
-  public func read(_ key: Keychain) -> String? {
+  public func read(_ key: PCKeychain) -> String? {
     let query: NSDictionary = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrAccount: key.rawValue,
@@ -48,7 +48,7 @@ public class KeychainManager {
     return value
   }
   
-  public func delete(_ key: Keychain) {
+  public func delete(_ key: PCKeychain) {
     let query: NSDictionary = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrAccount: key.rawValue,
@@ -59,6 +59,6 @@ public class KeychainManager {
   }
   
   public func deleteAll() {
-    Keychain.allCases.forEach { delete($0) }
+    PCKeychain.allCases.forEach { delete($0) }
   }
 }

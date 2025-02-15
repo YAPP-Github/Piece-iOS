@@ -10,9 +10,9 @@ import Alamofire
 import LocalStorage
 
 class APIRequestInterceptor: RequestInterceptor {
-  private let keychain: KeychainManager
+  private let keychain: PCKeychainManager
   
-  public init(keychain: KeychainManager = .shared) {
+  public init(keychain: PCKeychainManager = .shared) {
     self.keychain = keychain
   }
   
