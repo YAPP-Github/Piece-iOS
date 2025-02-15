@@ -92,7 +92,7 @@ struct EditValueTalkCard: View {
         .focused($isEditingAnswer)
       
       if !viewModel.localAnswer.isEmpty || isEditingAnswer {
-        TextCountIndicator(count: .constant(viewModel.localAnswer.count))
+        TextCountIndicator(count: .constant(viewModel.localAnswer.count), maxCount: 300)
       }
     }
     .padding(.horizontal, 16)
@@ -154,7 +154,7 @@ struct EditValueTalkCard: View {
       )
       
       if viewModel.summaryStatus == .isEditing {
-        TextCountIndicator(count: .constant(viewModel.localSummary.count))
+        TextCountIndicator(count: .constant(viewModel.localSummary.count), maxCount: 50)
           .frame(maxWidth: .infinity, alignment: .trailing)
       }
     }
