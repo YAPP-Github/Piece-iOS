@@ -77,7 +77,7 @@ struct ValueTalkCard: View {
         .focused($isEditing)
       
       if !viewModel.localAnswer.isEmpty || isEditing {
-        TextCountIndicator(count: .constant(viewModel.localAnswer.count))
+        TextCountIndicator(count: .constant(viewModel.localAnswer.count), maxCount: 300)
       }
     }
     .padding(.horizontal, 16)
