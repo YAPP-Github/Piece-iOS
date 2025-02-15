@@ -68,12 +68,6 @@ struct SettingsView: View {
   @ViewBuilder
   private func makeSections(_ section: SettingSection) -> some View {
     switch section.id {
-    case .loginInformation:
-      SettingsLoginInformationSectionView(
-        title: section.title,
-        loginInformationImage: $viewModel.loginInformationImage,
-        loginEmail: $viewModel.loginEmail
-      )
     case .notification:
       SettingsNotificationSettingSectionView(
         title: section.title,
