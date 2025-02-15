@@ -130,8 +130,14 @@ public struct Coordinator {
         
     case .withdraw:
         WithdrawViewFactory.createWithdrawView()
+      
     case .withdrawConfirm:
         WithdrawViewFactory.createWithdrawConfirm()
+      
+    case .login:
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
     }
   }
 }
