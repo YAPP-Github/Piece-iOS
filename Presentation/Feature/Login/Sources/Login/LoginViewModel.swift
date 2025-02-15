@@ -86,7 +86,7 @@ final class LoginViewModel: NSObject {
   }
   
   private func handleKakaoLoginSuccess(_ oauthToken: OAuthToken?) {
-    guard let token = oauthToken?.idToken else { return }
+    guard let token = oauthToken?.accessToken else { return }
     Task {
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
