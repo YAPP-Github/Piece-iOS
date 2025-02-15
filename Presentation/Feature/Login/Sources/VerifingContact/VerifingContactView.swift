@@ -106,6 +106,9 @@ struct VerifingContactView: View {
       .padding(.bottom, 10)
       .padding(.horizontal, 20)
     }
+    .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
+      router.push(to: .termsAgreement)
+    }
   }
 }
 //

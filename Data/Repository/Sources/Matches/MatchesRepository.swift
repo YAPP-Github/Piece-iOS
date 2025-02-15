@@ -43,4 +43,10 @@ final class MatchesRepository: MatchesRepositoryInterface {
     let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
+  
+  func getMatchInfo() async throws -> MatchInfosModel {
+    let endpoint = MatchesEndpoint.matchesInfos
+    let responseDTO: MatchInfosResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
 }
