@@ -10,4 +10,6 @@ import Entities
 
 public protocol LoginRepositoryInterfaces {
   func socialLogin(providerName: SocialLoginType, token: String) async throws -> SocialLoginResultModel
+  func sendSMSCode(phoneNumber: String) async throws -> Bool
+  func verifySMSCode(phoneNumber: String, code: String) async throws -> SocialLoginResultModel
 }

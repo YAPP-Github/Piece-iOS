@@ -13,13 +13,23 @@ public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
+  
+  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
+    NotificationPermissionUseCaseImpl()
+  }
+  
+  // MARK: - 로그인
 
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
   
-  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
-    NotificationPermissionUseCaseImpl()
+  public static func createSendSMSCodeUseCase(repository: LoginRepositoryInterfaces) -> SendSMSCodeUseCase {
+    SendSMSCodeUseCaseImpl(repository: repository)
+  }
+  
+  public static func createVerifySMSCodeUseCase(repository: LoginRepositoryInterfaces) -> VerifySMSCodeUseCase {
+    VerifySMSCodeUseCaseImpl(repository: repository)
   }
   
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {

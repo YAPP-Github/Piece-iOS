@@ -15,6 +15,7 @@ public enum Route: Hashable {
   case matchValueTalk
   case matchValuePick
   case signUp
+  case verifyContact
   case createProfile
   case editValueTalk
   case editValuePick
