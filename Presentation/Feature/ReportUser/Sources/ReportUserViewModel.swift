@@ -1,0 +1,63 @@
+//
+// ReportUserViewModel.swift
+// ReportUser
+//
+// Created by summercat on 2025/02/16.
+//
+
+import Observation
+import UseCases
+
+@Observable
+final class ReportUserViewModel {
+  enum Action {
+    case didSelectReportReason(ReportReason?)
+    case didUpdateReportReason(String)
+    case didTapReportButton
+    case didTapNextButton
+  }
+  
+  let nickname: String
+  let reportReasons = ReportReason.allCases
+  let placeholder = "자유롭게 작성해 주세요"
+  var reportReason: String = ""
+  var showBlockAlert: Bool = false
+  var showBlockResultAlert: Bool = false
+
+  private(set) var selectedReportReason: ReportReason?
+  private(set) var isBottomButtonEnabled: Bool = false
+  
+  private let reportUserUseCase: ReportUserUseCase
+  
+  init(nickname: String, reportUserUseCase: ReportUserUseCase) {
+    self.nickname = nickname
+    self.reportUserUseCase = reportUserUseCase
+  }
+  
+  func handleAction(_ action: Action) {
+    switch action {
+    case let .didSelectReportReason(reason):
+      selectedReportReason = reason
+      
+    case .didTapNextButton:
+      showBlockAlert = true
+      
+    case let .didUpdateReportReason(reason):
+      let limitedText = reason.count <= 100 ? reason : String(reason.prefix(100))
+      reportReason = limitedText
+      
+    case .didTapReportButton:
+      showBlockAlert = false
+      Task { await reportUser() }
+    }
+  }
+  
+  private func reportUser() async {
+    do {
+      let result = try await reportUserUseCase.execute()
+      showBlockResultAlert = true
+    } catch {
+      print(error)
+    }
+  }
+}
