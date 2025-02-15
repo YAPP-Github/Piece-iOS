@@ -7,9 +7,8 @@ struct ContentView: View {
   @State private var coordinator = Coordinator()
   
   var body: some View {
-    // TODO: - Splash 화면으로 변경
     NavigationStack(path: $router.path) {
-      coordinator.view(for: .home)
+      coordinator.view(for: .splash)
         .navigationDestination(for: Route.self) { route in
           coordinator.view(for: route)
         }

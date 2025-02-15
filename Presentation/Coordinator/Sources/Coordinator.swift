@@ -20,6 +20,7 @@ import Router
 import SwiftUI
 import UseCases
 import EditValuePick
+import Splash
 
 public struct Coordinator {
   public init() { }
@@ -138,6 +139,16 @@ public struct Coordinator {
       let loginRepository = repositoryFactory.createLoginRepository()
       let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
       LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      
+    case .splash:
+      let commonRepository = repositoryFactory.createCommonRepository()
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      SplashViewFactory.createSplashView(
+        getServerStatusUseCase: getServerStatusUseCase,
+        socialLoginUseCase: socialLoginUseCase
+      )
     }
   }
 }
