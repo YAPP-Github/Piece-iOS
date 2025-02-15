@@ -39,16 +39,19 @@ final class SettingsViewModel {
   private let fetchTermsUseCase: FetchTermsUseCase
   private let notificationPermissionUseCase: NotificationPermissionUseCase
   private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let getBlockContactsSyncTimeUseCase: GetBlockContactsSyncTimeUseCase
   private(set) var tappedTermItem: SettingsTermsItem?
   
   init(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    getBlockContactsSyncTimeUseCase: GetBlockContactsSyncTimeUseCase
   ) {
     self.fetchTermsUseCase = fetchTermsUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
     self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.getBlockContactsSyncTimeUseCase = getBlockContactsSyncTimeUseCase
     addObserver()
   }
   
@@ -113,6 +116,9 @@ final class SettingsViewModel {
   @objc private func willEnterForeground() {
     Task {
       await checkPermissions()
+      if isBlockContactsEnabled {
+        await getBlockContactsSyncTime()
+      }
     }
   }
   
@@ -170,6 +176,15 @@ final class SettingsViewModel {
       if let url = URL(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.open(url)
       }
+    }
+  }
+  
+  private func getBlockContactsSyncTime() async {
+    do {
+      let response = try await getBlockContactsSyncTimeUseCase.execute()
+      updatedDate = response.syncTime
+    } catch {
+      print(error)
     }
   }
   
