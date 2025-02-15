@@ -20,6 +20,7 @@ import SwiftUI
 import UseCases
 import EditValuePick
 import Splash
+import Settings
 
 public struct Coordinator {
   public init() { }
