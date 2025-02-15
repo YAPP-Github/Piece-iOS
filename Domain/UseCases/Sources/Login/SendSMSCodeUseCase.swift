@@ -10,7 +10,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol SendSMSCodeUseCase {
-  func execute(phoneNumber: String) async throws -> Bool
+  func execute(phoneNumber: String) async throws -> VoidModel
 }
 
 final class SendSMSCodeUseCaseImpl: SendSMSCodeUseCase {
@@ -20,7 +20,7 @@ final class SendSMSCodeUseCaseImpl: SendSMSCodeUseCase {
     self.repository = repository
   }
   
-  func execute(phoneNumber: String) async throws -> Bool {
+  func execute(phoneNumber: String) async throws -> VoidModel {
     return try await repository.sendSMSCode(phoneNumber: phoneNumber)
   }
 }

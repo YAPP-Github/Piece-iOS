@@ -27,10 +27,11 @@ public final class LoginRepository: LoginRepositoryInterfaces {
     return responseDTO.toDomain()
   }
   
-  public func sendSMSCode(phoneNumber: String) async throws -> Bool {
+  public func sendSMSCode(phoneNumber: String) async throws -> VoidModel {
     let body = SMSCodeRequestDTO(phoneNumber: phoneNumber)
     let endpoint = LoginEndpoint.sendSMSCode(body: body)
-    return try await networkService.request(endpoint: endpoint)
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
   }
   
   public func verifySMSCode(phoneNumber: String, code: String) async throws -> SocialLoginResultModel {
