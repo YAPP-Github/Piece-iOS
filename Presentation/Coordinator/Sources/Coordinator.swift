@@ -39,6 +39,7 @@ public struct Coordinator {
       let socialLoginRepository = repositoryFactory.createLoginRepository()
       let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: socialLoginRepository)
       LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      
     case .verifyContact:
       let loginRepository = repositoryFactory.createLoginRepository()
       let sendSMSCodeUseCase = UseCaseFactory.createSendSMSCodeUseCase(repository: loginRepository)
@@ -105,6 +106,9 @@ public struct Coordinator {
       let termsRepository = repositoryFactory.createTermsRepository()
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
+      
+    case let .termsWebView(title, url):
+      SignUpViewFactory.createTermsWebView(title: title, url: url)
       
     case .AvoidContactsGuide:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()

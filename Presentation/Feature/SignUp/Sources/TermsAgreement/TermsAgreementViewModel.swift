@@ -24,8 +24,8 @@ final class TermsAgreementViewModel {
     fetchTerms()
   }
   
-  
   private(set) var terms: [TermModel] = []
+  private(set) var isShowWebView: Bool = false
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
   }
@@ -33,6 +33,7 @@ final class TermsAgreementViewModel {
     isAllChecked ? .solid : .disabled
   }
   private let fetchTermsUseCase: FetchTermsUseCase
+  var selectedTerm: TermModel?
   
   func handleAction(_ action: Action) {
     switch action {
@@ -45,8 +46,9 @@ final class TermsAgreementViewModel {
       if let index = terms.firstIndex(where: { $0.id == id }) {
         terms[index].isChecked.toggle()
       }
-    default:
-      return
+    case .tapChevronButton(let term):
+      selectedTerm = term
+      isShowWebView = true
     }
   }
   
