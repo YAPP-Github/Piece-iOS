@@ -40,6 +40,7 @@ struct TermsWebView: View {
     .onAppear {
       viewModel.setDismissAction { dismiss() }
     }
+    .toolbar(.hidden, for: .navigationBar)
   }
 }
 

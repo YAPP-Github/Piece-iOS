@@ -49,6 +49,7 @@ struct TermsAgreementView: View {
         .padding(.bottom, 10)
       }
     }
+    .toolbar(.hidden, for: .navigationBar)
   }
   
   private var title: some View {
