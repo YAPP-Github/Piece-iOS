@@ -80,6 +80,7 @@ public extension Modules {
     case PCWebView
     
     // 피처
+    case Splash
     case Login
     case SignUp
     case Home
