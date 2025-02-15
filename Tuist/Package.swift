@@ -9,7 +9,12 @@ let packageSettings = PackageSettings(
   // Customize the product types for specific package product
   // Default is .staticFramework
   // productTypes: ["Alamofire": .framework,]
-  productTypes: [:],
+  productTypes: [
+    "Alamofire": .framework,
+    "KakaoSDKAuth": .framework,
+    "KakaoSDKCommon": .framework,
+    "KakaoSDKUser": .framework,
+  ],
   baseSettings: .settings()
 //      .settings(
 //    configurations: [
