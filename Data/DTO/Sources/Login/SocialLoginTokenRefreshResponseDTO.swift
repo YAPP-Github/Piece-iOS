@@ -12,12 +12,3 @@ public struct SocialLoginTokenRefreshResponseDTO: Decodable {
   public let accessToken: String
   public let refreshToken: String
 }
-
-public extension SocialLoginTokenRefreshResponseDTO {
-  func toDomain() -> SocialLoginRefreshTokenModel {
-    SocialLoginRefreshTokenModel(
-      accessToken: accessToken,
-      refreshToken: refreshToken
-    )
-  }
-}
