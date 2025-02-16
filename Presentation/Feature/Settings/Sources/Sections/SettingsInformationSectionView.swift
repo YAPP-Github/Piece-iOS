@@ -30,7 +30,7 @@ struct SettingsInformationSectionView: View {
               didTapTermsItem(terms.id)
             }
         }
-        SettingsTextItemView(title: version, textColor: Color.grayscaleDark3)
+        SettingsTextItemView(title: version.isEmpty ? "": "버전 정보 v\(version)", textColor: Color.grayscaleDark3)
       }
     }
   }
