@@ -50,4 +50,8 @@ public struct RepositoryFactory {
   public func createMatchesRepository() -> MatchesRepositoryInterface {
     MatchesRepository(networkService: networkService)
   }
+  
+  public func createSSERepository() -> SSERepositoryInterface {
+    SSERepository(networkService: networkService)
+  }
 }
