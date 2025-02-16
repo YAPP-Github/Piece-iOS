@@ -31,7 +31,7 @@ public struct UseCaseFactory {
   }
   
   // MARK: - 로그인
-
+  
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
@@ -48,7 +48,7 @@ public struct UseCaseFactory {
     FetchTermsUseCaseImpl(repository: repository)
   }
   
-
+  
   public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
     CheckNicknameUseCaseImpl(repository: repository)
   }
@@ -131,11 +131,12 @@ public struct UseCaseFactory {
   
   public static func createReportUserUseCase(repository: ReportsRepositoryInterface) -> ReportUserUseCase {
     ReportUserUseCaseImpl(repository: repository)
-}
-
+  }
+  
   public static func createBlockUserUseCase(repository: MatchesRepositoryInterface) -> BlockUserUseCase {
     BlockUserUseCaseImpl(repository: repository)
-
+  }
+  
   // MARK: - AI요약 SSE
   public static func createGetAISummaryUseCase(repository: SSERepositoryInterface) -> GetAISummaryUseCase {
     GetAISummaryUseCaseImpl(repository: repository)

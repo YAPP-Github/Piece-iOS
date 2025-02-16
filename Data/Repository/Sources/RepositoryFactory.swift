@@ -57,6 +57,7 @@ public struct RepositoryFactory {
   
   public func createReportsRepository() -> ReportsRepositoryInterface {
     ReportsRepository(networkService: networkService)
+  }
 
   public func createSSERepository() -> SSERepositoryInterface {
     SSERepository(networkService: networkService)
