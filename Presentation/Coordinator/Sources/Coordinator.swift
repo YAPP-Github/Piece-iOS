@@ -205,17 +205,12 @@ public struct Coordinator {
         getProfileValuePicksUseCase: getProfileValuePicksUseCase,
         updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
-        
+      
     case .withdraw:
-        WithdrawViewFactory.createWithdrawView()
+      WithdrawViewFactory.createWithdrawView()
       
     case .withdrawConfirm:
-        WithdrawViewFactory.createWithdrawConfirm()
-      
-    case .login:
-      let loginRepository = repositoryFactory.createLoginRepository()
-      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
-      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      WithdrawViewFactory.createWithdrawConfirm()
       
     case .splash:
       let commonRepository = repositoryFactory.createCommonRepository()
