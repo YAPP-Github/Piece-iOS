@@ -49,7 +49,8 @@ final class SplashViewModel {
     /// - USER: 프로필 심사 완료 > 매칭 메인
     Task {
       do {
-        let serverStatus = try await getServerStatusUseCase.execute()
+        // 서버에서 response를 string 타입으로만 내려줘서 현재 항상 decoding error 발생하여 일단 주석처리함..
+//        let serverStatus = try await getServerStatusUseCase.execute()
         let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
         if didSeeOnboarding {
           // TODO: - SDK에 로그인 요청
