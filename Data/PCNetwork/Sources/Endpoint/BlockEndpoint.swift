@@ -31,7 +31,7 @@ public enum BlockEndpoint: TargetType {
     switch self {
     case .postBlockContacts:
       [NetworkHeader.contentType:NetworkHeader.applicationJson,
-       NetworkHeader.authorization:NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")]
+       NetworkHeader.authorization:NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   
@@ -41,7 +41,4 @@ public enum BlockEndpoint: TargetType {
         .body(body)
     }
   }
-  
-  
-  
 }

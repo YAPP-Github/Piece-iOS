@@ -22,33 +22,28 @@ struct TermsAgreementView: View {
   }
   
   var body: some View {
-    ZStack {
-      Color.grayscaleWhite.ignoresSafeArea()
-      VStack {
-        NavigationBar(
-          title: "",
-          leftButtonTap: { router.pop() }
-        )
+    VStack {
+      Spacer()
+        .frame(height: 60)
+      
+      VStack(alignment: .center, spacing: 0) {
+        title
         
-        VStack(alignment: .center, spacing: 0) {
-          
-          title
-          
-          Spacer()
-            .frame(height: 120)
-          
-          allTermsCheckableRow
-          
-          termsList
-          
-          Spacer()
-          
-          nextButton
-        }
-        .padding([.top, .horizontal], 20)
-        .padding(.bottom, 10)
+        Spacer()
+          .frame(height: 120)
+        
+        allTermsCheckableRow
+        
+        termsList
+        
+        Spacer()
+        
+        nextButton
       }
+      .padding([.top, .horizontal], 20)
+      .padding(.bottom, 10)
     }
+    .background(.grayscaleWhite)
     .onChange(of: viewModel.isShowWebView) { _, newValue in
       if newValue, let term = viewModel.selectedTerm {
         router.push(to: .termsWebView(title: term.title, url: term.url))

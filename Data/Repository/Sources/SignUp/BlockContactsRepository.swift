@@ -14,7 +14,7 @@ import RepositoryInterfaces
 public final class BlockContactsRepository: BlockContactsRepositoryInterface {
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   

@@ -107,7 +107,7 @@ struct VerifingContactView: View {
       .padding(.horizontal, 20)
     }
     .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
-      router.push(to: .termsAgreement)
+      router.setRoute(.termsAgreement)
     }
     .toolbar(.hidden, for: .navigationBar)
   }

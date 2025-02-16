@@ -21,12 +21,12 @@ public enum LoginEndpoint: TargetType {
     case .sendSMSCode:
       [
         NetworkHeader.contentType: NetworkHeader.applicationJson,
-        NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
     case .verifySMSCode:
       [
         NetworkHeader.contentType: NetworkHeader.applicationJson,
-        NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
     }
   }
@@ -39,7 +39,7 @@ public enum LoginEndpoint: TargetType {
         .post
     case .verifySMSCode:
         .post
-    case .socialLoginTokenRefresh: .patch
+//    case .socialLoginTokenRefresh: .patch
     }
   }
   
@@ -51,8 +51,8 @@ public enum LoginEndpoint: TargetType {
       "api/register/sms/auth/code"
     case .verifySMSCode:
       "api/register/sms/auth/code/verify"
-    case .socialLoginTokenRefresh:
-     "/api/login/token/refresh"
+//    case .socialLoginTokenRefresh:
+//     "/api/login/token/refresh"
     }
   }
   
@@ -64,8 +64,8 @@ public enum LoginEndpoint: TargetType {
         .body(body)
     case .verifySMSCode(let body):
         .body(body)
-    case let .socialLoginTokenRefresh(body):
-        .body(body)
+//    case let .socialLoginTokenRefresh(body):
+//        .body(body)
     }
   }
 }
