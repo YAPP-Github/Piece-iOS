@@ -72,3 +72,5 @@ Derived/
 
 ### Tuist managed dependencies ###
 Tuist/.build
+
+App/Resources/GoogleService-Info.plist
