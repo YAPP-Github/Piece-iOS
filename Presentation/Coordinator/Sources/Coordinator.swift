@@ -23,6 +23,7 @@ import EditValuePick
 import MatchingMain
 import Splash
 import Settings
+import ReportUser
 
 public struct Coordinator {
   public init() { }
@@ -231,7 +232,11 @@ public struct Coordinator {
         getServerStatusUseCase: getServerStatusUseCase,
         socialLoginUseCase: socialLoginUseCase
       )
-
+      
+    case let .reportUser(nickname):
+      let reportsRepository = repositoryFactory.createReportsRepository()
+      let reportUserUseCase = UseCaseFactory.createReportUserUseCase(repository: reportsRepository)
+      ReportUserViewFactory.createReportUserView(nickname: nickname, reportUserUseCase: reportUserUseCase)
     }
   }
 }

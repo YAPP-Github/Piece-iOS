@@ -261,7 +261,8 @@ struct MatchProfileBasicView: View {
         )
       }
       bottomSheetContentRow(text: "신고하기") {
-        
+        viewModel.isBottomSheetPresented = false
+        router.push(to: .reportUser(nickname: model.nickname))
       }
     }
   }
