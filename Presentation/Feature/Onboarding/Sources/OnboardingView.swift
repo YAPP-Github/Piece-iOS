@@ -87,7 +87,7 @@ struct OnboardingView: View {
     ) {
       withAnimation {
         if viewModel.isLastTab {
-          router.push(to: .login)
+          router.setRoute(.login)
         } else {
           viewModel.handleAction(.didTapNextButton)
         }
