@@ -6,9 +6,18 @@
 //
 
 import SwiftUI
+import UseCases
 
 public struct BlockUserViewFactory {
-  public static func createBlockUserView() -> some View {
-    BlockUserView()
+  public static func createBlockUserView(
+    matchId: Int,
+    nickname: String,
+    blockUserUseCase: BlockUserUseCase
+  ) -> some View {
+    BlockUserView(
+      matchId: matchId,
+      nickname: nickname,
+      blockUserUseCase: blockUserUseCase
+    )
   }
 }

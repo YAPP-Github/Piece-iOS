@@ -48,7 +48,7 @@ struct ValueTalkView: View {
       content(valueTalkModel: valueTalkModel)
         .toolbar(.hidden)
         .sheet(isPresented: $viewModel.isBottomSheetPresented) { // TODO: - 바텀시트 커스텀 컴포넌트화
-          bottomSheetContent
+          bottomSheetContent(model: valueTalkModel)
             .presentationDetents([.height(160)])
         }
     } else {
@@ -166,11 +166,11 @@ struct ValueTalkView: View {
   }
   
   // MARK: - 바텀시트
-  private var bottomSheetContent: some View {
+  private func bottomSheetContent(model: ValueTalkModel) -> some View {
     VStack(spacing: 0) {
       bottomSheetContentRow(text: "차단하기") {
         viewModel.isBottomSheetPresented = false
-        router.push(to: .blockUser)
+        router.push(to: .blockUser(matchId: model.id, nickname: model.nickname))
       }
       bottomSheetContentRow(text: "신고하기") {
         

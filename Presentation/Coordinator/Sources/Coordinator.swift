@@ -85,6 +85,15 @@ public struct Coordinator {
         refuseMatchUseCase: refuseMatchUseCase
       )
       
+    case let .blockUser(matchId, nickname):
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let blockUserUseCase = UseCaseFactory.createBlockUserUseCase(repository: matchesRepository)
+      BlockUserViewFactory.createBlockUserView(
+        matchId: matchId,
+        nickname: nickname,
+        blockUserUseCase: blockUserUseCase
+      )
+      
       // MARK: - SignUp
     case .termsAgreement:
       let termsRepository = repositoryFactory.createTermsRepository()
@@ -157,8 +166,7 @@ public struct Coordinator {
         getServerStatusUseCase: getServerStatusUseCase,
         socialLoginUseCase: socialLoginUseCase
       )
-    case .blockUser:
-      BlockUserViewFactory.createBlockUserView()
+
     }
   }
 }

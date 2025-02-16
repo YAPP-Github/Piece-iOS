@@ -5,7 +5,8 @@
 // Created by summercat on 2025/02/12.
 //
 
-import Foundation
+import Observation
+import UseCases
 
 @Observable
 final class BlockUserViewModel {
@@ -16,10 +17,19 @@ final class BlockUserViewModel {
     case didTapBlockUserCompleteButton
   }
   
-  init() { }
+  init(matchId: Int, nickname: String, blockUserUseCase: BlockUserUseCase) {
+    self.matchId = matchId
+    self.nickname = nickname
+    self.blockUserUseCase = blockUserUseCase
+  }
+  
+  let matchId: Int
+  let nickname: String
   
   var isBlockUserAlertPresented: Bool = false
   var isBlockUserCompleteAlertPresented: Bool = false
+  
+  private let blockUserUseCase: BlockUserUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -30,12 +40,22 @@ final class BlockUserViewModel {
       isBlockUserAlertPresented = false
       
     case .didTapBlockUserAlertBlockUserButton:
-      isBlockUserAlertPresented = false
-      // TODO: - API 요청 - 응답 후
-      isBlockUserCompleteAlertPresented = true
+      blockUser()
       
     case .didTapBlockUserCompleteButton:
       isBlockUserCompleteAlertPresented = false
+    }
+  }
+  
+  private func blockUser() {
+    Task {
+      do {
+        isBlockUserAlertPresented = false
+        let result = try await blockUserUseCase.execute(matchId: matchId)
+        isBlockUserCompleteAlertPresented = true
+      } catch {
+        print(error)
+      }
     }
   }
 }
