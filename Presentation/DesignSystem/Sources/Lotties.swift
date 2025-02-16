@@ -7,10 +7,12 @@
 
 public enum Lotties {
   case aiSummaryLarge
+  case piece_logo_wide
   
   public var name: String {
     switch self {
     case .aiSummaryLarge: DesignSystemAsset.Lotties.aiSummaryLarge.name
+    case .piece_logo_wide: DesignSystemAsset.Lotties.pieceLogoWide.name
     }
   }
 }

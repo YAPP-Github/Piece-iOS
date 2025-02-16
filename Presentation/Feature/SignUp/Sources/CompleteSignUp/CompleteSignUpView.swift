@@ -14,10 +14,10 @@ struct CompleteSignUpView: View {
   @Environment(Router.self) private var router: Router
   
   var body: some View {
-    VStack {
+    VStack(alignment: .center) {
       title
       
-      // TODO: - 로띠 추가
+      PCLottieView(.piece_logo_wide)
       
       Spacer()
       
