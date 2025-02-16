@@ -9,7 +9,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol BlockUserUseCase {
-  func execute(userId: Int) async throws -> VoidModel
+  func execute(matchId: Int) async throws -> VoidModel
 }
 
 final class BlockUserUseCaseImpl: BlockUserUseCase {
@@ -19,7 +19,7 @@ final class BlockUserUseCaseImpl: BlockUserUseCase {
     self.repository = repository
   }
   
-  func execute(userId: Int) async throws -> VoidModel {
-    try await repository.blockUser(userId: userId)
+  func execute(matchId: Int) async throws -> VoidModel {
+    try await repository.blockUser(matchId: matchId)
   }
 }

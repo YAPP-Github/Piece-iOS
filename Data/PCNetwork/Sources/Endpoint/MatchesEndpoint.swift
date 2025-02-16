@@ -8,6 +8,7 @@
 import Alamofire
 import DTO
 import Foundation
+import LocalStorage
 
 public enum MatchesEndpoint: TargetType {
   case profileBasic
@@ -15,7 +16,7 @@ public enum MatchesEndpoint: TargetType {
   case valuePicks
   case accept
   case refuse
-  case block(userId: Int)
+  case block(matchId: Int)
   
   public var method: HTTPMethod {
     switch self {
@@ -35,7 +36,7 @@ public enum MatchesEndpoint: TargetType {
     case .valuePicks: "api/matches/values/picks"
     case .accept: "api/matches/accept"
     case .refuse: "api/matches/refuse"
-    case let .block(userId): "api/matches/blocks/users/\(userId)"
+    case let .block(matchId): "api/matches/\(matchId)/blocks"
     }
   }
   
@@ -46,7 +47,7 @@ public enum MatchesEndpoint: TargetType {
     case .valuePicks: [:]
     case .accept: [:]
     case .refuse: [:]
-    case .block: [:]
+    case .block: [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   
@@ -57,7 +58,7 @@ public enum MatchesEndpoint: TargetType {
     case .valuePicks: .plain
     case .accept: .plain
     case .refuse: .plain
-    case let .block(userId): .body(userId)
+    case .block: .plain
     }
   }
 }
