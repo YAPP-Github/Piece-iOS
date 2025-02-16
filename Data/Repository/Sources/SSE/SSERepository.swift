@@ -33,8 +33,8 @@ public final class SSERepository: SSERepositoryInterface {
         }
       }
       
-      continuation.onTermination = { _ in
-        Task { try? await disconnectSse() }
+      continuation.onTermination = { [weak self] _ in
+        Task { try? await self?.disconnectSse() }
       }
     }
   }
