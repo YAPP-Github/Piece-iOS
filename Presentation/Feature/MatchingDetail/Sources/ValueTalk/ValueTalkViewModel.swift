@@ -66,6 +66,7 @@ final class ValueTalkViewModel {
     do {
       let entity = try await getMatchValueTalkUseCase.execute()
       valueTalkModel = ValueTalkModel(
+        id: entity.id,
         description: entity.description,
         nickname: entity.nickname,
         valueTalks: entity.valueTalks.map {

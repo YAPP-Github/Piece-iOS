@@ -6,6 +6,7 @@
 //
 
 struct ValueTalkModel {
+  let id: Int
   let description: String
   let nickname: String
   let valueTalks: [ValueTalk]

@@ -8,12 +8,22 @@
 import DesignSystem
 import Router
 import SwiftUI
+import UseCases
 
 struct BlockUserView: View {
   @State private var viewModel: BlockUserViewModel
   @Environment(Router.self) private var router
   
-  init() { _viewModel = .init(wrappedValue: .init()) }
+  init(matchId: Int, nickname: String, blockUserUseCase: BlockUserUseCase) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        matchId: matchId,
+        nickname: nickname,
+        blockUserUseCase: blockUserUseCase
+      )
+    )
+  }
+    
   
   var body: some View {
     VStack(spacing: 0) {
@@ -29,8 +39,7 @@ struct BlockUserView: View {
     .pcAlert(isPresented: $viewModel.isBlockUserAlertPresented) {
       AlertView(
         title: {
-          // TODO: - 닉네임 추가
-          Text("님을\n차단하시겠습니까?")
+          Text("\(viewModel.nickname)님을\n차단하시겠습니까?")
             .pretendard(.heading_M_SB)
             .foregroundStyle(Color.grayscaleBlack)
         },
@@ -46,8 +55,7 @@ struct BlockUserView: View {
     .pcAlert(isPresented: $viewModel.isBlockUserCompleteAlertPresented) {
       AlertView(
         title: {
-          // TODO: - 닉네임 추가
-          Text("님을 차단했습니다.")
+          Text("\(viewModel.nickname)님을 차단했습니다.")
             .pretendard(.heading_M_SB)
             .foregroundStyle(Color.grayscaleBlack)
         },
@@ -73,8 +81,7 @@ struct BlockUserView: View {
   
   private var title: some View {
     VStack(alignment: .leading, spacing: 12) {
-      // TODO: - 닉네임 넘겨받아서 ~~님에 추가
-      Text("님을\n차단하시겠습니까?")
+      Text("\(viewModel.nickname)님을\n차단하시겠습니까?")
         .pretendard(.heading_L_SB)
         .foregroundStyle(Color.grayscaleBlack)
       
@@ -129,8 +136,8 @@ struct BlockUserView: View {
     }
   }
 }
-
-#Preview {
-  BlockUserView()
-    .environment(Router())
-}
+//
+//#Preview {
+//  BlockUserView()
+//    .environment(Router())
+//}

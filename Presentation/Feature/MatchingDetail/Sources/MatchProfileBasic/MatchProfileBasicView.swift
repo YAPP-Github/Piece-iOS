@@ -36,7 +36,7 @@ struct MatchProfileBasicView: View {
       content(basicInfoModel: basicInfoModel)
         .toolbar(.hidden)
         .sheet(isPresented: $viewModel.isBottomSheetPresented) { // TODO: - 바텀시트 커스텀 컴포넌트화
-          bottomSheetContent
+          bottomSheetContent(model: basicInfoModel)
             .presentationDetents([.height(160)])
         }
     } else {
@@ -249,11 +249,16 @@ struct MatchProfileBasicView: View {
   }
   
   // MARK: - 바텀시트
-  private var bottomSheetContent: some View {
+  private func bottomSheetContent(model: BasicInfoModel) -> some View {
     VStack(spacing: 0) {
       bottomSheetContentRow(text: "차단하기") {
         viewModel.isBottomSheetPresented = false
-        router.push(to: .blockUser)
+        router.push(
+          to: .blockUser(
+            matchId: model.id,
+            nickname: model.nickname
+          )
+        )
       }
       bottomSheetContentRow(text: "신고하기") {
         
