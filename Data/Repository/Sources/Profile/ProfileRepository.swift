@@ -42,6 +42,14 @@ final class ProfileRepository: ProfileRepositoryInterface {
     return responseDto.toDomain()
   }
   
+  func updateProfileValueTalkSummary(profileTalkId: Int, summary: String) async throws -> Entities.VoidModel {
+    let requestDto = ProfileValueTalkSummaryRequestDTO(summary: summary)
+    let endpoint = ProfileEndpoint.updateValueTalkSummary(profileTalkId: profileTalkId, dto: requestDto)
+    let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return responseDto.toDomain()
+  }
+  
   func getProfileValuePicks() async throws -> [ProfileValuePickModel] {
     let endpoint = ProfileEndpoint.getValuePicks
     let responseDto: ProfileValuePicksResponseDTO = try await networkService.request(endpoint: endpoint)
