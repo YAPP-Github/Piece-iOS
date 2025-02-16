@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "ai_summary_large.json",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
