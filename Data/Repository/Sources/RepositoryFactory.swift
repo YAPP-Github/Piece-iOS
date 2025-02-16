@@ -31,6 +31,10 @@ public struct RepositoryFactory {
     ProfileRepository(networkService: networkService)
   }
   
+  public func createBlockContactsRepository() -> BlockContactsRepositoryInterface {
+    BlockContactsRepository(networkService: networkService)
+  }
+  
   public func createProfileRepository() -> ProfileRepositoryInterface {
     ProfileRepository(networkService: networkService)
   }

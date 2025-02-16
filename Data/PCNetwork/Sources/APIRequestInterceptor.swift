@@ -18,9 +18,9 @@ class APIRequestInterceptor: RequestInterceptor {
   
   func adapt(_ urlRequest: URLRequest, for session: Alamofire.Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
     var request = urlRequest
-    if let accessToken = keychain.read(.accessToken) {
-      request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-    }
+//    if let accessToken = keychain.read(.accessToken) {
+//      request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+//    }
     completion(.success(request))
   }
   
