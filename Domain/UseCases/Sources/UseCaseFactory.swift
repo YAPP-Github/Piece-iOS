@@ -72,6 +72,10 @@ public struct UseCaseFactory {
     UpdateProfileValuePicksUseCaseImpl(repository: repository)
   }
   
+  public static func createUpdateProfileValueTalkSummaryUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileValueTalkSummaryUseCase {
+    UpdateProfileValueTalkSummaryUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - 매칭
   
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
