@@ -1,4 +1,6 @@
 import DesignSystem
+import FirebaseCore
+import FirebaseRemoteConfig
 import Router
 import KakaoSDKCommon
 import KakaoSDKAuth
@@ -9,13 +11,13 @@ import SwiftUI
 
 @main
 struct PieceApp: App {
- 
   init() {
     // Kakao SDK 초기화
     guard let KakaoAppKey = Bundle.main.infoDictionary?["NATIVE_APP_KEY"] as? String else {
       fatalError()
     }
     KakaoSDK.initSDK(appKey: KakaoAppKey)
+    FirebaseApp.configure()
   }
   
   var body: some Scene {

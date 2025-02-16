@@ -9,6 +9,8 @@ import SwiftUI
 import Observation
 import DesignSystem
 import PCFoundationExtension
+import UseCases
+import LocalStorage
 
 @Observable
 final class VerifingContactViewModel {
@@ -24,8 +26,12 @@ final class VerifingContactViewModel {
     case tapNextButton
   }
   
+  private let sendSMSCodeUseCase: SendSMSCodeUseCase
+  private let verifySMSCodeUseCase: VerifySMSCodeUseCase
+  
   private(set) var showVerificationField: Bool = false
   private(set) var isActiveNextButton: Bool = false
+  private(set) var tapNextButtonFlag: Bool = false
   private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
   private(set) var recivedCertificationNumberButtonWidth = Constants.buttonDefaultWidth
   private var timer: Timer?
@@ -52,29 +58,55 @@ final class VerifingContactViewModel {
   }
   
   init(
-    phoneNumber: String,
-    verificationCode: String
+    sendSMSCodeUseCase: SendSMSCodeUseCase,
+    verifySMSCodeUseCase: VerifySMSCodeUseCase
   ) {
-    self.phoneNumber = phoneNumber
-    self.verificationCode = verificationCode
+    self.sendSMSCodeUseCase = sendSMSCodeUseCase
+    self.verifySMSCodeUseCase = verifySMSCodeUseCase
   }
   
   func handleAction(_ action: Action) {
     switch action {
     case .reciveCertificationNumber:
-      showVerificationField = true
-      recivedCertificationNumberButtonText = "인증번호 재전송"
-      recivedCertificationNumberButtonWidth = Constants.buttonExpandedWidth
-      startTimer()
+      Task { await handleReceiveCertificationNumber() }
     case .checkCertificationNumber:
-      isActiveNextButton = true
+      Task { await handleCheckCertificationNumber() }
     case .tapNextButton:
-      return
+      tapNextButtonFlag = true
     }
   }
   
   private func buttonType(for isEnabled: Bool) -> RoundedButton.ButtonType {
     isEnabled ? .solid : .disabled
+  }
+  
+  private func handleReceiveCertificationNumber() async {
+    do {
+      _ = try await sendSMSCodeUseCase.execute(phoneNumber: phoneNumber)
+    } catch {
+      print(error.localizedDescription)
+    }
+    await MainActor.run {
+      recivedCertificationNumberButtonText = "인증번호 재전송"
+      recivedCertificationNumberButtonWidth = Constants.buttonExpandedWidth
+      startTimer()
+      showVerificationField = true
+    }
+  }
+  
+  private func handleCheckCertificationNumber() async {
+    do {
+      print(phoneNumber, verificationCode)
+      let response = try await verifySMSCodeUseCase.execute(phoneNumber: phoneNumber, code: verificationCode)
+      KeychainManager.shared.save(.accessToken, value: response.accessToken)
+      KeychainManager.shared.save(.refreshToken, value: response.refreshToken)
+      KeychainManager.shared.save(.role, value: response.role.rawValue)
+      await MainActor.run {
+        isActiveNextButton = true
+      }
+    } catch {
+      print(error.localizedDescription)
+    }
   }
   
   private func startTimer() {

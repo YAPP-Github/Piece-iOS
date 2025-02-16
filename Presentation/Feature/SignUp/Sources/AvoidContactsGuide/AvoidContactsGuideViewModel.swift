@@ -8,6 +8,7 @@
 import SwiftUI
 import Observation
 import UseCases
+import Entities
 
 @Observable
 final class AvoidContactsGuideViewModel {
@@ -18,11 +19,20 @@ final class AvoidContactsGuideViewModel {
   }
   
   private(set) var showToast = false
+  private(set) var moveToCompleteSignUp: Bool = false
   var isPresentedAlert: Bool = false
   private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let fetchContactsUseCase: FetchContactsUseCase
+  private let blockContactsUseCase: BlockContactsUseCase
   
-  init(contactsPermissionUseCase: ContactsPermissionUseCase) {
+  init(
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase
+  ) {
     self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.fetchContactsUseCase = fetchContactsUseCase
+    self.blockContactsUseCase = blockContactsUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -45,6 +55,12 @@ final class AvoidContactsGuideViewModel {
       
       if isAuthorized {
         await isToastVisible()
+        let userContacts = try await fetchContactsUseCase.execute()
+        let encodedContacts = userContacts.compactMap { $0.data(using: .utf8)?.base64EncodedString() }
+        
+        let phoneNumbers: BlockContactsModel = BlockContactsModel(phoneNumbers: encodedContacts)
+        _ = try await blockContactsUseCase.execute(phoneNumbers: phoneNumbers)
+        
       } else {
         isPresentedAlert = true
       }
@@ -58,6 +74,7 @@ final class AvoidContactsGuideViewModel {
     showToast = true
     try? await Task.sleep(for: .seconds(2))
     showToast = false
+    moveToCompleteSignUp = true
   }
   
   private func openSettings() {

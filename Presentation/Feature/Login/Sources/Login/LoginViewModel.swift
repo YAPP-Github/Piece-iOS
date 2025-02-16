@@ -29,7 +29,7 @@ final class LoginViewModel: NSObject {
   }
   
   private let socialLoginUseCase: SocialLoginUseCase
-  
+  private(set) var isLoginSuccessful: Bool = false
   func handleAction(_ action: Action) {
     switch action {
     case .tapAppleLoginButton:
@@ -86,11 +86,17 @@ final class LoginViewModel: NSObject {
   }
   
   private func handleKakaoLoginSuccess(_ oauthToken: OAuthToken?) {
-    guard let token = oauthToken?.idToken else { return }
+    guard let token = oauthToken?.accessToken else { return }
     Task {
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
         print("Social login success: \(socialLoginResponse)")
+        KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
+        KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        KeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
+        await MainActor.run {
+          isLoginSuccessful = true
+        }
       } catch {
         print("Social login failed: \(error.localizedDescription)")
       }
@@ -99,13 +105,13 @@ final class LoginViewModel: NSObject {
   
   private func handleGoogleLoginButton() {
     // TODO: - Google Login Action
-    guard let rootViewController = UIApplication.shared.connectedScenes
-      .compactMap({ $0 as? UIWindowScene })
-      .flatMap({ $0.windows })
-      .first(where: { $0.isKeyWindow }) else {
-      print("❌ RootViewController를 찾을 수 없습니다.")
-      return
-    }
+//    guard let rootViewController = UIApplication.shared.connectedScenes
+//      .compactMap({ $0 as? UIWindowScene })
+//      .flatMap({ $0.windows })
+//      .first(where: { $0.isKeyWindow }) else {
+//      print("❌ RootViewController를 찾을 수 없습니다.")
+//      return
+//    }
     
 //    GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signInResult, error in
 //      if let error = error {
@@ -161,12 +167,17 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
     
     Task {
       do {
-        let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: identityToken)
+        let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
+        KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
+        KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        KeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
+        await MainActor.run {
+          isLoginSuccessful = true
+        }
       } catch {
         print("Apple Login Error: \(error.localizedDescription)")
       }
     }
   }
-  
 }

@@ -7,15 +7,31 @@
 
 import SwiftUI
 import DesignSystem
+import Router
+import UseCases
 
 struct VerifingContactView: View {
   @State var viewModel: VerifingContactViewModel
   @FocusState private var isFocused: Bool
   
+  @Environment(Router.self) private var router: Router
+  
+  init(
+    sendSMSCodeUseCase: SendSMSCodeUseCase,
+    verifySMSCodeUseCase: VerifySMSCodeUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        sendSMSCodeUseCase: sendSMSCodeUseCase,
+        verifySMSCodeUseCase: verifySMSCodeUseCase
+      )
+    )
+  }
+  
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
-        .frame(height: 104)
+        .frame(height: 60)
       
       VStack(alignment: .leading, spacing: 12) {
         Text("휴대폰 번호")
@@ -75,29 +91,33 @@ struct VerifingContactView: View {
             )
           )
         }
+        Spacer()
+        
+        RoundedButton(
+          type: viewModel.nextButtonType,
+          buttonText: "다음",
+          icon: nil,
+          width: .maxWidth,
+          action: {
+            viewModel.handleAction(.tapNextButton)
+          }
+        )
       }
-      Spacer()
-      
-      RoundedButton(
-        type: viewModel.nextButtonType,
-        buttonText: "다음",
-        icon: nil,
-        action: {
-          viewModel.handleAction(.tapNextButton)
-        }
-      )
+      .padding(.bottom, 10)
+      .padding(.horizontal, 20)
     }
-    .padding(.bottom, 10)
-    .padding(.horizontal, 20)
-    .background(Color.grayscaleWhite)
+    .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
+      router.push(to: .termsAgreement)
+    }
+    .toolbar(.hidden, for: .navigationBar)
   }
 }
-
-#Preview {
-  VerifingContactView(
-    viewModel: VerifingContactViewModel(
-      phoneNumber: "01012345678",
-      verificationCode: ""
-    )
-  )
-}
+//
+//#Preview {
+//  VerifingContactView(
+//    viewModel: VerifingContactViewModel(
+//      phoneNumber: "01012345678",
+//      verificationCode: ""
+//    )
+//  )
+//}

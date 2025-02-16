@@ -28,5 +28,6 @@ let project = Project.dynamicResourceFramework(
   infoPlist: .extendingDefault(with: infoPlist),
   dependencies: [
     .utility(target: .PCFoundationExtension),
+    .externalDependency(dependency: .Lottie),
   ]
 )

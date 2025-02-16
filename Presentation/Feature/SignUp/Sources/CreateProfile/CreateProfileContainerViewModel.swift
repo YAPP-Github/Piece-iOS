@@ -61,7 +61,7 @@ final class CreateProfileContainerViewModel {
       do {
         let profile = profileCreator.createProfile()
         let response = try await createProfileUseCase.execute(profile: profile)
-        // TODO: - accessToken, refreshToken 저장이 필요한 경우 여기서 처리해주세요
+        
         isProfileCreated = true
         error = nil
       } catch {

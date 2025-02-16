@@ -17,13 +17,31 @@ public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
+  
+  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
+    NotificationPermissionUseCaseImpl()
+  }
+  
+  public static func createCameraPermissionUseCase() -> CameraPermissionUseCase {
+    CameraPermissionUseCaseImpl()
+  }
+  
+  public static func createPhotoPermissionUseCase() -> PhotoPermissionUseCase {
+    PhotoPermissionUseCaseImpl()
+  }
+  
+  // MARK: - 로그인
 
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
   
-  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
-    NotificationPermissionUseCaseImpl()
+  public static func createSendSMSCodeUseCase(repository: LoginRepositoryInterfaces) -> SendSMSCodeUseCase {
+    SendSMSCodeUseCaseImpl(repository: repository)
+  }
+  
+  public static func createVerifySMSCodeUseCase(repository: LoginRepositoryInterfaces) -> VerifySMSCodeUseCase {
+    VerifySMSCodeUseCaseImpl(repository: repository)
   }
   
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
@@ -33,6 +51,14 @@ public struct UseCaseFactory {
 
   public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
     CheckNicknameUseCaseImpl(repository: repository)
+  }
+  
+  public static func createFetchContactsUseCase() -> FetchContactsUseCase {
+    FetchContactsUseCaseImpl()
+  }
+  
+  public static func createBlockContactsUseCase(repository: BlockContactsRepositoryInterface) -> BlockContactsUseCase {
+    BlockContactsUseCaseImpl(repository: repository)
   }
   
   // MARK: - Profile
@@ -72,6 +98,10 @@ public struct UseCaseFactory {
     UpdateProfileValuePicksUseCaseImpl(repository: repository)
   }
   
+  public static func createUpdateProfileValueTalkSummaryUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileValueTalkSummaryUseCase {
+    UpdateProfileValueTalkSummaryUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - 매칭
   
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
@@ -101,5 +131,13 @@ public struct UseCaseFactory {
   
   public static func createBlockUserUseCase(repository: MatchesRepositoryInterface) -> BlockUserUseCase {
     BlockUserUseCaseImpl(repository: repository)
+
+  // MARK: - AI요약 SSE
+  public static func createGetAISummaryUseCase(repository: SSERepositoryInterface) -> GetAISummaryUseCase {
+    GetAISummaryUseCaseImpl(repository: repository)
+  }
+  
+  public static func createFinishAISummaryUseCase(repository: SSERepositoryInterface) -> FinishAISummaryUseCase {
+    FinishAISummaryUseCaseImpl(repository: repository)
   }
 }
