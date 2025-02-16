@@ -21,8 +21,18 @@ struct AvoidContactsGuideView: View {
   @State private var path = NavigationPath()
   @Environment(Router.self) private var router: Router
   
-  init(contactsPermissionUseCase: ContactsPermissionUseCase) {
-    _viewModel = .init(wrappedValue: .init(contactsPermissionUseCase: contactsPermissionUseCase))
+  init(
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase
+      )
+    )
   }
   
   var body: some View {

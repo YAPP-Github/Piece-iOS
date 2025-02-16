@@ -123,15 +123,30 @@ public struct Coordinator {
       )
       
     case .AvoidContactsGuide:
+      let blockcontactsrepository = repositoryFactory.createBlockContactsRepository()
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
-      SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      let fetchContactsUseCase = UseCaseFactory.createFetchContactsUseCase()
+      let blockContactsUseCase = UseCaseFactory.createBlockContactsUseCase(repository: blockcontactsrepository)
+      SignUpViewFactory.createAvoidContactsGuideView(
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase
+      )
       
     case .completeSignUp:
       SignUpViewFactory.createCompleteSignUpView()
       
     case .signUp:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
-      SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      let cameraPermissionUseCase = UseCaseFactory.createCameraPermissionUseCase()
+      let photoPermissionUseCase = UseCaseFactory.createPhotoPermissionUseCase()
+      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      SignUpViewFactory.createPermissionRequestView(
+        cameraPermissionUseCase: cameraPermissionUseCase,
+        photoPermissionUseCase: photoPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase
+      )
       
     case .createProfile:
       let profileRepository = repositoryFactory.createProfileRepository()

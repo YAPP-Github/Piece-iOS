@@ -49,6 +49,14 @@ public struct UseCaseFactory {
     CheckNicknameUseCaseImpl(repository: repository)
   }
   
+  public static func createFetchContactsUseCase() -> FetchContactsUseCase {
+    FetchContactsUseCaseImpl()
+  }
+  
+  public static func createBlockContactsUseCase(repository: BlockContactsRepositoryInterface) -> BlockContactsUseCase {
+    BlockContactsUseCaseImpl(repository: repository)
+  }
+  
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
     AcceptMatchUseCaseImpl(repository: repository)
   }
