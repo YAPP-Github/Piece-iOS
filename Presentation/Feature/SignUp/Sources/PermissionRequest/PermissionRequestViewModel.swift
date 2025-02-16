@@ -16,11 +16,11 @@ final class PermissionRequestViewModel {
   private(set) var isPhotoPermissionGranted: Bool = false
   private(set) var isNotificationPermissionGranted: Bool = false
   private(set) var isContactsPermissionGranted: Bool = false
+  private(set) var showToAvoidContactsView: Bool = false
   var shouldShowSettingsAlert: Bool = false // 카메라 권한 거절 상태에 설정창으로 보내기 위한 flag
   var nextButtonType: RoundedButton.ButtonType {
     isCameraPermissionGranted ? .solid : .disabled
   }
-  private var dismissAction: (() -> Void)?
   private let cameraPermissionUseCase: CameraPermissionUseCase
   private let photoPermissionUseCase: PhotoPermissionUseCase
   private let contactsPermissionUseCase: ContactsPermissionUseCase
@@ -29,7 +29,6 @@ final class PermissionRequestViewModel {
   enum Action {
     case showShettingAlert
     case tapNextButton
-    case tapBackButton
     case cancelAlert
   }
   
@@ -49,16 +48,11 @@ final class PermissionRequestViewModel {
     switch action {
     case .showShettingAlert:
       openSettings()
-    case .tapBackButton:
-      dismissAction?()
     case .cancelAlert:
       Task { await resetAlertState() }
-    default: return
+    case .tapNextButton:
+      showToAvoidContactsView = true
     }
-  }
-  
-  func setDismissAction(_ dismiss: @escaping () -> Void) {
-    self.dismissAction = dismiss
   }
   
   func checkPermissions() async {

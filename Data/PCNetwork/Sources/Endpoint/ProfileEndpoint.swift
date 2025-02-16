@@ -17,6 +17,7 @@ public enum ProfileEndpoint: TargetType {
   case updateValueTalks(ProfileValueTalksRequestDTO)
   case getValuePicks
   case updateValuePicks(ProfileValuePicksRequestDTO)
+  case updateValueTalkSummary(profileTalkId: Int, dto: ProfileValueTalkSummaryRequestDTO)
   
   public var method: HTTPMethod {
     switch self {
@@ -27,6 +28,7 @@ public enum ProfileEndpoint: TargetType {
     case .updateValueTalks: .put
     case .getValuePicks: .get
     case .updateValuePicks: .put
+    case .updateValueTalkSummary: .patch
     }
   }
   
@@ -39,6 +41,7 @@ public enum ProfileEndpoint: TargetType {
     case .updateValueTalks: "api/profiles/valueTalks"
     case .getValuePicks: "api/profiles/valuePicks"
     case .updateValuePicks: "api/profiles/valuePicks"
+    case let .updateValueTalkSummary(profileTalkId, _): "api/profiles/valueTalks/\(profileTalkId)/summary"
     }
   }
   
@@ -51,6 +54,7 @@ public enum ProfileEndpoint: TargetType {
     case .updateValueTalks: [:]
     case .getValuePicks: [:]
     case .updateValuePicks: [:]
+    case .updateValueTalkSummary: [:]
     }
   }
   
@@ -63,6 +67,7 @@ public enum ProfileEndpoint: TargetType {
     case let .updateValueTalks(dto): .body(dto)
     case .getValuePicks: .plain
     case let .updateValuePicks(dto): .body(dto)
+    case let .updateValueTalkSummary(_, dto): .body(dto)
     }
   }
 }

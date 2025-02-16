@@ -21,8 +21,18 @@ struct AvoidContactsGuideView: View {
   @State private var path = NavigationPath()
   @Environment(Router.self) private var router: Router
   
-  init(contactsPermissionUseCase: ContactsPermissionUseCase) {
-    _viewModel = .init(wrappedValue: .init(contactsPermissionUseCase: contactsPermissionUseCase))
+  init(
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase
+      )
+    )
   }
   
   var body: some View {
@@ -63,6 +73,9 @@ struct AvoidContactsGuideView: View {
         .opacity(viewModel.showToast ? 1 : 0)
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
     }
+    .onChange(of: viewModel.moveToCompleteSignUp) { _, newValue in
+      router.push(to: .completeSignUp)
+    }
   }
   
   private var title: some View {
@@ -97,8 +110,6 @@ struct AvoidContactsGuideView: View {
       width: .maxWidth,
       action: {
         viewModel.handleAction(.tapAccepetButton)
-        // TODO: - 다음 화면 라우터 제작 시, 연결
-        //  router.push(to: )
       }
     )
   }

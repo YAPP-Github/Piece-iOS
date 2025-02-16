@@ -17,5 +17,6 @@ let project = Project.staticLibrary(
     .presentation(target: .Router),
     .presentation(target: .PCWebView),
     .data(target: .LocalStorage),
+    .utility(target: .PCAppVersionService),
   ]
 )

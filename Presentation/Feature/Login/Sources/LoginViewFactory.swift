@@ -15,4 +15,15 @@ public struct LoginViewFactory {
   ) -> some View {
     LoginView(socialLoginUseCase: socialLoginUseCase)
   }
+  
+  @ViewBuilder
+  public static func createVerifingContactView(
+    sendSMSCodeUseCase: SendSMSCodeUseCase,
+    verifySMSCodeUseCase: VerifySMSCodeUseCase
+  ) -> some View {
+    VerifingContactView(
+      sendSMSCodeUseCase: sendSMSCodeUseCase,
+      verifySMSCodeUseCase: verifySMSCodeUseCase
+    )
+  }
 }

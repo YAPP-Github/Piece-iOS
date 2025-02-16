@@ -19,6 +19,7 @@ public class PCKeychainManager {
     
     let query: NSDictionary = [
       kSecClass: kSecClassGenericPassword,
+      kSecAttrAccount: key.rawValue,
       kSecAttrService: key.rawValue,
       kSecValueData: data
     ]

@@ -20,6 +20,7 @@ import SignUp
 import SwiftUI
 import UseCases
 import EditValuePick
+import MatchingMain
 import Splash
 import Settings
 
@@ -35,6 +36,20 @@ public struct Coordinator {
   @ViewBuilder
   public func view(for route: Route) -> some View {
     switch route {
+      // MARK: - 로그인
+    case .login:
+      let socialLoginRepository = repositoryFactory.createLoginRepository()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: socialLoginRepository)
+      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      
+    case .verifyContact:
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let sendSMSCodeUseCase = UseCaseFactory.createSendSMSCodeUseCase(repository: loginRepository)
+      let verifySMSCodeUseCase = UseCaseFactory.createVerifySMSCodeUseCase(repository: loginRepository)
+      LoginViewFactory.createVerifingContactView(
+        sendSMSCodeUseCase: sendSMSCodeUseCase,
+        verifySMSCodeUseCase: verifySMSCodeUseCase
+      )
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
       let termsRepository = repositoryFactory.createTermsRepository()
@@ -55,6 +70,16 @@ public struct Coordinator {
       // MARK: - 설정
     case let .settingsWebView(title, uri):
       SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
+      
+      // MARK: - 매칭 메인
+    case .matchMain:
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let getMatchMainUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
+      let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
+      MatchMainViewFactory.createMatchMainView(
+        getMatchProfileBasicUseCase: getMatchMainUseCase,
+        acceptMatchUseCase: acceptMatchUseCase
+      )
       
       // MARK: - 매칭 상세
     case .matchProfileBasic:
@@ -100,13 +125,46 @@ public struct Coordinator {
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
       
-    case .AvoidContactsGuide:
+    case let .termsWebView(title, url):
+      SignUpViewFactory.createTermsWebView(title: title, url: url)
+      
+    case .checkPremission:
+      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      let cameraPermissionUseCase = UseCaseFactory.createCameraPermissionUseCase()
+      let photoPermissionUseCase = UseCaseFactory.createPhotoPermissionUseCase()
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
-      SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      SignUpViewFactory.createPermissionRequestView(
+        cameraPermissionUseCase: cameraPermissionUseCase,
+        photoPermissionUseCase: photoPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase
+      )
+      
+    case .AvoidContactsGuide:
+      let blockcontactsrepository = repositoryFactory.createBlockContactsRepository()
+      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      let fetchContactsUseCase = UseCaseFactory.createFetchContactsUseCase()
+      let blockContactsUseCase = UseCaseFactory.createBlockContactsUseCase(repository: blockcontactsrepository)
+      SignUpViewFactory.createAvoidContactsGuideView(
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase
+      )
+      
+    case .completeSignUp:
+      SignUpViewFactory.createCompleteSignUpView()
       
     case .signUp:
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
-      SignUpViewFactory.createAvoidContactsGuideView(contactsPermissionUseCase: contactsPermissionUseCase)
+      let cameraPermissionUseCase = UseCaseFactory.createCameraPermissionUseCase()
+      let photoPermissionUseCase = UseCaseFactory.createPhotoPermissionUseCase()
+      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      SignUpViewFactory.createPermissionRequestView(
+        cameraPermissionUseCase: cameraPermissionUseCase,
+        photoPermissionUseCase: photoPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase
+      )
       
     case .createProfile:
       let profileRepository = repositoryFactory.createProfileRepository()
@@ -127,6 +185,18 @@ public struct Coordinator {
         createProfileUseCase: createProfileUseCase
       )
       
+    case .waitingAISummary:
+      let sseRepository = repositoryFactory.createSSERepository()
+      let getAISummaryUseCase = UseCaseFactory.createGetAISummaryUseCase(repository: sseRepository)
+      let finishAISummaryUseCase = UseCaseFactory.createFinishAISummaryUseCase(repository: sseRepository)
+      SignUpViewFactory.createWaitingAISummaryView(
+        getAISummaryUseCase: getAISummaryUseCase,
+        finishAISummaryUseCase: finishAISummaryUseCase
+      )
+      
+    case .completeCreateProfile:
+      SignUpViewFactory.createCompleteCreateProfileView()
+      
       // MARK: - Profile
     case .editValueTalk:
       let profileRepository = repositoryFactory.createProfileRepository()
@@ -145,17 +215,12 @@ public struct Coordinator {
         getProfileValuePicksUseCase: getProfileValuePicksUseCase,
         updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
-        
+      
     case .withdraw:
-        WithdrawViewFactory.createWithdrawView()
+      WithdrawViewFactory.createWithdrawView()
       
     case .withdrawConfirm:
-        WithdrawViewFactory.createWithdrawConfirm()
-      
-    case .login:
-      let loginRepository = repositoryFactory.createLoginRepository()
-      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
-      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      WithdrawViewFactory.createWithdrawConfirm()
       
     case .splash:
       let commonRepository = repositoryFactory.createCommonRepository()
