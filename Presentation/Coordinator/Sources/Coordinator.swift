@@ -175,6 +175,18 @@ public struct Coordinator {
         createProfileUseCase: createProfileUseCase
       )
       
+    case .waitingAISummary:
+      let sseRepository = repositoryFactory.createSSERepository()
+      let getAISummaryUseCase = UseCaseFactory.createGetAISummaryUseCase(repository: sseRepository)
+      let finishAISummaryUseCase = UseCaseFactory.createFinishAISummaryUseCase(repository: sseRepository)
+      SignUpViewFactory.createWaitingAISummaryView(
+        getAISummaryUseCase: getAISummaryUseCase,
+        finishAISummaryUseCase: finishAISummaryUseCase
+      )
+      
+    case .completeCreateProfile:
+      SignUpViewFactory.createCompleteCreateProfileView()
+      
       // MARK: - Profile
     case .editValueTalk:
       let profileRepository = repositoryFactory.createProfileRepository()

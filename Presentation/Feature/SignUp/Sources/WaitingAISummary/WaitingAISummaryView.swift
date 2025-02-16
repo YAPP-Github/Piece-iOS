@@ -29,7 +29,7 @@ struct WaitingAISummaryView: View {
   var body: some View {
     VStack(alignment: .center) {
       Spacer()
-        .frame(height: 104) // NavigationBar만큼 여백
+        .frame(height: 60) // NavigationBar만큼 여백
       titleArea
       Spacer()
       lottie
@@ -43,6 +43,11 @@ struct WaitingAISummaryView: View {
     }
     .onDisappear {
       viewModel.handleAction(.onDisappear)
+    }
+    .onChange(of: viewModel.isCreatingSummary) { _, newValue in
+      if newValue == false {
+        router.setRoute(.completeCreateProfile)
+      }
     }
   }
   

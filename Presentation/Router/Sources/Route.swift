@@ -28,4 +28,6 @@ public enum Route: Hashable {
   case withdraw
   case withdrawConfirm
   case settingsWebView(title: String, uri: String)
+  case waitingAISummary
+  case completeCreateProfile
 }
