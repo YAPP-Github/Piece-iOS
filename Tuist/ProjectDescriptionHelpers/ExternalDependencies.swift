@@ -15,6 +15,8 @@ public enum ExternalDependencies {
   case GoogleSignIn
   case GoogleSignInSwift
   case Lottie
+  case FirebaseRemoteConfig
+  case FirebaseCore
   
   public var name: String {
     switch self {
@@ -25,6 +27,8 @@ public enum ExternalDependencies {
     case .KakaoSDKAuth: "KakaoSDKAuth"
     case .KakaoSDKUser: "KakaoSDKUser"
     case .Lottie: "Lottie"
+    case .FirebaseRemoteConfig: "FirebaseRemoteConfig"
+    case .FirebaseCore: "FirebaseCore"
     }
   }
 }

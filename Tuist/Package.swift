@@ -14,6 +14,7 @@ let packageSettings = PackageSettings(
     "KakaoSDKAuth": .framework,
     "KakaoSDKCommon": .framework,
     "KakaoSDKUser": .framework,
+    "FirebaseRemoteConfig": .framework,
   ],
   baseSettings: .settings()
 //      .settings(
@@ -41,6 +42,7 @@ enum ExternalDependency: String, CaseIterable {
   case KakaoOpenSDK
   case GoogleSignIn
   case Lottie
+  case Firebase
 }
 
 extension ExternalDependency {
@@ -51,6 +53,7 @@ extension ExternalDependency {
     case .KakaoOpenSDK: "https://github.com/kakao/kakao-ios-sdk"
     case .GoogleSignIn: "https://github.com/google/GoogleSignIn-iOS"
     case .Lottie: "https://github.com/airbnb/lottie-ios"
+    case .Firebase: "https://github.com/firebase/firebase-ios-sdk"
     }
   }
 }
@@ -63,6 +66,7 @@ extension ExternalDependency {
     case .KakaoOpenSDK: "2.23.0"
     case .GoogleSignIn: "7.0.0"
     case .Lottie: "4.5.1"
+    case .Firebase: "11.8.1"
     }
   }
 }
