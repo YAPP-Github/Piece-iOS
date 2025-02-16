@@ -64,4 +64,18 @@ public struct SignUpViewFactory {
       createProfileUseCase: createProfileUseCase
     )
   }
+  
+  public static func createWaitingAISummaryView(
+    getAISummaryUseCase: GetAISummaryUseCase,
+    finishAISummaryUseCase: FinishAISummaryUseCase
+  ) -> some View {
+    WaitingAISummaryView(
+      getAISummaryUseCase: getAISummaryUseCase,
+      finishAISummaryUseCase: finishAISummaryUseCase
+    )
+  }
+  
+  public static func createCompleteCreateProfileView() -> some View {
+    CompleteCreateProfileView()
+  }
 }
