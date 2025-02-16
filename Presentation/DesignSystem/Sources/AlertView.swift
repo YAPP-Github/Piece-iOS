@@ -12,9 +12,9 @@ public struct AlertView<Title: View>: View {
     icon: Image? = nil,
     @ViewBuilder title: () -> Title,
     message: String,
-    firstButtonText: String,
+    firstButtonText: String? = nil,
     secondButtonText: String,
-    firstButtonAction: @escaping () -> Void,
+    firstButtonAction: (() -> Void)? = nil,
     secondButtonAction: @escaping () -> Void
   ) {
     self.icon = icon
@@ -57,9 +57,9 @@ public struct AlertView<Title: View>: View {
   private let icon: Image?
   private let title: Title
   private let message: String
-  private let firstButtonText: String
+  private let firstButtonText: String?
   private let secondButtonText: String
-  private let firstButtonAction: () -> Void
+  private let firstButtonAction: (() -> Void)?
   private let secondButtonAction: () -> Void
 }
 
@@ -89,14 +89,16 @@ private struct AlertTopView<Title: View>: View {
 private struct AlertBottomView: View {
   var body: some View {
     HStack {
-      RoundedButton(
-        type: .outline,
-        buttonText: firstButtonText,
-        icon: nil,
-        width: .maxWidth,
-        height: 52,
-        action: firstButtonAction
-      )
+      if let firstButtonText = firstButtonText {
+        RoundedButton(
+          type: .outline,
+          buttonText: firstButtonText,
+          icon: nil,
+          width: .maxWidth,
+          height: 52,
+          action: firstButtonAction
+        )
+      }
       RoundedButton(
         type: .solid,
         buttonText: secondButtonText,
@@ -111,9 +113,9 @@ private struct AlertBottomView: View {
     .padding(.top, 12)
   }
   
-  let firstButtonText: String
+  let firstButtonText: String?
   let secondButtonText: String
-  let firstButtonAction: () -> Void
+  let firstButtonAction: (() -> Void)?
   let secondButtonAction: () -> Void
 }
 
@@ -137,6 +139,12 @@ private struct AlertBottomView: View {
         secondButtonText: "label",
         firstButtonAction: {},
         secondButtonAction: {}
+      )
+      AlertView(
+        title: { Text("수줍은 수달님과의 인연을 이어가시겠습니까?") },
+        message: "테스트트트트",
+        secondButtonText: "네!!",
+        secondButtonAction: { }
       )
     }
   }
