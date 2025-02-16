@@ -8,12 +8,29 @@
 import SwiftUI
 import DesignSystem
 import UseCases
+import Router
 
 struct PermissionRequestView: View {
   @State var viewModel: PermissionRequestViewModel
-  @Environment(\.dismiss) private var dismiss
   @Environment(\.scenePhase) private var scenePhase
-
+  @Environment(Router.self) private var router: Router
+  
+  init(
+    cameraPermissionUseCase: CameraPermissionUseCase,
+    photoPermissionUseCase: PhotoPermissionUseCase,
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    notificationPermissionUseCase: NotificationPermissionUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        cameraPermissionUseCase: cameraPermissionUseCase,
+        photoPermissionUseCase: photoPermissionUseCase,
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        notificationPermissionUseCase: notificationPermissionUseCase
+      )
+    )
+  }
+  
   var body: some View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
@@ -55,8 +72,7 @@ struct PermissionRequestView: View {
       .padding(.bottom, 10)
     }
     .task {
-       await viewModel.checkPermissions()
-       viewModel.setDismissAction { dismiss() }
+      await viewModel.checkPermissions()
     }
     .onChange(of: scenePhase) {
       if scenePhase == .active {
@@ -65,10 +81,13 @@ struct PermissionRequestView: View {
         }
       }
     }
+    .onChange(of: viewModel.showToAvoidContactsView) { _, newValue in
+      router.push(to: .AvoidContactsGuide)
+    }
     .navigationBarModifier {
       NavigationBar(
         title: "",
-        leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+        leftButtonTap: { router.pop() }
       )
     }
     .alert("필수 권한 요청", isPresented: $viewModel.shouldShowSettingsAlert) {
@@ -82,7 +101,7 @@ struct PermissionRequestView: View {
       Text("사진, 카메라 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
     }
   }
-
+  
   private var title: some View {
     VStack(alignment: .leading) {
       Text("편리한 Piece 이용을 위해")
@@ -101,6 +120,7 @@ struct PermissionRequestView: View {
     RoundedButton(
       type: viewModel.nextButtonType ,
       buttonText: "다음",
+      width: .maxWidth,
       action: { viewModel.handleAction(.tapNextButton) }
     )
   }
@@ -136,49 +156,49 @@ struct PermissionRequestView: View {
 }
 
 // MARK: - Preview
-
-#Preview("권한 요청 - 카메라 거절 상태") {
-  PermissionRequestView(
-    viewModel:PermissionRequestViewModel(
-      cameraPermissionUseCase: MockCameraPermissionUseCase(isGranted: false),
-      photoPermissionUseCase: MockPhotoPermissionUseCase(),
-      contactsPermissionUseCase: MockContactsPermissionUseCase(),
-      notificationPermissionUseCase: MockNotificationPermissionUseCase()
-    )
-  )
-}
-
-#Preview("권한 요청 - 카메라 허락 상태") {
-  PermissionRequestView(
-    viewModel: PermissionRequestViewModel(
-      cameraPermissionUseCase: MockCameraPermissionUseCase(isGranted: true),
-      photoPermissionUseCase: MockPhotoPermissionUseCase(),
-      contactsPermissionUseCase: MockContactsPermissionUseCase(),
-      notificationPermissionUseCase: MockNotificationPermissionUseCase()
-    )
-  )
-}
-
-class MockCameraPermissionUseCase: CameraPermissionUseCase {
-    var isGranted: Bool
-    
-    init(isGranted: Bool) {
-        self.isGranted = isGranted
-    }
-    
-    func execute() async -> Bool {
-        return isGranted
-    }
-}
-
-private class MockPhotoPermissionUseCase: PhotoPermissionUseCase {
-  func execute() async -> Bool { return true }
-}
-
-private class MockContactsPermissionUseCase: ContactsPermissionUseCase {
-  func execute() async throws -> Bool { return true }
-}
-
-private class MockNotificationPermissionUseCase: NotificationPermissionUseCase {
-  func execute() async throws -> Bool { return true }
-}
+//
+//#Preview("권한 요청 - 카메라 거절 상태") {
+//  PermissionRequestView(
+//    viewModel:PermissionRequestViewModel(
+//      cameraPermissionUseCase: MockCameraPermissionUseCase(isGranted: false),
+//      photoPermissionUseCase: MockPhotoPermissionUseCase(),
+//      contactsPermissionUseCase: MockContactsPermissionUseCase(),
+//      notificationPermissionUseCase: MockNotificationPermissionUseCase()
+//    )
+//  )
+//}
+//
+//#Preview("권한 요청 - 카메라 허락 상태") {
+//  PermissionRequestView(
+//    viewModel: PermissionRequestViewModel(
+//      cameraPermissionUseCase: MockCameraPermissionUseCase(isGranted: true),
+//      photoPermissionUseCase: MockPhotoPermissionUseCase(),
+//      contactsPermissionUseCase: MockContactsPermissionUseCase(),
+//      notificationPermissionUseCase: MockNotificationPermissionUseCase()
+//    )
+//  )
+//}
+//
+//class MockCameraPermissionUseCase: CameraPermissionUseCase {
+//  var isGranted: Bool
+//  
+//  init(isGranted: Bool) {
+//    self.isGranted = isGranted
+//  }
+//  
+//  func execute() async -> Bool {
+//    return isGranted
+//  }
+//}
+//
+//private class MockPhotoPermissionUseCase: PhotoPermissionUseCase {
+//  func execute() async -> Bool { return true }
+//}
+//
+//private class MockContactsPermissionUseCase: ContactsPermissionUseCase {
+//  func execute() async throws -> Bool { return true }
+//}
+//
+//private class MockNotificationPermissionUseCase: NotificationPermissionUseCase {
+//  func execute() async throws -> Bool { return true }
+//}
