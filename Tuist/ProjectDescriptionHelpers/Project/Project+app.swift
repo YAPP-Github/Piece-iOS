@@ -44,6 +44,7 @@ extension Project {
       ),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
+      entitlements: .file(path: .relativeToRoot("Piece-iOS.entitlements")),
       dependencies: dependencies,
       settings: .settings(
         base: [:],
