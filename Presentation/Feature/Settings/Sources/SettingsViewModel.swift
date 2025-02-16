@@ -7,6 +7,7 @@
 
 import Foundation
 import LocalStorage
+import PCAppVersionService
 import SwiftUI
 import UseCases
 
@@ -29,13 +30,14 @@ final class SettingsViewModel {
   var isBlockContactsEnabled: Bool = false
   var updatedDate: Date? = nil
   var termsItems = [SettingsTermsItem]()
-  var version = "버전 정보 v1.0" // TODO: - 버전 정보 받아오기
+  var version = ""
   var loginInformationImage: Image?
   var loginEmail = "example@kakao.com" // TODO: - 이거 어디서 받아옴?
   let inquiriesUri = "https://kd0n5.channel.io/home"
   let noticeUri = "https://brassy-client-c0a.notion.site/16a2f1c4b96680e79a0be5e5cea6ea8a"
   
   private let userDefaults = PCUserDefaultsService.shared
+  private let appVersionService = PCAppVersionService.shared
   private let fetchTermsUseCase: FetchTermsUseCase
   private let notificationPermissionUseCase: NotificationPermissionUseCase
   private let contactsPermissionUseCase: ContactsPermissionUseCase
@@ -178,6 +180,13 @@ final class SettingsViewModel {
       let updatedDate = Date()
       userDefaults.setBlockContactsLastUpdatedDate(updatedDate)
       self.updatedDate = updatedDate
+    }
+  }
+  
+  private func fetchAppVersion() {
+    Task {
+      guard let currentAppVersion = appVersionService.appVersion() else { return }
+      version = currentAppVersion
     }
   }
 }
