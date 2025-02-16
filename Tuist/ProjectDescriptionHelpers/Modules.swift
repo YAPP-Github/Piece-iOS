@@ -58,6 +58,7 @@ public extension Modules {
 public extension Modules {
   enum Utility: String {
     case PCFoundationExtension
+    case PCRemoteConfig
     
     var path: String {
       "Utility/\(self.rawValue)"
