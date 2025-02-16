@@ -14,7 +14,7 @@ import RepositoryInterfaces
 final class ProfileRepository: ProfileRepositoryInterface {
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   
@@ -37,6 +37,14 @@ final class ProfileRepository: ProfileRepositoryInterface {
     let requests = valueTalks.map { ProfileValueTalkRequestDTO(profileValueTalkId: $0.id, answer: $0.answer, summary: $0.summary) }
     let requestDto = ProfileValueTalksRequestDTO(profileValueTalkUpdateRequests: requests)
     let endpoint = ProfileEndpoint.updateValueTalks(requestDto)
+    let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return responseDto.toDomain()
+  }
+  
+  func updateProfileValueTalkSummary(profileTalkId: Int, summary: String) async throws -> Entities.VoidModel {
+    let requestDto = ProfileValueTalkSummaryRequestDTO(summary: summary)
+    let endpoint = ProfileEndpoint.updateValueTalkSummary(profileTalkId: profileTalkId, dto: requestDto)
     let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     
     return responseDto.toDomain()

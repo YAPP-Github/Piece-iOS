@@ -5,13 +5,15 @@
 //  Created by eunseou on 2/1/25.
 //
 
+import DTO
 import Foundation
 import Alamofire
 
 public class NetworkService {
+  public static let shared = NetworkService()
   private let session: Session
   
-  public init() {
+  private init() {
     let interceptor = APIRequestInterceptor()
     self.session = Session(interceptor: interceptor)
   }
@@ -90,6 +92,52 @@ public class NetworkService {
         }
       }
     }
-    
+  }
+  
+  public func connectSse(endpoint: TargetType) -> AsyncThrowingStream<ProfileValueTalkAISummaryResponseDTO, Error> {
+    return AsyncThrowingStream { continuation in
+      let request = session.streamRequest(endpoint)
+        .validate()
+        .responseStream { stream in
+          switch stream.event {
+          case let .stream(result):
+            switch result {
+            case let .success(data):
+              do {
+                let decodedData = try JSONDecoder().decode(ProfileValueTalkAISummaryResponseDTO.self, from: data)
+                continuation.yield(decodedData)
+              } catch {
+                continuation.finish(throwing: NetworkError.decodingFailed)
+              }
+            case let .failure(error):
+              continuation.finish(throwing: error)
+            }
+            
+          case let .complete(completion):
+            guard let statusCode = completion.response?.statusCode else {
+              continuation.finish(throwing: NetworkError.decodingFailed)
+              return
+            }
+            
+            switch statusCode {
+            case 400:
+              continuation.finish(throwing: NetworkError.badRequest(error: nil))
+            case 401:
+              continuation.finish(throwing: NetworkError.unauthorized)
+            case 403:
+              continuation.finish(throwing: NetworkError.forbidden)
+            case 404:
+              continuation.finish(throwing: NetworkError.notFound)
+            case 500:
+              continuation.finish(throwing: NetworkError.internalServerError)
+            default:
+              continuation.finish(throwing: NetworkError.statusCode(statusCode))
+            }
+          }
+        }
+      continuation.onTermination = { _ in
+        request.cancel()
+      }
+    }
   }
 }

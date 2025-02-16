@@ -14,7 +14,7 @@ public final class CheckNicknameRepository: CheckNinknameRepositoryInterface {
   
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   

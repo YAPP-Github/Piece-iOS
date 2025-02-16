@@ -14,7 +14,7 @@ struct ValuePickView: View {
   private enum Constant {
     static let horizontalPadding: CGFloat = 20
     static let accepetButtonText = "매칭 수락하기"
-    static let denyButtonText = "매칭 거절하기"
+    static let refuseButtonText = "매칭 거절하기"
   }
   
   @State var viewModel: ValuePickViewModel
@@ -24,13 +24,15 @@ struct ValuePickView: View {
   init(
     getMatchValuePickUseCase: GetMatchValuePickUseCase,
     getMatchPhotoUseCase: GetMatchPhotoUseCase,
-    acceptMatchUseCase: AcceptMatchUseCase
+    acceptMatchUseCase: AcceptMatchUseCase,
+    refuseMatchUseCase: RefuseMatchUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase,
-        acceptMatchUseCase: acceptMatchUseCase
+        acceptMatchUseCase: acceptMatchUseCase,
+        refuseMatchUseCase: refuseMatchUseCase
       )
     )
   }
@@ -72,12 +74,7 @@ struct ValuePickView: View {
           viewModel.handleAction(.contentOffsetDidChange(offset))
         })) {
           pickCards
-          
-          PCTextButton(content: Constant.denyButtonText)
-            .onTapGesture {
-              viewModel.handleAction(.didTapDenyButton)
-            }
-          
+          refuseButton
           Spacer()
             .frame(height: 60)
         }
@@ -107,11 +104,10 @@ struct ValuePickView: View {
         viewModel.isMatchAcceptAlertPresented = false
       } secondButtonAction: {
         viewModel.handleAction(.didAcceptMatch)
-        viewModel.isMatchAcceptAlertPresented = false
         router.popToRoot()
       }
     }
-    .pcAlert(isPresented: $viewModel.isMatchDenyAlertPresented) {
+    .pcAlert(isPresented: $viewModel.isMatchDeclineAlertPresented) {
       AlertView(
         title: {
           Text("\(viewModel.valuePickModel?.nickname ?? "")님과의\n").foregroundStyle(Color.grayscaleBlack) +
@@ -123,9 +119,9 @@ struct ValuePickView: View {
         firstButtonText: "뒤로",
         secondButtonText: "매칭 거절하기"
       ) {
-        viewModel.isMatchDenyAlertPresented = false
+        viewModel.isMatchDeclineAlertPresented = false
       } secondButtonAction: {
-        viewModel.isMatchDenyAlertPresented = false
+        viewModel.handleAction(.didRefuseMatch)
         router.popToRoot()
       }
     }
@@ -187,6 +183,14 @@ struct ValuePickView: View {
     .padding(.horizontal, Constant.horizontalPadding)
     .padding(.top, 20)
     .padding(.bottom, 60)
+  }
+  
+  // MARK: - 매칭 거절하기 버튼
+  private var refuseButton: some View {
+    PCTextButton(content: Constant.refuseButtonText)
+      .onTapGesture {
+        viewModel.handleAction(.didTapRefuseButton)
+      }
   }
   
   // MARK: - 하단 버튼
