@@ -253,7 +253,8 @@ struct ValuePickView: View {
         router.push(to: .blockUser(matchId: model.id, nickname: model.nickname))
       }
       bottomSheetContentRow(text: "신고하기") {
-        
+        viewModel.isBottomSheetPresented = false
+        router.push(to: .reportUser(nickname: model.nickname))
       }
     }
   }
