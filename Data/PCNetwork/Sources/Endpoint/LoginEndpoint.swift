@@ -21,12 +21,12 @@ public enum LoginEndpoint: TargetType {
     case .sendSMSCode:
       [
         NetworkHeader.contentType: NetworkHeader.applicationJson,
-        NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
     case .verifySMSCode:
       [
         NetworkHeader.contentType: NetworkHeader.applicationJson,
-        NetworkHeader.authorization: NetworkHeader.bearer(KeychainManager.shared.read(.accessToken) ?? "")
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
     }
   }

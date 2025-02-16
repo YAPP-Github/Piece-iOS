@@ -98,9 +98,9 @@ final class VerifingContactViewModel {
     do {
       print(phoneNumber, verificationCode)
       let response = try await verifySMSCodeUseCase.execute(phoneNumber: phoneNumber, code: verificationCode)
-      KeychainManager.shared.save(.accessToken, value: response.accessToken)
-      KeychainManager.shared.save(.refreshToken, value: response.refreshToken)
-      KeychainManager.shared.save(.role, value: response.role.rawValue)
+      PCKeychainManager.shared.save(.accessToken, value: response.accessToken)
+      PCKeychainManager.shared.save(.refreshToken, value: response.refreshToken)
+      PCKeychainManager.shared.save(.role, value: response.role.rawValue)
       await MainActor.run {
         isActiveNextButton = true
       }

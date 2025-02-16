@@ -91,9 +91,9 @@ final class LoginViewModel: NSObject {
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
         print("Social login success: \(socialLoginResponse)")
-        KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
-        KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
-        KeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
+        PCKeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
+        PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        PCKeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
         await MainActor.run {
           isLoginSuccessful = true
         }
@@ -169,9 +169,9 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
-        KeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
-        KeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
-        KeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
+        PCKeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
+        PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
+        PCKeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
         await MainActor.run {
           isLoginSuccessful = true
         }
