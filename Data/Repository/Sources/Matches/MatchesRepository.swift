@@ -16,7 +16,7 @@ import RepositoryInterfaces
 final class MatchesRepository: MatchesRepositoryInterface {
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   
@@ -44,9 +44,15 @@ final class MatchesRepository: MatchesRepositoryInterface {
     return responseDTO.toDomain()
   }
   
+
   func getMatchInfo() async throws -> MatchInfosModel {
     let endpoint = MatchesEndpoint.matchesInfos
     let responseDTO: MatchInfosResponseDTO = try await networkService.request(endpoint: endpoint)
+  }
+
+  func refuseMatch() async throws -> VoidModel {
+    let endpoint = MatchesEndpoint.refuse
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
 }

@@ -77,9 +77,11 @@ public extension Modules {
     case DesignSystem
     case Router
     case Coordinator
+    case Onboarding
     case PCWebView
     
     // 피처
+    case Splash
     case Login
     case SignUp
     case Home

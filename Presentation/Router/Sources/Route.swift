@@ -5,8 +5,11 @@
 //  Created by summercat on 1/30/25.
 //
 
+// TODO: - 화면별로 분리해서 주석
 public enum Route: Hashable {
+  case splash
   case home
+  case onboarding
   case AvoidContactsGuide
   case login
   case termsAgreement

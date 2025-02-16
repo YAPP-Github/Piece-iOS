@@ -29,67 +29,67 @@ struct VerifingContactView: View {
   }
   
   var body: some View {
-    ZStack {
-      Color.grayscaleWhite.ignoresSafeArea()
-      VStack(alignment: .center) {
-        VStack(alignment: .leading, spacing: 12) {
-          Text("휴대폰 번호")
-            .foregroundStyle(Color.primaryDefault) +
-          Text("로\n인증을 진행해 주세요")
-          Text("신뢰도 높은 매칭과 안전한 커뮤니티를 위해\n휴대폰 번호로 인증해 주세요.")
-            .pretendard(.body_S_M)
-            .foregroundStyle(Color.grayscaleDark3)
+    VStack(spacing: 0) {
+      Spacer()
+        .frame(height: 104)
+      
+      VStack(alignment: .leading, spacing: 12) {
+        Text("휴대폰 번호")
+          .foregroundStyle(Color.primaryDefault) +
+        Text("로\n인증을 진행해 주세요")
+        Text("신뢰도 높은 매칭과 안전한 커뮤니티를 위해\n휴대폰 번호로 인증해 주세요.")
+          .pretendard(.body_S_M)
+          .foregroundStyle(Color.grayscaleDark3)
+      }
+      .pretendard(.heading_L_SB)
+      .padding(.top, 20)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      
+      Spacer()
+        .frame(height: 68)
+      
+      VStack(spacing: 32) {
+        PCTextField(
+          title: "휴대폰 번호",
+          text: $viewModel.phoneNumber,
+          focusState: $isFocused,
+          focusField: true
+        )
+        .infoText("- 없이 숫자만 입력해주세요")
+        .withButton(
+          RoundedButton(
+            type: viewModel.phoneNumberTextfieldButtonType,
+            buttonText: viewModel.recivedCertificationNumberButtonText,
+            action: {
+              viewModel.handleAction(.reciveCertificationNumber)
+            }
+          ),
+          width: viewModel.recivedCertificationNumberButtonWidth
+        )
+        .onChange{ newValue in
+          viewModel.phoneNumber = newValue.filter { $0.isNumber }
         }
-        .pretendard(.heading_L_SB)
-        .padding(.top, 20)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .textContentType(.telephoneNumber)
         
-        Spacer()
-          .frame(height: 68)
         
-        VStack(spacing: 32) {
+        if viewModel.showVerificationField {
           PCTextField(
-            title: "휴대폰 번호",
-            text: $viewModel.phoneNumber,
+            title: "인증번호",
+            text: $viewModel.verificationCode,
             focusState: $isFocused,
             focusField: true
           )
-          .infoText("- 없이 숫자만 입력해주세요")
+          .infoText("어떤 경우에도 타인에게 공유하지 마세요")
+          .rightText(viewModel.timerText, textColor: .primaryDefault)
           .withButton(
             RoundedButton(
-              type: viewModel.phoneNumberTextfieldButtonType,
-              buttonText: viewModel.recivedCertificationNumberButtonText,
+              type: viewModel.verificationCodeTextfieldButtonType,
+              buttonText: "확인",
               action: {
-                viewModel.handleAction(.reciveCertificationNumber)
+                viewModel.handleAction(.checkCertificationNumber)
               }
-            ),
-            width: viewModel.recivedCertificationNumberButtonWidth
+            )
           )
-          .onChange{ newValue in
-            viewModel.phoneNumber = newValue.filter { $0.isNumber }
-          }
-          .textContentType(.telephoneNumber)
-          
-          
-          if viewModel.showVerificationField {
-            PCTextField(
-              title: "인증번호",
-              text: $viewModel.verificationCode,
-              focusState: $isFocused,
-              focusField: true
-            )
-            .infoText("어떤 경우에도 타인에게 공유하지 마세요")
-            .rightText(viewModel.timerText, textColor: .primaryDefault)
-            .withButton(
-              RoundedButton(
-                type: viewModel.verificationCodeTextfieldButtonType,
-                buttonText: "확인",
-                action: {
-                  viewModel.handleAction(.checkCertificationNumber)
-                }
-              )
-            )
-          }
         }
         Spacer()
         

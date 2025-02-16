@@ -22,18 +22,21 @@ final class ValuePickViewModel {
     case didSelectTab(ValuePickTab)
     case didTapPhotoButton
     case didTapAcceptButton
-    case didTapDenyButton
+    case didTapRefuseButton
     case didAcceptMatch
+    case didRefuseMatch
   }
   
   init(
     getMatchValuePickUseCase: GetMatchValuePickUseCase,
     getMatchPhotoUseCase: GetMatchPhotoUseCase,
-    acceptMatchUseCase: AcceptMatchUseCase
+    acceptMatchUseCase: AcceptMatchUseCase,
+    refuseMatchUseCase: RefuseMatchUseCase
   ) {
     self.getMatchValuePickUseCase = getMatchValuePickUseCase
     self.getMatchPhotoUseCase = getMatchPhotoUseCase
     self.acceptMatchUseCase = acceptMatchUseCase
+    self.refuseMatchUseCase = refuseMatchUseCase
     
     Task {
       await fetchMatchValueTalk()
@@ -45,7 +48,7 @@ final class ValuePickViewModel {
   let navigationTitle: String = Constant.navigationTitle
   var isPhotoViewPresented: Bool = false
   var isMatchAcceptAlertPresented: Bool = false
-  var isMatchDenyAlertPresented: Bool = false
+  var isMatchDeclineAlertPresented: Bool = false
   
   private(set) var valuePickModel: ValuePickModel?
   private(set) var isLoading = true
@@ -61,6 +64,7 @@ final class ValuePickViewModel {
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
   private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   private let acceptMatchUseCase: AcceptMatchUseCase
+  private let refuseMatchUseCase: RefuseMatchUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -88,11 +92,16 @@ final class ValuePickViewModel {
     case .didTapAcceptButton:
       isMatchAcceptAlertPresented = true
       
-    case .didTapDenyButton:
-      isMatchDenyAlertPresented = true
+    case .didTapRefuseButton:
+      isMatchDeclineAlertPresented = true
       
     case .didAcceptMatch:
       Task { await acceptMatch() }
+      isMatchAcceptAlertPresented = false
+      
+    case .didRefuseMatch:
+      Task { await refuseMatch() }
+      isMatchDeclineAlertPresented = false
     }
   }
   
@@ -138,6 +147,14 @@ final class ValuePickViewModel {
   private func acceptMatch() async {
     do {
       _ = try await acceptMatchUseCase.execute()
+    } catch {
+      self.error = error
+    }
+  }
+  
+  private func refuseMatch() async {
+    do {
+      _ = try await refuseMatchUseCase.execute()
     } catch {
       self.error = error
     }

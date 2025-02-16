@@ -15,7 +15,7 @@ public final class TermsRepository: TermsRepositoryInterfaces {
   
   private let networkService: NetworkService
   
-  public init (networkService: NetworkService = NetworkService()) {
+  public init (networkService: NetworkService) {
     self.networkService = networkService
   }
   

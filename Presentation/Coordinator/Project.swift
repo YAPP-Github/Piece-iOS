@@ -14,6 +14,7 @@ let project = Project.dynamicFramework(
     .data(target: .PCNetwork),
     .data(target: .Repository),
     .presentation(target: .Router),
+    .presentation(target: .Onboarding),
     .presentation(target: .Home),
     .presentation(target: .Profile),
     .presentation(target: .Settings),
@@ -23,5 +24,6 @@ let project = Project.dynamicFramework(
     .presentation(target: .EditValuePick),
     .presentation(target: .Withdraw),
     .presentation(target: .Login),
+    .presentation(target: .Splash),
   ]
 )

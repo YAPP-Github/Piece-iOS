@@ -15,6 +15,10 @@ public struct RepositoryFactory {
     self.networkService = networkService
   }
   
+  public func createCommonRepository() -> CommonRepositoryInterface {
+    CommonRepository(networkService: networkService)
+  }
+  
   public func createLoginRepository() -> LoginRepositoryInterfaces {
     LoginRepository(networkService: networkService)
   }
@@ -49,5 +53,9 @@ public struct RepositoryFactory {
   
   public func createMatchesRepository() -> MatchesRepositoryInterface {
     MatchesRepository(networkService: networkService)
+  }
+  
+  public func createSSERepository() -> SSERepositoryInterface {
+    SSERepository(networkService: networkService)
   }
 }

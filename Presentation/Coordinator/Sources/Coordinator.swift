@@ -10,23 +10,24 @@ import EditValuePick
 import EditValueTalk
 import Login
 import MatchingDetail
-import Settings
-import SignUp
 import Home
-import SignUp
+import Onboarding
 import PCNetwork
 import Repository
 import Router
+import SignUp
 import SwiftUI
 import UseCases
 import EditValuePick
 import MatchingMain
+import Splash
+import Settings
 
 public struct Coordinator {
   public init() { }
   
   // MARK: - Repositories
-  private let repositoryFactory = RepositoryFactory(networkService: NetworkService())
+  private let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
   
   // MARK: - UseCases
   private let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase()
@@ -62,6 +63,9 @@ public struct Coordinator {
         contactsPermissionUseCase: contactsPermissionUseCase
       )
       
+    case .onboarding:
+      OnboardingViewFactory.createOnboardingView()
+      
       // MARK: - 설정
     case let .settingsWebView(title, uri):
       SettingsViewFactory.createSettingsWebView(title: title, uri: uri)
@@ -84,6 +88,7 @@ public struct Coordinator {
         getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
       )
+      
     case .matchValueTalk:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase(repository: matchesRepository)
@@ -91,14 +96,17 @@ public struct Coordinator {
         getMatchValueTalkUseCase: getMatchValueTalkUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
       )
+      
     case .matchValuePick:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase(repository: matchesRepository)
       let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
+      let refuseMatchUseCase = UseCaseFactory.createRefuseMatchUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchValuePickView(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase,
-        acceptMatchUseCase: acceptMatchUseCase
+        acceptMatchUseCase: acceptMatchUseCase,
+        refuseMatchUseCase: refuseMatchUseCase
       )
       
       // MARK: - SignUp
@@ -188,8 +196,24 @@ public struct Coordinator {
         
     case .withdraw:
         WithdrawViewFactory.createWithdrawView()
+      
     case .withdrawConfirm:
         WithdrawViewFactory.createWithdrawConfirm()
+      
+    case .login:
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      
+    case .splash:
+      let commonRepository = repositoryFactory.createCommonRepository()
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      SplashViewFactory.createSplashView(
+        getServerStatusUseCase: getServerStatusUseCase,
+        socialLoginUseCase: socialLoginUseCase
+      )
     }
   }
 }

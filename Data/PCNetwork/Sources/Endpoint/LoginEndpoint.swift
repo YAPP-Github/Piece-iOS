@@ -5,7 +5,6 @@
 //  Created by eunseou on 2/7/25.
 //
 
-import SwiftUI
 import Alamofire
 import DTO
 import LocalStorage
@@ -40,6 +39,7 @@ public enum LoginEndpoint: TargetType {
         .post
     case .verifySMSCode:
         .post
+    case .socialLoginTokenRefresh: .patch
     }
   }
   
@@ -51,6 +51,8 @@ public enum LoginEndpoint: TargetType {
       "api/register/sms/auth/code"
     case .verifySMSCode:
       "api/register/sms/auth/code/verify"
+    case .socialLoginTokenRefresh:
+     "/api/login/token/refresh"
     }
   }
   
@@ -61,6 +63,8 @@ public enum LoginEndpoint: TargetType {
     case .sendSMSCode(let body):
         .body(body)
     case .verifySMSCode(let body):
+        .body(body)
+    case let .socialLoginTokenRefresh(body):
         .body(body)
     }
   }
