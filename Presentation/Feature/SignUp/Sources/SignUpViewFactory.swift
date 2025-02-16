@@ -74,4 +74,8 @@ public struct SignUpViewFactory {
       finishAISummaryUseCase: finishAISummaryUseCase
     )
   }
+  
+  public static func createCompleteCreateProfileView() -> some View {
+    CompleteCreateProfileView()
+  }
 }
