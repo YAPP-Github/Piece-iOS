@@ -14,6 +14,7 @@ public enum ExternalDependencies {
   case KakaoSDKUser
   case GoogleSignIn
   case GoogleSignInSwift
+  case Lottie
   
   public var name: String {
     switch self {
@@ -23,6 +24,7 @@ public enum ExternalDependencies {
     case .KakaoSDKCommon: "KakaoSDKCommon"
     case .KakaoSDKAuth: "KakaoSDKAuth"
     case .KakaoSDKUser: "KakaoSDKUser"
+    case .Lottie: "Lottie"
     }
   }
 }

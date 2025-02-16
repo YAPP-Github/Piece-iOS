@@ -40,6 +40,7 @@ enum ExternalDependency: String, CaseIterable {
   case Alamofire
   case KakaoOpenSDK
   case GoogleSignIn
+  case Lottie
 }
 
 extension ExternalDependency {
@@ -49,6 +50,7 @@ extension ExternalDependency {
     case .Alamofire: "https://github.com/Alamofire/Alamofire"
     case .KakaoOpenSDK: "https://github.com/kakao/kakao-ios-sdk"
     case .GoogleSignIn: "https://github.com/google/GoogleSignIn-iOS"
+    case .Lottie: "https://github.com/airbnb/lottie-ios"
     }
   }
 }
@@ -60,6 +62,7 @@ extension ExternalDependency {
     case .Alamofire: "5.10.2"
     case .KakaoOpenSDK: "2.23.0"
     case .GoogleSignIn: "7.0.0"
+    case .Lottie: "4.5.1"
     }
   }
 }
