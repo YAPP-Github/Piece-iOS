@@ -9,11 +9,11 @@ import Foundation
 import PCRemoteConfig
 
 public final class PCAppVersionService {
-  private let remoteConfig: PCRemoteConfig
+  public static let shared = PCAppVersionService()
   
-  public init(remoteConfig: PCRemoteConfig = .shared) {
-    self.remoteConfig = remoteConfig
-  }
+  private let remoteConfig = PCRemoteConfig.shared
+  
+  private init() { }
   
   public func appVersion() -> String? {
     return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
