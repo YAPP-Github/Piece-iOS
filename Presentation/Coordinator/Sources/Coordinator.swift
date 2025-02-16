@@ -9,6 +9,7 @@ import Withdraw
 import EditValuePick
 import EditValueTalk
 import Login
+import BlockUser
 import MatchingDetail
 import Home
 import Onboarding
@@ -107,6 +108,15 @@ public struct Coordinator {
         getMatchPhotoUseCase: getMatchPhotoUseCase,
         acceptMatchUseCase: acceptMatchUseCase,
         refuseMatchUseCase: refuseMatchUseCase
+      )
+      
+    case let .blockUser(matchId, nickname):
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let blockUserUseCase = UseCaseFactory.createBlockUserUseCase(repository: matchesRepository)
+      BlockUserViewFactory.createBlockUserView(
+        matchId: matchId,
+        nickname: nickname,
+        blockUserUseCase: blockUserUseCase
       )
       
       // MARK: - SignUp
@@ -221,6 +231,7 @@ public struct Coordinator {
         getServerStatusUseCase: getServerStatusUseCase,
         socialLoginUseCase: socialLoginUseCase
       )
+
     }
   }
 }

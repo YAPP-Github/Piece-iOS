@@ -13,4 +13,5 @@ public protocol MatchesRepositoryInterface {
   func getMatchValuePicks() async throws -> MatchValuePickModel
   func acceptMatch() async throws -> VoidModel
   func refuseMatch() async throws -> VoidModel
+  func blockUser(matchId: Int) async throws -> VoidModel
 }

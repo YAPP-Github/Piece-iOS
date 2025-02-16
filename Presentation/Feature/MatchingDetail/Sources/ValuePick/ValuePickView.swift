@@ -125,6 +125,14 @@ struct ValuePickView: View {
         router.popToRoot()
       }
     }
+    .sheet(isPresented: $viewModel.isBottomSheetPresented) { // TODO: - 바텀시트 커스텀 컴포넌트화
+      if let model = viewModel.valuePickModel {
+        bottomSheetContent(model: model)
+          .presentationDetents([.height(160)])
+      } else {
+        EmptyView()
+      }
+    }
   }
   
   // MARK: - 탭
@@ -235,6 +243,35 @@ struct ValuePickView: View {
       rounding: true,
       action: { viewModel.handleAction(.didTapAcceptButton) }
     )
+  }
+  
+  // MARK: - 바텀시트
+  private func bottomSheetContent(model: ValuePickModel) -> some View {
+    VStack(spacing: 0) {
+      bottomSheetContentRow(text: "차단하기") {
+        viewModel.isBottomSheetPresented = false
+        router.push(to: .blockUser(matchId: model.id, nickname: model.nickname))
+      }
+      bottomSheetContentRow(text: "신고하기") {
+        
+      }
+    }
+  }
+  
+  private func bottomSheetContentRow(
+    text: String,
+    tapAction: @escaping () -> Void
+  ) -> some View {
+    Button {
+      tapAction()
+    } label: {
+      Text(text)
+        .pretendard(.body_M_M)
+        .foregroundStyle(Color.grayscaleBlack)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+    }
   }
 }
 
