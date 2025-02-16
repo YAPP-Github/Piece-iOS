@@ -12,33 +12,21 @@ import Observation
 final class TermsWebViewModel {
   enum Action {
     case tapAgreementButton
-    case tapBackButton
   }
   
-  var term: TermModel
-  var checkTerm: ((TermModel) -> Void)?
-  private var dismissAction: (() -> Void)?
+  var term: TermModel = .init(id: 0, title: "", url: "", required: true, isChecked: true)
+  let title: String
+  let url: String
   
-  init(
-    term: TermModel,
-    checkTerm: ((TermModel) -> Void)? = nil
-  ) {
-    self.term = term
-    self.checkTerm = checkTerm
+  init(title: String, url: String) {
+    self.title = title
+    self.url = url
   }
   
   func handleAction(_ action: Action) {
     switch action {
-    case .tapBackButton:
-      dismissAction?()
     case .tapAgreementButton:
       term.isChecked = true
-      checkTerm?(term)
-      dismissAction?()
     }
-  }
-  
-  func setDismissAction(_ dismiss: @escaping () -> Void) {
-    self.dismissAction = dismiss
   }
 }

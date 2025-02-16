@@ -17,13 +17,31 @@ public struct UseCaseFactory {
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
   }
+  
+  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
+    NotificationPermissionUseCaseImpl()
+  }
+  
+  public static func createCameraPermissionUseCase() -> CameraPermissionUseCase {
+    CameraPermissionUseCaseImpl()
+  }
+  
+  public static func createPhotoPermissionUseCase() -> PhotoPermissionUseCase {
+    PhotoPermissionUseCaseImpl()
+  }
+  
+  // MARK: - 로그인
 
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
   
-  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
-    NotificationPermissionUseCaseImpl()
+  public static func createSendSMSCodeUseCase(repository: LoginRepositoryInterfaces) -> SendSMSCodeUseCase {
+    SendSMSCodeUseCaseImpl(repository: repository)
+  }
+  
+  public static func createVerifySMSCodeUseCase(repository: LoginRepositoryInterfaces) -> VerifySMSCodeUseCase {
+    VerifySMSCodeUseCaseImpl(repository: repository)
   }
   
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
@@ -33,6 +51,18 @@ public struct UseCaseFactory {
 
   public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
     CheckNicknameUseCaseImpl(repository: repository)
+  }
+  
+  public static func createFetchContactsUseCase() -> FetchContactsUseCase {
+    FetchContactsUseCaseImpl()
+  }
+  
+  public static func createBlockContactsUseCase(repository: BlockContactsRepositoryInterface) -> BlockContactsUseCase {
+    BlockContactsUseCaseImpl(repository: repository)
+  }
+  
+  public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
+    AcceptMatchUseCaseImpl(repository: repository)
   }
   
   // MARK: - Profile

@@ -8,10 +8,15 @@
 import DesignSystem
 import PCWebView
 import SwiftUI
+import Router
 
 struct TermsWebView: View {
   @State var viewModel: TermsWebViewModel
-  @Environment(\.dismiss) private var dismiss
+  @Environment(Router.self) private var router: Router
+  
+  init(title: String, url: String) {
+    _viewModel = .init(wrappedValue: .init(title: title, url: url))
+  }
   
   var body: some View {
     ZStack {
@@ -34,25 +39,23 @@ struct TermsWebView: View {
     .navigationBarModifier {
       NavigationBar(
         title: viewModel.term.title,
-        leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+        leftButtonTap: { router.pop() }
       )
     }
-    .onAppear {
-      viewModel.setDismissAction { dismiss() }
-    }
+    .toolbar(.hidden, for: .navigationBar)
   }
 }
 
-#Preview {
-  TermsWebView(
-    viewModel: TermsWebViewModel(
-      term: TermModel(
-        id: 0,
-        title: "서비스 이용약관",
-        url: "https://brassy-client-c0a.notion.site/16a2f1c4b966800f923cd499d8e07a97",
-        required: true,
-        isChecked: false
-      )
-    )
-  )
-}
+//#Preview {
+//  TermsWebView(
+//    viewModel: TermsWebViewModel(
+//      term: TermModel(
+//        id: 0,
+//        title: "서비스 이용약관",
+//        url: "https://brassy-client-c0a.notion.site/16a2f1c4b966800f923cd499d8e07a97",
+//        required: true,
+//        isChecked: false
+//      )
+//    )
+//  )
+//}

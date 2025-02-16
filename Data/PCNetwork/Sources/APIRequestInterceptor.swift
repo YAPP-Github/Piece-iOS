@@ -24,9 +24,9 @@ class APIRequestInterceptor: RequestInterceptor {
     completion: @escaping (Result<URLRequest, Error>) -> Void
   ) {
     var request = urlRequest
-    if let accessToken = keychain.read(.accessToken) {
-      request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-    }
+//    if let accessToken = keychain.read(.accessToken) {
+//      request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+//    }
     completion(.success(request))
   }
   
