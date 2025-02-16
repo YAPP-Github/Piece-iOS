@@ -175,6 +175,18 @@ public struct Coordinator {
         createProfileUseCase: createProfileUseCase
       )
       
+    case .waitingAISummary:
+      let sseRepository = repositoryFactory.createSSERepository()
+      let getAISummaryUseCase = UseCaseFactory.createGetAISummaryUseCase(repository: sseRepository)
+      let finishAISummaryUseCase = UseCaseFactory.createFinishAISummaryUseCase(repository: sseRepository)
+      SignUpViewFactory.createWaitingAISummaryView(
+        getAISummaryUseCase: getAISummaryUseCase,
+        finishAISummaryUseCase: finishAISummaryUseCase
+      )
+      
+    case .completeCreateProfile:
+      SignUpViewFactory.createCompleteCreateProfileView()
+      
       // MARK: - Profile
     case .editValueTalk:
       let profileRepository = repositoryFactory.createProfileRepository()
@@ -193,17 +205,12 @@ public struct Coordinator {
         getProfileValuePicksUseCase: getProfileValuePicksUseCase,
         updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
       )
-        
+      
     case .withdraw:
-        WithdrawViewFactory.createWithdrawView()
+      WithdrawViewFactory.createWithdrawView()
       
     case .withdrawConfirm:
-        WithdrawViewFactory.createWithdrawConfirm()
-      
-    case .login:
-      let loginRepository = repositoryFactory.createLoginRepository()
-      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
-      LoginViewFactory.createLoginView(socialLoginUseCase: socialLoginUseCase)
+      WithdrawViewFactory.createWithdrawConfirm()
       
     case .splash:
       let commonRepository = repositoryFactory.createCommonRepository()

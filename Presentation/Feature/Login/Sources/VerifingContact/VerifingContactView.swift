@@ -31,7 +31,7 @@ struct VerifingContactView: View {
   var body: some View {
     VStack(spacing: 0) {
       Spacer()
-        .frame(height: 104)
+        .frame(height: 60)
       
       VStack(alignment: .leading, spacing: 12) {
         Text("휴대폰 번호")
