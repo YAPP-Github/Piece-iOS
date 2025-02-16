@@ -8,7 +8,7 @@ struct ContentView: View {
   
   var body: some View {
     NavigationStack(path: $router.path) {
-      coordinator.view(for: .splash)
+      coordinator.view(for: router.initialRoute)
         .navigationDestination(for: Route.self) { route in
           coordinator.view(for: route)
         }
