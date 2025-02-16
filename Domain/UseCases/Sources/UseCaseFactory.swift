@@ -102,4 +102,13 @@ public struct UseCaseFactory {
   public static func createGetMatchPhotoUseCase() -> GetMatchPhotoUseCase {
     GetMatchPhotoUseCaseImpl()
   }
+  
+  // MARK: - AI요약 SSE
+  public static func createGetAISummaryUseCase(repository: SSERepositoryInterface) -> GetAISummaryUseCase {
+    GetAISummaryUseCaseImpl(repository: repository)
+  }
+  
+  public static func createFinishAISummaryUseCase(repository: SSERepositoryInterface) -> FinishAISummaryUseCase {
+    FinishAISummaryUseCaseImpl(repository: repository)
+  }
 }
