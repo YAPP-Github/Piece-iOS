@@ -53,6 +53,9 @@ final class WithdrawConfirmViewModel {
     } catch {
       print(error.localizedDescription)
     }
+    
+    // 로컬 데이터 초기화
+    initialize()
   }
 
   private func revokeAppleIDCredential() async throws {
@@ -61,13 +64,20 @@ final class WithdrawConfirmViewModel {
       // 서버에 탈퇴 요청
       _ = try await deleteUserAccountUseCase.execute(reason: withdrawReason)
       
-      // 로컬 데이터 초기화
-      destination = .splash
-      PCUserDefaultsService.shared.setDidSeeOnboarding(false)
-      
     } catch {
       print(error.localizedDescription)
     }
+    
+    // 로컬 데이터 초기화
+    initialize()
+  }
+  
+  private func initialize() {
+    PCKeychainManager.shared.deleteAll()
+    
+    PCUserDefaultsService.shared.initialize()
+    
+    destination = .splash
   }
 }
 
