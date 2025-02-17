@@ -140,4 +140,58 @@ public class NetworkService {
       }
     }
   }
+  
+  public func withdraw(clientId: String, clientSecret: String, token: String) async throws {
+    let url = "https://appleid.apple.com/auth/revoke"
+    let parameters: [String: String] = [
+      "client_id": clientId,
+      "client_secret": clientSecret,
+      "token": token
+    ]
+    
+    return try await withCheckedThrowingContinuation { continuation in
+      AF.request(url, method: .post, parameters: parameters, encoding: URLEncoding.httpBody)
+        .validate()
+        .response { response in
+          switch response.result {
+          case .success:
+            continuation.resume()
+          case .failure:
+            guard let statusCode = response.response?.statusCode else {
+              continuation.resume(throwing: NetworkError.decodingFailed)
+              return
+            }
+            switch statusCode {
+            case 400:
+              continuation.resume(throwing: NetworkError.badRequest(error: .none))
+            default:
+              continuation.resume(throwing: NetworkError.statusCode(statusCode))
+            }
+          }
+        }
+    }
+  }
+  
+  public func getAppleAccessToken(authCode: String) async throws -> String {
+    let url = "https://appleid.apple.com/auth/token"
+    let parameters: [String: String] = [
+      "client_id": "com.yourcompany.yourapp",
+      "client_secret": "",
+      "code": authCode,
+      "grant_type": "authorization_code"
+    ]
+    
+    return try await withCheckedThrowingContinuation { continuation in
+      AF.request(url, method: .post, parameters: parameters, encoding: URLEncoding.httpBody)
+        .validate()
+        .responseDecodable(of: AppleOathTokenResponseDTO.self) { response in
+          switch response.result {
+          case .success(let tokenResponse):
+            continuation.resume(returning: tokenResponse.access_token)
+          case .failure(let error):
+            continuation.resume(throwing: error)
+          }
+        }
+    }
+  }
 }

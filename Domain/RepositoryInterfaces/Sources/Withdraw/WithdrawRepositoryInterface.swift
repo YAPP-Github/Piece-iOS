@@ -10,4 +10,5 @@ import Entities
 
 public protocol WithdrawRepositoryInterface {
   func deleteUserAccount(reason: String) async throws -> VoidModel
+  func withdrawWithApple() async throws -> VoidModel
 }

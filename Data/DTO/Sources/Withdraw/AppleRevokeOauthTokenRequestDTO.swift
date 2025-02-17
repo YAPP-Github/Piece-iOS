@@ -8,10 +8,8 @@
 import SwiftUI
 import Entities
 
-public struct AppleOauthTokenRequestDTO: Encodable {
+public struct AppleRevokeOauthTokenRequestDTO: Encodable {
   public let client_id: String
   public let client_secret: String
-  public let grant_type: String
-  public let code: String
-  public let redirect_uri: String
+  public let token: String
 }
