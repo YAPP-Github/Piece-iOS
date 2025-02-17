@@ -17,4 +17,6 @@ enum NetworkHeader {
   static func bearer(_ token: String) -> String {
     return "Bearer \(token)"
   }
+  static let formUrlEncoded = "x-www-form-urlencoded"
+  static let application = "application"
 }
