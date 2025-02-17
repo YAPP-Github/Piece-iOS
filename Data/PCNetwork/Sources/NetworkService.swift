@@ -8,6 +8,7 @@
 import DTO
 import Foundation
 import Alamofire
+import LocalStorage
 
 public class NetworkService {
   public static let shared = NetworkService()
@@ -172,11 +173,13 @@ public class NetworkService {
     }
   }
   
-  public func getAppleAccessToken(authCode: String) async throws -> String {
+  public func getAppleAccessToken() async throws -> AppleOathTokenResponseDTO {
     let url = "https://appleid.apple.com/auth/token"
+    let authCode = PCKeychainManager.shared.read(.appleAuthCode) ?? ""
+    let clientSecret = PCKeychainManager.shared.read(.appleClientSecret) ?? ""
     let parameters: [String: String] = [
-      "client_id": "com.yourcompany.yourapp",
-      "client_secret": "",
+      "client_id": "com.piece.puzzly",
+      "client_secret": clientSecret,
       "code": authCode,
       "grant_type": "authorization_code"
     ]
@@ -187,7 +190,7 @@ public class NetworkService {
         .responseDecodable(of: AppleOathTokenResponseDTO.self) { response in
           switch response.result {
           case .success(let tokenResponse):
-            continuation.resume(returning: tokenResponse.access_token)
+            continuation.resume(returning: tokenResponse)
           case .failure(let error):
             continuation.resume(throwing: error)
           }
