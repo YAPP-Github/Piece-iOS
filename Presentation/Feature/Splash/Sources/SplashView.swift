@@ -50,7 +50,3 @@ struct SplashView: View {
       }
   }
 }
-//
-//#Preview {
-//  SplashView(viewModel: SplashViewModel())
-//}
