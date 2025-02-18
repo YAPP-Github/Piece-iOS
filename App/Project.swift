@@ -11,6 +11,6 @@ let project = Project.app(
     .externalDependency(dependency: .KakaoSDKUser),
     .externalDependency(dependency: .GoogleSignIn),
     .externalDependency(dependency: .GoogleSignInSwift),
-    .externalDependency(dependency: .FirebaseRemoteConfig),
+    .utility(target: .PCFirebase),
   ]
 )

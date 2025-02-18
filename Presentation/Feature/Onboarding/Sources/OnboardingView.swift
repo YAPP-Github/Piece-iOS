@@ -27,6 +27,7 @@ struct OnboardingView: View {
     }
     .frame(maxHeight: .infinity)
     .background(Color.grayscaleWhite)
+    .toolbar(.hidden)
     .onAppear {
       viewModel.handleAction(.onAppear)
     }

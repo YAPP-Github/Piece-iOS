@@ -12,6 +12,7 @@ extension Project {
     name: String,
     infoPlist: InfoPlist? = .default,
     dependencies: [TargetDependency] = [],
+    settings: Settings? = .settings(),
     packages: [Package] = []
   ) -> Project {
     let target = Target.target(
@@ -23,7 +24,8 @@ extension Project {
       infoPlist: infoPlist,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
-      dependencies: dependencies
+      dependencies: dependencies,
+      settings: settings
     )
     
     return Project(
