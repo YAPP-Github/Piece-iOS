@@ -97,8 +97,7 @@ struct AvoidContactsGuideView: View {
   private var denyButton: some View {
     PCTextButton(content: Constant.denyButtonText)
       .onTapGesture {
-        // TODO: - 다음 화면 라우터 제작 시, 연결
-        //   router.push(to: )
+        router.push(to: .completeSignUp)
       }
       .padding(.bottom, 20)
   }
