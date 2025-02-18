@@ -21,15 +21,6 @@ public final class PCUserDefaultsService {
     }
   }
   
-  var blockContactsLastUpdatedDate: Date? {
-    get {
-      PCUserDefaults.objectFor(key: .blockContactsLastUpdatedDate) as? Date
-    }
-    set {
-      _ = PCUserDefaults.setObjectFor(key: .blockContactsLastUpdatedDate, object: newValue)
-    }
-  }
-  
   // 처음 앱을 실행하는지
   var isFirstLaunch: Bool {
     get {
@@ -53,7 +44,7 @@ public final class PCUserDefaultsService {
 public extension PCUserDefaultsService {
   // 로그아웃 시 UserDefaults 초기화 메서드
   func initialize() {
-    blockContactsLastUpdatedDate = nil
+    didSeeOnboarding = false
   }
   
   func getDidSeeOnboarding() -> Bool {
