@@ -61,6 +61,8 @@ final class WithdrawConfirmViewModel {
   private func revokeAppleIDCredential() async throws {
     do {
       
+      // TODO: - 애플 탈퇴 구현
+      /// 새롭게 업데이트되는 API를 이용해 서버와 합 맞춰봐야함!
       // 서버에 탈퇴 요청
       _ = try await deleteUserAccountUseCase.execute(reason: withdrawReason)
       
