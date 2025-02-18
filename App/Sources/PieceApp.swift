@@ -1,6 +1,7 @@
 import DesignSystem
 import FirebaseCore
 import FirebaseRemoteConfig
+import LocalStorage
 import Router
 import KakaoSDKCommon
 import KakaoSDKAuth
@@ -18,6 +19,14 @@ struct PieceApp: App {
     }
     KakaoSDK.initSDK(appKey: KakaoAppKey)
     FirebaseApp.configure()
+    
+    // 앱 첫 실행 테스트 시, 아래 주석 해제
+    // PCUserDefaultsService.shared.resetFirstLaunch()
+    if PCUserDefaultsService.shared.checkFirstLaunch() {
+      PCUserDefaultsService.shared.initialize()
+      PCUserDefaultsService.shared.setDidSeeOnboarding(false)
+      PCKeychainManager.shared.deleteAll()
+    }
   }
   
   var body: some Scene {
