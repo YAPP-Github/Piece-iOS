@@ -145,4 +145,9 @@ public struct UseCaseFactory {
   public static func createFinishAISummaryUseCase(repository: SSERepositoryInterface) -> FinishAISummaryUseCase {
     FinishAISummaryUseCaseImpl(repository: repository)
   }
+  
+  // MARK: - 설정
+  public static func createGetContactsSyncTimeUseCase(repository: SettingsRepositoryInterface) -> GetContactsSyncTimeUseCase {
+    GetContactsSyncTimeUseCaseImpl(repository: repository)
+  }
 }
