@@ -23,4 +23,15 @@ private let networkService: NetworkService
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return response.toDomain()
   }
+  public func withdrawWithApple() async throws -> VoidModel {
+    
+    // TODO: - 애플 전용 탈퇴 (미완)
+    /// 추후 서버와 맞춰볼 필요있음.
+    let body = WithdrawRequestDTO(reason: "")
+    let endpoint = CommonEndpoint.withdrawWithPiece(body)
+    let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return response.toDomain()
+  }
 }
+
+
