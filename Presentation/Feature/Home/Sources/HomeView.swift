@@ -20,14 +20,20 @@ struct HomeView: View {
     getProfileUseCase: GetProfileUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase,
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         getProfileUseCase: getProfileUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase,
+        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
       )
     )
   }
@@ -55,7 +61,10 @@ struct HomeView: View {
       SettingsViewFactory.createSettingsView(
         fetchTermsUseCase: viewModel.fetchTermsUseCase,
         notificationPermissionUseCase: viewModel.notificationPermissionUseCase,
-        contactsPermissionUseCase: viewModel.contactsPermissionUseCase
+        contactsPermissionUseCase: viewModel.contactsPermissionUseCase,
+        fetchContactsUseCase: viewModel.fetchContactsUseCase,
+        blockContactsUseCase: viewModel.blockContactsUseCase,
+        getContactsSyncTimeUseCase: viewModel.getContactsSyncTimeUseCase
       )
     }
   }
