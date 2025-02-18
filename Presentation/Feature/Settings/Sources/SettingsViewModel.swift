@@ -7,7 +7,7 @@
 
 import Foundation
 import LocalStorage
-import PCAppVersionService
+import PCFoundationExtension
 import SwiftUI
 import UseCases
 
@@ -37,7 +37,6 @@ final class SettingsViewModel {
   let noticeUri = "https://brassy-client-c0a.notion.site/16a2f1c4b96680e79a0be5e5cea6ea8a"
   
   private let userDefaults = PCUserDefaultsService.shared
-  private let appVersionService = PCAppVersionService.shared
   private let fetchTermsUseCase: FetchTermsUseCase
   private let notificationPermissionUseCase: NotificationPermissionUseCase
   private let contactsPermissionUseCase: ContactsPermissionUseCase
@@ -61,6 +60,7 @@ final class SettingsViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .onAppear:
+      onAppear()
       sections = [
         .init(id: .notification),
         .init(id: .system),
@@ -68,10 +68,6 @@ final class SettingsViewModel {
         .init(id: .information),
         .init(id: .etc),
       ]
-      Task {
-        await fetchTerms()
-        await checkPermissions()
-      }
       
     case let .matchingNotificationToggled(isEnabled):
       matchingNotificationToggled(isEnabled: isEnabled)
@@ -118,6 +114,18 @@ final class SettingsViewModel {
     }
   }
   
+  private func onAppear() {
+    fetchAppVersion()
+    Task {
+      await fetchTerms()
+      await checkPermissions()
+    }
+  }
+  
+  private func fetchAppVersion() {
+    version = AppVersion.appVersion()
+  }
+  
   private func fetchTerms() async {
     do {
       let terms = try await fetchTermsUseCase.execute()
@@ -144,7 +152,6 @@ final class SettingsViewModel {
   
   private func matchingNotificationToggled(isEnabled: Bool) {
     isMatchingNotificationOn = isEnabled
-    // TODO: - UserDefaults 저장
   }
   
   private func pushNotificationToggled(isEnabled: Bool) {
@@ -154,7 +161,6 @@ final class SettingsViewModel {
     if !isEnabled {
       isMatchingNotificationOn = isEnabled
     }
-    // TODO: - UserDefaults 저장
   }
   
   private func blockContactsToggled(isEnabled: Bool) {
@@ -180,13 +186,6 @@ final class SettingsViewModel {
       let updatedDate = Date()
       userDefaults.setBlockContactsLastUpdatedDate(updatedDate)
       self.updatedDate = updatedDate
-    }
-  }
-  
-  private func fetchAppVersion() {
-    Task {
-      guard let currentAppVersion = appVersionService.appVersion() else { return }
-      version = currentAppVersion
     }
   }
 }
