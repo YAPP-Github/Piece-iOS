@@ -12,7 +12,8 @@ import UseCases
 
 struct VerifingContactView: View {
   @State var viewModel: VerifingContactViewModel
-  @FocusState private var isFocused: Bool
+  @FocusState private var isPhoneNumberFocused: Bool
+  @FocusState private var isVerificationCodeFocused: Bool
   
   @Environment(Router.self) private var router: Router
   
@@ -52,7 +53,7 @@ struct VerifingContactView: View {
         PCTextField(
           title: "휴대폰 번호",
           text: $viewModel.phoneNumber,
-          focusState: $isFocused,
+          focusState: $isPhoneNumberFocused,
           focusField: true
         )
         .infoText("- 없이 숫자만 입력해주세요")
@@ -60,6 +61,7 @@ struct VerifingContactView: View {
           RoundedButton(
             type: viewModel.phoneNumberTextfieldButtonType,
             buttonText: viewModel.recivedCertificationNumberButtonText,
+            width: .maxWidth,
             action: {
               viewModel.handleAction(.reciveCertificationNumber)
             }
@@ -71,12 +73,11 @@ struct VerifingContactView: View {
         }
         .textContentType(.telephoneNumber)
         
-        
         if viewModel.showVerificationField {
           PCTextField(
             title: "인증번호",
             text: $viewModel.verificationCode,
-            focusState: $isFocused,
+            focusState: $isVerificationCodeFocused,
             focusField: true
           )
           .infoText("어떤 경우에도 타인에게 공유하지 마세요")
@@ -85,6 +86,7 @@ struct VerifingContactView: View {
             RoundedButton(
               type: viewModel.verificationCodeTextfieldButtonType,
               buttonText: "확인",
+              width: .maxWidth,
               action: {
                 viewModel.handleAction(.checkCertificationNumber)
               }
@@ -104,8 +106,8 @@ struct VerifingContactView: View {
         )
       }
       .padding(.bottom, 10)
-      .padding(.horizontal, 20)
     }
+    .padding(.horizontal, 20)
     .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
       router.setRoute(.termsAgreement)
     }
