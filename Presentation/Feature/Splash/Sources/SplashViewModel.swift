@@ -86,7 +86,7 @@ final class SplashViewModel {
       destination = .verifyContact
     case "REGISTER":
       print("---REGISTER---")
-      destination = .createProfile
+      destination = .termsAgreement
     case "PENDING":
       print("---PENDING---")
       destination = .matchMain
