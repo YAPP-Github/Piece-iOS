@@ -33,40 +33,49 @@ struct CreateProfileContainerView: View {
   }
   
   var body: some View {
-    NavigationStack(path: $viewModel.presentedStep) {
-      CreateBasicInfoView(
-        profileCreator: viewModel.profileCreator,
-        checkNicknameUseCase: viewModel.checkNicknameUseCase,
-        uploadProfileImageUseCase: viewModel.uploadProfileImageUseCase
-      ) // TODO: - 프로필 기본정보 화면으로 변경
-        .navigationDestination(for: CreateProfileContainerViewModel.Step.self) { step in
-          switch step {
-          case .valueTalk:
-            ValueTalkView(
-              profileCreator: viewModel.profileCreator,
-              getValueTalksUseCase: viewModel.getValueTalksUseCase,
-              didTapBackButton: { viewModel.presentedStep.removeLast() },
-              didTapNextButton: { viewModel.presentedStep.append(.valuePick) }
-            )
-            
-          case .valuePick:
-            ValuePickView(
-              profileCreator: viewModel.profileCreator,
-              getValuePicksUseCase: viewModel.getValuePicksUseCase,
-              didTapBackButton: { viewModel.presentedStep.removeLast() },
-              didTapCreateProfileButton: {
-                viewModel.handleAction(.didTapCreateProfileButton)
-                
-                if viewModel.isProfileCreated {
-                  // TODO: - AI 요약 생성중 화면으로 라우팅 처리
-                }
-              }
-            )
-            .navigationBarHidden(true)
-            
-          default: EmptyView()
-          }
-        }
-    }
-  }
+     NavigationStack(path: $viewModel.navigationPath) {
+       CreateBasicInfoView(
+         profileCreator: viewModel.profileCreator,
+         checkNicknameUseCase: viewModel.checkNicknameUseCase,
+         uploadProfileImageUseCase: viewModel.uploadProfileImageUseCase,
+         didTapNextButton: { viewModel.navigationPath.append(CreateProfileStep.valueTalk) }
+       )
+       .navigationDestination(for: CreateProfileStep.self) { step in
+         switch step {
+         case .basicInfo:
+           CreateBasicInfoView(
+             profileCreator: viewModel.profileCreator,
+             checkNicknameUseCase: viewModel.checkNicknameUseCase,
+             uploadProfileImageUseCase: viewModel.uploadProfileImageUseCase,
+             didTapNextButton: { viewModel.navigationPath.append(CreateProfileStep.valueTalk) }
+           )
+           .toolbar(.hidden)
+
+         case .valueTalk:
+           ValueTalkView(
+             profileCreator: viewModel.profileCreator,
+             getValueTalksUseCase: viewModel.getValueTalksUseCase,
+             didTapBackButton: { viewModel.navigationPath.removeLast() },
+             didTapNextButton: { viewModel.navigationPath.append(CreateProfileStep.valuePick) }
+           )
+           .toolbar(.hidden)
+           
+         case .valuePick:
+           ValuePickView(
+             profileCreator: viewModel.profileCreator,
+             getValuePicksUseCase: viewModel.getValuePicksUseCase,
+             didTapBackButton: { viewModel.navigationPath.removeLast() },
+             didTapCreateProfileButton: {
+               viewModel.handleAction(.didTapCreateProfileButton)
+               
+               if viewModel.isProfileCreated {
+                 router.setRoute(.waitingAISummary)
+               }
+             }
+           )
+           .toolbar(.hidden)
+         }
+       }
+     }
+   }
 }
