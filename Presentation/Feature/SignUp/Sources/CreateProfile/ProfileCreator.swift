@@ -17,6 +17,7 @@ final class ProfileCreator {
   func updateBasicInfo(_ profile: ProfileModel) {
     print(profile)
     self.basicInfo = profile
+    isBasicInfoValid = true
   }
   
   func updateValueTalks(_ valueTalks: [ValueTalkModel]) {

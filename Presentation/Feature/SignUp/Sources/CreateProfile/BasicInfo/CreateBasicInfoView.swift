@@ -14,11 +14,13 @@ import UseCases
 struct CreateBasicInfoView: View {
   @State var viewModel: CreateBasicInfoViewModel
   @FocusState private var focusField: String?
+  var didTapNextButton: () -> Void
   
   init(
     profileCreator: ProfileCreator,
     checkNicknameUseCase: CheckNicknameUseCase,
-    uploadProfileImageUseCase: UploadProfileImageUseCase
+    uploadProfileImageUseCase: UploadProfileImageUseCase,
+    didTapNextButton: @escaping () -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
@@ -27,6 +29,7 @@ struct CreateBasicInfoView: View {
         uploadProfileImageUseCase: uploadProfileImageUseCase
       )
     )
+    self.didTapNextButton = didTapNextButton
   }
   
   var body: some View {
@@ -195,6 +198,7 @@ struct CreateBasicInfoView: View {
       RoundedButton(
         type: .solid,
         buttonText: "중복검사",
+        width: .maxWidth,
         action: { viewModel.handleAction(.tapVaildNickName)}
       )
     )
@@ -387,7 +391,12 @@ struct CreateBasicInfoView: View {
       type: .solid,
       buttonText: "다음",
       width: .maxWidth,
-      action: { viewModel.handleAction(.tapNextButton) }
+      action: {
+        viewModel.handleAction(.tapNextButton)
+        if viewModel.isNextButtonEnabled {
+          didTapNextButton()
+        }
+      }
     )
   }
   
