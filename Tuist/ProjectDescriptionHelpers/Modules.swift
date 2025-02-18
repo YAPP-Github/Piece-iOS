@@ -58,7 +58,7 @@ public extension Modules {
 public extension Modules {
   enum Utility: String {
     case PCFoundationExtension
-    case PCRemoteConfig
+    case PCFirebase
     case PCAppVersionService
     
     var path: String {

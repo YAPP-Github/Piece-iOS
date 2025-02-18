@@ -14,7 +14,6 @@ let packageSettings = PackageSettings(
     "KakaoSDKAuth": .framework,
     "KakaoSDKCommon": .framework,
     "KakaoSDKUser": .framework,
-    "FirebaseRemoteConfig": .framework,
   ],
   baseSettings: .settings()
 //      .settings(

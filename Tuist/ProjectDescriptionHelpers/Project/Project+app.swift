@@ -47,7 +47,9 @@ extension Project {
       entitlements: .file(path: .relativeToRoot("Piece-iOS.entitlements")),
       dependencies: dependencies,
       settings: .settings(
-        base: [:],
+        base: [
+          "OTHER_LDFLAGS": ["-ObjC"]
+        ],
         configurations: [
           .debug(name: "Debug", xcconfig: .relativeToRoot("Config.xcconfig")),
           .release(name: "Release", xcconfig: .relativeToRoot("Config.xcconfig"))
