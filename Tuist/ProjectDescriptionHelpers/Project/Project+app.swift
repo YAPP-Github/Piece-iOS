@@ -46,7 +46,95 @@ extension Project {
         ]
       ),
       sources: ["Sources/**"],
-      resources: ["Resources/**"],
+      resources: .resources(
+        ["Resources/**"],
+        privacyManifest: .privacyManifest(
+          tracking: false,
+          trackingDomains: [],
+          collectedDataTypes: [
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeName",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeEmailAddress",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypePhoneNumber",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeCoarseLocation",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeSensitiveInfo",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeContacts",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ],
+            [
+              "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeOtherDataTypes",
+              "NSPrivacyCollectedDataTypeLinked": true,
+              "NSPrivacyCollectedDataTypeTracking": false,
+              "NSPrivacyCollectedDataTypePurposes": [
+                "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+              ]
+            ]
+          ],
+          accessedApiTypes: [
+            [
+              "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+              "NSPrivacyAccessedAPITypeReasons": [
+                "CA92.1",
+              ],
+            ],
+          ]
+        )
+      ),
       entitlements: .file(path: .relativeToRoot("Piece-iOS.entitlements")),
       dependencies: dependencies,
       settings: .settings(
