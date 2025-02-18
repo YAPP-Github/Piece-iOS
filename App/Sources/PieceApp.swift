@@ -2,6 +2,7 @@ import DesignSystem
 import FirebaseCore
 import FirebaseRemoteConfig
 import LocalStorage
+import PCFirebase
 import Router
 import KakaoSDKCommon
 import KakaoSDKAuth
@@ -13,12 +14,14 @@ import SwiftUI
 @main
 struct PieceApp: App {
   init() {
-    // Kakao SDK 초기화
-    guard let KakaoAppKey = Bundle.main.infoDictionary?["NATIVE_APP_KEY"] as? String else {
-      fatalError()
+    do {
+      try PCFirebase.shared.configureFirebaseApp()
+      try PCFirebase.shared.setRemoteConfig()
+    } catch let error as PCFirebaseError {
+      print("Firebase setup failed: \(error.errorDescription)")
+    } catch {
+      print("Firebase setup failed with unknown error:", error)
     }
-    KakaoSDK.initSDK(appKey: KakaoAppKey)
-    FirebaseApp.configure()
     
     // 앱 첫 실행 테스트 시, 아래 주석 해제
     // PCUserDefaultsService.shared.resetFirstLaunch()
@@ -27,6 +30,23 @@ struct PieceApp: App {
       PCUserDefaultsService.shared.setDidSeeOnboarding(false)
       PCKeychainManager.shared.deleteAll()
     }
+    
+    Task {
+      do {
+        try await PCFirebase.shared.fetchRemoteConfigValues()
+      } catch let error as PCFirebaseError {
+        print("RemoteConfig fetch failed:", error.errorDescription)
+      } catch {
+        print("RemoteConfig fetch failed with unknown error:", error)
+      }
+    }
+    
+    // Kakao SDK 초기화
+    guard let kakaoAppKey = Bundle.main.infoDictionary?["NATIVE_APP_KEY"] as? String else {
+      print("Failed to load Kakao App Key")
+      return
+    }
+    KakaoSDK.initSDK(appKey: kakaoAppKey)
   }
   
   var body: some Scene {
