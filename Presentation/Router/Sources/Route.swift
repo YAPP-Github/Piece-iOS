@@ -22,7 +22,6 @@ public enum Route: Hashable {
   case matchValuePick
   case signUp
   case verifyContact
-  case createProfile
   case editValueTalk
   case editValuePick
   case withdraw
@@ -30,6 +29,9 @@ public enum Route: Hashable {
   case settingsWebView(title: String, uri: String)
   case reportUser(nickname: String)
   case blockUser(matchId: Int, nickname: String)
+  
+  // MARK: - 프로필 생성
+  case createProfile
   case waitingAISummary
   case completeCreateProfile
 }
