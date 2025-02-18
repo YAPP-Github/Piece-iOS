@@ -7,7 +7,8 @@
 
 import LocalStorage
 import Observation
-import PCAppVersionService
+import PCFirebase
+import PCFoundationExtension
 import Router
 import UseCases
 import UIKit
@@ -24,7 +25,6 @@ final class SplashViewModel {
   
   private let getServerStatusUseCase: GetServerStatusUseCase
   private let socialLoginUseCase: SocialLoginUseCase
-  private let appVersionService = PCAppVersionService.shared
   
   init(
     getServerStatusUseCase: GetServerStatusUseCase,
@@ -58,8 +58,7 @@ final class SplashViewModel {
     
     Task {
       do {
-        try await checkAppVersion()
-        
+        showNeedsForceUpdateAlert = needsForceUpdate()
         let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
         if didSeeOnboarding {
           // TODO: - SDK에 로그인 요청
@@ -71,9 +70,15 @@ final class SplashViewModel {
     }
   }
   
-  private func checkAppVersion() async throws {
-    let needsForceUpdate = try await appVersionService.needsForceUpdate()
-    self.showNeedsForceUpdateAlert = needsForceUpdate
+  private func needsForceUpdate() -> Bool {
+    let currentVersion = AppVersion.appVersion()
+    let minimumVersion = PCFirebase.shared.minimumVersion()
+    let needsForceUpdate = PCFirebase.shared.needsForceUpdate()
+    
+    print("currentVersion: \(currentVersion)")
+    print("minimumVersion: \(minimumVersion)")
+    print("needsForceUpdate: \(needsForceUpdate)")
+    return needsForceUpdate && currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
   }
   
   private func openAppStore() {
@@ -81,7 +86,7 @@ final class SplashViewModel {
     let appStoreUrl = "itms-apps://itunes.apple.com/app/apple-store/\(appId)"
     guard let url = URL(string: appStoreUrl) else { return }
     if UIApplication.shared.canOpenURL(url) {
-        UIApplication.shared.open(url)
+      UIApplication.shared.open(url)
     }
   }
 }

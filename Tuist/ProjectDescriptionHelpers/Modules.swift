@@ -59,7 +59,6 @@ public extension Modules {
   enum Utility: String {
     case PCFoundationExtension
     case PCFirebase
-    case PCAppVersionService
     
     var path: String {
       "Utility/\(self.rawValue)"
