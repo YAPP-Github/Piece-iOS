@@ -20,16 +20,6 @@ struct PieceApp: App {
       print("Firebase setup failed with unknown error:", error)
     }
     
-    Task {
-      do {
-        try await PCFirebase.shared.fetchRemoteConfigValues()
-      } catch let error as PCFirebaseError {
-        print("RemoteConfig fetch failed:", error.errorDescription)
-      } catch {
-        print("RemoteConfig fetch failed with unknown error:", error)
-      }
-    }
-    
     // Kakao SDK 초기화
     guard let kakaoAppKey = Bundle.main.infoDictionary?["NATIVE_APP_KEY"] as? String else {
       print("Failed to load Kakao App Key")

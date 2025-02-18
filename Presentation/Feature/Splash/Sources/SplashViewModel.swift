@@ -58,12 +58,15 @@ final class SplashViewModel {
     
     Task {
       do {
+        try await PCFirebase.shared.fetchRemoteConfigValues()
         showNeedsForceUpdateAlert = needsForceUpdate()
         let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
         if didSeeOnboarding {
           // TODO: - SDK에 로그인 요청
           // TODO: - 서버에 로그인 요청
         }
+      }  catch let error as PCFirebaseError {
+        print("RemoteConfig fetch failed:", error.errorDescription)
       } catch {
         print(error)
       }
