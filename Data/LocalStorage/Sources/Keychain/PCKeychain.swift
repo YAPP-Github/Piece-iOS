@@ -14,6 +14,4 @@ public enum PCKeychain: String, CaseIterable {
   
   // apple auth
   case appleAuthCode
-  case appleClientSecret
-  
 }
