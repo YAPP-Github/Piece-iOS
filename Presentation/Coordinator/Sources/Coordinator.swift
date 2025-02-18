@@ -54,15 +54,23 @@ public struct Coordinator {
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
       let termsRepository = repositoryFactory.createTermsRepository()
+      let blockContactsRepository = repositoryFactory.createBlockContactsRepository()
+      let settingsRepository = repositoryFactory.createSettingsRepository()
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      let fetchContactsUseCase = UseCaseFactory.createFetchContactsUseCase()
+      let blockContactsUseCase = UseCaseFactory.createBlockContactsUseCase(repository: blockContactsRepository)
+      let getContactsSyncTimeUseCase = UseCaseFactory.createGetContactsSyncTimeUseCase(repository: settingsRepository)
       HomeViewFactory.createHomeView(
         getProfileUseCase: getProfileUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase,
+        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
       )
       
     case .onboarding:
