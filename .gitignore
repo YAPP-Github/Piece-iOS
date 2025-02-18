@@ -76,4 +76,4 @@ Derived/
 Tuist/.build
 
 App/Resources/GoogleService-Info.plist
-Utility/PCRemoteConfig/Resources/remote_config_defaults.plist
+Utility/PCFirebase/Resources/remote_config_defaults.plist
