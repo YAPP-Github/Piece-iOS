@@ -112,6 +112,7 @@ struct ValuePickView: View {
       width: .maxWidth
     ) {
       viewModel.handleAction(.didTapCreateProfileButton)
+      didTapCreateProfileButton()
     }
     .padding(.top, 12)
     .padding(.horizontal, 20)

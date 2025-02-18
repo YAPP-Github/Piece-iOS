@@ -7,7 +7,14 @@
 
 import Entities
 import Observation
+import SwiftUI
 import UseCases
+
+enum CreateProfileStep: Hashable {
+  case basicInfo
+  case valueTalk
+  case valuePick
+}
 
 @Observable
 final class CreateProfileContainerViewModel {
@@ -15,13 +22,7 @@ final class CreateProfileContainerViewModel {
     case didTapCreateProfileButton
   }
   
-  enum Step {
-    case basicInfo
-    case valueTalk
-    case valuePick
-  }
-  
-  var presentedStep: [Step] = []
+  var navigationPath = NavigationPath()
   let profileCreator = ProfileCreator()
   let checkNicknameUseCase: CheckNicknameUseCase
   let uploadProfileImageUseCase: UploadProfileImageUseCase
@@ -29,7 +30,6 @@ final class CreateProfileContainerViewModel {
   let getValuePicksUseCase: GetValuePicksUseCase
   
   private let createProfileUseCase: CreateProfileUseCase
-  private(set) var currentStep: Step = .basicInfo
   private(set) var isProfileCreated: Bool = false
   private(set) var error: Error?
   
