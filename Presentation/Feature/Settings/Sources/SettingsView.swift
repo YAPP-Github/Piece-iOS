@@ -17,13 +17,19 @@ struct SettingsView: View {
   init(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase,
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase
+        contactsPermissionUseCase: contactsPermissionUseCase,
+        fetchContactsUseCase: fetchContactsUseCase,
+        blockContactsUseCase: blockContactsUseCase,
+        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
       )
     )
   }

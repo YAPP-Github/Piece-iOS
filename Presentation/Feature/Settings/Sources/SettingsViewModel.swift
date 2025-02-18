@@ -5,6 +5,7 @@
 // Created by summercat on 2025/02/12.
 //
 
+import Entities
 import Foundation
 import LocalStorage
 import PCFoundationExtension
@@ -40,16 +41,25 @@ final class SettingsViewModel {
   private let fetchTermsUseCase: FetchTermsUseCase
   private let notificationPermissionUseCase: NotificationPermissionUseCase
   private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let fetchContactsUseCase: FetchContactsUseCase
+  private let blockContactsUseCase: BlockContactsUseCase
+  private let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   private(set) var tappedTermItem: SettingsTermsItem?
   
   init(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase,
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   ) {
     self.fetchTermsUseCase = fetchTermsUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
     self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.fetchContactsUseCase = fetchContactsUseCase
+    self.blockContactsUseCase = blockContactsUseCase
+    self.getContactsSyncTimeUseCase = getContactsSyncTimeUseCase
     addObserver()
   }
   
@@ -79,7 +89,6 @@ final class SettingsViewModel {
       blockContactsToggled(isEnabled: isEnabled)
       
     case .synchronizeContactsButtonTapped:
-      // TODO: 연락처 동기화
       synchronizeContacts()
       
     case let .termsItemTapped(id):
@@ -183,9 +192,13 @@ final class SettingsViewModel {
   
   private func synchronizeContacts() {
     if isBlockContactsEnabled {
-      let updatedDate = Date()
-      userDefaults.setBlockContactsLastUpdatedDate(updatedDate)
-      self.updatedDate = updatedDate
+      Task {
+        let userContacts = try await fetchContactsUseCase.execute()
+        _ = try await blockContactsUseCase.execute(phoneNumbers: userContacts)
+        let response = try await getContactsSyncTimeUseCase.execute()
+        let updatedDate = response.syncTime
+        self.updatedDate = updatedDate
+      }
     }
   }
 }
