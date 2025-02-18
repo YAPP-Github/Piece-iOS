@@ -18,12 +18,18 @@ final class HomeViewModel {
     getProfileUseCase: GetProfileUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase,
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   ) {
     self.getProfileUseCase = getProfileUseCase
     self.fetchTermsUseCase = fetchTermsUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
     self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.fetchContactsUseCase = fetchContactsUseCase
+    self.blockContactsUseCase = blockContactsUseCase
+    self.getContactsSyncTimeUseCase = getContactsSyncTimeUseCase
   }
   
   let tabbarViewModel = TabBarViewModel()
@@ -31,4 +37,7 @@ final class HomeViewModel {
   let fetchTermsUseCase: FetchTermsUseCase
   let notificationPermissionUseCase: NotificationPermissionUseCase
   let contactsPermissionUseCase: ContactsPermissionUseCase
+  let fetchContactsUseCase: FetchContactsUseCase
+  let blockContactsUseCase: BlockContactsUseCase
+  let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
 }
