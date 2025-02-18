@@ -61,6 +61,7 @@ struct VerifingContactView: View {
           RoundedButton(
             type: viewModel.phoneNumberTextfieldButtonType,
             buttonText: viewModel.recivedCertificationNumberButtonText,
+            width: .maxWidth,
             action: {
               viewModel.handleAction(.reciveCertificationNumber)
             }
@@ -71,7 +72,6 @@ struct VerifingContactView: View {
           viewModel.phoneNumber = newValue.filter { $0.isNumber }
         }
         .textContentType(.telephoneNumber)
-        
         
         if viewModel.showVerificationField {
           PCTextField(
@@ -86,6 +86,7 @@ struct VerifingContactView: View {
             RoundedButton(
               type: viewModel.verificationCodeTextfieldButtonType,
               buttonText: "확인",
+              width: .maxWidth,
               action: {
                 viewModel.handleAction(.checkCertificationNumber)
               }
@@ -105,8 +106,8 @@ struct VerifingContactView: View {
         )
       }
       .padding(.bottom, 10)
-      .padding(.horizontal, 20)
     }
+    .padding(.horizontal, 20)
     .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
       router.setRoute(.termsAgreement)
     }
