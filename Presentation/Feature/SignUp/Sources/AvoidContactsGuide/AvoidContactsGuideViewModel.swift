@@ -56,11 +56,7 @@ final class AvoidContactsGuideViewModel {
       if isAuthorized {
         await isToastVisible()
         let userContacts = try await fetchContactsUseCase.execute()
-        let encodedContacts = userContacts.compactMap { $0.data(using: .utf8)?.base64EncodedString() }
-        
-        let phoneNumbers: BlockContactsModel = BlockContactsModel(phoneNumbers: encodedContacts)
-        _ = try await blockContactsUseCase.execute(phoneNumbers: phoneNumbers)
-        
+        _ = try await blockContactsUseCase.execute(phoneNumbers: userContacts)
       } else {
         isPresentedAlert = true
       }
