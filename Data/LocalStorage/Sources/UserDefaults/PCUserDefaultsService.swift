@@ -39,6 +39,15 @@ public final class PCUserDefaultsService {
       _ = PCUserDefaults.setObjectFor(key: .isFirstLaunch, object: newValue)
     }
   }
+  
+  var socialLoginType: String {
+    get {
+      PCUserDefaults.objectFor(key: .socialLoginType) as? String ?? ""
+    }
+    set {
+      _ = PCUserDefaults.setObjectFor(key: .socialLoginType, object: newValue)
+    }
+  }
 }
 
 public extension PCUserDefaultsService {
@@ -61,6 +70,14 @@ public extension PCUserDefaultsService {
   
   func setBlockContactsLastUpdatedDate(_ date: Date) {
     self.blockContactsLastUpdatedDate = date
+  }
+  
+  func setSocialLoginType(_ type: String) {
+    self.socialLoginType = type
+  }
+  
+  func getSocialLoginType() -> String {
+    socialLoginType
   }
   
   /// 첫 실행 여부 확인

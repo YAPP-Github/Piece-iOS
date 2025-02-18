@@ -33,7 +33,11 @@ final class WithdrawConfirmViewModel {
   }
   
   private func handleContirmWithdraw() async {
-    //PCKeychainManager.shared.read(.)
+    if PCUserDefaultsService.shared.getSocialLoginType() == "apple" {
+      revokeAppleIDCredential()
+    } else if PCUserDefaultsService.shared.getSocialLoginType() == "kakao" {
+      revokeKakao()
+    }
   }
   
   private func revokeKakao() async throws {
