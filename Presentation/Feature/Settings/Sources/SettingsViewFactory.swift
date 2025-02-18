@@ -12,12 +12,18 @@ public struct SettingsViewFactory {
   public static func createSettingsView(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase,
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   ) -> some View {
     SettingsView(
       fetchTermsUseCase: fetchTermsUseCase,
       notificationPermissionUseCase: notificationPermissionUseCase,
-      contactsPermissionUseCase: contactsPermissionUseCase
+      contactsPermissionUseCase: contactsPermissionUseCase,
+      fetchContactsUseCase: fetchContactsUseCase,
+      blockContactsUseCase: blockContactsUseCase,
+      getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
     )
   }
   

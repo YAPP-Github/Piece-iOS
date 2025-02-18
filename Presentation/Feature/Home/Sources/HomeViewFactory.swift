@@ -14,13 +14,19 @@ public struct HomeViewFactory {
     getProfileUseCase: GetProfileUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase
+    contactsPermissionUseCase: ContactsPermissionUseCase,
+    fetchContactsUseCase: FetchContactsUseCase,
+    blockContactsUseCase: BlockContactsUseCase,
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   ) -> some View {
     HomeView(
       getProfileUseCase: getProfileUseCase,
       fetchTermsUseCase: fetchTermsUseCase,
       notificationPermissionUseCase: notificationPermissionUseCase,
-      contactsPermissionUseCase: contactsPermissionUseCase
+      contactsPermissionUseCase: contactsPermissionUseCase,
+      fetchContactsUseCase: fetchContactsUseCase,
+      blockContactsUseCase: blockContactsUseCase,
+      getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
     )
   }
 }
