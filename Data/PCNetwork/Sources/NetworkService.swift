@@ -8,6 +8,7 @@
 import DTO
 import Foundation
 import Alamofire
+import LocalStorage
 
 public class NetworkService {
   public static let shared = NetworkService()

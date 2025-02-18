@@ -12,5 +12,9 @@ let project = Project.staticLibrary(
   name: Modules.Presentation.Withdraw.rawValue,
   dependencies: [
     .presentation(target: .DesignSystem),
+    .presentation(target: .Router),
+    .utility(target: .PCFoundationExtension),
+    .domain(target: .UseCases),
+    .data(target: .LocalStorage)
   ]
 )

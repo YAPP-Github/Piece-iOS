@@ -164,6 +164,7 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
     
     print("🍎 identityToken : \(identityToken)")
     print("🍎 authorizationCode : \(authorizationCode)")
+    PCKeychainManager.shared.save(.appleAuthCode, value: authorizationCode)
     
     Task {
       do {

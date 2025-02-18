@@ -11,4 +11,7 @@ public enum PCKeychain: String, CaseIterable {
   case accessToken
   case refreshToken
   case role
+  
+  // apple auth
+  case appleAuthCode
 }

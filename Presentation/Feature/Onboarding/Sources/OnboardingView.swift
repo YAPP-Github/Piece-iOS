@@ -30,6 +30,7 @@ struct OnboardingView: View {
     .onAppear {
       viewModel.handleAction(.onAppear)
     }
+    .toolbar(.hidden)
   }
   
   private var topBar: some View {
