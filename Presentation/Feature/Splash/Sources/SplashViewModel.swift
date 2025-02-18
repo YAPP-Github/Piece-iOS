@@ -56,6 +56,49 @@ final class SplashViewModel {
     /// - PENDING: 프로필 등록 완료, 프로필 심사중 > 매칭 메인 - 심사중
     /// - USER: 프로필 심사 완료 > 매칭 메인
     
+    print("onAppear called")
+    
+    // 온보딩 여부 확인
+    guard PCUserDefaultsService.shared.getDidSeeOnboarding() else {
+      destination = .onboarding
+      return
+    }
+    
+    // 로그인 여부 확인 ( AccessToken 유무 확인 )
+    guard let accessToken = PCKeychainManager.shared.read(.accessToken) else {
+      print("AccessToken이 없어서 로그인 화면으로 이동")
+      destination = .login
+      return
+    }
+    print("AccessToken: \(accessToken)")
+    
+    // role에 따라 화면 분기 처리
+    guard let role = PCKeychainManager.shared.read(.role) else {
+      print("Role이 nil이어서 로그인 화면으로 이동")
+      destination = .login
+      return
+    }
+    print(role)
+    
+    switch role {
+    case "NONE":
+      print("---NONE---")
+      destination = .verifyContact
+    case "REGISTER":
+      print("---REGISTER---")
+      destination = .createProfile
+    case "PENDING":
+      print("---PENDING---")
+      destination = .matchMain
+    case "USER":
+      print("---USER---")
+      destination = .matchMain
+    default:
+      print("---\(role)---")
+      destination = .login
+    }
+    
+    
     Task {
       do {
         try await PCFirebase.shared.fetchRemoteConfigValues()
@@ -85,7 +128,7 @@ final class SplashViewModel {
   }
   
   private func openAppStore() {
-    let appId = "" // TODO: - 앱 ID 추가
+    let appId = "6740155700" 
     let appStoreUrl = "itms-apps://itunes.apple.com/app/apple-store/\(appId)"
     guard let url = URL(string: appStoreUrl) else { return }
     if UIApplication.shared.canOpenURL(url) {

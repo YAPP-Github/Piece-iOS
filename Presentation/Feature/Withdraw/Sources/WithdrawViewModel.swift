@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UseCases
 
 @Observable
 final class WithdrawViewModel {

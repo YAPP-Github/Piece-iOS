@@ -1,5 +1,6 @@
 import DesignSystem
 import PCFirebase
+import LocalStorage
 import Router
 import KakaoSDKCommon
 import KakaoSDKAuth
@@ -26,6 +27,14 @@ struct PieceApp: App {
       return
     }
     KakaoSDK.initSDK(appKey: kakaoAppKey)
+    
+    // 앱 첫 실행 테스트 시, 아래 주석 해제
+    // PCUserDefaultsService.shared.resetFirstLaunch()
+    if PCUserDefaultsService.shared.checkFirstLaunch() {
+      PCUserDefaultsService.shared.initialize()
+      PCUserDefaultsService.shared.setDidSeeOnboarding(false)
+      PCKeychainManager.shared.deleteAll()
+    }
   }
   
   var body: some Scene {
