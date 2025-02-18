@@ -29,6 +29,16 @@ public final class PCUserDefaultsService {
       _ = PCUserDefaults.setObjectFor(key: .blockContactsLastUpdatedDate, object: newValue)
     }
   }
+  
+  // 처음 앱을 실행하는지
+  var isFirstLaunch: Bool {
+    get {
+      PCUserDefaults.objectFor(key: .isFirstLaunch) as? Bool ?? true
+    }
+    set {
+      _ = PCUserDefaults.setObjectFor(key: .isFirstLaunch, object: newValue)
+    }
+  }
 }
 
 public extension PCUserDefaultsService {
@@ -51,5 +61,20 @@ public extension PCUserDefaultsService {
   
   func setBlockContactsLastUpdatedDate(_ date: Date) {
     self.blockContactsLastUpdatedDate = date
+  }
+  
+  /// 첫 실행 여부 확인
+  func checkFirstLaunch() -> Bool {
+    if isFirstLaunch {
+      isFirstLaunch = false
+      return true
+    }
+    return false
+  }
+  
+  // 강제로 첫 실행 플래그를 리셋 (테스트용)
+  func resetFirstLaunch() {
+    isFirstLaunch = true
+    didSeeOnboarding = false
   }
 }

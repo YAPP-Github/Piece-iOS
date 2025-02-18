@@ -6,6 +6,7 @@
 //
 
 public enum UserDefaultsKeys: String {
+  case isFirstLaunch
   case didSeeOnboarding
   case socialLoginType
   case blockContactsLastUpdatedDate // TODO: - 서버에서 준다고 해서 지우기
