@@ -6,6 +6,7 @@
 //
 
 import ProjectDescription
+import ProjectDescriptionHelpers
 
 extension Project {
   public static func app(
@@ -34,10 +35,12 @@ extension Project {
             "kakaokompassauth"
           ],
           "GIDClientID": "$(GIDClientID)",
+          "CFBundleShortVersionString": AppConstants.version,
+          "CFBundleVersion": AppConstants.build,
           "CFBundleURLSchemes": [
             "CFBundleURLSchemes": [
               "kakao$(NATIVE_APP_KEY)",
-              "YOUR_DOT_REVERSED_IOS_CLIENT_ID"
+              "\(AppConstants.bundleId)"
             ]
           ]
         ]
