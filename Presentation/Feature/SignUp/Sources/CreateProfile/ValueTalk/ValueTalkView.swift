@@ -82,8 +82,8 @@ struct ValueTalkView: View {
 
   private var valueTalks: some View {
     ForEach(
-      Array(zip(viewModel.cardViewModels.indices, viewModel.valueTalks)),
-      id: \.1
+      Array(zip(viewModel.cardViewModels.indices, viewModel.cardViewModels)),
+      id: \.0
     ) { index, valueTalk in
       ValueTalkCard(viewModel: Binding(
         get: { viewModel.cardViewModels[index] },

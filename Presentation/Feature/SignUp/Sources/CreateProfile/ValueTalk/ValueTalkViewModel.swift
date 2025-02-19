@@ -48,6 +48,7 @@ final class ValueTalkViewModel {
     }
   }
   
+  @MainActor
   private func fetchValueTalks() async {
     do {
       let valueTalks = try await getValueTalksUseCase.execute()

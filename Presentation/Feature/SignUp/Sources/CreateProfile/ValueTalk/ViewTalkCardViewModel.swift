@@ -12,7 +12,7 @@ import SwiftUI
 import Observation
 
 @Observable
-final class ValueTalkCardViewModel: Equatable {
+final class ValueTalkCardViewModel: Hashable {
   static func == (lhs: ValueTalkCardViewModel, rhs: ValueTalkCardViewModel) -> Bool {
     lhs.model == rhs.model
   }
@@ -46,6 +46,12 @@ final class ValueTalkCardViewModel: Equatable {
       let limitedText = answer.count <= 300 ? answer : String(answer.prefix(300))
       localAnswer = limitedText
     }
+  }
+  
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(model)
+    hasher.combine(index)
+    hasher.combine(localAnswer)
   }
 
   private func increaseGuideTextIndex() {
