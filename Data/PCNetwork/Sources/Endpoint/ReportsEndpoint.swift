@@ -7,6 +7,7 @@
 
 import Alamofire
 import DTO
+import LocalStorage
 
 public enum ReportsEndpoint: TargetType {
   case report
@@ -25,7 +26,8 @@ public enum ReportsEndpoint: TargetType {
   
   public var headers: [String : String] {
     switch self {
-    case .report: [:]
+    case .report:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   

@@ -30,7 +30,10 @@ public enum LoginEndpoint: TargetType {
         NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
     case .socialLoginTokenRefresh(body: let body):
-      [:]
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
     }
   }
   

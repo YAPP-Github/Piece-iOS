@@ -45,13 +45,32 @@ public enum MatchesEndpoint: TargetType {
   
   public var headers: [String : String] {
     switch self {
-    case .profileBasic: [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
-    case .valueTalks: [:]
-    case .valuePicks: [:]
-    case .accept: [:]
-    case .matchesInfos: [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
-    case .refuse: [:]
-    case .block: [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .profileBasic:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .valueTalks:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .valuePicks:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .accept:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .matchesInfos:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .refuse:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .block:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   

@@ -8,6 +8,7 @@
 import Alamofire
 import DTO
 import Foundation
+import LocalStorage
 
 public enum ProfileEndpoint: TargetType {
   case postProfile(PostProfileRequestDTO)
@@ -47,14 +48,37 @@ public enum ProfileEndpoint: TargetType {
   
   public var headers: [String : String] {
     switch self {
-    case .postProfile: [:]
-    case .postCheckNickname: [NetworkHeader.accept : NetworkHeader.all]
-    case .postUploadImage: [NetworkHeader.contentType : NetworkHeader.multipartFormData]
-    case .getValueTalks: [:]
-    case .updateValueTalks: [:]
-    case .getValuePicks: [:]
-    case .updateValuePicks: [:]
-    case .updateValueTalkSummary: [:]
+    case .postProfile:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .postCheckNickname:
+      [NetworkHeader.accept : NetworkHeader.all]
+    case .postUploadImage:
+      [NetworkHeader.contentType : NetworkHeader.multipartFormData]
+    case .getValueTalks:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .updateValueTalks:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .getValuePicks:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .updateValuePicks:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .updateValueTalkSummary:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
     }
   }
   
