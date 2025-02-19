@@ -7,6 +7,7 @@
 
 import Alamofire
 import DTO
+import LocalStorage
 
 public enum SSEEndpoint: TargetType {
   case connect
@@ -28,8 +29,10 @@ public enum SSEEndpoint: TargetType {
   
   public var headers: [String : String] {
     switch self {
-    case .connect: [:] // TODO: - 헤더 넣어야 하는지 확인
-    case .disconnect: [:]
+    case .connect:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .disconnect:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   
