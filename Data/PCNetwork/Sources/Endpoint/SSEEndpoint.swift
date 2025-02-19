@@ -15,7 +15,7 @@ public enum SSEEndpoint: TargetType {
   
   public var method: Alamofire.HTTPMethod {
     switch self {
-    case .connect: .post
+    case .connect: .get
     case .disconnect: .delete
     }
   }
