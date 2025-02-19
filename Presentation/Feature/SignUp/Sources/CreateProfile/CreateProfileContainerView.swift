@@ -67,12 +67,13 @@ struct CreateProfileContainerView: View {
              didTapBackButton: { viewModel.navigationPath.removeLast() },
              didTapCreateProfileButton: {
                viewModel.handleAction(.didTapCreateProfileButton)
-               
-               if viewModel.isProfileCreated {
-                 router.setRoute(.waitingAISummary)
-               }
              }
            )
+           .onChange(of: viewModel.isProfileCreated) { _, isProfileCreated in
+             if viewModel.isProfileCreated {
+               router.setRoute(.waitingAISummary)
+             }
+           }
            .toolbar(.hidden)
          }
        }
