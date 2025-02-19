@@ -42,10 +42,7 @@ final class WaitingAISummaryViewModel {
     sseTask = Task {
       do {
         for try await _ in getAISummaryUseCase.execute() { }
-        
-        _ = try await finishAISummaryUseCase.execute()
         isCreatingSummary = false
-
       } catch {
         print(error)
       }
@@ -53,6 +50,13 @@ final class WaitingAISummaryViewModel {
   }
   
   private func finishSSEConnection() {
+    Task {
+      do {
+        _ = try await finishAISummaryUseCase.execute()
+      } catch {
+        print(error)
+      }
+    }
     sseTask?.cancel()
   }
 }

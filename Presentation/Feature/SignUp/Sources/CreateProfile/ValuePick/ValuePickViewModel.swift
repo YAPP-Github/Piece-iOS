@@ -52,6 +52,7 @@ final class ValuePickViewModel {
     }
   }
   
+  @MainActor
   private func fetchValuePicks() async {
     do {
       let valuePicks = try await getValuePicksUseCase.execute()

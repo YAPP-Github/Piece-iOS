@@ -49,7 +49,10 @@ public enum ProfileEndpoint: TargetType {
   public var headers: [String : String] {
     switch self {
     case .postProfile:
-      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+      [
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? ""),
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+      ]
     case .postCheckNickname:
       [NetworkHeader.accept : NetworkHeader.all]
     case .postUploadImage:

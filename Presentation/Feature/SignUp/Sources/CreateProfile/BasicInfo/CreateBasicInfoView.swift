@@ -343,10 +343,10 @@ struct CreateBasicInfoView: View {
         }
         SelectCard(
           isEditing: true,
-          isSelected: viewModel.snsActivityLevel == "비활동",
-          text: "비활동"
+          isSelected: viewModel.snsActivityLevel == "은둔",
+          text: "은둔"
         ){
-          viewModel.snsActivityLevel = "비활동"
+          viewModel.snsActivityLevel = "은둔"
         }
       }
       Text(viewModel.snsInfoText)
