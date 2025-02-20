@@ -33,16 +33,15 @@ extension Project {
             "NSAllowsArbitraryLoads": true
           ],
           "LSApplicationQueriesSchemes": [
-            "kakaokompassauth"
+            "kakaokompassauth",
+            "kakaolink"
           ],
           "GIDClientID": "$(GIDClientID)",
           "CFBundleShortVersionString": AppConstants.version,
           "CFBundleVersion": AppConstants.build,
-          "CFBundleURLSchemes": [
-            "CFBundleURLSchemes": [
-              "kakao$(NATIVE_APP_KEY)",
-              "\(AppConstants.bundleId)"
-            ]
+          "CFBundleURLTypes": [
+            ["CFBundleURLSchemes": ["kakao$(NATIVE_APP_KEY)"]],
+            ["CFBundleURLSchemes": ["\(AppConstants.bundleId)"]]
           ]
         ]
       ),

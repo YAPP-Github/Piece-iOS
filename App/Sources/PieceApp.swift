@@ -55,7 +55,7 @@ struct PieceApp: App {
         .preventScreenshot()
         .onOpenURL(perform: { url in
           if (AuthApi.isKakaoTalkLoginUrl(url)) {
-            AuthController.handleOpenUrl(url: url)
+            _ = AuthController.handleOpenUrl(url: url)
           }
         })
         .onOpenURL { url in
