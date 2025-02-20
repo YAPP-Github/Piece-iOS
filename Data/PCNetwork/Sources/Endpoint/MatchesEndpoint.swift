@@ -18,6 +18,7 @@ public enum MatchesEndpoint: TargetType {
   case matchesInfos
   case refuse
   case block(matchId: Int)
+  case contacts
   case image
   
   public var method: HTTPMethod {
@@ -29,6 +30,7 @@ public enum MatchesEndpoint: TargetType {
     case .matchesInfos: .get
     case .refuse: .put
     case .block: .post
+    case .contacts: .get
     case .image: .get
     }
   }
@@ -42,6 +44,7 @@ public enum MatchesEndpoint: TargetType {
     case .matchesInfos: "api/matches/infos"
     case .refuse: "api/matches/refuse"
     case let .block(matchId): "api/matches/\(matchId)/blocks"
+    case .contacts: "api/matches/contacts"
     case .image: "api/matches/images"
     }
   }
@@ -75,6 +78,9 @@ public enum MatchesEndpoint: TargetType {
     case .block:
       [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
       
+    case .contacts:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+      
     case .image:
       [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
@@ -89,6 +95,7 @@ public enum MatchesEndpoint: TargetType {
     case .matchesInfos: .plain
     case .refuse: .plain
     case .block: .plain
+    case .contacts: .plain
     case .image: .plain
     }
   }
