@@ -14,4 +14,5 @@ public protocol MatchesRepositoryInterface {
   func acceptMatch() async throws -> VoidModel
   func refuseMatch() async throws -> VoidModel
   func blockUser(matchId: Int) async throws -> VoidModel
+  func getMatchImage() async throws -> MatchImageModel
 }
