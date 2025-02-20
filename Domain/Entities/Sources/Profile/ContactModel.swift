@@ -13,6 +13,7 @@ public struct ContactModel: Identifiable, Equatable {
     case openKakao = "OPEN_CHAT_URL"
     case instagram = "INSTAGRAM_ID"
     case phone = "PHONE_NUMBER"
+    case unknown = "UNKNOWN"
   }
   
   public let id = UUID()
