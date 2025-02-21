@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ContactModel: Identifiable, Equatable {
+public struct ContactModel: Hashable, Identifiable {
   public enum ContactType: String {
     case kakao = "KAKAO_TALK_ID"
     case openKakao = "OPEN_CHAT_URL"

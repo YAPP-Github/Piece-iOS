@@ -5,6 +5,7 @@
 //  Created by eunseou on 2/5/25.
 //
 
+import Entities
 import SwiftUI
 import UseCases
 
@@ -53,25 +54,23 @@ public struct SignUpViewFactory {
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase,
     getValueTalksUseCase: GetValueTalksUseCase,
-    getValuePicksUseCase: GetValuePicksUseCase,
-    createProfileUseCase: CreateProfileUseCase
+    getValuePicksUseCase: GetValuePicksUseCase
   ) -> some View {
     CreateProfileContainerView(
       checkNicknameUseCase: checkNicknameUseCase,
       uploadProfileImageUseCase: uploadProfileImageUseCase,
       getValueTalksUseCase: getValueTalksUseCase,
-      getValuePicksUseCase: getValuePicksUseCase,
-      createProfileUseCase: createProfileUseCase
+      getValuePicksUseCase: getValuePicksUseCase
     )
   }
   
   public static func createWaitingAISummaryView(
-    getAISummaryUseCase: GetAISummaryUseCase,
-    finishAISummaryUseCase: FinishAISummaryUseCase
+    profile: ProfileModel,
+    createProfileUseCase: CreateProfileUseCase
   ) -> some View {
     WaitingAISummaryView(
-      getAISummaryUseCase: getAISummaryUseCase,
-      finishAISummaryUseCase: finishAISummaryUseCase
+      profile: profile,
+      createProfileUseCase: createProfileUseCase
     )
   }
   

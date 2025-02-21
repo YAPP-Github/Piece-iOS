@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import Entities
 import Router
 import SwiftUI
 import UseCases
@@ -15,13 +16,13 @@ struct WaitingAISummaryView: View {
   @Environment(Router.self) private var router
   
   init(
-    getAISummaryUseCase: GetAISummaryUseCase,
-    finishAISummaryUseCase: FinishAISummaryUseCase
+    profile: ProfileModel,
+    createProfileUseCase: CreateProfileUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
-        getAISummaryUseCase: getAISummaryUseCase,
-        finishAISummaryUseCase: finishAISummaryUseCase
+        profile: profile,
+        createProfileUseCase: createProfileUseCase
       )
     )
   }
@@ -40,9 +41,6 @@ struct WaitingAISummaryView: View {
     .background(.grayscaleWhite)
     .onAppear {
       viewModel.handleAction(.onAppear)
-    }
-    .onDisappear {
-      viewModel.handleAction(.onDisappear)
     }
     .onChange(of: viewModel.isCreatingSummary) { _, newValue in
       if newValue == false {

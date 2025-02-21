@@ -5,7 +5,7 @@
 //  Created by summercat on 1/30/25.
 //
 
-public struct ProfileModel {
+public struct ProfileModel: Hashable {
   public init(
     nickname: String,
     description: String,

@@ -5,6 +5,7 @@
 //  Created by summercat on 2/16/25.
 //
 
+import Entities
 import Observation
 import UseCases
 
@@ -12,51 +13,36 @@ import UseCases
 final class WaitingAISummaryViewModel {
   enum Action {
     case onAppear
-    case onDisappear
   }
   
   init(
-    getAISummaryUseCase: GetAISummaryUseCase,
-    finishAISummaryUseCase: FinishAISummaryUseCase
+    profile: ProfileModel,
+    createProfileUseCase: CreateProfileUseCase
   ) {
-    self.getAISummaryUseCase = getAISummaryUseCase
-    self.finishAISummaryUseCase = finishAISummaryUseCase
+    self.profile = profile
+    self.createProfileUseCase = createProfileUseCase
   }
   
   private(set) var isCreatingSummary: Bool = true
-  private var sseTask: Task<Void, Never>?
   
-  private let getAISummaryUseCase: GetAISummaryUseCase
-  private let finishAISummaryUseCase: FinishAISummaryUseCase
+  private let profile: ProfileModel
+  private let createProfileUseCase: CreateProfileUseCase
   
   func handleAction(_ action: Action) {
     switch action {
     case .onAppear:
       createAISummary()
-    case .onDisappear:
-      finishSSEConnection()
     }
   }
   
   private func createAISummary() {
-    sseTask = Task {
+    Task {
       do {
-        for try await _ in getAISummaryUseCase.execute() { }
+        let _ = try await createProfileUseCase.execute(profile: profile)
         isCreatingSummary = false
       } catch {
         print(error)
       }
     }
-  }
-  
-  private func finishSSEConnection() {
-    Task {
-      do {
-        _ = try await finishAISummaryUseCase.execute()
-      } catch {
-        print(error)
-      }
-    }
-    sseTask?.cancel()
   }
 }
