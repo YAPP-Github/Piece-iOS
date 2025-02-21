@@ -29,22 +29,19 @@ final class CreateProfileContainerViewModel {
   let getValueTalksUseCase: GetValueTalksUseCase
   let getValuePicksUseCase: GetValuePicksUseCase
   
-  private let createProfileUseCase: CreateProfileUseCase
-  private(set) var isProfileCreated: Bool = false
+  private(set) var profile: ProfileModel?
   private(set) var error: Error?
   
   init(
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase,
     getValueTalksUseCase: GetValueTalksUseCase,
-    getValuePicksUseCase: GetValuePicksUseCase,
-    createProfileUseCase: CreateProfileUseCase
+    getValuePicksUseCase: GetValuePicksUseCase
   ) {
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
     self.getValueTalksUseCase = getValueTalksUseCase
     self.getValuePicksUseCase = getValuePicksUseCase
-    self.createProfileUseCase = createProfileUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -57,17 +54,6 @@ final class CreateProfileContainerViewModel {
   }
     
   private func createProfile() {
-    Task {
-      do {
-        let profile = profileCreator.createProfile()
-        let response = try await createProfileUseCase.execute(profile: profile)
-        
-        isProfileCreated = true
-        error = nil
-      } catch {
-        self.error = error
-        print(error)
-      }
-    }
+    profile = profileCreator.createProfile()
   }
 }

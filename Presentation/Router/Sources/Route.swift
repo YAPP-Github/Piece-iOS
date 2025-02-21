@@ -5,6 +5,8 @@
 //  Created by summercat on 1/30/25.
 //
 
+import Entities
+
 // TODO: - 화면별로 분리해서 주석
 public enum Route: Hashable {
   case splash
@@ -33,6 +35,6 @@ public enum Route: Hashable {
   
   // MARK: - 프로필 생성
   case createProfile
-  case waitingAISummary
+  case waitingAISummary(profile: ProfileModel)
   case completeCreateProfile
 }

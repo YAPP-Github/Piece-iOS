@@ -18,16 +18,14 @@ struct CreateProfileContainerView: View {
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase,
     getValueTalksUseCase: GetValueTalksUseCase,
-    getValuePicksUseCase: GetValuePicksUseCase,
-    createProfileUseCase: CreateProfileUseCase
+    getValuePicksUseCase: GetValuePicksUseCase
   ) {
     _viewModel = .init(
       .init(
         checkNicknameUseCase: checkNicknameUseCase,
         uploadProfileImageUseCase: uploadProfileImageUseCase,
         getValueTalksUseCase: getValueTalksUseCase,
-        getValuePicksUseCase: getValuePicksUseCase,
-        createProfileUseCase: createProfileUseCase
+        getValuePicksUseCase: getValuePicksUseCase
       )
     )
   }
