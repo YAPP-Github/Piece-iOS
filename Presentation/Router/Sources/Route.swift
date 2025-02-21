@@ -37,4 +37,9 @@ public enum Route: Hashable {
   case createProfile
   case waitingAISummary(profile: ProfileModel)
   case completeCreateProfile
+  
+  // MARK: - 프로필 미리보기
+  case previewProfileBasic
+  case previewProfileValueTalks(nickname: String, description: String, imageUri: String)
+  case previewProfileValuePicks(nickname: String, description: String, imageUri: String)
 }
