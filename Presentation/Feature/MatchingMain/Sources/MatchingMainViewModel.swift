@@ -15,6 +15,7 @@ import UseCases
 @Observable
 final class MatchingMainViewModel {
   enum MatchingButtonState {
+    case pending
     case checkMatchingPiece // 매칭 조각 확인하기
     case acceptMatching // 매칭 수락하기
     case responseComplete // 응답 완료
@@ -22,6 +23,8 @@ final class MatchingMainViewModel {
     
     var title: String {
       switch self {
+      case .pending:
+        "내 프로필 확인하기"
       case .checkMatchingPiece:
         "매칭 조각 확인하기"
       case .acceptMatching:
@@ -35,7 +38,7 @@ final class MatchingMainViewModel {
     
     var buttonType: RoundedButton.ButtonType {
       switch self {
-      case .checkMatchingPiece, .acceptMatching, .checkContact:
+      case .pending, .checkMatchingPiece, .acceptMatching, .checkContact:
           .solid
       case .responseComplete:
           .disabled
@@ -43,11 +46,12 @@ final class MatchingMainViewModel {
     }
     
     var destination: Route? {
-      switch self { // TODO: - 매칭 심사중일 때 내 프로필 확인하기 화면
+      switch self {
+      case .pending: .previewProfileBasic
       case .checkMatchingPiece: .matchProfileBasic
       case .acceptMatching: nil
       case .responseComplete: nil
-      case .checkContact: nil // TODO: - 연락처 확인 화면으로 변경
+      case .checkContact: nil // TODO: - 연락처 확인 화면으로 변경 (연관값 전달 필요..)
       }
     }
   }
