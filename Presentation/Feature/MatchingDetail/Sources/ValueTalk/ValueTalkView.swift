@@ -151,7 +151,7 @@ struct ValueTalkView: View {
   
   private var backButton: some View {
     CircleButton(
-      type: .solid,
+      type: .solid_primary,
       icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage,
       action: { router.pop() }
     )
@@ -159,7 +159,7 @@ struct ValueTalkView: View {
   
   private var nextButton: some View {
     CircleButton(
-      type: .solid,
+      type: .solid_primary,
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
       action: { router.push(to: .matchValuePick) }
     )

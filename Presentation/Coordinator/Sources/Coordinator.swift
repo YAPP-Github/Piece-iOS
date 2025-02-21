@@ -24,6 +24,7 @@ import MatchingMain
 import Splash
 import Settings
 import ReportUser
+import MatchResult
 
 public struct Coordinator {
   public init() { }
@@ -32,7 +33,6 @@ public struct Coordinator {
   private let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
   
   // MARK: - UseCases
-  private let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase()
   
   @ViewBuilder
   public func view(for route: Route) -> some View {
@@ -94,6 +94,7 @@ public struct Coordinator {
     case .matchProfileBasic:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchProfileBasicUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
+      let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchProfileBasicView(
         getMatchProfileBasicUseCase: getMatchProfileBasicUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
@@ -102,6 +103,7 @@ public struct Coordinator {
     case .matchValueTalk:
       let matchesRepository = repositoryFactory.createMatchesRepository()
       let getMatchValueTalkUseCase = UseCaseFactory.createGetMatchValueTalkUseCase(repository: matchesRepository)
+      let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchValueTalkView(
         getMatchValueTalkUseCase: getMatchValueTalkUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase
@@ -112,6 +114,7 @@ public struct Coordinator {
       let getMatchValuePickUseCase = UseCaseFactory.createGetMatchValuePickUseCase(repository: matchesRepository)
       let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
       let refuseMatchUseCase = UseCaseFactory.createRefuseMatchUseCase(repository: matchesRepository)
+      let getMatchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase(repository: matchesRepository)
       MatchDetailViewFactory.createMatchValuePickView(
         getMatchValuePickUseCase: getMatchValuePickUseCase,
         getMatchPhotoUseCase: getMatchPhotoUseCase,
@@ -126,6 +129,18 @@ public struct Coordinator {
         matchId: matchId,
         nickname: nickname,
         blockUserUseCase: blockUserUseCase
+      )
+      
+      // MARK: - 매칭 결과
+    case let .matchResult(nickname): // 연락처 공개
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let matchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase(repository: matchesRepository)
+      let matchContactsUseCase = UseCaseFactory.createGetMatchContactsUseCase(repository: matchesRepository)
+      
+      MatchResultViewFactory.createMatchResultView(
+        nickname: nickname,
+        getMatchPhotoUseCase: matchPhotoUseCase,
+        getMatchContactsUseCase: matchContactsUseCase
       )
       
       // MARK: - SignUp

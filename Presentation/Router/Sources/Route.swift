@@ -29,6 +29,7 @@ public enum Route: Hashable {
   case settingsWebView(title: String, uri: String)
   case reportUser(nickname: String)
   case blockUser(matchId: Int, nickname: String)
+  case matchResult(nickname: String)
   
   // MARK: - 프로필 생성
   case createProfile

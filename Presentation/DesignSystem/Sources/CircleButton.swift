@@ -9,13 +9,15 @@ import SwiftUI
 
 public struct CircleButton: View {
   public enum ButtonType {
-    case solid
+    case solid_primary
+    case solid_white
     case outline
     case disabled
     
     var backgroundColor: Color {
       switch self {
-      case .solid: .primaryDefault
+      case .solid_primary: .primaryDefault
+      case .solid_white: .grayscaleWhite
       case .outline: .grayscaleWhite
       case .disabled: .grayscaleLight1
       }
@@ -23,7 +25,8 @@ public struct CircleButton: View {
     
     var borderColor: Color {
       switch self {
-      case .solid: .primaryDefault
+      case .solid_primary: .primaryDefault
+      case .solid_white: .grayscaleWhite
       case .outline: .primaryDefault
       case .disabled: .clear
       }
@@ -31,7 +34,8 @@ public struct CircleButton: View {
     
     var contentColor: Color {
       switch self {
-      case .solid: .grayscaleWhite
+      case .solid_primary: .grayscaleWhite
+      case .solid_white: .primaryDefault
       case .outline: .primaryDefault
       case .disabled: .grayscaleWhite
       }
@@ -76,7 +80,7 @@ public struct CircleButton: View {
 #Preview {
   VStack {
     CircleButton(
-      type: .solid,
+      type: .solid_primary,
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
       action: { }
     )

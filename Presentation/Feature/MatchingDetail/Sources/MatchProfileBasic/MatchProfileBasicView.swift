@@ -240,7 +240,7 @@ struct MatchProfileBasicView: View {
   
   private var nextButton: some View {
     CircleButton(
-      type: .solid,
+      type: .solid_primary,
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
       action: {
         router.push(to: .matchValueTalk)
