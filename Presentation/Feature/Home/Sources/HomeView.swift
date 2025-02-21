@@ -17,7 +17,7 @@ struct HomeView: View {
   @State private var viewModel: HomeViewModel
   
   init(
-    getProfileUseCase: GetProfileUseCase,
+    getProfileUseCase: GetProfileBasicUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
     contactsPermissionUseCase: ContactsPermissionUseCase,

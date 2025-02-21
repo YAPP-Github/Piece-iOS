@@ -66,7 +66,7 @@ public struct UseCaseFactory {
     UploadProfileImageUseCaseImpl(repository: repository)
   }
   
-  public static func createGetProfileUseCase(repository: ProfileRepositoryInterface) -> GetProfileUseCase {
+  public static func createGetProfileUseCase(repository: ProfileRepositoryInterface) -> GetProfileBasicUseCase {
     GetProfileUseCaseImpl(repository: repository)
   }
   

@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import PCFoundationExtension
 import UseCases
 
 @Observable
 final class ProfileViewModel {
   enum Action { }
   
-  init(getProfileUseCase: GetProfileUseCase) {
+  init(getProfileUseCase: GetProfileBasicUseCase) {
     self.getProfileUseCase = getProfileUseCase
     
     Task {
@@ -20,7 +21,7 @@ final class ProfileViewModel {
     }
   }
   
-  private let getProfileUseCase: GetProfileUseCase
+  private let getProfileUseCase: GetProfileBasicUseCase
   private(set) var isLoading = true
   private(set) var error: Error?
   private(set) var userProfile: UserProfile?
@@ -32,7 +33,7 @@ final class ProfileViewModel {
         nickname: entity.nickname,
         description: entity.description,
         age: entity.age,
-        birthdate: entity.birthdate,
+        birthdate: entity.birthdate.extractYear(),
         height: entity.height,
         weight: entity.weight,
         job: entity.job,

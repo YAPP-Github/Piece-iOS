@@ -25,6 +25,7 @@ import Splash
 import Settings
 import ReportUser
 import MatchResult
+import PreviewProfile
 
 public struct Coordinator {
   public init() { }
@@ -256,6 +257,34 @@ public struct Coordinator {
       let reportsRepository = repositoryFactory.createReportsRepository()
       let reportUserUseCase = UseCaseFactory.createReportUserUseCase(repository: reportsRepository)
       ReportUserViewFactory.createReportUserView(nickname: nickname, reportUserUseCase: reportUserUseCase)
+      
+      // MARK: - 프로필 미리보기
+    case .previewProfileBasic:
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileBasicUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
+      PreviewProfileViewFactory.createMatchProfileBasicView(
+        getProfileBasicUseCase: getProfileBasicUseCase
+      )
+      
+    case let .previewProfileValueTalks(nickname, description, imageUri):
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileValueTalksUseCase = UseCaseFactory.createGetProfileValueTalksUseCase(repository: profileRepository)
+      PreviewProfileViewFactory.createMatchValueTalkView(
+        nickname: nickname,
+        description: description,
+        imageUri: imageUri,
+        getProfileValueTalksUseCase: getProfileValueTalksUseCase
+      )
+      
+    case let .previewProfileValuePicks(nickname, description, imageUri):
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let getProfileValuePicksUseCase = UseCaseFactory.createGetProfileValuePicksUseCase(repository: profileRepository)
+      PreviewProfileViewFactory.createMatchValuePickView(
+        nickname: nickname,
+        description: description,
+        imageUri: imageUri,
+        getProfileValuePicksUseCase: getProfileValuePicksUseCase
+      )
     }
   }
 }

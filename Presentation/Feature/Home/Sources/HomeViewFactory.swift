@@ -11,7 +11,7 @@ import UseCases
 public struct HomeViewFactory {
   @ViewBuilder
   public static func createHomeView(
-    getProfileUseCase: GetProfileUseCase,
+    getProfileUseCase: GetProfileBasicUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
     contactsPermissionUseCase: ContactsPermissionUseCase,

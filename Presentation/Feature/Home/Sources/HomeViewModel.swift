@@ -15,7 +15,7 @@ final class HomeViewModel {
   enum Action { }
   
   init(
-    getProfileUseCase: GetProfileUseCase,
+    getProfileUseCase: GetProfileBasicUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
     contactsPermissionUseCase: ContactsPermissionUseCase,
@@ -33,7 +33,7 @@ final class HomeViewModel {
   }
   
   let tabbarViewModel = TabBarViewModel()
-  let getProfileUseCase: GetProfileUseCase
+  let getProfileUseCase: GetProfileBasicUseCase
   let fetchTermsUseCase: FetchTermsUseCase
   let notificationPermissionUseCase: NotificationPermissionUseCase
   let contactsPermissionUseCase: ContactsPermissionUseCase

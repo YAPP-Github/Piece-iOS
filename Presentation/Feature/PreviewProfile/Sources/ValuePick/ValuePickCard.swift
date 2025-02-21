@@ -1,6 +1,6 @@
 //
 //  ValuePickCard.swift
-//  MatchingDetail
+//  PreviewProfile
 //
 //  Created by summercat on 1/13/25.
 //
@@ -10,11 +10,11 @@ import Entities
 import SwiftUI
 
 struct ValuePickCard: View {
-  init(valuePick: MatchValuePickItemModel) {
+  init(valuePick: ProfileValuePickModel) {
     self.model = valuePick
   }
   
-  private let model: MatchValuePickItemModel
+  private let model: ProfileValuePickModel
   
   var body: some View {
     VStack(spacing: 24) {
@@ -31,13 +31,7 @@ struct ValuePickCard: View {
   
   private var question: some View {
     VStack(alignment: .leading, spacing: 12) {
-      HStack(alignment: .center) {
-        category
-        Spacer()
-        if model.sameWithMe {
-          Badge(badgeText: "나와 같은")
-        }
-      }
+      category
       
       Text(model.question)
         .lineLimit(2)

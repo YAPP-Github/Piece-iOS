@@ -96,6 +96,7 @@ public extension Modules {
     case Withdraw
     case BlockUser
     case ReportUser
+    case PreviewProfile
     
     var path: String {
       switch self {
