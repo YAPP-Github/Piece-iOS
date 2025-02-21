@@ -5,12 +5,14 @@
 //  Created by summercat on 1/30/25.
 //
 
+import Foundation
+
 public struct ProfileModel: Hashable {
   public init(
     nickname: String,
     description: String,
     age: Int,
-    birthdate: String,
+    birthdate: Date,
     height: Int,
     weight: Int,
     job: String,
@@ -41,7 +43,7 @@ public struct ProfileModel: Hashable {
   public let nickname: String
   public let description: String
   public let age: Int
-  public let birthdate: String
+  public let birthdate: Date
   public let height: Int
   public let weight: Int
   public let job: String
@@ -59,7 +61,7 @@ public extension ProfileModel {
     nickname: "",
     description: "",
     age: 0,
-    birthdate: "",
+    birthdate: Date(),
     height: 0,
     weight: 0,
     job: "",

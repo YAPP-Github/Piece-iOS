@@ -268,13 +268,12 @@ final class CreateBasicInfoViewModel {
     return ageComponents.year ?? 0
   }
   
-  private func formatBirthDate(_ birthDate: String) -> String {
+  private func formatBirthDate(_ birthDate: String) -> Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyyMMdd" // 입력된 YYYYMMDD 형식
-    guard let date = dateFormatter.date(from: birthDate) else { return "" }
+    guard let date = dateFormatter.date(from: birthDate) else { return Date() }
     
-    dateFormatter.dateFormat = "yyyy-MM-dd" // 서버에 전달할 형식
-    return dateFormatter.string(from: date)
+    return date
   }
   
   func saveSelectedJob() {
