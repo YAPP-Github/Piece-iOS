@@ -10,19 +10,21 @@ import Observation
 import SwiftUI
 import UseCases
 
-enum CreateProfileStep: Hashable {
-  case basicInfo
-  case valueTalk
-  case valuePick
-}
-
 @Observable
 final class CreateProfileContainerViewModel {
+  enum CreateProfileStep: Hashable {
+    case basicInfo
+    case valueTalk
+    case valuePick
+  }
+
   enum Action {
+    case didTapBackButton
+    case didTapNextButton
     case didTapCreateProfileButton
   }
   
-  var navigationPath = NavigationPath()
+  var currentStep: CreateProfileStep = .basicInfo
   let profileCreator = ProfileCreator()
   let checkNicknameUseCase: CheckNicknameUseCase
   let uploadProfileImageUseCase: UploadProfileImageUseCase
@@ -46,10 +48,32 @@ final class CreateProfileContainerViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
+    case .didTapBackButton:
+      moveToPreviousStep()
+      
+    case .didTapNextButton:
+      moveToNextStep()
+      
     case .didTapCreateProfileButton:
       if profileCreator.isProfileValid() {
         createProfile()
       }
+    }
+  }
+  
+  private func moveToPreviousStep() {
+    switch currentStep {
+    case .basicInfo: break
+    case .valueTalk: currentStep = .basicInfo
+    case .valuePick: currentStep = .valueTalk
+    }
+  }
+  
+  private func moveToNextStep() {
+    switch currentStep {
+    case .basicInfo: currentStep = .valueTalk
+    case .valueTalk: currentStep = .valuePick
+    case .valuePick: break
     }
   }
     

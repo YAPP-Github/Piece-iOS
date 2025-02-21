@@ -191,31 +191,27 @@ public struct Coordinator {
       )
       
     case .createProfile:
-      let profileRepository = repositoryFactory.createProfileRepository()
       let checkNicknameRepositoty = repositoryFactory.createCheckNicknameRepository()
       let uploadProfileImageRepository = repositoryFactory.createUploadProfileImageRepository()
       let valueTalksRepository = repositoryFactory.createValueTalksRepository()
       let valuePicksRepository = repositoryFactory.createValuePicksRepository()
       let checkNicknameUseCase = UseCaseFactory.createCheckNicknameUseCase(repository: checkNicknameRepositoty)
       let uploadProfileImageUseCase = UseCaseFactory.createUploadProfileImageUseCase(repository: uploadProfileImageRepository)
-      let createProfileUseCase = UseCaseFactory.createProfileUseCase(repository: profileRepository)
       let getValueTalksUseCase = UseCaseFactory.createGetValueTalksUseCase(repository: valueTalksRepository)
       let getValuePicksUseCase = UseCaseFactory.createGetValuePicksUseCase(repository: valuePicksRepository)
       SignUpViewFactory.createProfileContainerView(
         checkNicknameUseCase: checkNicknameUseCase,
         uploadProfileImageUseCase: uploadProfileImageUseCase,
         getValueTalksUseCase: getValueTalksUseCase,
-        getValuePicksUseCase: getValuePicksUseCase,
-        createProfileUseCase: createProfileUseCase
+        getValuePicksUseCase: getValuePicksUseCase
       )
       
-    case .waitingAISummary:
-      let sseRepository = repositoryFactory.createSSERepository()
-      let getAISummaryUseCase = UseCaseFactory.createGetAISummaryUseCase(repository: sseRepository)
-      let finishAISummaryUseCase = UseCaseFactory.createFinishAISummaryUseCase(repository: sseRepository)
+    case let .waitingAISummary(profile):
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let createProfileUseCase = UseCaseFactory.createProfileUseCase(repository: profileRepository)
       SignUpViewFactory.createWaitingAISummaryView(
-        getAISummaryUseCase: getAISummaryUseCase,
-        finishAISummaryUseCase: finishAISummaryUseCase
+        profile: profile,
+        createProfileUseCase: createProfileUseCase
       )
       
     case .completeCreateProfile:

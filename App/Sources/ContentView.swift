@@ -9,6 +9,7 @@ struct ContentView: View {
   var body: some View {
     NavigationStack(path: $router.path) {
       coordinator.view(for: router.initialRoute)
+        .id(router.rootViewId)
         .navigationDestination(for: Route.self) { route in
           coordinator.view(for: route)
         }
