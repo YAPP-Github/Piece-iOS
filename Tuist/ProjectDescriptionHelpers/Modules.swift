@@ -90,6 +90,7 @@ public extension Modules {
     case Settings
     case MatchingMain
     case MatchingDetail
+    case MatchResult
     case EditValueTalk
     case EditValuePick
     case Withdraw

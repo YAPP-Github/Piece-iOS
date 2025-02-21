@@ -506,6 +506,8 @@ struct CreateBasicInfoView: View {
       return DesignSystemAsset.Icons.instagram32.swiftUIImage
     case .phone:
       return DesignSystemAsset.Icons.cellFill32.swiftUIImage
+    default:
+      return Image(systemName: "questionmark")
     }
   }
   

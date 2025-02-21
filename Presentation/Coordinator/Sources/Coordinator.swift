@@ -24,6 +24,7 @@ import MatchingMain
 import Splash
 import Settings
 import ReportUser
+import MatchResult
 
 public struct Coordinator {
   public init() { }
@@ -128,6 +129,18 @@ public struct Coordinator {
         matchId: matchId,
         nickname: nickname,
         blockUserUseCase: blockUserUseCase
+      )
+      
+      // MARK: - 매칭 결과
+    case let .matchResult(nickname): // 연락처 공개
+      let matchesRepository = repositoryFactory.createMatchesRepository()
+      let matchPhotoUseCase = UseCaseFactory.createGetMatchPhotoUseCase(repository: matchesRepository)
+      let matchContactsUseCase = UseCaseFactory.createGetMatchContactsUseCase(repository: matchesRepository)
+      
+      MatchResultViewFactory.createMatchResultView(
+        nickname: nickname,
+        getMatchPhotoUseCase: matchPhotoUseCase,
+        getMatchContactsUseCase: matchContactsUseCase
       )
       
       // MARK: - SignUp
