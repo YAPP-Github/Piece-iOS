@@ -14,7 +14,7 @@ struct ProfileView: View {
   @State var viewModel: ProfileViewModel
   @Environment(Router.self) private var router: Router
   
-  init(getProfileUseCase: GetProfileUseCase) {
+  init(getProfileUseCase: GetProfileBasicUseCase) {
     _viewModel = .init(wrappedValue: .init(getProfileUseCase: getProfileUseCase))
   }
   
