@@ -228,7 +228,7 @@ struct ValuePickView: View {
   
   private var backButton: some View {
     CircleButton(
-      type: .solid,
+      type: .solid_primary,
       icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage
     ) {
       router.pop()
