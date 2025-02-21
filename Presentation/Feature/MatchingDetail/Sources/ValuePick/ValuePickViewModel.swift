@@ -5,6 +5,7 @@
 //  Created by summercat on 1/13/25.
 //
 
+import Entities
 import Foundation
 import Observation
 import UseCases
@@ -51,17 +52,17 @@ final class ValuePickViewModel {
   var isMatchAcceptAlertPresented: Bool = false
   var isMatchDeclineAlertPresented: Bool = false
   
-  private(set) var valuePickModel: ValuePickModel?
+  private(set) var valuePickModel: MatchValuePickModel?
   private(set) var isLoading = true
   private(set) var error: Error?
   private(set) var contentOffset: CGFloat = 0
   private(set) var isNameViewVisible: Bool = true
   private(set) var selectedTab: ValuePickTab = .all
-  private(set) var displayedValuePicks: [ValuePickAnswerModel] = []
+  private(set) var displayedValuePicks: [MatchValuePickItemModel] = []
   private(set) var sameWithMeCount: Int = 0
   private(set) var differentFromMeCount: Int = 0
   private(set) var photoUri: String = ""
-  private var valuePicks: [ValuePickAnswerModel] = []
+  private var valuePicks: [MatchValuePickItemModel] = []
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
   private let getMatchPhotoUseCase: GetMatchPhotoUseCase
   private let acceptMatchUseCase: AcceptMatchUseCase
@@ -109,22 +110,9 @@ final class ValuePickViewModel {
   func fetchMatchValueTalk() async {
     do {
       let entity = try await getMatchValuePickUseCase.execute()
-      let model = ValuePickModel(
-        id: entity.id,
-        shortIntroduction: entity.description,
-        nickname: entity.nickname,
-        valuePicks: entity.valuePicks.map {
-          ValuePickAnswerModel(
-            id: UUID(),
-            category: $0.category,
-            question: $0.question,
-            sameWithMe: $0.sameWithMe
-          )
-        }
-      )
-      valuePickModel = model
-      valuePicks = model.valuePicks
-      displayedValuePicks = model.valuePicks
+      valuePickModel = entity
+      valuePicks = entity.valuePicks
+      displayedValuePicks = entity.valuePicks
       sameWithMeCount = entity.valuePicks.filter { $0.sameWithMe }.count
       differentFromMeCount = entity.valuePicks.filter { !$0.sameWithMe }.count
       

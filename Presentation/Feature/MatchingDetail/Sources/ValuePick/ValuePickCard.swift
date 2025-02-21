@@ -6,14 +6,15 @@
 //
 
 import DesignSystem
+import Entities
 import SwiftUI
 
 struct ValuePickCard: View {
-  init(valuePick: ValuePickAnswerModel) {
+  init(valuePick: MatchValuePickItemModel) {
     self.model = valuePick
   }
   
-  private let model: ValuePickAnswerModel
+  private let model: MatchValuePickItemModel
   
   var body: some View {
     VStack(spacing: 24) {
@@ -60,9 +61,9 @@ struct ValuePickCard: View {
   
   private var answers: some View {
     VStack(spacing: 8) {
-//      ForEach(valuePick.answers) { answer in
-//        SelectCard(isSelected: answer.isSelected, text: answer.content)
-//      }
+      ForEach(model.answers) { answer in
+        SelectCard(isSelected: answer.id == model.selectedAnswer, text: answer.content)
+      }
     }
   }
 }
