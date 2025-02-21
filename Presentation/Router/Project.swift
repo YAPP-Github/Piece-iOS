@@ -10,5 +10,6 @@ import ProjectDescriptionHelpers
 let project = Project.dynamicFramework(
   name: Modules.Presentation.Router.rawValue,
   dependencies: [
+    .domain(target: .Entities),
   ]
 )

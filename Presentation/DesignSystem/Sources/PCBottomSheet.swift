@@ -71,7 +71,7 @@ public struct PCBottomSheet<Content: View>: View {
           .background(
             RoundedRectangle(cornerRadius: 20)
               .fill(Color.grayscaleWhite)
-              .ignoresSafeArea()
+              .ignoresSafeArea(edges: .bottom)
           )
         }
         .transition(.move(edge: .bottom))

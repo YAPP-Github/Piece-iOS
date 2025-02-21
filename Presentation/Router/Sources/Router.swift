@@ -11,7 +11,13 @@ import SwiftUI
 @Observable
 public final class Router {
   public var path = NavigationPath()
-  public var initialRoute: Route
+  public var initialRoute: Route {
+    didSet {
+      self.rootViewId = UUID()
+    }
+  }
+  
+  public private(set) var rootViewId = UUID()
   
   public init(initialRoute: Route = .splash) {
     self.initialRoute = initialRoute
@@ -36,7 +42,13 @@ public final class Router {
   /// NavigationPath의 모든 route를 제거하고 인자로 전달받은 route로 이동합니다.
   /// - Parameter route: 이동하고자 하는 route
   public func setRoute(_ route: Route) {
-    initialRoute = route
     path.removeLast(path.count)
+    initialRoute = route
+  }
+  
+  public func setRouteAndPush(root: Route, pushTo route: Route) {
+    path.removeLast(path.count)
+    initialRoute = root
+    path.append(route)
   }
 }
