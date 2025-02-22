@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import Entities
 import Router
 import SwiftUI
 import UseCases
@@ -54,7 +55,7 @@ struct ValuePickView: View {
       if let valuePickModel = viewModel.valuePickModel {
         if viewModel.isNameViewVisible {
           BasicInfoNameView(
-            shortIntroduction: valuePickModel.shortIntroduction,
+            shortIntroduction: valuePickModel.description,
             nickname: valuePickModel.nickname
           ) {
             viewModel.handleAction(.didTapMoreButton)
@@ -246,7 +247,7 @@ struct ValuePickView: View {
   }
   
   // MARK: - 바텀시트
-  private func bottomSheetContent(model: ValuePickModel) -> some View {
+  private func bottomSheetContent(model: MatchValuePickModel) -> some View {
     VStack(spacing: 0) {
       bottomSheetContentRow(text: "차단하기") {
         viewModel.isBottomSheetPresented = false

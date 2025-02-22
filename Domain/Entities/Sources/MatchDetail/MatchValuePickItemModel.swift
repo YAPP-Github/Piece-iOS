@@ -5,7 +5,8 @@
 //  Created by summercat on 2/9/25.
 //
 
-public struct MatchValuePickItemModel {
+public struct MatchValuePickItemModel: Identifiable {
+  public var id: String { question }
   public let category: String
   public let question: String
   public let sameWithMe: Bool
