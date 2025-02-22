@@ -10,9 +10,10 @@ import UseCases
 import Router
 import LocalStorage
 import KakaoSDKUser
+import AuthenticationServices
 
 @Observable
-final class WithdrawConfirmViewModel {
+final class WithdrawConfirmViewModel: NSObject {
   enum Action {
     case confirmWithdraw
   }
@@ -55,7 +56,6 @@ final class WithdrawConfirmViewModel {
   }
   
   private func revokeKakao() async throws {
-    // 1. Kakao 계정 해제 ( 비동기 처리 )
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
       UserApi.shared.unlink { error in
         if let error = error {
@@ -67,11 +67,15 @@ final class WithdrawConfirmViewModel {
     }
   }
   
-  private func revokeAppleIDCredential() async throws {
-    // TODO: - 애플 탈퇴 구현
-    /// 새롭게 업데이트되는 API를 이용해 서버와 합 맞춰봐야함!
-    // 서버에 탈퇴 요청
-      
+  private func revokeAppleIDCredential() async {
+    let appleIDProvider = ASAuthorizationAppleIDProvider()
+    let request = appleIDProvider.createRequest()
+    request.requestedScopes = [.fullName]
+    
+    let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+    authorizationController.delegate = self
+    authorizationController.presentationContextProvider = self
+    authorizationController.performRequests()
   }
   
   private func initialize() {
@@ -83,3 +87,23 @@ final class WithdrawConfirmViewModel {
   }
 }
 
+extension WithdrawConfirmViewModel: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+  func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+    return UIApplication.shared.connectedScenes
+      .compactMap { $0 as? UIWindowScene }
+      .flatMap { $0.windows }
+      .first { $0.isKeyWindow } ?? UIWindow()
+  }
+  
+  func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
+          let authorizationCodeData = appleIDCredential.authorizationCode,
+          let authorizationCode = String(data: authorizationCodeData, encoding: .utf8) else {
+      print("Apple ID Token is missing")
+      return
+    }
+    
+    print("🍎 authorizationCode : \(authorizationCode)")
+    PCKeychainManager.shared.save(.appleAuthCode, value: authorizationCode)
+  }
+}
