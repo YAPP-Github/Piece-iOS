@@ -27,7 +27,7 @@ struct SplashView: View {
   }
   
   var body: some View {
-    DesignSystemAsset.Images.logo.swiftUIImage
+    DesignSystemAsset.Icons.logoCircle3x.swiftUIImage
       .onAppear {
         viewModel.handleAction(.onAppear)
       }

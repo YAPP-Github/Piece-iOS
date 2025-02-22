@@ -10,6 +10,7 @@ import ProjectDescriptionHelpers
 let project = Project.staticLibrary(
   name: Modules.Presentation.MatchingMain.rawValue,
   dependencies: [
+    .domain(target: .UseCases),
     .presentation(target: .DesignSystem),
     .presentation(target: .Router),
     .utility(target: .PCFoundationExtension),
