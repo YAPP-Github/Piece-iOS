@@ -12,7 +12,7 @@ public struct WithdrawViewFactory {
         WithdrawView(viewModel: WithdrawViewModel())
     }
     
-    public static func createWithdrawConfirm() -> some View {
+    public static func createWithdrawConfirmView() -> some View {
         WithdrawConfirmView()
     }
 }

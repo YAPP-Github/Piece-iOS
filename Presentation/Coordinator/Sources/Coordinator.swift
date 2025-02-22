@@ -234,7 +234,7 @@ public struct Coordinator {
       WithdrawViewFactory.createWithdrawView()
       
     case .withdrawConfirm:
-      WithdrawViewFactory.createWithdrawConfirm()
+      WithdrawViewFactory.createWithdrawConfirmView()
       
     case .splash:
       let userRepository = repositoryFactory.createUserRepository()
