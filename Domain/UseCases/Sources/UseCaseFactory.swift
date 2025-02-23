@@ -36,6 +36,10 @@ public struct UseCaseFactory {
     SocialLoginUseCaseImpl(repository: repository)
   }
   
+  public static func createAppleAuthServiceUseCase() -> AppleAuthServiceUseCase {
+    AppleAuthServiceUseCaseImpl()
+  }
+  
   public static func createSendSMSCodeUseCase(repository: LoginRepositoryInterfaces) -> SendSMSCodeUseCase {
     SendSMSCodeUseCaseImpl(repository: repository)
   }

@@ -12,6 +12,8 @@ import PCFoundationExtension
 import Router
 import UseCases
 import UIKit
+import KakaoSDKUser
+import Entities
 
 @Observable
 final class SplashViewModel {
@@ -25,13 +27,16 @@ final class SplashViewModel {
   
   private let getServerStatusUseCase: GetServerStatusUseCase
   private let socialLoginUseCase: SocialLoginUseCase
+  private let appleAuthServiceUseCase: AppleAuthServiceUseCase
   
   init(
     getServerStatusUseCase: GetServerStatusUseCase,
-    socialLoginUseCase: SocialLoginUseCase
+    socialLoginUseCase: SocialLoginUseCase,
+    appleAuthServiceUseCase: AppleAuthServiceUseCase
   ) {
     self.getServerStatusUseCase = getServerStatusUseCase
     self.socialLoginUseCase = socialLoginUseCase
+    self.appleAuthServiceUseCase = appleAuthServiceUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -72,7 +77,102 @@ final class SplashViewModel {
     }
     print("AccessToken: \(accessToken)")
     
-    // role에 따라 화면 분기 처리
+    Task {
+      do {
+        try await PCFirebase.shared.fetchRemoteConfigValues()
+        showNeedsForceUpdateAlert = needsForceUpdate()
+        let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
+        if didSeeOnboarding {
+          if PCUserDefaultsService.shared.getSocialLoginType() == "apple" {
+            let token = try await appleAuthServiceUseCase.execute().authorizationCode
+            let socialLoginResult = try await socialLoginUseCase.execute(providerName: .apple, token: token)
+            
+            PCKeychainManager.shared.save(.accessToken, value: socialLoginResult.accessToken)
+            PCKeychainManager.shared.save(.refreshToken, value: socialLoginResult.refreshToken)
+            PCKeychainManager.shared.save(.role, value: socialLoginResult.role.rawValue)
+          } else if PCUserDefaultsService.shared.getSocialLoginType() == "kakao" {
+            if UserApi.isKakaoTalkLoginAvailable() {
+              let token = try await fetchKakaoAccessToken()
+              let socialLoginResult = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
+              
+              PCKeychainManager.shared.save(.accessToken, value: socialLoginResult.accessToken)
+              PCKeychainManager.shared.save(.refreshToken, value: socialLoginResult.refreshToken)
+              PCKeychainManager.shared.save(.role, value: socialLoginResult.role.rawValue)
+            }
+          }
+        }
+      }  catch let error as PCFirebaseError {
+        print("RemoteConfig fetch failed:", error.errorDescription)
+      } catch {
+        print(error)
+      }
+    }
+    
+    setRoute()
+  }
+  
+  private func needsForceUpdate() -> Bool {
+    let currentVersion = AppVersion.appVersion()
+    let minimumVersion = PCFirebase.shared.minimumVersion()
+    let needsForceUpdate = PCFirebase.shared.needsForceUpdate()
+    
+    print("currentVersion: \(currentVersion)")
+    print("minimumVersion: \(minimumVersion)")
+    print("needsForceUpdate: \(needsForceUpdate)")
+    return needsForceUpdate && currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+  }
+  
+  private func openAppStore() {
+    let appId = "6740155700"
+    let appStoreUrl = "itms-apps://itunes.apple.com/app/apple-store/\(appId)"
+    guard let url = URL(string: appStoreUrl) else { return }
+    if UIApplication.shared.canOpenURL(url) {
+      UIApplication.shared.open(url)
+    }
+  }
+  
+  private func fetchKakaoAccessToken() async throws -> String {
+    return try await withCheckedThrowingContinuation { continuation in
+      if UserApi.isKakaoTalkLoginAvailable() {
+        UserApi.shared.loginWithKakaoTalk { (oauthToken, error) in
+          if let error = error {
+            print("카카오톡 로그인 실패: \(error.localizedDescription)")
+            self.loginWithKakaoAccount(continuation: continuation)
+            return
+          }
+          
+          guard let token = oauthToken?.accessToken else {
+            continuation.resume(throwing: NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "토큰이 없습니다."]))
+            return
+          }
+          
+          continuation.resume(returning: token)
+        }
+      } else {
+        self.loginWithKakaoAccount(continuation: continuation)
+      }
+    }
+  }
+  
+  private func loginWithKakaoAccount(continuation: CheckedContinuation<String, Error>) {
+    UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
+      if let error = error {
+        print("카카오 계정 로그인 실패: \(error.localizedDescription)")
+        continuation.resume(throwing: error)
+        return
+      }
+      
+      guard let token = oauthToken?.accessToken else {
+        continuation.resume(throwing: NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "토큰이 없습니다."]))
+        return
+      }
+      
+      continuation.resume(returning: token)
+    }
+  }
+  
+  private func setRoute() {
+    // 사용자 role에 따라 화면 분기 처리
     guard let role = PCKeychainManager.shared.read(.role) else {
       print("Role이 nil이어서 로그인 화면으로 이동")
       destination = .login
@@ -96,43 +196,6 @@ final class SplashViewModel {
     default:
       print("---\(role)---")
       destination = .login
-    }
-    
-    
-    Task {
-      do {
-        try await PCFirebase.shared.fetchRemoteConfigValues()
-        showNeedsForceUpdateAlert = needsForceUpdate()
-        let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
-        if didSeeOnboarding {
-          // TODO: - SDK에 로그인 요청
-          // TODO: - 서버에 로그인 요청
-        }
-      }  catch let error as PCFirebaseError {
-        print("RemoteConfig fetch failed:", error.errorDescription)
-      } catch {
-        print(error)
-      }
-    }
-  }
-  
-  private func needsForceUpdate() -> Bool {
-    let currentVersion = AppVersion.appVersion()
-    let minimumVersion = PCFirebase.shared.minimumVersion()
-    let needsForceUpdate = PCFirebase.shared.needsForceUpdate()
-    
-    print("currentVersion: \(currentVersion)")
-    print("minimumVersion: \(minimumVersion)")
-    print("needsForceUpdate: \(needsForceUpdate)")
-    return needsForceUpdate && currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
-  }
-  
-  private func openAppStore() {
-    let appId = "6740155700" 
-    let appStoreUrl = "itms-apps://itunes.apple.com/app/apple-store/\(appId)"
-    guard let url = URL(string: appStoreUrl) else { return }
-    if UIApplication.shared.canOpenURL(url) {
-      UIApplication.shared.open(url)
     }
   }
 }

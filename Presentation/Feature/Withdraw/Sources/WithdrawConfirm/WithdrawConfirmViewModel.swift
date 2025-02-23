@@ -28,12 +28,30 @@ final class WithdrawConfirmViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .confirmWithdraw:
-      Task { await handleContirmWithdraw() }
+      Task { await handleConfirmWithdraw() }
     }
   }
   
-  private func handleContirmWithdraw() async {
-    //PCKeychainManager.shared.read(.)
+  private func handleConfirmWithdraw() async {
+    let socialLoginType = PCUserDefaultsService.shared.getSocialLoginType()
+    switch socialLoginType {
+    case "apple":
+      await handleWithdrawalProcess(revokeMethod: revokeAppleIDCredential)
+    case "kakao":
+      await handleWithdrawalProcess(revokeMethod: revokeKakao)
+    default:
+      print("Unsupported login type: \(socialLoginType)")
+    }
+  }
+  
+  private func handleWithdrawalProcess(revokeMethod: @escaping () async throws -> Void) async {
+    do {
+      try await revokeMethod()
+      _ = try await deleteUserAccountUseCase.execute(reason: withdrawReason)
+      initialize()
+    } catch {
+      print("Withdrawal failed: \(error.localizedDescription)")
+    }
   }
   
   private func revokeKakao() async throws {
@@ -47,31 +65,13 @@ final class WithdrawConfirmViewModel {
         }
       }
     }
-    // 2. 서버에 탈퇴 요청
-    do {
-      _ = try await deleteUserAccountUseCase.execute(reason: withdrawReason)
-    } catch {
-      print(error.localizedDescription)
-    }
-    
-    // 로컬 데이터 초기화
-    initialize()
   }
-
+  
   private func revokeAppleIDCredential() async throws {
-    do {
+    // TODO: - 애플 탈퇴 구현
+    /// 새롭게 업데이트되는 API를 이용해 서버와 합 맞춰봐야함!
+    // 서버에 탈퇴 요청
       
-      // TODO: - 애플 탈퇴 구현
-      /// 새롭게 업데이트되는 API를 이용해 서버와 합 맞춰봐야함!
-      // 서버에 탈퇴 요청
-      _ = try await deleteUserAccountUseCase.execute(reason: withdrawReason)
-      
-    } catch {
-      print(error.localizedDescription)
-    }
-    
-    // 로컬 데이터 초기화
-    initialize()
   }
   
   private func initialize() {

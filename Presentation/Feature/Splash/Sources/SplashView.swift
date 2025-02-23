@@ -16,12 +16,14 @@ struct SplashView: View {
   
   init(
     getServerStatusUseCase: GetServerStatusUseCase,
-    socialLoginUseCase: SocialLoginUseCase
+    socialLoginUseCase: SocialLoginUseCase,
+    appleAuthServiceUseCase: AppleAuthServiceUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         getServerStatusUseCase: getServerStatusUseCase,
-        socialLoginUseCase: socialLoginUseCase
+        socialLoginUseCase: socialLoginUseCase,
+        appleAuthServiceUseCase: appleAuthServiceUseCase
       )
     )
   }
