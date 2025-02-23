@@ -13,6 +13,7 @@ let project = Project.dynamicResourceFramework(
   dependencies: [
     .externalDependency(dependency: .FirebaseAnalytics),
     .externalDependency(dependency: .FirebaseCore),
+    .externalDependency(dependency: .FirebaseMessaging),
     .externalDependency(dependency: .FirebaseRemoteConfig),
   ],
   settings: .settings(

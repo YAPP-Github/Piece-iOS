@@ -11,15 +11,11 @@ import SwiftUI
 
 @main
 struct PieceApp: App {
+  @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
+  
   init() {
-    do {
-      try PCFirebase.shared.configureFirebaseApp()
-      try PCFirebase.shared.setRemoteConfig()
-    } catch let error as PCFirebaseError {
-      print("Firebase setup failed: \(error.errorDescription)")
-    } catch {
-      print("Firebase setup failed with unknown error:", error)
-    }
+    print("app init")
+
     
     // Kakao SDK 초기화
     guard let kakaoAppKey = Bundle.main.infoDictionary?["NATIVE_APP_KEY"] as? String else {
