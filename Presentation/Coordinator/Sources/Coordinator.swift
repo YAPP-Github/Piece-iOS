@@ -248,9 +248,11 @@ public struct Coordinator {
       let loginRepository = repositoryFactory.createLoginRepository()
       let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
       let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthServiceUseCase()
       SplashViewFactory.createSplashView(
         getServerStatusUseCase: getServerStatusUseCase,
-        socialLoginUseCase: socialLoginUseCase
+        socialLoginUseCase: socialLoginUseCase,
+        appleAuthServiceUseCase: appleAuthServiceUseCase
       )
       
     case let .reportUser(nickname):

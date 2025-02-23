@@ -11,11 +11,13 @@ import UseCases
 public struct SplashViewFactory {
   public static func createSplashView(
     getServerStatusUseCase: GetServerStatusUseCase,
-    socialLoginUseCase: SocialLoginUseCase
+    socialLoginUseCase: SocialLoginUseCase,
+    appleAuthServiceUseCase: AppleAuthServiceUseCase
   ) -> some View {
     SplashView(
       getServerStatusUseCase: getServerStatusUseCase,
-      socialLoginUseCase: socialLoginUseCase
+      socialLoginUseCase: socialLoginUseCase,
+      appleAuthServiceUseCase: appleAuthServiceUseCase
     )
   }
 }
