@@ -55,14 +55,6 @@ public extension PCUserDefaultsService {
     self.didSeeOnboarding = didSeeOnboarding
   }
   
-  func getBlockContactsLastUpdatedDate() -> Date? {
-    blockContactsLastUpdatedDate
-  }
-  
-  func setBlockContactsLastUpdatedDate(_ date: Date) {
-    self.blockContactsLastUpdatedDate = date
-  }
-  
   func setSocialLoginType(_ type: String) {
     self.socialLoginType = type
   }
