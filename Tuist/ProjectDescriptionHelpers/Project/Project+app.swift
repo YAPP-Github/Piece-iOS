@@ -42,7 +42,8 @@ extension Project {
           "CFBundleURLTypes": [
             ["CFBundleURLSchemes": ["kakao$(NATIVE_APP_KEY)"]],
             ["CFBundleURLSchemes": ["\(AppConstants.bundleId)"]]
-          ]
+          ],
+          "ITSAppUsesNonExemptEncryption": false,
         ]
       ),
       sources: ["Sources/**"],
