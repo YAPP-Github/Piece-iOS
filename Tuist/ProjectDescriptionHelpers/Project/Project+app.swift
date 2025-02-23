@@ -143,8 +143,8 @@ extension Project {
           "OTHER_LDFLAGS": ["-ObjC"]
         ],
         configurations: [
-          .debug(name: "Debug", xcconfig: .relativeToRoot("Config.xcconfig")),
-          .release(name: "Release", xcconfig: .relativeToRoot("Config.xcconfig"))
+          .debug(name: "Debug", xcconfig: .relativeToRoot("Debug.xcconfig")),
+          .release(name: "Release", xcconfig: .relativeToRoot("Release.xcconfig"))
         ]
       )
       //          .settings(
