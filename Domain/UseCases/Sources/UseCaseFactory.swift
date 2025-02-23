@@ -36,6 +36,10 @@ public struct UseCaseFactory {
   
   // MARK: - 로그인
   
+  public static func createAppleAuthLoginUseCase() -> AppleAuthServiceUseCase {
+    AppleAuthServiceUseCaseImpl()
+  }
+  
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }

@@ -18,13 +18,18 @@ final class WithdrawConfirmViewModel: NSObject {
     case confirmWithdraw
   }
   
-  init(deleteUserAccountUseCase: DeleteUserAccountUseCase) {
+  init(
+    deleteUserAccountUseCase: DeleteUserAccountUseCase,
+    appleAuthServiceUseCase: AppleAuthServiceUseCase
+  ) {
     self.deleteUserAccountUseCase = deleteUserAccountUseCase
+    self.appleAuthServiceUseCase = appleAuthServiceUseCase
   }
   
   private(set) var destination: Route?
   private(set) var withdrawReason: String = ""
   private let deleteUserAccountUseCase: DeleteUserAccountUseCase
+  private let appleAuthServiceUseCase: AppleAuthServiceUseCase
   
   func handleAction(_ action: Action) {
     switch action {
@@ -37,33 +42,25 @@ final class WithdrawConfirmViewModel: NSObject {
     let socialLoginType = PCUserDefaultsService.shared.getSocialLoginType()
     switch socialLoginType {
     case "apple":
-      await handleWithdrawalProcess(revokeMethod: revokeAppleIDCredential)
+      Task { await revokeAppleIDCredential() }
     case "kakao":
-      await handleWithdrawalProcess(revokeMethod: revokeKakao)
+      Task { await revokeKakao() }
     default:
       print("Unsupported login type: \(socialLoginType)")
     }
   }
   
-  private func handleWithdrawalProcess(revokeMethod: @escaping () async throws -> Void) async {
+  private func revokeKakao() async {
+    UserApi.shared.unlink { error in
+      if let error = error {
+        print(error)
+      }
+    }
     do {
-      try await revokeMethod()
-      _ = try await deleteUserAccountUseCase.execute(reason: withdrawReason)
+      _ = try await deleteUserAccountUseCase.execute(providerName: "kakao", oauthCredential: "", reason: withdrawReason)
       initialize()
     } catch {
-      print("Withdrawal failed: \(error.localizedDescription)")
-    }
-  }
-  
-  private func revokeKakao() async throws {
-    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-      UserApi.shared.unlink { error in
-        if let error = error {
-          continuation.resume(throwing: error)
-        } else {
-          continuation.resume(returning: ())
-        }
-      }
+      print(error.localizedDescription)
     }
   }
   
@@ -105,5 +102,12 @@ extension WithdrawConfirmViewModel: ASAuthorizationControllerDelegate, ASAuthori
     
     print("🍎 authorizationCode : \(authorizationCode)")
     PCKeychainManager.shared.save(.appleAuthCode, value: authorizationCode)
+    Task {
+      do {
+        let authorizationCode = try await appleAuthServiceUseCase.execute().authorizationCode
+        _ = try await deleteUserAccountUseCase.execute(providerName: "apple", oauthCredential: authorizationCode, reason: withdrawReason)
+        initialize()
+      }
+    }
   }
 }

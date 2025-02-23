@@ -239,6 +239,10 @@ public struct Coordinator {
     case .splash:
       let loginRepository = repositoryFactory.createLoginRepository()
       let checkTokenHealthUseCase = UseCaseFactory.createCheckTokenHealthUseCase(repository: loginRepository)
+      let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
+      let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthLoginUseCase()
+      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
+      let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthServiceUseCase()
       SplashViewFactory.createSplashView(
         checkTokenHealthUseCase: checkTokenHealthUseCase
       )
