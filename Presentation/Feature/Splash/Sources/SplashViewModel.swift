@@ -77,47 +77,20 @@ final class SplashViewModel {
     }
     print("AccessToken: \(accessToken)")
     
-    // role에 따라 화면 분기 처리
-    guard let role = PCKeychainManager.shared.read(.role) else {
-      print("Role이 nil이어서 로그인 화면으로 이동")
-      destination = .login
-      return
-    }
-    print(role)
-    
-    switch role {
-    case "NONE":
-      print("---NONE---")
-      destination = .verifyContact
-    case "REGISTER":
-      print("---REGISTER---")
-      destination = .termsAgreement
-    case "PENDING":
-      print("---PENDING---")
-      destination = .matchMain
-    case "USER":
-      print("---USER---")
-      destination = .matchMain
-    default:
-      print("---\(role)---")
-      destination = .login
-    }
-    
-    
     Task {
       do {
         try await PCFirebase.shared.fetchRemoteConfigValues()
         showNeedsForceUpdateAlert = needsForceUpdate()
         let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
         if didSeeOnboarding {
-          if PCUserDefaultsService.shared.getSocialLoginType().rawValue == "apple" {
+          if PCUserDefaultsService.shared.getSocialLoginType() == "apple" {
             let token = try await appleAuthServiceUseCase.execute().authorizationCode
             let socialLoginResult = try await socialLoginUseCase.execute(providerName: .apple, token: token)
             
             PCKeychainManager.shared.save(.accessToken, value: socialLoginResult.accessToken)
             PCKeychainManager.shared.save(.refreshToken, value: socialLoginResult.refreshToken)
             PCKeychainManager.shared.save(.role, value: socialLoginResult.role.rawValue)
-          } else if PCUserDefaultsService.shared.getSocialLoginType().rawValue == "kakao" {
+          } else if PCUserDefaultsService.shared.getSocialLoginType() == "kakao" {
             if UserApi.isKakaoTalkLoginAvailable() {
               let token = try await fetchKakaoAccessToken()
               let socialLoginResult = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
@@ -134,6 +107,8 @@ final class SplashViewModel {
         print(error)
       }
     }
+    
+    setRoute()
   }
   
   private func needsForceUpdate() -> Bool {
@@ -193,6 +168,34 @@ final class SplashViewModel {
       }
       
       continuation.resume(returning: token)
+    }
+  }
+  
+  private func setRoute() {
+    // 사용자 role에 따라 화면 분기 처리
+    guard let role = PCKeychainManager.shared.read(.role) else {
+      print("Role이 nil이어서 로그인 화면으로 이동")
+      destination = .login
+      return
+    }
+    print(role)
+    
+    switch role {
+    case "NONE":
+      print("---NONE---")
+      destination = .verifyContact
+    case "REGISTER":
+      print("---REGISTER---")
+      destination = .termsAgreement
+    case "PENDING":
+      print("---PENDING---")
+      destination = .matchMain
+    case "USER":
+      print("---USER---")
+      destination = .matchMain
+    default:
+      print("---\(role)---")
+      destination = .login
     }
   }
 }
