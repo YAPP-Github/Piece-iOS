@@ -15,19 +15,11 @@ struct EditValueTalkCard: View {
   @State private var viewModel: EditValueTalkCardViewModel
 
   init(
-    model: ProfileValueTalkModel,
-    index: Int,
-    isEditingAnswer: Bool,
-    onModelUpdate: @escaping (ProfileValueTalkModel) -> Void
+    viewModel: EditValueTalkCardViewModel,
+    isEditingAnswer: Bool
   ) {
-    _viewModel = .init(
-      wrappedValue: .init(
-        model: model,
-        index: index,
-        isEditingAnswer: isEditingAnswer,
-        onModelUpdate: onModelUpdate
-      )
-    )
+    _viewModel = .init(wrappedValue: viewModel)
+    self.isEditingAnswer = isEditingAnswer
   }
   
   var body: some View {
@@ -131,20 +123,28 @@ struct EditValueTalkCard: View {
       }
       
       HStack(alignment: .bottom, spacing: 4) {
-        TextEditor(text: Binding(
-          get: { viewModel.localSummary },
-          set: { viewModel.handleAction(.didUpdateSummary($0)) }
-        ))
-        .disabled(viewModel.summaryStatus != .isEditing)
-        .pretendard(.body_M_M)
-        .autocorrectionDisabled()
-        .textInputAutocapitalization(.none)
-        .scrollContentBackground(.hidden)
-        .scrollDisabled(true)
-        .foregroundStyle(viewModel.summaryStatus == .isWaiting ? Color.grayscaleDark2 : Color.grayscaleBlack)
-        .focused($isEditingSummary)
-        
-        summaryButton
+        if case .generatingAISummary = viewModel.editingState {
+          Text("작성해주신 내용을 AI가 요약하고 있어요")
+            .pretendard(.body_M_M)
+            .foregroundStyle(.grayscaleDark2)
+          PCLottieView(.refresh)
+          Spacer()
+        } else {
+          TextEditor(text: Binding(
+            get: { viewModel.localSummary },
+            set: { viewModel.handleAction(.didUpdateSummary($0)) }
+          ))
+          .disabled(viewModel.editingState != .editingSummary)
+          .pretendard(.body_M_M)
+          .autocorrectionDisabled()
+          .textInputAutocapitalization(.none)
+          .scrollContentBackground(.hidden)
+          .scrollDisabled(true)
+          .foregroundStyle(viewModel.editingState == .generatingAISummary ? Color.grayscaleDark2 : Color.grayscaleBlack)
+          .focused($isEditingSummary)
+          
+          summaryButton
+        }
       }
       .padding(.horizontal, 16)
       .padding(.vertical, 10) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
@@ -153,7 +153,7 @@ struct EditValueTalkCard: View {
           .foregroundStyle(Color.grayscaleLight3)
       )
       
-      if viewModel.summaryStatus == .isEditing {
+      if case .editingSummary = viewModel.editingState {
         TextCountIndicator(count: .constant(viewModel.localSummary.count), maxCount: 50)
           .frame(maxWidth: .infinity, alignment: .trailing)
       }
@@ -165,18 +165,24 @@ struct EditValueTalkCard: View {
     Button {
       viewModel.handleAction(.didTapSummaryButton)
     } label: {
-      switch viewModel.summaryStatus {
-      case .plain:
+      switch viewModel.editingState {
+      case .viewing:
         DesignSystemAsset.Icons.pencilFill24.swiftUIImage
           .renderingMode(.template)
           .foregroundStyle(Color.primaryDefault)
-      case .isEditing:
+        
+      case .editingAnswer:
+        EmptyView()
+        
+      case .editingSummary:
         DesignSystemAsset.Icons.check24.swiftUIImage
           .renderingMode(.template)
           .foregroundStyle(Color.primaryDefault)
-      case .isWaiting:
+        
+      case .generatingAISummary:
         EmptyView()
       }
     }
+    .disabled(viewModel.editingState == .generatingAISummary)
   }
 }

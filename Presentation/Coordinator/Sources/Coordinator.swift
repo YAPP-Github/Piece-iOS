@@ -221,11 +221,16 @@ public struct Coordinator {
       // MARK: - Profile
     case .editValueTalk:
       let profileRepository = repositoryFactory.createProfileRepository()
+      let sseRepository = repositoryFactory.createSseRepository()
       let getProfileValueTalksUseCase = UseCaseFactory.createGetProfileValueTalksUseCase(repository: profileRepository)
       let updateProfileValueTalksUseCase = UseCaseFactory.createUpdateProfileValueTalksUseCase(repository: profileRepository)
+      let connectSseUseCase = UseCaseFactory.createConnectSseUseCase(repository: sseRepository)
+      let disconnectSseUseCase = UseCaseFactory.createDisconnectSseUseCase(repository: sseRepository)
       EditValueTalkViewFactory.createEditValueTalkViewFactory(
         getProfileValueTalksUseCase: getProfileValueTalksUseCase,
-        updateProfileValueTalksUseCase: updateProfileValueTalksUseCase
+        updateProfileValueTalksUseCase: updateProfileValueTalksUseCase,
+        connectSseUseCase: connectSseUseCase,
+        disconnectSseUseCase: disconnectSseUseCase
       )
       
     case .editValuePick:

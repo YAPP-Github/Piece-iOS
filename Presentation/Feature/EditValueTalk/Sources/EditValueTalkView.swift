@@ -16,12 +16,16 @@ struct EditValueTalkView: View {
   
   init(
     getProfileValueTalksUseCase: GetProfileValueTalksUseCase,
-    updateProfileValueTalksUseCase: UpdateProfileValueTalksUseCase
+    updateProfileValueTalksUseCase: UpdateProfileValueTalksUseCase,
+    connectSseUseCase: ConnectSseUseCase,
+    disconnectSseUseCase: DisconnectSseUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         getProfileValueTalksUseCase: getProfileValueTalksUseCase,
-        updateProfileValueTalksUseCase: updateProfileValueTalksUseCase
+        updateProfileValueTalksUseCase: updateProfileValueTalksUseCase,
+        connectSseUseCase: connectSseUseCase,
+        disconnectSseUseCase: disconnectSseUseCase
       )
     )
   }
@@ -45,21 +49,24 @@ struct EditValueTalkView: View {
     .frame(maxHeight: .infinity)
     .background(Color.grayscaleWhite)
     .toolbar(.hidden)
+    .onAppear {
+      viewModel.handleAction(.onAppear)
+    }
+    .onDisappear {
+      viewModel.handleAction(.onDisappear)
+    }
   }
   
   private var valueTalks: some View {
     ForEach(
-      Array(zip(viewModel.valueTalks.indices, viewModel.valueTalks)),
-      id: \.1
-    ) { index, valueTalk in
+      Array(viewModel.cardViewModels.enumerated()),
+      id: \.1.model.id
+    ) { index, cardViewModel in
       EditValueTalkCard(
-        model: valueTalk,
-        index: index,
+        viewModel: cardViewModel,
         isEditingAnswer: viewModel.isEditing
-      ) { model in
-        viewModel.handleAction(.updateValueTalk(model))
-      }
-      if index < viewModel.valueTalks.count - 1 {
+      )
+      if index < viewModel.cardViewModels.count - 1 {
         Divider(weight: .thick)
       }
     }

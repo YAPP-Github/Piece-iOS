@@ -11,11 +11,15 @@ import UseCases
 public struct EditValueTalkViewFactory {
   public static func createEditValueTalkViewFactory(
     getProfileValueTalksUseCase: GetProfileValueTalksUseCase,
-    updateProfileValueTalksUseCase: UpdateProfileValueTalksUseCase
+    updateProfileValueTalksUseCase: UpdateProfileValueTalksUseCase,
+    connectSseUseCase: ConnectSseUseCase,
+    disconnectSseUseCase: DisconnectSseUseCase
   ) -> some View {
     EditValueTalkView(
       getProfileValueTalksUseCase: getProfileValueTalksUseCase,
-      updateProfileValueTalksUseCase: updateProfileValueTalksUseCase
+      updateProfileValueTalksUseCase: updateProfileValueTalksUseCase,
+      connectSseUseCase: connectSseUseCase,
+      disconnectSseUseCase: disconnectSseUseCase
     )
   }
 }

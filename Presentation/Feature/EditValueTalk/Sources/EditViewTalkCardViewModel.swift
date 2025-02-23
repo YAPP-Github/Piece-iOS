@@ -23,21 +23,23 @@ final class EditValueTalkCardViewModel: Equatable {
     case didTapSummaryButton
   }
   
-  enum SummaryStatus {
-    case plain
-    case isEditing
-    case isWaiting
+  enum EditingState {
+    case viewing
+    case editingAnswer
+    case editingSummary
+    case generatingAISummary
   }
   
   var model: ProfileValueTalkModel
   let index: Int
   let isEditingAnswer: Bool
-  var summaryStatus: SummaryStatus = .plain
   var localAnswer: String
   var localSummary: String
   var currentGuideText: String {
     model.guides[guideTextIndex]
   }
+  
+  private(set) var editingState: EditingState = .viewing
   private(set) var guideTextIndex: Int = 0
   private var cancellables: [AnyCancellable] = []
   
@@ -58,6 +60,10 @@ final class EditValueTalkCardViewModel: Equatable {
     startTimer()
   }
   
+  deinit {
+    cancellables.removeAll()
+  }
+  
   func handleAction(_ action: Action) {
     switch action {
     case let .didUpdateAnswer(answer):
@@ -72,21 +78,32 @@ final class EditValueTalkCardViewModel: Equatable {
       didTapSummaryButton()
     }
   }
+  
+  func updateSummary(_ summary: String) {
+    localSummary = summary
+    model.summary = summary
+    editingState = .viewing
+  }
+    
 
   private func increaseGuideTextIndex() {
     guideTextIndex = (guideTextIndex + 1) % model.guides.count
   }
   
   private func didTapSummaryButton() {
-    switch summaryStatus {
-    case .plain:
-      summaryStatus = .isEditing
-    case .isEditing:
+    switch editingState {
+    case .viewing:
+      editingState = .editingSummary
+      
+    case .editingAnswer:
+      break
+      
+    case .editingSummary:
+      model.summary = localSummary
       onModelUpdate(model)
-      summaryStatus = .plain
-    case .isWaiting:
-      onModelUpdate(model)
-      // TODO: - AI 요약 완료 이벤트 받으면, 클로저 호출 후 .plain 상태로
+      editingState = .viewing
+      
+    case .generatingAISummary:
       break
     }
   }
@@ -99,3 +116,4 @@ final class EditValueTalkCardViewModel: Equatable {
       .store(in: &cancellables)
   }
 }
+
