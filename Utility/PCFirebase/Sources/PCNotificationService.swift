@@ -28,6 +28,10 @@ public final class PCNotificationService: NSObject, UNUserNotificationCenterDele
     }
   }
   
+  public func setApnsToken(_ token: Data) {
+    Messaging.messaging().apnsToken = token
+  }
+  
   // MARK: - UserNotificationCenterDelegate
   
   // Foreground 상태에서 푸시 알림을 받았을 때 호출되는 메소드
@@ -36,6 +40,8 @@ public final class PCNotificationService: NSObject, UNUserNotificationCenterDele
     willPresent notification: UNNotification
   ) async -> UNNotificationPresentationOptions {
     let userInfo = notification.request.content.userInfo
+    
+    // TODO: - 필요 시 딥링크 처리 로직 추가
     print(userInfo)
     return [.banner, .list, .sound]
   }
@@ -43,29 +49,12 @@ public final class PCNotificationService: NSObject, UNUserNotificationCenterDele
   // Background 상태에서 푸시 알림을 받았을 때 호출되는 메소드
   public func userNotificationCenter(
     _ center: UNUserNotificationCenter,
-    didReceive response: UNNotificationResponse,
-    withCompletionHandler completionHandler: @escaping () -> Void
-  ) {
+    didReceive response: UNNotificationResponse
+  ) async {
     let userInfo = response.notification.request.content.userInfo
     print(userInfo)
   }
-  
-  // 앱이 종료된 상태에서 푸시 알림을 받았을 때 호출되는 메소드
-  func application(
-    _ application: UIApplication,
-    didReceiveRemoteNotification userInfo: [AnyHashable : Any]
-  ) async -> UIBackgroundFetchResult {
-    print(userInfo)
-    return .newData
-  }
-  
-  func application(
-    _ application: UIApplication,
-    didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
-  ) {
-    print("앱이 APNs에 성공적으로 등록" )
-    Messaging.messaging().apnsToken = deviceToken
-  }
+
   
   // MARK: - MessagingDelegate
   

@@ -30,4 +30,21 @@ final class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     
     return true
   }
+  
+  // 앱이 종료된 상태에서 푸시 알림을 받았을 때 호출되는 메소드
+  func application(
+    _ application: UIApplication,
+    didReceiveRemoteNotification userInfo: [AnyHashable : Any]
+  ) async -> UIBackgroundFetchResult {
+    return .newData
+  }
+  
+  
+  func application(
+    _ application: UIApplication,
+    didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+  ) {
+    print("앱이 APNs에 성공적으로 등록" )
+    PCNotificationService.shared.setApnsToken(deviceToken)
+  }
 }
