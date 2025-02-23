@@ -146,11 +146,11 @@ public struct UseCaseFactory {
   }
   
   // MARK: - AI요약 SSE
-  public static func createGetAISummaryUseCase(repository: SSERepositoryInterface) -> ConnectSseUseCase {
+  public static func createConnectSseUseCase(repository: SSERepositoryInterface) -> ConnectSseUseCase {
     ConnectSseUseCaseImpl(repository: repository)
   }
   
-  public static func createFinishAISummaryUseCase(repository: SSERepositoryInterface) -> DisconnectSseUseCase {
+  public static func createDisconnectSseUseCase(repository: SSERepositoryInterface) -> DisconnectSseUseCase {
     DisconnectSseUseCaseImpl(repository: repository)
   }
   
