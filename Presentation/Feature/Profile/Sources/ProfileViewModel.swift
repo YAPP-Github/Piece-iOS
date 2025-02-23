@@ -10,6 +10,7 @@ import PCFoundationExtension
 import UseCases
 
 @Observable
+@MainActor
 final class ProfileViewModel {
   enum Action { }
   
@@ -29,7 +30,7 @@ final class ProfileViewModel {
   private func fetchUserProfile() async {
     do {
       let entity = try await getProfileUseCase.execute()
-      userProfile = UserProfile(
+      let userProfile = UserProfile(
         nickname: entity.nickname,
         description: entity.description,
         age: entity.age,
@@ -41,10 +42,15 @@ final class ProfileViewModel {
         smokingStatus: entity.smokingStatus,
         imageUri: entity.imageUri
       )
+      updateUserProfile(userProfile)
       error = nil
     } catch {
       self.error = error
     }
     isLoading = false
+  }
+  
+  private func updateUserProfile(_ profile: UserProfile) {
+    userProfile = profile
   }
 }
