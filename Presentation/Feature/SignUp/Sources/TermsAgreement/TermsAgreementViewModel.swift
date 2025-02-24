@@ -25,7 +25,7 @@ final class TermsAgreementViewModel {
   }
   
   private(set) var terms: [TermModel] = []
-  private(set) var isShowWebView: Bool = false
+  var isShowWebView: Bool = false
   var isAllChecked: Bool {
     terms.allSatisfy { $0.isChecked }
   }
