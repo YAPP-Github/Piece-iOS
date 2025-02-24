@@ -14,7 +14,7 @@ final class TermsWebViewModel {
     case tapAgreementButton
   }
   
-  var term: TermModel = .init(id: 0, title: "", url: "", required: true, isChecked: true)
+  var term: TermModel?
   let title: String
   let url: String
   
@@ -26,7 +26,7 @@ final class TermsWebViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .tapAgreementButton:
-      term.isChecked = true
+      term?.isChecked = true
     }
   }
 }
