@@ -122,6 +122,9 @@ public struct UseCaseFactory {
   }
   
   // MARK: - 매칭
+  public static func createGetMatchesInfoUseCase(repository: MatchesRepositoryInterface) -> GetMatchesInfoUseCase {
+    GetMatchesInfoUseCaseImpl(repository: repository)
+  }
   
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
     AcceptMatchUseCaseImpl(repository: repository)

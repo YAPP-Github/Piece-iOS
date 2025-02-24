@@ -18,12 +18,12 @@ struct MatchingMainView: View {
   
   init(
     acceptMatchUseCase: AcceptMatchUseCase,
-    getMatchesProfileBasicUsecase: GetMatchProfileBasicUseCase
+    getMatchesInfoUseCase: GetMatchesInfoUseCase
   ) {
     _matchingMainViewModel = .init(
       wrappedValue: .init(
         acceptMatchUseCase: acceptMatchUseCase,
-        getMatchesProfileBasicUseCase: getMatchesProfileBasicUsecase
+        getMatchesInfoUseCase: getMatchesInfoUseCase
       )
     )
     _matchingTimerViewModel = .init(wrappedValue: .init())

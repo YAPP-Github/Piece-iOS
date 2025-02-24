@@ -72,7 +72,7 @@ final class MatchingMainViewModel {
   private(set) var tags: [String] = []
   private(set) var error: Error?
   private let acceptMatchUseCase: AcceptMatchUseCase
-  private let getMatchesProfileBasicUseCase: GetMatchProfileBasicUseCase
+  private let getMatchesInfoUseCase: GetMatchesInfoUseCase
   
   var buttonTitle: String {
     matchingButtonState.title
@@ -88,10 +88,10 @@ final class MatchingMainViewModel {
   
   init(
     acceptMatchUseCase: AcceptMatchUseCase,
-    getMatchesProfileBasicUseCase: GetMatchProfileBasicUseCase
+    getMatchesInfoUseCase: GetMatchesInfoUseCase
   ) {
     self.acceptMatchUseCase = acceptMatchUseCase
-    self.getMatchesProfileBasicUseCase = getMatchesProfileBasicUseCase
+    self.getMatchesInfoUseCase = getMatchesInfoUseCase
     
     fetchInfo()
   }
@@ -120,12 +120,14 @@ final class MatchingMainViewModel {
   private func fetchInfo() {
     Task {
       do {
-        let basicInfo = try await getMatchesProfileBasicUseCase.execute()
-        name = basicInfo.nickname
-        description = basicInfo.description
-        age = String(basicInfo.age)
-        location = basicInfo.location
-        job = basicInfo.job
+        let info = try await getMatchesInfoUseCase.execute()
+        
+        name = info.nickname
+        description = info.description
+        age = info.birthYear
+        location = info.location
+        job = info.job
+        tags = info.matchedValueList
       } catch {
         print(error.localizedDescription)
       }
