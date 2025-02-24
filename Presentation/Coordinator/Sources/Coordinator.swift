@@ -84,12 +84,17 @@ public struct Coordinator {
       // MARK: - 매칭 메인
     case .matchMain:
       let matchesRepository = repositoryFactory.createMatchesRepository()
-      let getMatchMainUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
       let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
       let getMatchesInfoUseCase = UseCaseFactory.createGetMatchesInfoUseCase(repository: matchesRepository)
+      let getMatchesContactsUseCase = UseCaseFactory.createGetMatchContactsUseCase(repository: matchesRepository)
+      let getUserRejectUseCase = UseCaseFactory.createGetUserRejectUseCase(repository: matchesRepository)
+      let patchMatchesCheckPieceUseCase = UseCaseFactory.createPatchMatchesCheckPieceUseCase(repository: matchesRepository)
       MatchMainViewFactory.createMatchMainView(
         acceptMatchUseCase: acceptMatchUseCase,
-        getMatchesInfoUseCase: getMatchesInfoUseCase
+        getMatchesInfoUseCase: getMatchesInfoUseCase,
+        getMatchContactsUseCase: getMatchesContactsUseCase,
+        getUserRejectUseCase: getUserRejectUseCase,
+        patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase
       )
       
       // MARK: - 매칭 상세

@@ -12,6 +12,7 @@ import PCNetwork
 import RepositoryInterfaces
 
 final class MatchesRepository: MatchesRepositoryInterface {
+  
   private let networkService: NetworkService
   
   public init (networkService: NetworkService) {
@@ -76,6 +77,18 @@ final class MatchesRepository: MatchesRepositoryInterface {
   func getMatchContacts() async throws -> MatchContactsModel {
     let endpoint = MatchesEndpoint.contacts
     let responseDTO: MatchContactsResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
+  
+  func getUserRejectReason() async throws -> UserRejectReasonModel {
+    let endpoint = CommonEndpoint.userReject
+    let responseDTO: UserRejectReasonResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
+  
+  func patchCheckMatchPiece() async throws -> VoidModel {
+    let endpoint = MatchesEndpoint.checkMatchPiece
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
 }

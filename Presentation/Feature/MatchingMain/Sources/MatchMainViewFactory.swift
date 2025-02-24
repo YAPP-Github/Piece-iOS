@@ -12,11 +12,17 @@ public struct MatchMainViewFactory {
   @ViewBuilder
   public static func createMatchMainView(
     acceptMatchUseCase: AcceptMatchUseCase,
-    getMatchesInfoUseCase: GetMatchesInfoUseCase
+    getMatchesInfoUseCase: GetMatchesInfoUseCase,
+    getMatchContactsUseCase: GetMatchContactsUseCase,
+    getUserRejectUseCase: GetUserRejectUseCase,
+    patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   ) -> some View {
     MatchingMainView(
       acceptMatchUseCase: acceptMatchUseCase,
-      getMatchesInfoUseCase: getMatchesInfoUseCase
+      getMatchesInfoUseCase: getMatchesInfoUseCase,
+      getMatchContactsUseCase: getMatchContactsUseCase,
+      getUserRejectUseCase: getUserRejectUseCase,
+      patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase
     )
   }
 }

@@ -122,6 +122,14 @@ public struct UseCaseFactory {
   }
   
   // MARK: - 매칭
+  public static func createGetUserRejectUseCase(repository: MatchesRepositoryInterface) -> GetUserRejectUseCase {
+    GetUserRejectUseCaseImpl(repository: repository)
+  }
+  
+  public static func createPatchMatchesCheckPieceUseCase(repository: MatchesRepositoryInterface) -> PatchMatchesCheckPieceUseCase {
+    PatchMatchesCheckPieceUseCaseImpl(repository: repository)
+  }
+  
   public static func createGetMatchesInfoUseCase(repository: MatchesRepositoryInterface) -> GetMatchesInfoUseCase {
     GetMatchesInfoUseCaseImpl(repository: repository)
   }
