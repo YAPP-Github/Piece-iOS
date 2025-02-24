@@ -248,7 +248,6 @@ public struct Coordinator {
       let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
       let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthLoginUseCase()
       let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
-      let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthServiceUseCase()
       SplashViewFactory.createSplashView(
         checkTokenHealthUseCase: checkTokenHealthUseCase
       )
