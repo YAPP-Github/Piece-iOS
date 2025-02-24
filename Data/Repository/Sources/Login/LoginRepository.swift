@@ -43,4 +43,10 @@ public final class LoginRepository: LoginRepositoryInterfaces {
     let responseDTO: SocialLoginResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
+  
+  public func checkTokenHealth(token: String) async throws -> VoidModel {
+    let endpoint = LoginEndpoint.tokenHealthCheck(token: token)
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
 }

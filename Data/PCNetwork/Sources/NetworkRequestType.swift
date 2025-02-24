@@ -12,9 +12,6 @@ public enum RequestType {
   case plain
   case query(_ query: [URLQueryItem])
   case body(_ body: Encodable)
-  case queryAndBodyParameters(
-    query: [URLQueryItem],
-    body: Encodable
-  )
+  case queryAndBodyParameters(query: [URLQueryItem], body: Encodable)
   case multipart(Data)
 }

@@ -7,6 +7,7 @@
 
 import Alamofire
 import DTO
+import Foundation
 import LocalStorage
 
 public enum LoginEndpoint: TargetType {
@@ -14,6 +15,7 @@ public enum LoginEndpoint: TargetType {
   case sendSMSCode(body: SMSCodeRequestDTO)
   case verifySMSCode(body: VerifySMSCodeRequestDTO)
   case socialLoginTokenRefresh(body: SocialLoginTokenRefreshRequestDTO)
+  case tokenHealthCheck(token: String)
   
   public var headers: [String : String] {
     switch self {
@@ -34,6 +36,7 @@ public enum LoginEndpoint: TargetType {
         NetworkHeader.contentType: NetworkHeader.applicationJson,
         NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
+    case .tokenHealthCheck: [:]
     }
   }
   
@@ -46,6 +49,7 @@ public enum LoginEndpoint: TargetType {
     case .verifySMSCode:
         .post
     case .socialLoginTokenRefresh: .patch
+    case .tokenHealthCheck: .get
     }
   }
   
@@ -58,7 +62,10 @@ public enum LoginEndpoint: TargetType {
     case .verifySMSCode:
       "api/register/sms/auth/code/verify"
     case .socialLoginTokenRefresh:
-     "/api/login/token/refresh"
+      "api/login/token/refresh"
+    case let .tokenHealthCheck(parameters):
+      "api/login/token/health-check/"
+      
     }
   }
   
@@ -72,6 +79,7 @@ public enum LoginEndpoint: TargetType {
         .body(body)
     case let .socialLoginTokenRefresh(body):
         .body(body)
+    case let .tokenHealthCheck(token): .query([URLQueryItem(name: "token", value: token)])
     }
   }
 }

@@ -65,6 +65,10 @@ public struct UseCaseFactory {
     BlockContactsUseCaseImpl(repository: repository)
   }
   
+  public static func createCheckTokenHealthUseCase(repository: LoginRepositoryInterfaces) -> CheckTokenHealthUseCase {
+    CheckTokenHealthUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - Profile
   public static func createUploadProfileImageUseCase(repository: ProfileRepositoryInterface) -> UploadProfileImageUseCase {
     UploadProfileImageUseCaseImpl(repository: repository)
