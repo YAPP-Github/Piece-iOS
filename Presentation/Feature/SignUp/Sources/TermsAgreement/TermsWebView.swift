@@ -20,7 +20,7 @@ struct TermsWebView: View {
   
   var body: some View {
     ZStack {
-      PCWebView(uri: viewModel.term.url)
+      PCWebView(uri: viewModel.url)
         .padding(.bottom, 74)
       
       VStack {
@@ -38,7 +38,7 @@ struct TermsWebView: View {
     }
     .navigationBarModifier {
       NavigationBar(
-        title: viewModel.term.title,
+        title: viewModel.title,
         leftButtonTap: { router.pop() }
       )
     }
