@@ -15,6 +15,7 @@ let project = Project.staticLibrary(
     .domain(target: .UseCases),
     .presentation(target: .DesignSystem),
     .presentation(target: .Router),
+    .data(target: .LocalStorage),
     .utility(target: .PCFirebase),
     .utility(target: .PCFoundationExtension),
   ]
