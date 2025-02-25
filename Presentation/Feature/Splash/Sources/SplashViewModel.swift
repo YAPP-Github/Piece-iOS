@@ -12,7 +12,6 @@ import PCFoundationExtension
 import Router
 import UseCases
 import UIKit
-import KakaoSDKUser
 import Entities
 
 @Observable
@@ -25,18 +24,10 @@ final class SplashViewModel {
   var showNeedsForceUpdateAlert: Bool = false
   private(set) var destination: Route?
   
-  private let getServerStatusUseCase: GetServerStatusUseCase
-  private let socialLoginUseCase: SocialLoginUseCase
-  private let appleAuthServiceUseCase: AppleAuthServiceUseCase
+  private let checkTokenHealthUseCase: CheckTokenHealthUseCase
   
-  init(
-    getServerStatusUseCase: GetServerStatusUseCase,
-    socialLoginUseCase: SocialLoginUseCase,
-    appleAuthServiceUseCase: AppleAuthServiceUseCase
-  ) {
-    self.getServerStatusUseCase = getServerStatusUseCase
-    self.socialLoginUseCase = socialLoginUseCase
-    self.appleAuthServiceUseCase = appleAuthServiceUseCase
+  init(checkTokenHealthUseCase: CheckTokenHealthUseCase) {
+    self.checkTokenHealthUseCase = checkTokenHealthUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -53,65 +44,41 @@ final class SplashViewModel {
     /// 1.  강제 업데이트 필요 여부 확인
     /// 2. 온보딩 여부 확인
     /// - 온보딩 본 적 없으면 온보딩 화면으로
-    /// - 본 적 있으면 로그인 요청 수행
-    /// 3. OAuth 로그인
-    /// - 로그인 후 role에 따라 화면 분기 처리
+    /// - 본 적 있으면 토큰 확인
+    /// 3. 인증 토큰 확인
+    /// - accessToken이 유효하면 바로 사용
+    /// - accessToken이 유효하지 않으면 refreshToken으로 갱신 시도
+    /// - 둘 다 없거나 갱신 실패시 로그인 화면으로 이동
+    /// 4. 인증 성공 후 role에 따라 화면 분기 처리
     /// - NONE: 소셜 로그인 완료, SMS 인증 전 > SMS 인증 화면으로
     /// - REGISTER: SMS 인증 완료 > 프로필 등록 화면으로
     /// - PENDING: 프로필 등록 완료, 프로필 심사중 > 매칭 메인 - 심사중
     /// - USER: 프로필 심사 완료 > 매칭 메인
     
-    print("onAppear called")
-    
-    // 온보딩 여부 확인
-    guard PCUserDefaultsService.shared.getDidSeeOnboarding() else {
-      destination = .onboarding
-      return
-    }
-    
-    // 로그인 여부 확인 ( AccessToken 유무 확인 )
-    guard let accessToken = PCKeychainManager.shared.read(.accessToken) else {
-      print("AccessToken이 없어서 로그인 화면으로 이동")
-      destination = .login
-      return
-    }
-    print("AccessToken: \(accessToken)")
+    print("Splash onAppear called")
     
     Task {
       do {
-        try await PCFirebase.shared.fetchRemoteConfigValues()
-        showNeedsForceUpdateAlert = needsForceUpdate()
-        let didSeeOnboarding = PCUserDefaultsService.shared.getDidSeeOnboarding()
-        if didSeeOnboarding {
-          if PCUserDefaultsService.shared.getSocialLoginType() == "apple" {
-            let token = try await appleAuthServiceUseCase.execute().authorizationCode
-            let socialLoginResult = try await socialLoginUseCase.execute(providerName: .apple, token: token)
-            
-            PCKeychainManager.shared.save(.accessToken, value: socialLoginResult.accessToken)
-            PCKeychainManager.shared.save(.refreshToken, value: socialLoginResult.refreshToken)
-            PCKeychainManager.shared.save(.role, value: socialLoginResult.role.rawValue)
-          } else if PCUserDefaultsService.shared.getSocialLoginType() == "kakao" {
-            if UserApi.isKakaoTalkLoginAvailable() {
-              let token = try await fetchKakaoAccessToken()
-              let socialLoginResult = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
-              
-              PCKeychainManager.shared.save(.accessToken, value: socialLoginResult.accessToken)
-              PCKeychainManager.shared.save(.refreshToken, value: socialLoginResult.refreshToken)
-              PCKeychainManager.shared.save(.role, value: socialLoginResult.role.rawValue)
-            }
-          }
+        try await checkForceUpdate()
+        
+        guard checkOnboarding() else { return }
+        
+        guard let accessToken = checkAccesstoken() else {
+          checkRefreshToken()
+          return
         }
-      }  catch let error as PCFirebaseError {
-        print("RemoteConfig fetch failed:", error.errorDescription)
-      } catch {
-        print(error)
+        
+        
       }
     }
     
     setRoute()
   }
   
-  private func needsForceUpdate() -> Bool {
+  // MARK: - onAppear 시 로직
+  
+  private func checkForceUpdate() async throws {
+    try await PCFirebase.shared.fetchRemoteConfigValues()
     let currentVersion = AppVersion.appVersion()
     let minimumVersion = PCFirebase.shared.minimumVersion()
     let needsForceUpdate = PCFirebase.shared.needsForceUpdate()
@@ -119,7 +86,44 @@ final class SplashViewModel {
     print("currentVersion: \(currentVersion)")
     print("minimumVersion: \(minimumVersion)")
     print("needsForceUpdate: \(needsForceUpdate)")
-    return needsForceUpdate && currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+    showNeedsForceUpdateAlert = needsForceUpdate && currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+  }
+  
+  private func checkOnboarding() -> Bool {
+    guard PCUserDefaultsService.shared.getDidSeeOnboarding() else {
+      print("온보딩을 본 적 없어 온보딩 화면으로 이동")
+      destination = .onboarding
+      return false
+    }
+    return true
+  }
+  
+  private func validateAuthentication() async {
+    do {
+      if let accessToken = PCKeychainManager.shared.read(.accessToken) {}
+    }
+  }
+  
+  private func checkAccesstoken() -> String? {
+    // 로그인 여부 확인 ( AccessToken 유무 확인 )
+    guard let accessToken = PCKeychainManager.shared.read(.accessToken) else {
+      print("AccessToken이 없어서 로그인 화면으로 이동")
+      destination = .login
+      return nil
+    }
+    print("AccessToken: \(accessToken)")
+    
+    return accessToken
+  }
+  
+  private func checkRefreshToken() {
+    print("액세스 토큰이 만료되었거나 유효하지 않음, RefreshToken 확인")
+    guard let refreshToken = PCKeychainManager.shared.read(.refreshToken) else {
+      print("RefreshToken이 없어서 로그인 화면으로 이동")
+      destination = .login
+      return
+    }
+    
   }
   
   private func openAppStore() {
@@ -128,46 +132,6 @@ final class SplashViewModel {
     guard let url = URL(string: appStoreUrl) else { return }
     if UIApplication.shared.canOpenURL(url) {
       UIApplication.shared.open(url)
-    }
-  }
-  
-  private func fetchKakaoAccessToken() async throws -> String {
-    return try await withCheckedThrowingContinuation { continuation in
-      if UserApi.isKakaoTalkLoginAvailable() {
-        UserApi.shared.loginWithKakaoTalk { (oauthToken, error) in
-          if let error = error {
-            print("카카오톡 로그인 실패: \(error.localizedDescription)")
-            self.loginWithKakaoAccount(continuation: continuation)
-            return
-          }
-          
-          guard let token = oauthToken?.accessToken else {
-            continuation.resume(throwing: NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "토큰이 없습니다."]))
-            return
-          }
-          
-          continuation.resume(returning: token)
-        }
-      } else {
-        self.loginWithKakaoAccount(continuation: continuation)
-      }
-    }
-  }
-  
-  private func loginWithKakaoAccount(continuation: CheckedContinuation<String, Error>) {
-    UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
-      if let error = error {
-        print("카카오 계정 로그인 실패: \(error.localizedDescription)")
-        continuation.resume(throwing: error)
-        return
-      }
-      
-      guard let token = oauthToken?.accessToken else {
-        continuation.resume(throwing: NSError(domain: "KakaoLogin", code: -1, userInfo: [NSLocalizedDescriptionKey: "토큰이 없습니다."]))
-        return
-      }
-      
-      continuation.resume(returning: token)
     }
   }
   

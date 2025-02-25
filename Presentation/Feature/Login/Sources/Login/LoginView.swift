@@ -59,7 +59,7 @@ struct LoginView: View {
       .padding(.top, 80)
     }
     .onChange(of: viewModel.isLoginSuccessful) { _, newValue in
-      router.push(to: .verifyContact)
+      router.push(to: .verifyContact)  // TODO: - role에 따른 분기처리 필요
     }
     .toolbar(.hidden, for: .navigationBar)
   }

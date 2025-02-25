@@ -15,15 +15,11 @@ struct SplashView: View {
   @Environment(Router.self) var router
   
   init(
-    getServerStatusUseCase: GetServerStatusUseCase,
-    socialLoginUseCase: SocialLoginUseCase,
-    appleAuthServiceUseCase: AppleAuthServiceUseCase
+    checkTokenHealthUseCase: CheckTokenHealthUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
-        getServerStatusUseCase: getServerStatusUseCase,
-        socialLoginUseCase: socialLoginUseCase,
-        appleAuthServiceUseCase: appleAuthServiceUseCase
+        checkTokenHealthUseCase: checkTokenHealthUseCase
       )
     )
   }
