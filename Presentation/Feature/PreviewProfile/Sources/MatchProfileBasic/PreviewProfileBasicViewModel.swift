@@ -53,7 +53,7 @@ final class PreviewProfileBasicViewModel {
       matchingBasicInfoModel = BasicInfoModel(
         nickname: entity.nickname,
         shortIntroduction: entity.description,
-        age: entity.age,
+        age: entity.age ?? -1,
         birthYear: entity.birthdate.extractYear(),
         height: entity.height,
         weight: entity.weight,

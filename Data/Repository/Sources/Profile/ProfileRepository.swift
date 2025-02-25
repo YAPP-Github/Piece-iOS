@@ -26,7 +26,7 @@ final class ProfileRepository: ProfileRepositoryInterface {
     return responseDto.toDomain()
   }
   
-  func getProfileBasic() async throws -> ProfileModel {
+  func getProfileBasic() async throws -> ProfileBasicModel {
     let endpoint = ProfileEndpoint.getProfileBasic
     let responseDto: ProfileBasicResponseDTO = try await networkService.request(endpoint: endpoint)
     

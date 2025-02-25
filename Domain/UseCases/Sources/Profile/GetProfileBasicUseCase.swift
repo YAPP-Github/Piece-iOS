@@ -9,7 +9,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol GetProfileBasicUseCase {
-  func execute() async throws -> ProfileModel
+  func execute() async throws -> ProfileBasicModel
 }
 
 final class GetProfileUseCaseImpl: GetProfileBasicUseCase {
@@ -19,7 +19,7 @@ final class GetProfileUseCaseImpl: GetProfileBasicUseCase {
     self.repository = repository
   }
   
-  func execute() async throws -> ProfileModel {
+  func execute() async throws -> ProfileBasicModel {
     try await repository.getProfileBasic()
   }
 }

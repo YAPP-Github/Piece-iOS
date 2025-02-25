@@ -162,7 +162,7 @@ struct ProfileView: View {
           .pretendard(.body_S_M)
           .foregroundStyle(Color.grayscaleBlack)
       }
-      Text("\(userProfile.birthdate)년생")
+      Text("\(userProfile.birthYear)년생")
         .lineLimit(1)
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark2)
