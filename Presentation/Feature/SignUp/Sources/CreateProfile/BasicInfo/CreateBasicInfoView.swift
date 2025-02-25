@@ -121,6 +121,7 @@ struct CreateBasicInfoView: View {
           .padding(.horizontal, 20)
           .padding(.bottom, 10)
       }
+      .ignoresSafeArea(.keyboard)
       
       if viewModel.isJobSheetPresented {
         jobBottomSheet

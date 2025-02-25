@@ -109,8 +109,9 @@ struct ValuePickView: View {
       viewModel.handleAction(.didTapCreateProfileButton)
       didTapCreateProfileButton()
     }
-    .padding(.top, 12)
     .padding(.horizontal, 20)
+    .padding(.top, 12)
+    .padding(.bottom, 10)
     .background(Color.grayscaleWhite)
   }
 }

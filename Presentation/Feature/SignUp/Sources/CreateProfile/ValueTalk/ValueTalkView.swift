@@ -12,8 +12,13 @@ import SwiftUI
 import UseCases
 
 struct ValueTalkView: View {
+  enum Field: Hashable {
+    case valueTalkEditor(Int)
+  }
+  
   @Bindable var viewModel: ValueTalkViewModel
   @Environment(Router.self) private var router: Router
+  @FocusState private var focusField: Field?
   var didTapNextButton: () -> Void
 
   init(
@@ -32,14 +37,22 @@ struct ValueTalkView: View {
 
   var body: some View {
     GeometryReader { proxy in
-      VStack(spacing: 0) {
-        ScrollView {
-          content
+      ZStack {
+        Color.clear
+          .contentShape(Rectangle())
+          .onTapGesture {
+            focusField = nil
+          }
+        VStack(spacing: 0) {
+          ScrollView {
+            content
+          }
+          
+          buttonArea
         }
-        
-        buttonArea
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(.keyboard)
       }
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
   }
 
@@ -76,9 +89,12 @@ struct ValueTalkView: View {
       Array(zip(viewModel.cardViewModels.indices, viewModel.cardViewModels)),
       id: \.0
     ) { index, valueTalk in
-      ValueTalkCard(viewModel: Binding(
+      ValueTalkCard(
+        viewModel: Binding(
         get: { viewModel.cardViewModels[index] },
-        set: { viewModel.cardViewModels[index] = $0 }) )
+        set: { viewModel.cardViewModels[index] = $0 }),
+        focusState: $focusField
+      )
       if index < viewModel.valueTalks.count - 1 {
         Divider(weight: .thick, isVertical: false)
       }
@@ -94,8 +110,9 @@ struct ValueTalkView: View {
       viewModel.handleAction(.didTapNextButton)
       didTapNextButton()
     }
-    .padding(.top, 12)
     .padding(.horizontal, 20)
+    .padding(.top, 12)
+    .padding(.bottom, 10)
     .background(Color.grayscaleWhite)
   }
 }
