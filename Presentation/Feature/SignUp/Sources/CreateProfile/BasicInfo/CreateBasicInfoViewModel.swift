@@ -213,11 +213,10 @@ final class CreateBasicInfoViewModel {
         let imageURL = try await uploadProfileImageUseCase.execute(image: imageData)
         print("이미지 업로드 성공: \(imageURL)")
         
-        let basicInfo = ProfileModel(
+        let basicInfo = ProfileBasicModel(
           nickname: nickname,
           description: description,
-          age: calculateAge(from: birthDate),
-          birthdate: formatBirthDate(birthDate),
+          birthdate: birthDate,
           height: Int(height) ?? 0,
           weight: Int(weight) ?? 0,
           job: job,
@@ -225,9 +224,7 @@ final class CreateBasicInfoViewModel {
           smokingStatus: smokingStatus,
           snsActivityLevel: snsActivityLevel,
           imageUri: imageURL.absoluteString,
-          contacts: contacts,
-          valueTalks: [],
-          valuePicks: []
+          contacts: contacts
         )
         
         profileCreator.updateBasicInfo(basicInfo)
@@ -253,27 +250,7 @@ final class CreateBasicInfoViewModel {
   private func isValidBirthDateFormat(_ date: String) -> Bool {
     let dateRegex = "^[0-9]{8}$" // YYYYMMDD
     let dateTest = NSPredicate(format: "SELF MATCHES %@", dateRegex)
-    return dateTest.evaluate(with: date)
-  }
-  
-  private func calculateAge(from birthDateString: String) -> Int {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyyMMdd" // YYMMDD 형식
-    guard let birthDate = dateFormatter.date(from: birthDateString) else { return 0 }
-    
-    let calendar = Calendar.current
-    let now = Date()
-    
-    let ageComponents = calendar.dateComponents([.year], from: birthDate, to: now)
-    return ageComponents.year ?? 0
-  }
-  
-  private func formatBirthDate(_ birthDate: String) -> Date {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyyMMdd" // 입력된 YYYYMMDD 형식
-    guard let date = dateFormatter.date(from: birthDate) else { return Date() }
-    
-    return date
+    return dateTest.evaluate(with: date) && date.count == 8
   }
   
   func saveSelectedJob() {

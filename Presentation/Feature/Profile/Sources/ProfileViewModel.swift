@@ -33,8 +33,8 @@ final class ProfileViewModel {
       let userProfile = UserProfile(
         nickname: entity.nickname,
         description: entity.description,
-        age: entity.age,
-        birthdate: entity.birthdate.extractYear(),
+        age: entity.age ?? -1,
+        birthYear: entity.birthdate.extractYear(),
         height: entity.height,
         weight: entity.weight,
         job: entity.job,

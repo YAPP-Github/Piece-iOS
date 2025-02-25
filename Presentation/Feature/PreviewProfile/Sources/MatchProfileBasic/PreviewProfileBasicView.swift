@@ -249,12 +249,12 @@ struct PreviewProfileBasicView: View {
 }
 
 private final class DummyGetProfileBasicUseCase: GetProfileBasicUseCase {
-  func execute() async throws -> Entities.ProfileModel {
-    return ProfileModel(
+  func execute() async throws -> Entities.ProfileBasicModel {
+    return ProfileBasicModel(
       nickname: "수줍은 수달",
       description: "음악과 요리를 좋아하는",
       age: 25,
-      birthdate: Date(),
+      birthdate: "1999-11-11",
       height: 180,
       weight: 72,
       job: "프리랜서",
@@ -262,9 +262,7 @@ private final class DummyGetProfileBasicUseCase: GetProfileBasicUseCase {
       smokingStatus: "비흡연",
       snsActivityLevel: "은둔",
       imageUri: "https://www.thesprucepets.com/thmb/AyzHgPQM_X8OKhXEd8XTVIa-UT0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-145577979-d97e955b5d8043fd96747447451f78b7.jpg",
-      contacts: [],
-      valueTalks: [],
-      valuePicks: []
+      contacts: []
     )
   }
 }

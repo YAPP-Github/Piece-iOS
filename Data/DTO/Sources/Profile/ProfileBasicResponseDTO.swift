@@ -7,12 +7,13 @@
 
 import Entities
 import Foundation
+import PCFoundationExtension
 
 public struct ProfileBasicResponseDTO: Decodable {
   public let nickname: String
   public let description: String
   public let age: Int
-  public let birthdate: Date
+  public let birthdate: String
   public let height: Int
   public let weight: Int
   public let job: String
@@ -24,14 +25,12 @@ public struct ProfileBasicResponseDTO: Decodable {
 }
 
 public extension ProfileBasicResponseDTO {
-  func toDomain() -> ProfileModel {
-    let dateFormatter = DateFormatter()
-
-    return ProfileModel(
+  func toDomain() -> ProfileBasicModel {
+    return ProfileBasicModel(
       nickname: nickname,
       description: description,
       age: age,
-      birthdate: birthdate,
+      birthdate: birthdate.extractYear(),
       height: height,
       weight: weight,
       job: job,
@@ -39,9 +38,7 @@ public extension ProfileBasicResponseDTO {
       smokingStatus: smokingStatus,
       snsActivityLevel: snsActivityLevel,
       imageUri: imageUrl,
-      contacts: contacts.map { $0.toDomain() },
-      valueTalks: [],
-      valuePicks: []
+      contacts: contacts.map { $0.toDomain() }
     )
   }
 }

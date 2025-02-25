@@ -17,7 +17,10 @@ struct CompleteSignUpView: View {
     VStack(alignment: .center) {
       title
       
-      PCLottieView(.piece_logo_wide)
+      PCLottieView(
+        .piece_logo_wide,
+        loopMode: .playOnce
+      )
       
       Spacer()
       
@@ -47,7 +50,7 @@ struct CompleteSignUpView: View {
       buttonText: "프로필 생성하기",
       width: .maxWidth,
       action: {
-        router.setRoute(.createProfile)
+        router.push(to: .createProfile)
       }
     )
   }

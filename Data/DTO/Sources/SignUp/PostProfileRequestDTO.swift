@@ -56,9 +56,13 @@ public struct PostProfileRequestDTO: Encodable {
 
 public extension ProfileModel {
   func toDto() -> PostProfileRequestDTO {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd" // 서버에 전달할 형식
-    let formattedDate = dateFormatter.string(from: birthdate)
+    // 연도, 월, 일을 추출
+    let year = birthdate.prefix(4)
+    let month = birthdate.dropFirst(4).prefix(2)
+    let day = birthdate.dropFirst(6).prefix(2)
+    
+    // yyyy-MM-dd 형식으로 조합
+    let formattedBirthDate = "\(year)-\(month)-\(day)"
     
     var contactsDictionary: [String: String] = [:]
     contacts.forEach { model in
@@ -78,7 +82,7 @@ public extension ProfileModel {
     return PostProfileRequestDTO(
       nickname: nickname,
       description: description,
-      birthdate: formattedDate,
+      birthdate: formattedBirthDate,
       height: height,
       weight: weight,
       job: job,

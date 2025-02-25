@@ -9,12 +9,12 @@ import Entities
 
 final class ProfileCreator {
   private(set) var isBasicInfoValid: Bool = false
+  private(set) var basicInfo: ProfileBasicModel = ProfileBasicModel.empty
   private(set) var valueTalks: [ValueTalkModel] = []
   private(set) var valuePicks: [ProfileValuePickModel] = []
   private(set) var isValuePicksValid: Bool = false
-  private var basicInfo: ProfileModel = ProfileModel.empty
   
-  func updateBasicInfo(_ profile: ProfileModel) {
+  func updateBasicInfo(_ profile: ProfileBasicModel) {
     print(profile)
     self.basicInfo = profile
     isBasicInfoValid = true
@@ -39,7 +39,6 @@ final class ProfileCreator {
     return ProfileModel(
       nickname: basicInfo.nickname,
       description: basicInfo.description,
-      age: basicInfo.age,
       birthdate: basicInfo.birthdate,
       height: basicInfo.height,
       weight: basicInfo.weight,

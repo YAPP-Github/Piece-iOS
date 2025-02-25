@@ -9,7 +9,7 @@ struct UserProfile {
   let nickname: String
   let description: String
   let age: Int
-  let birthdate: String
+  let birthYear: String
   let height: Int
   let weight: Int
   let job: String
