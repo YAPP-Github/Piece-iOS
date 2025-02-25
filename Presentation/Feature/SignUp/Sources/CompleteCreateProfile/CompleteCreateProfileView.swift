@@ -57,6 +57,11 @@ struct CompleteCreateProfileView: View {
   private var buttons: some View {
     VStack(alignment: .center, spacing: 20) {
       PCTextButton(content: "홈으로")
+        .contentShape(Rectangle())
+        .onTapGesture {
+          router.setRoute(.home)
+        }
+      
       RoundedButton(
         type: .solid,
         buttonText: "내 프로필 확인하기",
