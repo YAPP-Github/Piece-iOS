@@ -10,21 +10,31 @@ import Entities
 import SwiftUI
 
 struct EditValueTalkCard: View {
-  @FocusState var isEditingAnswer: Bool
-  @FocusState var isEditingSummary: Bool
   @State private var viewModel: EditValueTalkCardViewModel
-
+  private var focusState: FocusState<EditValueTalkView.Field?>.Binding
+  let index: Int
+  let isEditing: Bool
+  
   init(
     viewModel: EditValueTalkCardViewModel,
-    isEditingAnswer: Bool
+    focusState: FocusState<EditValueTalkView.Field?>.Binding,
+    index: Int,
+    isEditing: Bool
   ) {
     _viewModel = .init(wrappedValue: viewModel)
-    self.isEditingAnswer = isEditingAnswer
+    self.focusState = focusState
+    self.index = index
+    self.isEditing = isEditing
   }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       question
+        .contentShape(Rectangle())
+        .onTapGesture {
+          // 질문 영역 탭 시 포커스 해제
+          focusState.wrappedValue = nil
+        }
       Spacer()
         .frame(height: 20)
       answer
@@ -32,12 +42,28 @@ struct EditValueTalkCard: View {
         .frame(height: 12)
       if viewModel.isEditingAnswer {
         guide
+          .contentShape(Rectangle())
+          .onTapGesture {
+            // 도움말 영역 탭 시 포커스 해제
+            focusState.wrappedValue = nil
+          }
+      }
+      
+      if !viewModel.isEditingAnswer {
+        Spacer()
+          .frame(height: 20)
+        summary
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.horizontal, 20)
     .padding(.vertical, 24)
     .background(Color.grayscaleWhite)
+    .contentShape(Rectangle())
+    .onTapGesture {
+      // 카드 전체 영역 탭 시 포커스 해제 (자식 뷰에서 이벤트가 처리되지 않은 경우에만)
+      focusState.wrappedValue = nil
+    }
   }
   
   private var question: some View {
@@ -74,25 +100,45 @@ struct EditValueTalkCard: View {
         .scrollDisabled(true)
         .foregroundStyle(Color.grayscaleBlack)
         .background(alignment: .topLeading) {
-          if viewModel.localAnswer.isEmpty && !isEditingAnswer {
+          if viewModel.localAnswer.isEmpty && focusState.wrappedValue != .answerEditor(index) {
             Text(viewModel.model.placeholder)
               .pretendard(.body_M_M)
               .foregroundStyle(Color.grayscaleDark3)
-              .padding(.top, 4) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
+              .padding(.top, 4)
           }
         }
-        .focused($isEditingAnswer)
+        .focused(focusState, equals: .answerEditor(index))
+        .allowsHitTesting(isEditing) // 편집 모드에서만 탭 가능하도록
+        .onTapGesture {
+          if isEditing {
+            focusState.wrappedValue = .answerEditor(index)
+          }
+        }
       
-      if !viewModel.localAnswer.isEmpty || isEditingAnswer {
+      if !viewModel.localAnswer.isEmpty || focusState.wrappedValue == .answerEditor(index) {
         TextCountIndicator(count: .constant(viewModel.localAnswer.count), maxCount: 300)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            // 카운터 영역 탭 시 포커스 해제
+            focusState.wrappedValue = nil
+          }
       }
     }
     .padding(.horizontal, 16)
-    .padding(.vertical, 10) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
+    .padding(.vertical, 10)
     .background(
       RoundedRectangle(cornerRadius: 8)
         .foregroundStyle(Color.grayscaleLight3)
     )
+    .contentShape(Rectangle())
+    .onTapGesture {
+      // TextEditor 주변 패딩 탭 시 처리
+      if isEditing && focusState.wrappedValue != .answerEditor(index) {
+        focusState.wrappedValue = .answerEditor(index)
+      } else {
+        focusState.wrappedValue = nil
+      }
+    }
   }
   
   private var guide: some View {
@@ -121,6 +167,10 @@ struct EditValueTalkCard: View {
           .renderingMode(.template)
           .foregroundStyle(Color.grayscaleDark3)
       }
+      .contentShape(Rectangle())
+      .onTapGesture {
+        focusState.wrappedValue = nil
+      }
       
       HStack(alignment: .bottom, spacing: 4) {
         if case .generatingAISummary = viewModel.editingState {
@@ -141,21 +191,42 @@ struct EditValueTalkCard: View {
           .scrollContentBackground(.hidden)
           .scrollDisabled(true)
           .foregroundStyle(viewModel.editingState == .generatingAISummary ? Color.grayscaleDark2 : Color.grayscaleBlack)
-          .focused($isEditingSummary)
+          .focused(focusState, equals: .summaryEditor(index))
+          .allowsHitTesting(viewModel.editingState == .editingSummary)
+          .onTapGesture {
+            if viewModel.editingState == .editingSummary {
+              focusState.wrappedValue = .summaryEditor(index)
+            } else {
+              focusState.wrappedValue = nil
+            }
+          }
           
           summaryButton
         }
       }
       .padding(.horizontal, 16)
-      .padding(.vertical, 10) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
+      .padding(.vertical, 10)
       .background(
         RoundedRectangle(cornerRadius: 8)
           .foregroundStyle(Color.grayscaleLight3)
       )
+      .contentShape(Rectangle())
+      .onTapGesture {
+        // 요약 영역 배경 탭 시
+        if viewModel.editingState == .editingSummary && focusState.wrappedValue != .summaryEditor(index) {
+          focusState.wrappedValue = .summaryEditor(index)
+        } else {
+          focusState.wrappedValue = nil
+        }
+      }
       
       if case .editingSummary = viewModel.editingState {
         TextCountIndicator(count: .constant(viewModel.localSummary.count), maxCount: 50)
           .frame(maxWidth: .infinity, alignment: .trailing)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            focusState.wrappedValue = nil
+          }
       }
     }
   }
@@ -163,6 +234,7 @@ struct EditValueTalkCard: View {
   @ViewBuilder
   private var summaryButton: some View {
     Button {
+      focusState.wrappedValue = nil // 버튼 탭 시 포커스 해제
       viewModel.handleAction(.didTapSummaryButton)
     } label: {
       switch viewModel.editingState {
