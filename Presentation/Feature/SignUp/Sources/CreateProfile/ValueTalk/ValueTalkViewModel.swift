@@ -20,18 +20,21 @@ final class ValueTalkViewModel {
   let profileCreator: ProfileCreator
   var valueTalks: [ValueTalkModel] = []
   var cardViewModels: [ValueTalkCardViewModel] = []
-
-  private let getValueTalksUseCase: GetValueTalksUseCase
   
   init(
     profileCreator: ProfileCreator,
-    getValueTalksUseCase: GetValueTalksUseCase
+    initialValueTalks: [ValueTalkModel]
   ) {
     self.profileCreator = profileCreator
-    self.getValueTalksUseCase = getValueTalksUseCase
     
-    Task {
-      await fetchValueTalks()
+    if profileCreator.valueTalks.isEmpty {
+      self.valueTalks = initialValueTalks
+    } else {
+      self.valueTalks = profileCreator.valueTalks
+    }
+    
+    self.cardViewModels = self.valueTalks.enumerated().map { index, talk in
+      ValueTalkCardViewModel(model: talk, index: index)
     }
   }
   
@@ -45,19 +48,6 @@ final class ValueTalkViewModel {
         valueTalks[cardViewModel.index].answer = cardViewModel.localAnswer
       }
       profileCreator.updateValueTalks(valueTalks)
-    }
-  }
-  
-  @MainActor
-  private func fetchValueTalks() async {
-    do {
-      let valueTalks = try await getValueTalksUseCase.execute()
-      self.valueTalks = valueTalks
-      cardViewModels = valueTalks.enumerated().map { index, talk in
-        ValueTalkCardViewModel(model: talk, index: index)
-      }
-    } catch {
-      print(error)
     }
   }
 }

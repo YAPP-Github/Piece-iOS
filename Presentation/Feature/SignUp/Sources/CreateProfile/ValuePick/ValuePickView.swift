@@ -6,40 +6,33 @@
 //
 
 import DesignSystem
+import Entities
 import SwiftUI
 import UseCases
 
 struct ValuePickView: View {
-  @State var viewModel: ValuePickViewModel
-  var didTapBackButton: () -> Void
+  @Bindable var viewModel: ValuePickViewModel
   var didTapCreateProfileButton: () -> Void
   
   init(
     profileCreator: ProfileCreator,
-    getValuePicksUseCase: GetValuePicksUseCase,
-    didTapBackButton: @escaping () -> Void,
+    initialValuePicks: [ProfileValuePickModel],
+    onUpdateValuePick: @escaping (ProfileValuePickModel) -> Void,
     didTapCreateProfileButton: @escaping () -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         profileCreator: profileCreator,
-        getValuePicksUseCase: getValuePicksUseCase
+        initialValuePicks: initialValuePicks,
+        onUpdateValuePick: onUpdateValuePick
       )
     )
-    self.didTapBackButton = didTapBackButton
     self.didTapCreateProfileButton = didTapCreateProfileButton
   }
   
   var body: some View {
     GeometryReader { proxy in
       VStack(spacing: 0) {
-        NavigationBar(
-          title: "",
-          leftButtonTap: { didTapBackButton() }
-        )
-        
-        PCPageIndicator(step: .third, width: proxy.size.width)
-        
         ScrollView {
           content
         }
@@ -92,15 +85,17 @@ struct ValuePickView: View {
   }
   
   private var valuePicks: some View {
-    ForEach(
-      Array(zip(viewModel.valuePicks.indices, viewModel.valuePicks)),
-      id: \.1
-    ) { index, valuePick in
-      ValuePickCard(valuePick: valuePick) { model in
-        viewModel.handleAction(.updateValuePick(model))
-      }
-      if index < viewModel.valuePicks.count - 1 {
-        Divider(weight: .thick, isVertical: false)
+    VStack(spacing: 16) {
+      ForEach(
+        Array(zip(viewModel.valuePicks.indices, viewModel.valuePicks)),
+        id: \.1.id
+      ) { index, valuePick in
+        ValuePickCard(valuePick: valuePick) { model in
+          viewModel.handleAction(.updateValuePick(model))
+        }
+        if index < viewModel.valuePicks.count - 1 {
+          Divider(weight: .thick, isVertical: false)
+        }
       }
     }
   }

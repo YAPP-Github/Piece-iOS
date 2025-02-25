@@ -6,6 +6,7 @@
 //
 
 import DesignSystem
+import Entities
 import Router
 import SwiftUI
 import UseCases
@@ -13,35 +14,25 @@ import UseCases
 struct ValueTalkView: View {
   @Bindable var viewModel: ValueTalkViewModel
   @Environment(Router.self) private var router: Router
-  var didTapBackButton: () -> Void
   var didTapNextButton: () -> Void
 
   init(
     profileCreator: ProfileCreator,
-    getValueTalksUseCase: GetValueTalksUseCase,
-    didTapBackButton: @escaping () -> Void,
+    initialValueTalks: [ValueTalkModel],
     didTapNextButton: @escaping () -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         profileCreator: profileCreator,
-        getValueTalksUseCase: getValueTalksUseCase
+        initialValueTalks: initialValueTalks
       )
     )
-    self.didTapBackButton = didTapBackButton
     self.didTapNextButton = didTapNextButton
   }
 
   var body: some View {
     GeometryReader { proxy in
       VStack(spacing: 0) {
-        NavigationBar(
-          title: "",
-          leftButtonTap: {}
-        )
-        
-        PCPageIndicator(step: .second, width: proxy.size.width)
-        
         ScrollView {
           content
         }
