@@ -102,6 +102,7 @@ struct CreateBasicInfoView: View {
             contactsTextField
             
             Button {
+              focusField = nil
               viewModel.isSNSSheetPresented = true
             } label: {
               HStack(spacing: 4) {
@@ -115,6 +116,13 @@ struct CreateBasicInfoView: View {
           }
           .padding(.horizontal, 20)
           .padding(.bottom, 10)
+          .background(
+            Color.clear
+              .contentShape(Rectangle())
+              .onTapGesture {
+                focusField = nil
+              }
+          )
         }
         .scrollIndicators(.hidden)
         
@@ -258,6 +266,7 @@ struct CreateBasicInfoView: View {
     )
     .disabled(true)
     .onTapGesture {
+      focusField = nil
       viewModel.isLocationSheetPresented = true
     }
   }
@@ -308,6 +317,7 @@ struct CreateBasicInfoView: View {
     )
     .disabled(true)
     .onTapGesture {
+      focusField = nil
       viewModel.isJobSheetPresented = true
     }
   }
@@ -320,9 +330,11 @@ struct CreateBasicInfoView: View {
       HStack {
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
           viewModel.smokingStatus = "흡연"
+          focusField = nil
         }
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
           viewModel.smokingStatus = "비흡연"
+          focusField = nil
         }
       }
       Text( viewModel.smokingInfoText)
@@ -381,6 +393,7 @@ struct CreateBasicInfoView: View {
             }
           },
           action: {
+            focusField = nil
             viewModel.selectedContactForIconChange = contact
             viewModel.isContactTypeChangeSheetPresented = true
           }
