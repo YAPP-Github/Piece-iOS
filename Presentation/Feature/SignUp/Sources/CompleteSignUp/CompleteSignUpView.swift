@@ -17,7 +17,10 @@ struct CompleteSignUpView: View {
     VStack(alignment: .center) {
       title
       
-      PCLottieView(.piece_logo_wide)
+      PCLottieView(
+        .piece_logo_wide,
+        loopMode: .playOnce
+      )
       
       Spacer()
       
