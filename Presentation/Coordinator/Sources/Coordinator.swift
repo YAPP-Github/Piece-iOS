@@ -179,18 +179,6 @@ public struct Coordinator {
     case .completeSignUp:
       SignUpViewFactory.createCompleteSignUpView()
       
-    case .signUp:
-      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
-      let cameraPermissionUseCase = UseCaseFactory.createCameraPermissionUseCase()
-      let photoPermissionUseCase = UseCaseFactory.createPhotoPermissionUseCase()
-      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
-      SignUpViewFactory.createPermissionRequestView(
-        cameraPermissionUseCase: cameraPermissionUseCase,
-        photoPermissionUseCase: photoPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase,
-        notificationPermissionUseCase: notificationPermissionUseCase
-      )
-      
     case .createProfile:
       let checkNicknameRepositoty = repositoryFactory.createCheckNicknameRepository()
       let uploadProfileImageRepository = repositoryFactory.createUploadProfileImageRepository()
