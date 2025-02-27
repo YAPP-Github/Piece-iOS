@@ -50,7 +50,7 @@ struct CompleteSignUpView: View {
       buttonText: "프로필 생성하기",
       width: .maxWidth,
       action: {
-        router.push(to: .createProfile)
+        router.setRoute(.createProfile)
       }
     )
   }

@@ -12,6 +12,7 @@ public enum NavigationType {
   case subBack
   case subClose
   case feature
+  case titleOnly
   
   var hasLeftButton: Bool {
     switch self {
@@ -107,6 +108,17 @@ public struct NavigationBar: View {
       label: label,
       labelColor: labelColor,
       backgroundColor: backgroundColor
+    )
+  }
+  
+  public init(
+    title: String,
+    titleColor: Color = .grayscaleBlack
+  ) {
+    self.init(
+      type: .titleOnly,
+      title: title,
+      titleColor: titleColor
     )
   }
   
