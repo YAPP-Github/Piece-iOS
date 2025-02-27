@@ -249,6 +249,7 @@ struct CreateBasicInfoView: View {
       viewModel.birthDate = String(newValue.filter { $0.isNumber }.prefix(8))
     }
     .textContentType(.birthdate)
+    .keyboardType(.numberPad)
   }
   
   private var locationTextField: some View {
@@ -283,6 +284,7 @@ struct CreateBasicInfoView: View {
     .onChange { newValue in
       viewModel.height = newValue.filter { $0.isNumber }
     }
+    .keyboardType(.numberPad)
   }
   
   private var weightTextField: some View {
@@ -299,6 +301,7 @@ struct CreateBasicInfoView: View {
     .onChange { newValue in
       viewModel.weight = newValue.filter { $0.isNumber }
     }
+    .keyboardType(.numberPad)
   }
   
   private var jobTextField: some View {
