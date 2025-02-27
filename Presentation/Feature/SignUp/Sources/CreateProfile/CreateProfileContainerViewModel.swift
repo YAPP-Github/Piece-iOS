@@ -27,7 +27,6 @@ final class CreateProfileContainerViewModel {
   }
   
   var currentStep: CreateProfileStep = .basicInfo
-  var isBackButtonAlertPresented: Bool = false
   
   let profileCreator = ProfileCreator()
   let checkNicknameUseCase: CheckNicknameUseCase
@@ -108,7 +107,7 @@ final class CreateProfileContainerViewModel {
   
   private func moveToPreviousStep() {
     switch currentStep {
-    case .basicInfo: isBackButtonAlertPresented = true
+    case .basicInfo: break
     case .valueTalk: currentStep = .basicInfo
     case .valuePick: currentStep = .valueTalk
     }

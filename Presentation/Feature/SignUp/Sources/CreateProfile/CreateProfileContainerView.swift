@@ -38,10 +38,21 @@ struct CreateProfileContainerView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      NavigationBar(
-        title: "",
-        leftButtonTap: { viewModel.handleAction(.didTapBackButton) }
-      )
+      switch viewModel.currentStep {
+      case .basicInfo:
+        NavigationBar(title: "프로필 생성하기")
+      case .valueTalk:
+        NavigationBar(
+          title: "",
+          leftButtonTap: { viewModel.handleAction(.didTapBackButton) }
+        )
+      case .valuePick:
+        NavigationBar(
+          title: "",
+          leftButtonTap: { viewModel.handleAction(.didTapBackButton) }
+        )
+      }
+
       pageIndicator
       ZStack {
         basicInfoView
@@ -62,17 +73,6 @@ struct CreateProfileContainerView: View {
       .animation(.easeInOut, value: viewModel.currentStep)
     }
     .toolbar(.hidden)
-    .pcAlert(isPresented: $viewModel.isBackButtonAlertPresented) {
-      AlertView(
-        icon: DesignSystemAsset.Icons.notice40.swiftUIImage,
-        title: { Text("작성 중인 프로필이 사라져요!") },
-        message: "지금 뒤로 가면 프로필이 저장되지 않습니다.\n계속 이어서 작성해 보세요.",
-        firstButtonText: "뒤로",
-        secondButtonText: "이어서 작성하기",
-        firstButtonAction: { dismiss() },
-        secondButtonAction: { viewModel.isBackButtonAlertPresented = false }
-      )
-    }
   }
   
   private var pageIndicator: some View {
