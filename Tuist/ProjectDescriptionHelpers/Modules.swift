@@ -97,6 +97,7 @@ public extension Modules {
     case BlockUser
     case ReportUser
     case PreviewProfile
+    case NotificationList
     
     var path: String {
       switch self {
