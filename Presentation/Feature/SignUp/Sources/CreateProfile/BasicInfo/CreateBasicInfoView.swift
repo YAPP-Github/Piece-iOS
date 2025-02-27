@@ -35,96 +35,106 @@ struct CreateBasicInfoView: View {
   var body: some View {
     ZStack {
       VStack {
-        ScrollView {
-          VStack(alignment: .center, spacing: 32) {
-            title
-            
-            // 프로필 이미지
-            Button {
-              viewModel.isProfileImageSheetPresented = true
-            } label: {
-              profileImage
-            }
-            .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
-              ActionSheet(
-                title: Text("프로필 사진 선택"),
-                buttons: [
-                  .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
-                  .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
-                  .cancel(Text("취소"))
-                ]
-              )
-            }
-            .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
-              CameraPicker {
-                viewModel.setImageFromCamera($0)
+        ScrollViewReader { proxy in
+          ScrollView {
+            VStack(alignment: .center, spacing: 32) {
+              title
+              
+              // 프로필 이미지
+              Button {
+                viewModel.isProfileImageSheetPresented = true
+              } label: {
+                profileImage
               }
-            }
-            .photosPicker(
-              isPresented: $viewModel.isPhotoSheetPresented,
-              selection: Binding(
-                get: { viewModel.selectedItem },
-                set: {
-                  viewModel.selectedItem = $0
-                  Task { await viewModel.loadImage() }
+              .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
+                ActionSheet(
+                  title: Text("프로필 사진 선택"),
+                  buttons: [
+                    .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
+                    .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
+                    .cancel(Text("취소"))
+                  ]
+                )
+              }
+              .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
+                CameraPicker {
+                  viewModel.setImageFromCamera($0)
                 }
-              ),
-              matching: .images
-            )
-            // 닉네임
-            nicknameTextField
-            
-            // 나를 표현하는 한 마디
-            descriptionTextField
-            
-            // 생년월일
-            birthdateTextField
-            
-            // 활동지역
-            locationTextField
-            
-            //키
-            heightTextField
-            
-            // 몸무게
-            weightTextField
-            
-            // 직업
-            jobTextField
-            
-            // 흡연
-            smokingTextField
-            
-            // SNS
-            snsTextField
-            
-            // 연락처
-            contactsTextField
-            
-            Button {
-              focusField = nil
-              viewModel.isSNSSheetPresented = true
-            } label: {
-              HStack(spacing: 4) {
-                Text("연락처 추가하기")
-                  .pretendard(.body_M_M)
-                DesignSystemAsset.Icons.plusLine20.swiftUIImage
-                  .renderingMode(.template)
               }
-              .foregroundStyle(Color.primaryDefault)
+              .photosPicker(
+                isPresented: $viewModel.isPhotoSheetPresented,
+                selection: Binding(
+                  get: { viewModel.selectedItem },
+                  set: {
+                    viewModel.selectedItem = $0
+                    Task { await viewModel.loadImage() }
+                  }
+                ),
+                matching: .images
+              )
+              // 닉네임
+              nicknameTextField.id("nickname_scroll")
+              
+              // 나를 표현하는 한 마디
+              descriptionTextField.id("description_scroll")
+              
+              // 생년월일
+              birthdateTextField.id("birthdate_scroll")
+              
+              // 활동지역
+              locationTextField.id("location_scroll")
+              
+              //키
+              heightTextField.id("height_scroll")
+              
+              // 몸무게
+              weightTextField.id("weight_scroll")
+              
+              // 직업
+              jobTextField.id("job_scroll")
+              
+              // 흡연
+              smokingTextField
+              
+              // SNS
+              snsTextField
+              
+              // 연락처
+              contactsTextField
+              
+              Button {
+                focusField = nil
+                viewModel.isSNSSheetPresented = true
+              } label: {
+                HStack(spacing: 4) {
+                  Text("연락처 추가하기")
+                    .pretendard(.body_M_M)
+                  DesignSystemAsset.Icons.plusLine20.swiftUIImage
+                    .renderingMode(.template)
+                }
+                .foregroundStyle(Color.primaryDefault)
+              }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 10)
+            .background(
+              Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                  focusField = nil
+                }
+            )
+          }
+          .scrollIndicators(.hidden)
+          .onChange(of: focusField) { _, newValue in
+            withAnimation {
+              if let field = newValue {
+                proxy.scrollTo("\(field)_scroll", anchor: .center)
+              }
             }
           }
-          .padding(.horizontal, 20)
-          .padding(.bottom, 10)
-          .background(
-            Color.clear
-              .contentShape(Rectangle())
-              .onTapGesture {
-                focusField = nil
-              }
-          )
         }
-        .scrollIndicators(.hidden)
+        
         nextButton
           .padding(.horizontal, 20)
           .padding(.bottom, 10)
@@ -216,6 +226,9 @@ struct CreateBasicInfoView: View {
       color: viewModel.nicknameInfoTextColor
     )
     .textMaxLength(6)
+    .onSubmit {
+      focusField = "description"
+    }
   }
   
   private var descriptionTextField: some View {
@@ -231,6 +244,9 @@ struct CreateBasicInfoView: View {
       color: .systemError
     )
     .textMaxLength(20)
+    .onSubmit {
+      focusField = "birthDate"
+    }
   }
   
   private var birthdateTextField: some View {
