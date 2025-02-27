@@ -125,11 +125,9 @@ struct CreateBasicInfoView: View {
           )
         }
         .scrollIndicators(.hidden)
-        
         nextButton
           .padding(.horizontal, 20)
           .padding(.bottom, 10)
-          .opacity(focusField == nil ? 1 : 0)
       }
       .ignoresSafeArea(.keyboard)
       
