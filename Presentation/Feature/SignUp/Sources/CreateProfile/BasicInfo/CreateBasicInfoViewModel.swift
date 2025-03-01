@@ -173,8 +173,20 @@ final class CreateBasicInfoViewModel {
   // Sheet
   var isPhotoSheetPresented: Bool = false
   var isCameraPresented: Bool  = false
-  var isJobSheetPresented: Bool = false
-  var isLocationSheetPresented: Bool = false
+  var isJobSheetPresented: Bool = false {
+    didSet {
+      if isJobSheetPresented {
+        selectedJob = job
+      }
+    }
+  }
+  var isLocationSheetPresented: Bool = false {
+    didSet {
+      if isLocationSheetPresented {
+        selectedLocation = location
+      }
+    }
+  }
   var isSNSSheetPresented: Bool = false
   var isProfileImageSheetPresented: Bool = false
   var showToast: Bool = false
@@ -258,6 +270,7 @@ final class CreateBasicInfoViewModel {
       self.job = selectedJob
     }
     isJobSheetPresented = false
+    selectedJob = nil
   }
   
   func saveSelectedLocation() {
@@ -265,6 +278,7 @@ final class CreateBasicInfoViewModel {
       self.location = selectedLocation
     }
     isLocationSheetPresented = false
+    selectedLocation = nil 
   }
   
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {

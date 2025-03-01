@@ -446,7 +446,7 @@ struct CreateBasicInfoView: View {
           ForEach(viewModel.locations, id: \.self) { location in
             cellItem(
               text: location,
-              isSelected: viewModel.selectedLocation == location || viewModel.location == location,
+              isSelected: viewModel.selectedLocation == location,
               action: { viewModel.selectedLocation = location }
             )
           }
@@ -469,7 +469,7 @@ struct CreateBasicInfoView: View {
           ForEach(viewModel.jobs, id: \.self) { job in
             cellItem(
               text: job,
-              isSelected: viewModel.selectedJob == job || viewModel.job == job,
+              isSelected: viewModel.selectedJob == job,
               action: { viewModel.selectedJob = job }
             )
           }
