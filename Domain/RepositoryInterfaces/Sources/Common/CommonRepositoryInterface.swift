@@ -8,5 +8,6 @@
 import Entities
 
 public protocol CommonRepositoryInterface {
+  func getUserRole() async throws -> UserRoleModel
   func getServerStatus() async throws -> VoidModel
 }

@@ -12,11 +12,13 @@ import LocalStorage
 public enum CommonEndpoint: TargetType {
   case healthCheck
   case withdrawWithPiece(WithdrawRequestDTO)
+  case getUserRole
   
   public var method: Alamofire.HTTPMethod {
     switch self {
     case .healthCheck: .get
     case .withdrawWithPiece: .delete
+    case .getUserRole: .get
     }
   }
   
@@ -24,6 +26,7 @@ public enum CommonEndpoint: TargetType {
     switch self {
     case .healthCheck: "api/common/health"
     case .withdrawWithPiece: "api/users"
+    case .getUserRole: "api/users/info"
     }
   }
   
@@ -32,6 +35,7 @@ public enum CommonEndpoint: TargetType {
     case .healthCheck: [:]
     case .withdrawWithPiece: [NetworkHeader.contentType : NetworkHeader.applicationJson,
                      NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .getUserRole: [ NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   
@@ -39,6 +43,7 @@ public enum CommonEndpoint: TargetType {
     switch self {
     case .healthCheck: .plain
     case let .withdrawWithPiece(body): .body(body)
+    case .getUserRole: .plain
     }
   }
 }
