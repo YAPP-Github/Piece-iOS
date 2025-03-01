@@ -11,6 +11,7 @@ import PCNetwork
 import RepositoryInterfaces
 
 final class CommonRepository: CommonRepositoryInterface {
+  
   private let networkService: NetworkService
 
   init(networkService: NetworkService) {
@@ -20,6 +21,14 @@ final class CommonRepository: CommonRepositoryInterface {
   public func getServerStatus() async throws -> VoidModel {
     let endpoint = CommonEndpoint.healthCheck
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return response.toDomain()
+  }
+  
+  
+  func getUserRole() async throws -> UserRoleModel {
+    let endpoint = CommonEndpoint.getUserRole
+    let response: UserRoleResponseDTO = try await networkService.request(endpoint: endpoint)
     
     return response.toDomain()
   }
