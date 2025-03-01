@@ -70,7 +70,7 @@ final class CreateBasicInfoViewModel {
     !job.isEmpty &&
     isContactsValid
   }
-
+  
   // TextField InfoMessage
   var nicknameInfoText: String {
     if nickname.isEmpty && didTapnextButton {
@@ -160,6 +160,10 @@ final class CreateBasicInfoViewModel {
   var snsActivityLevel: String = ""
   var selectedLocation: String? = nil
   var selectedJob: String? = nil
+  var customJobText: String = ""
+  var customLocationText: String = ""
+  var isCustomJobSelected: Bool = false
+  var isCustomLocationSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var selectedContactForIconChange: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
@@ -176,7 +180,16 @@ final class CreateBasicInfoViewModel {
   var isJobSheetPresented: Bool = false {
     didSet {
       if isJobSheetPresented {
-        selectedJob = job
+        // 바텀시트가 열릴 때 현재 job이 jobs 배열에 없다면 custom으로 간주
+        if !jobs.contains(job) && !job.isEmpty {
+          isCustomJobSelected = true
+          selectedJob = nil
+          customJobText = job
+        } else {
+          isCustomJobSelected = false
+          selectedJob = job
+          customJobText = ""
+        }
       }
     }
   }
@@ -210,7 +223,7 @@ final class CreateBasicInfoViewModel {
   
   private func handleTapNextButton() async {
     print("isNextButtonEnabled: \(isNextButtonEnabled)")
-
+    
     if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
       didTapnextButton = true
       await isToastVisible()
@@ -266,27 +279,35 @@ final class CreateBasicInfoViewModel {
   }
   
   func saveSelectedJob() {
-    if let selectedJob = selectedJob {
+    if isCustomJobSelected {
+      self.job = customJobText.isEmpty ? "" : customJobText
+    } else if let selectedJob = selectedJob {
       self.job = selectedJob
     }
     isJobSheetPresented = false
     selectedJob = nil
+    customJobText = ""
+    isCustomJobSelected = false
   }
   
   func saveSelectedLocation() {
-    if let selectedLocation = selectedLocation {
+    if isCustomLocationSelected {
+      self.location = customLocationText.isEmpty ? "" : customLocationText
+    } else if let selectedLocation = selectedLocation {
       self.location = selectedLocation
     }
     isLocationSheetPresented = false
-    selectedLocation = nil 
+    selectedLocation = nil
+    customLocationText = ""
+    isCustomLocationSelected = false
   }
   
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
-          if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
-              contacts[index].type = newType
-          }
-      }
-      
+    if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
+      contacts[index].type = newType
+    }
+  }
+  
   func saveSelectedSNSItem() {
     if let selectedType = selectedSNSContactType {
       if let contact = selectedContactForIconChange {

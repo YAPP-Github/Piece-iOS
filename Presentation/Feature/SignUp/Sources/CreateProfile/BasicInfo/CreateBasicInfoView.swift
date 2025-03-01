@@ -449,6 +449,12 @@ struct CreateBasicInfoView: View {
               isSelected: viewModel.selectedLocation == location,
               action: { viewModel.selectedLocation = location }
             )
+            if viewModel.job == "기타" && viewModel.isCustomJobSelected {
+              TextField("직접 입력해주세요", text: $viewModel.customJobText)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
           }
           .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -457,21 +463,46 @@ struct CreateBasicInfoView: View {
   }
   
   private var jobBottomSheet: some View {
-    PCBottomSheet(
+    func makeJobCell(_ job: String) -> some View {
+      VStack(alignment: .leading, spacing: 0) {
+        cellItem(
+          text: job,
+          isSelected: job == "기타" ? viewModel.isCustomJobSelected : viewModel.selectedJob == job,
+          action: {
+            if job == "기타" {
+              viewModel.isCustomJobSelected = true
+              viewModel.selectedJob = nil
+            } else {
+              viewModel.isCustomJobSelected = false
+              viewModel.selectedJob = job
+            }
+          }
+        )
+        
+        if job == "기타" && viewModel.isCustomJobSelected {
+          PCTextField(
+            title: "",
+            text: $viewModel.customJobText,
+            focusState: $focusField,
+            focusField: "customJob"
+          )
+          .padding(.horizontal)
+          .padding(.vertical, 8)
+        }
+      }
+    }
+    
+    return PCBottomSheet(
       isPresented: $viewModel.isJobSheetPresented,
       height: 431,
       titleText: "직업 선택",
       buttonText: "저장하기",
-      buttonAction: {  viewModel.saveSelectedJob() }
+      buttonAction: { viewModel.saveSelectedJob() }
     ) {
-      ScrollView{
-        VStack(alignment: .leading) {
+      ScrollView {
+        VStack(alignment: .leading, spacing: 0) {
           ForEach(viewModel.jobs, id: \.self) { job in
-            cellItem(
-              text: job,
-              isSelected: viewModel.selectedJob == job,
-              action: { viewModel.selectedJob = job }
-            )
+            makeJobCell(job)
           }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
