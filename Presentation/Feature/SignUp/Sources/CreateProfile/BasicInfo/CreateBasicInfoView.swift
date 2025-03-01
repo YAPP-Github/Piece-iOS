@@ -434,30 +434,49 @@ struct CreateBasicInfoView: View {
   }
   
   private var locationBottomSheet: some View {
-    PCBottomSheet(
+    func makeLocationCell(_ location: String) -> some View {
+      VStack(alignment: .leading, spacing: 0) {
+        cellItem(
+          text: location,
+          isSelected: location == "기타" ? viewModel.isCustomLocationSelected : viewModel.selectedLocation == location,
+          action: {
+            if location == "기타" {
+              viewModel.isCustomLocationSelected = true
+              viewModel.selectedLocation = nil
+            } else {
+              viewModel.isCustomLocationSelected = false
+              viewModel.selectedLocation = location
+            }
+          }
+        )
+        
+        if location == "기타" && viewModel.isCustomLocationSelected {
+          PCTextField(
+            title: "",
+            text: $viewModel.customLocationText,
+            focusState: $focusField,
+            focusField: "customLocation"
+          )
+          .padding(.horizontal)
+          .padding(.vertical, 8)
+        }
+      }
+    }
+    
+    return PCBottomSheet(
       isPresented: $viewModel.isLocationSheetPresented,
       height: 623,
       titleText: "활동지역 선택",
       buttonText: "저장하기",
       buttonAction: { viewModel.saveSelectedLocation() }
     ) {
-      VStack {
-        ScrollView{
+      ScrollView {
+        VStack(alignment: .leading, spacing: 0) {
           ForEach(viewModel.locations, id: \.self) { location in
-            cellItem(
-              text: location,
-              isSelected: viewModel.selectedLocation == location,
-              action: { viewModel.selectedLocation = location }
-            )
-            if viewModel.job == "기타" && viewModel.isCustomJobSelected {
-              TextField("직접 입력해주세요", text: $viewModel.customJobText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
+            makeLocationCell(location)
           }
-          .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
   }

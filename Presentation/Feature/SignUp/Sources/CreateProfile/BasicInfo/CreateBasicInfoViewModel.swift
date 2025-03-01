@@ -196,7 +196,15 @@ final class CreateBasicInfoViewModel {
   var isLocationSheetPresented: Bool = false {
     didSet {
       if isLocationSheetPresented {
-        selectedLocation = location
+        if !locations.contains(location) && !location.isEmpty {
+          isCustomLocationSelected = true
+          selectedLocation = nil
+          customLocationText = location
+        } else {
+          isCustomLocationSelected = false
+          selectedLocation = location
+          customLocationText = ""
+        }
       }
     }
   }
