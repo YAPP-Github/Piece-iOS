@@ -11,6 +11,7 @@ import ProjectDescriptionHelpers
 let project = Project.staticLibrary(
   name: Modules.Presentation.Home.rawValue,
   dependencies: [
+    .data(target: .LocalStorage),
     .presentation(target: .DesignSystem),
     .presentation(target: .Router),
     .presentation(target: .Profile),

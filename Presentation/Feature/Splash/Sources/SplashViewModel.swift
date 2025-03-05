@@ -122,6 +122,7 @@ final class SplashViewModel {
     // 사용자 role에 따라 화면 분기 처리
     let userInfo = try await getUserInfoUseCase.execute()
     let userRole = userInfo.role
+    PCUserDefaultsService.shared.setUserRole(userRole)
     
     switch userRole {
     case .NONE:

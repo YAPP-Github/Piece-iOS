@@ -1,5 +1,5 @@
 //
-//  ViewTalkCardViewModel.swift
+//  ValueTalkCardViewModel.swift
 //  SignUp
 //
 //  Created by summercat on 2/9/25.
