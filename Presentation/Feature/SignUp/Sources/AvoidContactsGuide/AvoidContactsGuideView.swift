@@ -80,7 +80,7 @@ struct AvoidContactsGuideView: View {
   
   private var title: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("아는사람")
+      Text("아는 사람")
         .foregroundStyle(Color.primaryDefault) +
       Text("에게는\n프로필이 노출되지 않아요")
       
