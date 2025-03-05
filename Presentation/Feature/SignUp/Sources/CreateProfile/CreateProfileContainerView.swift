@@ -40,7 +40,8 @@ struct CreateProfileContainerView: View {
     VStack(spacing: 0) {
       switch viewModel.currentStep {
       case .basicInfo:
-        NavigationBar(title: "프로필 생성하기")
+        Spacer()
+          .frame(height: 60)
       case .valueTalk:
         NavigationBar(
           title: "",
