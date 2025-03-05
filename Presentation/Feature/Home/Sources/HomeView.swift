@@ -43,6 +43,7 @@ struct HomeView: View {
       content
       TabBarView(viewModel: viewModel.tabbarViewModel)
     }
+    .toolbar(.hidden)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
   
