@@ -1,5 +1,5 @@
 //
-//  CommonRepositoryInterface.swift
+//  UserRepositoryInterface.swift
 //  RepositoryInterfaces
 //
 //  Created by summercat on 2/15/25.
@@ -7,7 +7,6 @@
 
 import Entities
 
-public protocol CommonRepositoryInterface {
+public protocol UserRepositoryInterface {
   func getUserRole() async throws -> UserRoleModel
-  func getServerStatus() async throws -> VoidModel
 }
