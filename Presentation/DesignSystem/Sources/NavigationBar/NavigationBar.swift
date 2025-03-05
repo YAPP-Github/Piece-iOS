@@ -113,12 +113,14 @@ public struct NavigationBar: View {
   
   public init(
     title: String,
-    titleColor: Color = .grayscaleBlack
+    titleColor: Color = .grayscaleBlack,
+    backgroundColor: Color? = .clear
   ) {
     self.init(
       type: .titleOnly,
       title: title,
-      titleColor: titleColor
+      titleColor: titleColor,
+      backgroundColor: backgroundColor
     )
   }
   
@@ -236,6 +238,7 @@ public struct NavigationBar: View {
         label: "label",
         backgroundColor: .white
       )
+      NavigationBar(title: "프로필 생성하기", backgroundColor: .grayscaleWhite)
     }
   }
 }
