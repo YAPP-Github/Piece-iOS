@@ -10,10 +10,8 @@ import UseCases
 
 public struct SplashViewFactory {
   public static func createSplashView(
-    checkTokenHealthUseCase: CheckTokenHealthUseCase
+    getUserInfoUseCase: GetUserInfoUseCase
   ) -> some View {
-    SplashView(
-      checkTokenHealthUseCase: checkTokenHealthUseCase
-    )
+    SplashView(getUserInfoUseCase: getUserInfoUseCase)
   }
 }

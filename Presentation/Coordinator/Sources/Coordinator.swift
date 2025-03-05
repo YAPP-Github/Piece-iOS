@@ -237,10 +237,10 @@ public struct Coordinator {
       WithdrawViewFactory.createWithdrawConfirm()
       
     case .splash:
-      let loginRepository = repositoryFactory.createLoginRepository()
-      let checkTokenHealthUseCase = UseCaseFactory.createCheckTokenHealthUseCase(repository: loginRepository)
+      let userRepository = repositoryFactory.createUserRepository()
+      let getUserInfoUseCase = UseCaseFactory.createGetUserInfoUseCase(repository: userRepository)
       SplashViewFactory.createSplashView(
-        checkTokenHealthUseCase: checkTokenHealthUseCase
+        getUserInfoUseCase: getUserInfoUseCase
       )
       
     case let .reportUser(nickname):

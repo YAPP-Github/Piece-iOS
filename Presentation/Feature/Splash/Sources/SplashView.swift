@@ -14,18 +14,18 @@ struct SplashView: View {
   @State var viewModel: SplashViewModel
   @Environment(Router.self) var router
   
-  init(
-    checkTokenHealthUseCase: CheckTokenHealthUseCase
-  ) {
+  init(getUserInfoUseCase: GetUserInfoUseCase) {
     _viewModel = .init(
       wrappedValue: .init(
-        checkTokenHealthUseCase: checkTokenHealthUseCase
+        getUserInfoUseCase: getUserInfoUseCase
       )
     )
   }
   
   var body: some View {
     DesignSystemAsset.Icons.logoCircle3x.swiftUIImage
+      .resizable()
+      .frame(width: 160, height: 160)
       .onAppear {
         viewModel.handleAction(.onAppear)
       }
