@@ -122,7 +122,6 @@ final class CreateProfileContainerViewModel {
   }
     
   private func createProfile() {
-    profileCreator.updateValueTalks(valueTalks)
     profileCreator.updateValuePicks(valuePicks)
     profile = profileCreator.createProfile()
   }
