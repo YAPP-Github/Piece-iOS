@@ -5,20 +5,20 @@
 //  Created by eunseou on 12/28/24.
 //
 
-import Observation
+import DesignSystem
 import SwiftUI
 
 // MARK: - 탭바 뷰
-public struct TabBarView: View {
+struct TabBarView: View {
   @State private var viewModel: TabBarViewModel
   
-  public init(
+  init(
     viewModel: TabBarViewModel
   ) {
     self.viewModel = viewModel
   }
   
-  public var body: some View {
+  var body: some View {
     VStack {
       Spacer()
       HStack {
@@ -28,17 +28,18 @@ public struct TabBarView: View {
           viewModel.selectedTab = .profile
         } label: {
           TabBarButton(
-            tabBarImage: .profile32,
+            tabBarImage: DesignSystemAsset.Icons.profile32.swiftUIImage,
             tabBarTitle: "프로필",
             isSelected: viewModel.selectedTab == .profile
           )
+          .disabled(viewModel.isProfileTabDisabled)
         }
         Spacer()
         Button {
           print("홈")
           viewModel.selectedTab = .home
         } label: {
-          Image(.btnMatch)
+          DesignSystemAsset.Icons.btnMatch.swiftUIImage
             .offset(y: -12)
         }
         Spacer()
@@ -47,7 +48,7 @@ public struct TabBarView: View {
           viewModel.selectedTab = .settings
         } label: {
           TabBarButton(
-            tabBarImage: .setting32,
+            tabBarImage: DesignSystemAsset.Icons.setting32.swiftUIImage,
             tabBarTitle: "설정",
             isSelected: viewModel.selectedTab == .settings
           )
@@ -59,48 +60,6 @@ public struct TabBarView: View {
     }
   }
 }
-
-// MARK: - 탭바 뷰모델 (임시)
-@Observable
-public class TabBarViewModel {
-  public var selectedTab: Tab = .home
-  
-  public init() { }
-  
-  public enum Tab {
-    case profile
-    case home
-    case settings
-  }
-}
-
-// MARK: - 탭바 버튼
-public struct TabBarButton: View {
-  public init(
-    tabBarImage: ImageResource,
-    tabBarTitle: String,
-    isSelected: Bool
-  ) {
-    self.tabBarImage = tabBarImage
-    self.tabBarTitle = tabBarTitle
-    self.isSelected = isSelected
-  }
-  
-  public var body: some View {
-    VStack(spacing: 0) {
-      Image(tabBarImage)
-        .renderingMode(.template)
-      Text(tabBarTitle)
-        .pretendard(.caption_M_M)
-    }
-    .foregroundColor(isSelected ? .primaryDefault : .grayscaleDark3)
-  }
-  
-  private let tabBarImage: ImageResource
-  private let tabBarTitle: String
-  private let isSelected: Bool
-}
-
 
 // MARK: - Preivew
 #Preview {
