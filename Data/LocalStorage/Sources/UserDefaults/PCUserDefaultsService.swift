@@ -5,6 +5,7 @@
 //  Created by summercat on 2/13/25.
 //
 
+import Entities
 import Foundation
 
 public final class PCUserDefaultsService {
@@ -39,12 +40,27 @@ public final class PCUserDefaultsService {
       _ = PCUserDefaults.setObjectFor(key: .socialLoginType, object: newValue)
     }
   }
+  
+  var userRole: UserRole {
+    get {
+      if let value = PCUserDefaults.objectFor(key: .userRole) as? String {
+        return UserRole(value)
+      } else {
+        return .NONE
+      }
+    }
+    set {
+      _ = PCUserDefaults.setObjectFor(key: .userRole, object: newValue.rawValue)
+    }
+  }
 }
 
 public extension PCUserDefaultsService {
   // 로그아웃 시 UserDefaults 초기화 메서드
   func initialize() {
     didSeeOnboarding = false
+    socialLoginType = ""
+    userRole = .NONE
   }
   
   func getDidSeeOnboarding() -> Bool {
@@ -76,5 +92,13 @@ public extension PCUserDefaultsService {
   func resetFirstLaunch() {
     isFirstLaunch = true
     didSeeOnboarding = false
+  }
+  
+  func getUserRole() -> UserRole {
+    userRole
+  }
+  
+  func setUserRole(_ userRole: UserRole) {
+    self.userRole = userRole
   }
 }

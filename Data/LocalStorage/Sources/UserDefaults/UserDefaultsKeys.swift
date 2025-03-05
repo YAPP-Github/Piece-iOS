@@ -9,4 +9,5 @@ public enum UserDefaultsKeys: String {
   case isFirstLaunch
   case didSeeOnboarding
   case socialLoginType
+  case userRole
 }
