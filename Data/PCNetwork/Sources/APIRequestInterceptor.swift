@@ -58,7 +58,7 @@ class APIRequestInterceptor: RequestInterceptor {
         let baseURL = NetworkConstants.baseURL
         let url = try baseURL.asURL().appendingPathComponent("/api/login/token/refresh")
         
-        let refreshRequestDTO = SocialLoginTokenRefreshRequestDTO(refreshToken: refreshToken)
+        let refreshRequestDTO = TokenRefreshRequestDTO(refreshToken: refreshToken)
         let requestBody = try JSONEncoder().encode(refreshRequestDTO)
         
         // 직접 AF.request 사용하여 토큰 갱신 요청
@@ -68,7 +68,7 @@ class APIRequestInterceptor: RequestInterceptor {
           headers: [NetworkHeader.contentType: NetworkHeader.applicationJson]
         )
           .authenticate(username: "", password: "")  // 기존 인증 헤더 무시
-          .serializingDecodable(APIResponse<SocialLoginTokenRefreshResponseDTO>.self)
+          .serializingDecodable(APIResponse<TokenRefreshResponseDTO>.self)
           .value
         
         // 새로운 토큰 저장
