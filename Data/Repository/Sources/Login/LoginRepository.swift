@@ -11,7 +11,7 @@ import PCNetwork
 import Entities
 import RepositoryInterfaces
 
-public final class LoginRepository: LoginRepositoryInterfaces {
+public final class LoginRepository: LoginRepositoryInterface {
 
   private let networkService: NetworkService
   
@@ -46,6 +46,13 @@ public final class LoginRepository: LoginRepositoryInterfaces {
   
   public func checkTokenHealth(token: String) async throws -> VoidModel {
     let endpoint = LoginEndpoint.tokenHealthCheck(token: token)
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
+  
+  public func registerFcmToken(token: String) async throws -> VoidModel {
+    let requestDto = FCMTokenRequestDTO(token: token)
+    let endpoint = LoginEndpoint.registerFcmToken(body: requestDto)
     let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }

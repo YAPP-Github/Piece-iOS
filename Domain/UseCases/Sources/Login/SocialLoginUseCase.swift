@@ -13,9 +13,9 @@ public protocol SocialLoginUseCase {
 }
 
 final class SocialLoginUseCaseImpl: SocialLoginUseCase {
-  private let repository: LoginRepositoryInterfaces
+  private let repository: LoginRepositoryInterface
 
-  init(repository: LoginRepositoryInterfaces) {
+  init(repository: LoginRepositoryInterface) {
     self.repository = repository
   }
   

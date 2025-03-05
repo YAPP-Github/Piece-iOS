@@ -19,7 +19,7 @@ public struct RepositoryFactory {
     UserRepository(networkService: networkService)
   }
   
-  public func createLoginRepository() -> LoginRepositoryInterfaces {
+  public func createLoginRepository() -> LoginRepositoryInterface {
     LoginRepository(networkService: networkService)
   }
   

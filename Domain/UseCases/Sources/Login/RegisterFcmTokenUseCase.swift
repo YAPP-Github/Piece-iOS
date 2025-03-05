@@ -1,18 +1,18 @@
 //
-//  CheckTokenHealthUseCase.swift
+//  RegisterFcmTokenUseCase.swift
 //  UseCases
 //
-//  Created by summercat on 2/25/25.
+//  Created by summercat on 3/6/25.
 //
 
 import Entities
 import RepositoryInterfaces
 
-public protocol CheckTokenHealthUseCase {
+public protocol RegisterFcmTokenUseCase {
   func execute(token: String) async throws -> VoidModel
 }
 
-final class CheckTokenHealthUseCaseImpl: CheckTokenHealthUseCase {
+final class RegisterFcmTokenUseCaseImpl: RegisterFcmTokenUseCase {
   private let repository: LoginRepositoryInterface
   
   init(repository: LoginRepositoryInterface) {
@@ -20,6 +20,6 @@ final class CheckTokenHealthUseCaseImpl: CheckTokenHealthUseCase {
   }
   
   func execute(token: String) async throws -> VoidModel {
-    try await repository.checkTokenHealth(token: token)
+    return try await repository.registerFcmToken(token: token)
   }
 }

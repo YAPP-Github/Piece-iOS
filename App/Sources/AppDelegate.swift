@@ -23,7 +23,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
       print("Firebase setup failed with unknown error:", error)
     }
     
-    // MARK: - Firebase Cloude Messaging (푸시알림)
+    // MARK: - Firebase Cloud Messaging (푸시알림)
     PCNotificationService.shared.setDelegate()
     PCNotificationService.shared.enableAutoInit()
     PCNotificationService.shared.requestPushPermission()
@@ -38,7 +38,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
   ) async -> UIBackgroundFetchResult {
     return .newData
   }
-  
   
   func application(
     _ application: UIApplication,

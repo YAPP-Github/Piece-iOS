@@ -6,7 +6,10 @@
 //
 
 import FirebaseMessaging
+import PCNetwork
+import Repository
 import UIKit
+import UseCases
 
 public final class PCNotificationService: NSObject, UNUserNotificationCenterDelegate, MessagingDelegate {
   public static let shared = PCNotificationService()
@@ -70,11 +73,24 @@ public final class PCNotificationService: NSObject, UNUserNotificationCenterDele
     _ messaging: Messaging,
     didReceiveRegistrationToken fcmToken: String?
   ) {
-    print("Firebase registration token: \(String(describing: fcmToken))")
-    let dataDict: [String: String] = ["token": fcmToken ?? ""]
-    NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-    
-    // TODO: - 서버에 FCM 토큰을 전송하는 로직 추가
-    // Note: This callback is fired at each app startup and whenever a new token is generated.
+    if let fcmToken {
+      print("Firebase registration token: \(String(describing: fcmToken))")
+      let dataDict: [String: String] = ["token": fcmToken]
+      NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+      
+      // TODO: - 서버에 FCM 토큰을 전송하는 로직
+      // Note: This callback is fired at each app startup and whenever a new token is generated.
+      let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
+      let loginRepository = repositoryFactory.createLoginRepository()
+      let registerFcmTokenUseCase = UseCaseFactory.createRegisterFcmTokenUseCase(repository: loginRepository)
+      Task {
+        do {
+          _ = try await registerFcmTokenUseCase.execute(token: fcmToken)
+        } catch {
+          print(error)
+        }
+      }
+    }
+
   }
 }
