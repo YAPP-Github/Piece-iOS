@@ -50,6 +50,12 @@ public struct UseCaseFactory {
     VerifySMSCodeUseCaseImpl(repository: repository)
   }
   
+  public static func createRegisterFcmTokenUseCase(repository: LoginRepositoryInterface) -> RegisterFcmTokenUseCase {
+    RegisterFcmTokenUseCaseImpl(repository: repository)
+  }
+  
+  // MARK: - 기타
+  
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: repository)
   }
