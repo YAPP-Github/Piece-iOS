@@ -5,22 +5,13 @@
 //  Created by eunseou on 2/7/25.
 //
 
-import SwiftUI
-
-public enum RoleType: String {
-  case NONE
-  case REGISTER
-  case PENDING
-  case USER
-}
-
 public struct SocialLoginResultModel {
-  public let role: RoleType
+  public let role: UserRole
   public let accessToken: String
   public let refreshToken: String
   
   public init(
-    role: RoleType,
+    role: UserRole,
     accessToken: String,
     refreshToken: String
   ) {

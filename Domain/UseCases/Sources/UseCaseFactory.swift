@@ -9,14 +9,7 @@ import Foundation
 import RepositoryInterfaces
 
 public struct UseCaseFactory {
-  public static func createGetUserRoleUseCase(repository: CommonRepositoryInterface) -> GetUserRoleUseCase {
-    GetUserRoleUseCaseImpl(repository: repository)
-  }
-  
-  public static func createGetServerStatusUseCase(repository: CommonRepositoryInterface) -> GetServerStatusUseCase {
-    GetServerStatusUseCaseImpl(repository: repository)
-  }
-  
+
   // MARK: - 권한
   public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
     ContactsPermissionUseCaseImpl()
@@ -32,6 +25,11 @@ public struct UseCaseFactory {
   
   public static func createPhotoPermissionUseCase() -> PhotoPermissionUseCase {
     PhotoPermissionUseCaseImpl()
+  }
+    
+  // MARK: - 사용자
+  public static func createGetUserInfoUseCase(repository: UserRepositoryInterface) -> GetUserInfoUseCase {
+    GetUserRoleUseCaseImpl(repository: repository)
   }
   
   // MARK: - 로그인
