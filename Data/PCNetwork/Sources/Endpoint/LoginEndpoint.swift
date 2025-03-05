@@ -14,7 +14,7 @@ public enum LoginEndpoint: TargetType {
   case loginWithOAuth(body: SocialLoginRequsetDTO)
   case sendSMSCode(body: SMSCodeRequestDTO)
   case verifySMSCode(body: VerifySMSCodeRequestDTO)
-  case socialLoginTokenRefresh(body: SocialLoginTokenRefreshRequestDTO)
+  case tokenRefresh(body: TokenRefreshRequestDTO)
   case tokenHealthCheck(token: String)
   
   public var headers: [String : String] {
@@ -31,10 +31,9 @@ public enum LoginEndpoint: TargetType {
         NetworkHeader.contentType: NetworkHeader.applicationJson,
         NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
       ]
-    case .socialLoginTokenRefresh(body: let body):
+    case .tokenRefresh(body: let body):
       [
-        NetworkHeader.contentType: NetworkHeader.applicationJson,
-        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+        NetworkHeader.contentType: NetworkHeader.applicationJson
       ]
     case .tokenHealthCheck: [:]
     }
@@ -48,7 +47,7 @@ public enum LoginEndpoint: TargetType {
         .post
     case .verifySMSCode:
         .post
-    case .socialLoginTokenRefresh: .patch
+    case .tokenRefresh: .patch
     case .tokenHealthCheck: .get
     }
   }
@@ -61,7 +60,7 @@ public enum LoginEndpoint: TargetType {
       "api/register/sms/auth/code"
     case .verifySMSCode:
       "api/register/sms/auth/code/verify"
-    case .socialLoginTokenRefresh:
+    case .tokenRefresh:
       "api/login/token/refresh"
     case let .tokenHealthCheck(parameters):
       "api/login/token/health-check/"
@@ -77,7 +76,7 @@ public enum LoginEndpoint: TargetType {
         .body(body)
     case .verifySMSCode(let body):
         .body(body)
-    case let .socialLoginTokenRefresh(body):
+    case let .tokenRefresh(body):
         .body(body)
     case let .tokenHealthCheck(token): .query([URLQueryItem(name: "token", value: token)])
     }

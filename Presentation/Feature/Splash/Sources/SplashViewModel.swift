@@ -24,10 +24,10 @@ final class SplashViewModel {
   var showNeedsForceUpdateAlert: Bool = false
   private(set) var destination: Route?
   
-  private let checkTokenHealthUseCase: CheckTokenHealthUseCase
+  private let getUserInfoUseCase: GetUserInfoUseCase
   
-  init(checkTokenHealthUseCase: CheckTokenHealthUseCase) {
-    self.checkTokenHealthUseCase = checkTokenHealthUseCase
+  init(getUserInfoUseCase: GetUserInfoUseCase) {
+    self.getUserInfoUseCase = getUserInfoUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -47,7 +47,7 @@ final class SplashViewModel {
     /// - 본 적 있으면 토큰 확인
     /// 3. 인증 토큰 확인
     /// - accessToken이 유효하면 바로 사용
-    /// - accessToken이 유효하지 않으면 refreshToken으로 갱신 시도
+    /// - accessToken이 유효하지 않으면 refreshToken으로 갱신 시도 (Interceptor에서 처리)
     /// - 둘 다 없거나 갱신 실패시 로그인 화면으로 이동
     /// 4. 인증 성공 후 role에 따라 화면 분기 처리
     /// - NONE: 소셜 로그인 완료, SMS 인증 전 > SMS 인증 화면으로
@@ -64,15 +64,14 @@ final class SplashViewModel {
         guard checkOnboarding() else { return }
         
         guard let accessToken = checkAccesstoken() else {
-          checkRefreshToken()
           return
         }
         
-        
+        try await setRoute()
+      } catch {
+        print(error.localizedDescription)
       }
     }
-    
-    setRoute()
   }
   
   // MARK: - onAppear 시 로직
@@ -98,12 +97,6 @@ final class SplashViewModel {
     return true
   }
   
-  private func validateAuthentication() async {
-    do {
-      if let accessToken = PCKeychainManager.shared.read(.accessToken) {}
-    }
-  }
-  
   private func checkAccesstoken() -> String? {
     // 로그인 여부 확인 ( AccessToken 유무 확인 )
     guard let accessToken = PCKeychainManager.shared.read(.accessToken) else {
@@ -115,17 +108,7 @@ final class SplashViewModel {
     
     return accessToken
   }
-  
-  private func checkRefreshToken() {
-    print("액세스 토큰이 만료되었거나 유효하지 않음, RefreshToken 확인")
-    guard let refreshToken = PCKeychainManager.shared.read(.refreshToken) else {
-      print("RefreshToken이 없어서 로그인 화면으로 이동")
-      destination = .login
-      return
-    }
-    
-  }
-  
+
   private func openAppStore() {
     let appId = "6740155700"
     let appStoreUrl = "itms-apps://itunes.apple.com/app/apple-store/\(appId)"
@@ -135,31 +118,24 @@ final class SplashViewModel {
     }
   }
   
-  private func setRoute() {
+  private func setRoute() async throws {
     // 사용자 role에 따라 화면 분기 처리
-    guard let role = PCKeychainManager.shared.read(.role) else {
-      print("Role이 nil이어서 로그인 화면으로 이동")
-      destination = .login
-      return
-    }
-    print(role)
+    let userInfo = try await getUserInfoUseCase.execute()
+    let userRole = userInfo.role
     
-    switch role {
-    case "NONE":
+    switch userRole {
+    case .NONE:
       print("---NONE---")
       destination = .verifyContact
-    case "REGISTER":
+    case .REGISTER:
       print("---REGISTER---")
       destination = .termsAgreement
-    case "PENDING":
+    case .PENDING:
       print("---PENDING---")
-      destination = .matchMain
-    case "USER":
+      destination = .home
+    case .USER:
       print("---USER---")
-      destination = .matchMain
-    default:
-      print("---\(role)---")
-      destination = .login
+      destination = .home
     }
   }
 }

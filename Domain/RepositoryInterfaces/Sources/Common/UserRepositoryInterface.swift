@@ -8,5 +8,5 @@
 import Entities
 
 public protocol UserRepositoryInterface {
-  func getUserRole() async throws -> UserRoleModel
+  func getUserRole() async throws -> UserInfoModel
 }
