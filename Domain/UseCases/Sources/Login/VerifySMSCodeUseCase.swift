@@ -14,9 +14,9 @@ public protocol VerifySMSCodeUseCase {
 }
 
 final class VerifySMSCodeUseCaseImpl: VerifySMSCodeUseCase {
-  private let repository: LoginRepositoryInterfaces
+  private let repository: LoginRepositoryInterface
 
-  init(repository: LoginRepositoryInterfaces) {
+  init(repository: LoginRepositoryInterface) {
     self.repository = repository
   }
   

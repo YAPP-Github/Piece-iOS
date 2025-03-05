@@ -13,9 +13,9 @@ public protocol CheckTokenHealthUseCase {
 }
 
 final class CheckTokenHealthUseCaseImpl: CheckTokenHealthUseCase {
-  private let repository: LoginRepositoryInterfaces
+  private let repository: LoginRepositoryInterface
   
-  init(repository: LoginRepositoryInterfaces) {
+  init(repository: LoginRepositoryInterface) {
     self.repository = repository
   }
   

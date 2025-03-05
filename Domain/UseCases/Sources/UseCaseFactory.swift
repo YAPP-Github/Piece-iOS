@@ -34,7 +34,7 @@ public struct UseCaseFactory {
   
   // MARK: - 로그인
   
-  public static func createSocialLoginUseCase(repository: LoginRepositoryInterfaces) -> SocialLoginUseCase {
+  public static func createSocialLoginUseCase(repository: LoginRepositoryInterface) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
   
@@ -42,18 +42,17 @@ public struct UseCaseFactory {
     AppleAuthServiceUseCaseImpl()
   }
   
-  public static func createSendSMSCodeUseCase(repository: LoginRepositoryInterfaces) -> SendSMSCodeUseCase {
+  public static func createSendSMSCodeUseCase(repository: LoginRepositoryInterface) -> SendSMSCodeUseCase {
     SendSMSCodeUseCaseImpl(repository: repository)
   }
   
-  public static func createVerifySMSCodeUseCase(repository: LoginRepositoryInterfaces) -> VerifySMSCodeUseCase {
+  public static func createVerifySMSCodeUseCase(repository: LoginRepositoryInterface) -> VerifySMSCodeUseCase {
     VerifySMSCodeUseCaseImpl(repository: repository)
   }
   
   public static func createFetchTermsUseCase(repository: TermsRepositoryInterfaces) -> FetchTermsUseCase {
     FetchTermsUseCaseImpl(repository: repository)
   }
-  
   
   public static func createCheckNicknameUseCase(repository: CheckNinknameRepositoryInterface) -> CheckNicknameUseCase {
     CheckNicknameUseCaseImpl(repository: repository)
@@ -67,7 +66,7 @@ public struct UseCaseFactory {
     BlockContactsUseCaseImpl(repository: repository)
   }
   
-  public static func createCheckTokenHealthUseCase(repository: LoginRepositoryInterfaces) -> CheckTokenHealthUseCase {
+  public static func createCheckTokenHealthUseCase(repository: LoginRepositoryInterface) -> CheckTokenHealthUseCase {
     CheckTokenHealthUseCaseImpl(repository: repository)
   }
   
