@@ -6,11 +6,12 @@
 //
 
 public enum UserRole: String {
+  case NONE
   case REGISTER
   case PENDING
   case USER
   
   public init(_ role: String) {
-    self = UserRole(rawValue: role) ?? .REGISTER
+    self = UserRole(rawValue: role) ?? .NONE
   }
 }
