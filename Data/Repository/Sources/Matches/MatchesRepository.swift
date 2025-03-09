@@ -81,7 +81,7 @@ final class MatchesRepository: MatchesRepositoryInterface {
   }
   
   func getUserRejectReason() async throws -> UserRejectReasonModel {
-    let endpoint = CommonEndpoint.userReject
+    let endpoint = UserEndpoint.userReject
     let responseDTO: UserRejectReasonResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }

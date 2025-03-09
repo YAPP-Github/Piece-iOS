@@ -19,7 +19,7 @@ private let networkService: NetworkService
   
   public func deleteUserAccount(providerName: String, oauthCredential: String, reason: String) async throws -> VoidModel {
     let body = WithdrawRequestDTO(providerName: providerName, oauthCredential: oauthCredential, reason: reason)
-    let endpoint = CommonEndpoint.withdrawWithPiece(body)
+    let endpoint = UserEndpoint.withdrawWithPiece(body)
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return response.toDomain()
   }

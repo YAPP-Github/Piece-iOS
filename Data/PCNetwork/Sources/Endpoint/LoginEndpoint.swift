@@ -69,7 +69,7 @@ public enum LoginEndpoint: TargetType {
       "api/register/sms/auth/code/verify"
     case .tokenRefresh:
       "api/login/token/refresh"
-    case let .tokenHealthCheck(parameters):
+    case let .tokenHealthCheck:
       "api/login/token/health-check/"
     case .registerFcmToken:
       "api/users/fcm-token"

@@ -19,7 +19,6 @@ import Router
 import SignUp
 import SwiftUI
 import UseCases
-import EditValuePick
 import MatchingMain
 import Splash
 import Settings
@@ -245,12 +244,6 @@ public struct Coordinator {
     case .splash:
       let userRepository = repositoryFactory.createUserRepository()
       let getUserInfoUseCase = UseCaseFactory.createGetUserInfoUseCase(repository: userRepository)
-      let loginRepository = repositoryFactory.createLoginRepository()
-      let commonRepository = repositoryFactory.createCommonRepository()
-      let checkTokenHealthUseCase = UseCaseFactory.createCheckTokenHealthUseCase(repository: loginRepository)
-      let getServerStatusUseCase = UseCaseFactory.createGetServerStatusUseCase(repository: commonRepository)
-      let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthLoginUseCase()
-      let socialLoginUseCase = UseCaseFactory.createSocialLoginUseCase(repository: loginRepository)
       SplashViewFactory.createSplashView(
         getUserInfoUseCase: getUserInfoUseCase
       )
