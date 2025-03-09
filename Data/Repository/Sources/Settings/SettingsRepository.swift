@@ -23,5 +23,12 @@ final class SettingsRepository: SettingsRepositoryInterface {
     
     return response.toDomain()
   }
+  
+  func patchLogout() async throws -> VoidModel {
+    let endpoint = SettingsEndpoint.patchLogout
+    let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    
+    return response.toDomain()
+  }
 }
 
