@@ -188,4 +188,8 @@ public struct UseCaseFactory {
   public static func createGetContactsSyncTimeUseCase(repository: SettingsRepositoryInterface) -> GetContactsSyncTimeUseCase {
     GetContactsSyncTimeUseCaseImpl(repository: repository)
   }
+  
+  public static func createLogoutUseCase(repository: SettingsRepositoryInterface) -> PatchLogoutUseCase {
+    PatchLogoutUseCaseImpl(repository: repository)
+  }
 }

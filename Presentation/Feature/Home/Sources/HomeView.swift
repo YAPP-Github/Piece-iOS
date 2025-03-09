@@ -23,7 +23,8 @@ struct HomeView: View {
     contactsPermissionUseCase: ContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
-    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    patchLogoutUseCase: PatchLogoutUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
@@ -33,7 +34,8 @@ struct HomeView: View {
         contactsPermissionUseCase: contactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
-        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
+        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+        patchLogoutUseCase: patchLogoutUseCase
       )
     )
   }
@@ -65,7 +67,8 @@ struct HomeView: View {
         contactsPermissionUseCase: viewModel.contactsPermissionUseCase,
         fetchContactsUseCase: viewModel.fetchContactsUseCase,
         blockContactsUseCase: viewModel.blockContactsUseCase,
-        getContactsSyncTimeUseCase: viewModel.getContactsSyncTimeUseCase
+        getContactsSyncTimeUseCase: viewModel.getContactsSyncTimeUseCase,
+        patchLogoutUseCase: viewModel.patchLogoutUseCase
       )
     }
   }

@@ -17,7 +17,8 @@ public struct HomeViewFactory {
     contactsPermissionUseCase: ContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
-    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    patchLogoutUseCase: PatchLogoutUseCase
   ) -> some View {
     HomeView(
       getProfileUseCase: getProfileUseCase,
@@ -26,7 +27,8 @@ public struct HomeViewFactory {
       contactsPermissionUseCase: contactsPermissionUseCase,
       fetchContactsUseCase: fetchContactsUseCase,
       blockContactsUseCase: blockContactsUseCase,
-      getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
+      getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+      patchLogoutUseCase: patchLogoutUseCase
     )
   }
 }

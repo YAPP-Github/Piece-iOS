@@ -100,7 +100,6 @@ final class VerifingContactViewModel {
       let response = try await verifySMSCodeUseCase.execute(phoneNumber: phoneNumber, code: verificationCode)
       PCKeychainManager.shared.save(.accessToken, value: response.accessToken)
       PCKeychainManager.shared.save(.refreshToken, value: response.refreshToken)
-      PCKeychainManager.shared.save(.role, value: response.role.rawValue)
       await MainActor.run {
         isActiveNextButton = true
       }

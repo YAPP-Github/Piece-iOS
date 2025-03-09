@@ -9,4 +9,5 @@ import Entities
 
 public protocol SettingsRepositoryInterface {
   func getContactsSyncTime() async throws -> ContactsSyncTimeModel
+  func patchLogout() async throws -> VoidModel
 }
