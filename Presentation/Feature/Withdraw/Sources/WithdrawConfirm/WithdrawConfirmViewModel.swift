@@ -51,19 +51,42 @@ final class WithdrawConfirmViewModel: NSObject {
   }
   
   private func revokeKakao() async {
-    UserApi.shared.unlink { error in
-      if let error = error {
-        print(error)
+    print("🔍 Kakao 탈퇴 진행")
+    
+    await withCheckedContinuation { continuation in
+      UserApi.shared.unlink { error in
+        if let error = error {
+          print("❌ Kakao unlink error: \(error)")
+        } else {
+          print("✅ Kakao unlink success")
+        }
+        continuation.resume()
       }
     }
+    
     do {
-      _ = try await deleteUserAccountUseCase.execute(providerName: "kakao", oauthCredential: "", reason: withdrawReason)
+      do {
+        _ = try await deleteUserAccountUseCase.execute(
+          providerName: "kakao",
+          oauthCredential: "",
+          reason: withdrawReason
+        )
+        print("✅ DeleteUserAccount success")
+      } catch let error as NSError {
+        // 200 상태 코드인 경우 성공으로 처리
+        if error.localizedDescription.contains("Status Code: 200") {
+          print("✅ DeleteUserAccount 성공 (Status 200)")
+        } else {
+          throw error
+        }
+      }
       
+      // 성공 시 initialize 호출
       await MainActor.run {
         initialize()
       }
     } catch {
-      print(error.localizedDescription)
+      print("\(error.localizedDescription)")
     }
   }
   
