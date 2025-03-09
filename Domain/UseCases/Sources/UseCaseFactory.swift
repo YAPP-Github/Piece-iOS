@@ -80,6 +80,10 @@ public struct UseCaseFactory {
     CheckTokenHealthUseCaseImpl(repository: repository)
   }
   
+  public static func createDeleteUserAccountUseCase(repository: WithdrawRepositoryInterface) -> DeleteUserAccountUseCase {
+    DeleteUserAccountUseCaseImpl(repository: repository)
+  }
+  
   // MARK: - Profile
   public static func createUploadProfileImageUseCase(repository: ProfileRepositoryInterface) -> UploadProfileImageUseCase {
     UploadProfileImageUseCaseImpl(repository: repository)

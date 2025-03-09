@@ -42,9 +42,9 @@ final class WithdrawConfirmViewModel: NSObject {
     let socialLoginType = PCUserDefaultsService.shared.getSocialLoginType()
     switch socialLoginType {
     case "apple":
-      Task { await revokeAppleIDCredential() }
+      await revokeAppleIDCredential()
     case "kakao":
-      Task { await revokeKakao() }
+      await revokeKakao()
     default:
       print("Unsupported login type: \(socialLoginType)")
     }
@@ -58,56 +58,51 @@ final class WithdrawConfirmViewModel: NSObject {
     }
     do {
       _ = try await deleteUserAccountUseCase.execute(providerName: "kakao", oauthCredential: "", reason: withdrawReason)
-      initialize()
+      
+      await MainActor.run {
+        initialize()
+      }
     } catch {
       print(error.localizedDescription)
     }
   }
   
   private func revokeAppleIDCredential() async {
-    let appleIDProvider = ASAuthorizationAppleIDProvider()
-    let request = appleIDProvider.createRequest()
-    request.requestedScopes = [.fullName]
+    print("🔍 Apple 탈퇴 진행")
     
-    let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-    authorizationController.delegate = self
-    authorizationController.presentationContextProvider = self
-    authorizationController.performRequests()
+    do {
+      let appleIDProvider = try await appleAuthServiceUseCase.execute()
+      print("✅ Apple authorization code : \(appleIDProvider.authorizationCode)")
+      do {
+        _ = try await deleteUserAccountUseCase.execute(
+          providerName: "apple",
+          oauthCredential: appleIDProvider.authorizationCode,
+          reason: withdrawReason
+        )
+        print("✅ DeleteUserAccount success")
+      } catch let error as NSError {
+        if error.localizedDescription.contains("Status Code: 200") {
+          print("✅ DeleteUserAccount 성공 (Status 200)")
+        } else {
+          throw error
+        }
+      }
+      
+      await MainActor.run {
+        initialize()
+      }
+    } catch {
+      print("\(error.localizedDescription)")
+    }
   }
   
   private func initialize() {
+    print("✅ Initialize started")
     PCKeychainManager.shared.deleteAll()
-    
+    print("✅ Keychain deleted")
     PCUserDefaultsService.shared.initialize()
-    
+    print("✅ UserDefaults initialized")
     destination = .splash
-  }
-}
-
-extension WithdrawConfirmViewModel: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-  func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-    return UIApplication.shared.connectedScenes
-      .compactMap { $0 as? UIWindowScene }
-      .flatMap { $0.windows }
-      .first { $0.isKeyWindow } ?? UIWindow()
-  }
-  
-  func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-    guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
-          let authorizationCodeData = appleIDCredential.authorizationCode,
-          let authorizationCode = String(data: authorizationCodeData, encoding: .utf8) else {
-      print("Apple ID Token is missing")
-      return
-    }
-    
-    print("🍎 authorizationCode : \(authorizationCode)")
-    PCKeychainManager.shared.save(.appleAuthCode, value: authorizationCode)
-    Task {
-      do {
-        let authorizationCode = try await appleAuthServiceUseCase.execute().authorizationCode
-        _ = try await deleteUserAccountUseCase.execute(providerName: "apple", oauthCredential: authorizationCode, reason: withdrawReason)
-        initialize()
-      }
-    }
+    print("✅ splash로 이동")
   }
 }

@@ -104,7 +104,7 @@ final class SplashViewModel {
       destination = .login
       return nil
     }
-    print("AccessToken: \(accessToken)")
+    print("SpalshView AccessToken: \(accessToken)")
     
     return accessToken
   }
