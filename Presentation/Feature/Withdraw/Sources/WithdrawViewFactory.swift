@@ -15,11 +15,13 @@ public struct WithdrawViewFactory {
     
   public static func createWithdrawConfirmView(
     deleteUserAccountUseCase: DeleteUserAccountUseCase,
-    appleAuthServiceUseCase: AppleAuthServiceUseCase
+    appleAuthServiceUseCase: AppleAuthServiceUseCase,
+    reason: String
   ) -> some View {
       WithdrawConfirmView(
         deleteUserAccountUseCase: deleteUserAccountUseCase,
-        appleAuthServiceUseCase: appleAuthServiceUseCase
+        appleAuthServiceUseCase: appleAuthServiceUseCase,
+        reason: reason
       )
     }
 }

@@ -20,14 +20,16 @@ final class WithdrawConfirmViewModel: NSObject {
   
   init(
     deleteUserAccountUseCase: DeleteUserAccountUseCase,
-    appleAuthServiceUseCase: AppleAuthServiceUseCase
+    appleAuthServiceUseCase: AppleAuthServiceUseCase,
+    withdrawReason: String
   ) {
     self.deleteUserAccountUseCase = deleteUserAccountUseCase
     self.appleAuthServiceUseCase = appleAuthServiceUseCase
+    self.withdrawReason = withdrawReason
   }
   
   private(set) var destination: Route?
-  private(set) var withdrawReason: String = ""
+  private var withdrawReason: String
   private let deleteUserAccountUseCase: DeleteUserAccountUseCase
   private let appleAuthServiceUseCase: AppleAuthServiceUseCase
   

@@ -18,12 +18,14 @@ struct WithdrawConfirmView: View {
   
   init(
     deleteUserAccountUseCase: DeleteUserAccountUseCase,
-    appleAuthServiceUseCase: AppleAuthServiceUseCase
+    appleAuthServiceUseCase: AppleAuthServiceUseCase,
+    reason: String
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         deleteUserAccountUseCase: deleteUserAccountUseCase,
-        appleAuthServiceUseCase: appleAuthServiceUseCase
+        appleAuthServiceUseCase: appleAuthServiceUseCase,
+        withdrawReason: reason
       )
     )
   }

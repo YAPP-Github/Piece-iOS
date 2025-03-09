@@ -238,13 +238,14 @@ public struct Coordinator {
     case .withdraw:
       WithdrawViewFactory.createWithdrawView()
       
-    case .withdrawConfirm:
+    case let .withdrawConfirm(reason):
       let withdrawRepository = repositoryFactory.createWithdrawRepository()
       let deleteUserAccountUseCase = UseCaseFactory.createDeleteUserAccountUseCase(repository: withdrawRepository)
       let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthServiceUseCase()
       WithdrawViewFactory.createWithdrawConfirmView(
         deleteUserAccountUseCase: deleteUserAccountUseCase,
-        appleAuthServiceUseCase: appleAuthServiceUseCase
+        appleAuthServiceUseCase: appleAuthServiceUseCase,
+        reason: reason
       )
       
     case .splash:

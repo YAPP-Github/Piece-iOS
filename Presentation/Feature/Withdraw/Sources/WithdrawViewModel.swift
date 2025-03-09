@@ -17,6 +17,11 @@ final class WithdrawViewModel {
   
   private(set) var currentWithdraw: WithdrawType?
   private(set) var editorText: String?
+  var withdrawReason: String {
+    currentWithdraw == .기타
+    ? editorText ?? ""
+    : currentWithdraw?.rawValue ?? ""
+  }
   var isValid: Bool {
     guard currentWithdraw != nil else { return false }
     guard currentWithdraw != .기타 else {

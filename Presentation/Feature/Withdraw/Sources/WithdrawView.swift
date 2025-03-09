@@ -59,7 +59,7 @@ struct WithdrawView: View {
         type: viewModel.isValid ? .solid : .disabled,
         buttonText: "다음",
         width: .maxWidth,
-        action: { router.push(to: .withdrawConfirm) }
+        action: { router.push(to: .withdrawConfirm(reason: viewModel.withdrawReason)) }
       )
       .animation(.easeInOut, value: viewModel.isValid)
       .padding(.horizontal, 20)
