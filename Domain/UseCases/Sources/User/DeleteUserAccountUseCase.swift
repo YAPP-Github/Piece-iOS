@@ -10,7 +10,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol DeleteUserAccountUseCase {
-  func execute(reason: String) async throws -> VoidModel
+  func execute(providerName: String, oauthCredential: String, reason: String) async throws -> VoidModel
 }
 
 final class DeleteUserAccountUseCaseImpl: DeleteUserAccountUseCase {
@@ -20,7 +20,7 @@ final class DeleteUserAccountUseCaseImpl: DeleteUserAccountUseCase {
     self.repository = repository
   }
   
-  func execute(reason: String) async throws -> VoidModel {
-    return try await repository.deleteUserAccount(reason: reason)
+  func execute(providerName: String, oauthCredential: String, reason: String) async throws -> VoidModel {
+    return try await repository.deleteUserAccount(providerName: providerName, oauthCredential: oauthCredential, reason: reason)
   }
 }

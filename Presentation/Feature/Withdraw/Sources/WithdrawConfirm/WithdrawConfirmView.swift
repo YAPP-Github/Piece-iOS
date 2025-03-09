@@ -9,10 +9,26 @@ import SwiftUI
 import DesignSystem
 import PCFoundationExtension
 import Router
+import UseCases
 
 struct WithdrawConfirmView: View {
+  @State var viewModel: WithdrawConfirmViewModel
   @Environment(Router.self)
   private var router: Router
+  
+  init(
+    deleteUserAccountUseCase: DeleteUserAccountUseCase,
+    appleAuthServiceUseCase: AppleAuthServiceUseCase,
+    reason: String
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        deleteUserAccountUseCase: deleteUserAccountUseCase,
+        appleAuthServiceUseCase: appleAuthServiceUseCase,
+        withdrawReason: reason
+      )
+    )
+  }
   
   var body: some View {
     VStack(spacing: 0) {
@@ -42,12 +58,16 @@ struct WithdrawConfirmView: View {
         type: .solid,
         buttonText: "탈퇴할래요",
         width: .maxWidth,
-        action: { }
+        action: { viewModel.handleAction(.confirmWithdraw) }
       )
       .padding(.horizontal, 20)
       .padding(.vertical, 12)
     }
     .toolbar(.hidden)
+    .onChange(of: viewModel.destination) { _, destination in
+      guard let destination else { return }
+      router.setRoute(destination)
+    }
   }
 }
 

@@ -20,6 +20,7 @@ public enum MatchesEndpoint: TargetType {
   case block(matchId: Int)
   case contacts
   case image
+  case checkMatchPiece
   
   public var method: HTTPMethod {
     switch self {
@@ -32,6 +33,7 @@ public enum MatchesEndpoint: TargetType {
     case .block: .post
     case .contacts: .get
     case .image: .get
+    case .checkMatchPiece: .patch
     }
   }
   
@@ -46,6 +48,7 @@ public enum MatchesEndpoint: TargetType {
     case let .block(matchId): "api/matches/\(matchId)/blocks"
     case .contacts: "api/matches/contacts"
     case .image: "api/matches/images"
+    case .checkMatchPiece: "api/matches/pieces/check"
     }
   }
   
@@ -83,6 +86,8 @@ public enum MatchesEndpoint: TargetType {
       
     case .image:
       [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .checkMatchPiece:
+      [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
     }
   }
   
@@ -97,6 +102,7 @@ public enum MatchesEndpoint: TargetType {
     case .block: .plain
     case .contacts: .plain
     case .image: .plain
+    case .checkMatchPiece: .plain
     }
   }
 }

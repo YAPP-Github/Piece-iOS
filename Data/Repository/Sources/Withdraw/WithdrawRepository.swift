@@ -17,17 +17,8 @@ private let networkService: NetworkService
     self.networkService = networkService
   }
   
-  public func deleteUserAccount(reason: String) async throws -> VoidModel {
-    let body = WithdrawRequestDTO(reason: reason)
-    let endpoint = UserEndpoint.withdrawWithPiece(body)
-    let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
-    return response.toDomain()
-  }
-  public func withdrawWithApple() async throws -> VoidModel {
-    
-    // TODO: - 애플 전용 탈퇴 (미완)
-    /// 추후 서버와 맞춰볼 필요있음.
-    let body = WithdrawRequestDTO(reason: "")
+  public func deleteUserAccount(providerName: String, oauthCredential: String, reason: String) async throws -> VoidModel {
+    let body = WithdrawRequestDTO(providerName: providerName, oauthCredential: oauthCredential, reason: reason)
     let endpoint = UserEndpoint.withdrawWithPiece(body)
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return response.toDomain()

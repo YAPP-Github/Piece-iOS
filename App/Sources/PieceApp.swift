@@ -1,6 +1,7 @@
 import DesignSystem
 import PCFirebase
 import LocalStorage
+import PCFirebase
 import Router
 import KakaoSDKCommon
 import KakaoSDKAuth
@@ -31,6 +32,17 @@ struct PieceApp: App {
       PCUserDefaultsService.shared.setDidSeeOnboarding(false)
       PCKeychainManager.shared.deleteAll()
     }
+    
+    Task {
+      do {
+        try await PCFirebase.shared.fetchRemoteConfigValues()
+      } catch let error as PCFirebaseError {
+        print("RemoteConfig fetch failed:", error.errorDescription)
+      } catch {
+        print("RemoteConfig fetch failed with unknown error:", error)
+      }
+    }
+    
   }
   
   var body: some Scene {

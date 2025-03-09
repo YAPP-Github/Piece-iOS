@@ -6,13 +6,22 @@
 //
 
 import SwiftUI
+import UseCases
 
 public struct WithdrawViewFactory {
     public static func createWithdrawView() -> some View {
         WithdrawView(viewModel: WithdrawViewModel())
     }
     
-    public static func createWithdrawConfirm() -> some View {
-        WithdrawConfirmView()
+  public static func createWithdrawConfirmView(
+    deleteUserAccountUseCase: DeleteUserAccountUseCase,
+    appleAuthServiceUseCase: AppleAuthServiceUseCase,
+    reason: String
+  ) -> some View {
+      WithdrawConfirmView(
+        deleteUserAccountUseCase: deleteUserAccountUseCase,
+        appleAuthServiceUseCase: appleAuthServiceUseCase,
+        reason: reason
+      )
     }
 }

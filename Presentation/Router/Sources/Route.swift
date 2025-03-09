@@ -25,8 +25,6 @@ public enum Route: Hashable {
   case verifyContact
   case editValueTalk
   case editValuePick
-  case withdraw
-  case withdrawConfirm
   case settingsWebView(title: String, uri: String)
   case reportUser(nickname: String)
   case blockUser(matchId: Int, nickname: String)
@@ -41,4 +39,8 @@ public enum Route: Hashable {
   case previewProfileBasic
   case previewProfileValueTalks(nickname: String, description: String, imageUri: String)
   case previewProfileValuePicks(nickname: String, description: String, imageUri: String)
+  
+  // MARK: - 탈퇴하기
+  case withdraw
+  case withdrawConfirm(reason: String)
 }

@@ -5,8 +5,6 @@
 //  Created by summercat on 2/11/25.
 //
 
-import RepositoryInterfaces
-
 import DTO
 import Entities
 import Foundation
@@ -14,10 +12,17 @@ import PCNetwork
 import RepositoryInterfaces
 
 final class MatchesRepository: MatchesRepositoryInterface {
+  
   private let networkService: NetworkService
   
   public init (networkService: NetworkService) {
     self.networkService = networkService
+  }
+  
+  func getMatchInfos() async throws -> Entities.MatchInfosModel {
+    let endpoint = MatchesEndpoint.matchesInfos
+    let responseDTO: MatchInfosResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
   }
   
   func getMatchesProfileBasic() async throws -> MatchProfileBasicModel {
@@ -72,6 +77,18 @@ final class MatchesRepository: MatchesRepositoryInterface {
   func getMatchContacts() async throws -> MatchContactsModel {
     let endpoint = MatchesEndpoint.contacts
     let responseDTO: MatchContactsResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
+  
+  func getUserRejectReason() async throws -> UserRejectReasonModel {
+    let endpoint = UserEndpoint.userReject
+    let responseDTO: UserRejectReasonResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
+  
+  func patchCheckMatchPiece() async throws -> VoidModel {
+    let endpoint = MatchesEndpoint.checkMatchPiece
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
 }

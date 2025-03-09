@@ -10,17 +10,17 @@ import Entities
 import RepositoryInterfaces
 
 public protocol GetMatchesInfoUseCase {
-  func execute() async throws -> TermsListModel
+  func execute() async throws -> MatchInfosModel
 }
 
 final class GetMatchesInfoUseCaseImpl: GetMatchesInfoUseCase {
-  private let repository: TermsRepositoryInterfaces
+  private let repository: MatchesRepositoryInterface
   
-  init(repository: TermsRepositoryInterfaces) {
+  init(repository: MatchesRepositoryInterface) {
     self.repository = repository
   }
   
-  func execute() async throws -> TermsListModel {
-    return try await repository.fetchTermList()
+  func execute() async throws -> MatchInfosModel {
+    return try await repository.getMatchInfos()
   }
 }

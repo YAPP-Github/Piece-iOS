@@ -34,6 +34,10 @@ public struct UseCaseFactory {
   
   // MARK: - 로그인
   
+  public static func createAppleAuthLoginUseCase() -> AppleAuthServiceUseCase {
+    AppleAuthServiceUseCaseImpl()
+  }
+  
   public static func createSocialLoginUseCase(repository: LoginRepositoryInterface) -> SocialLoginUseCase {
     SocialLoginUseCaseImpl(repository: repository)
   }
@@ -74,6 +78,10 @@ public struct UseCaseFactory {
   
   public static func createCheckTokenHealthUseCase(repository: LoginRepositoryInterface) -> CheckTokenHealthUseCase {
     CheckTokenHealthUseCaseImpl(repository: repository)
+  }
+  
+  public static func createDeleteUserAccountUseCase(repository: WithdrawRepositoryInterface) -> DeleteUserAccountUseCase {
+    DeleteUserAccountUseCaseImpl(repository: repository)
   }
   
   // MARK: - Profile
@@ -118,6 +126,17 @@ public struct UseCaseFactory {
   }
   
   // MARK: - 매칭
+  public static func createGetUserRejectUseCase(repository: MatchesRepositoryInterface) -> GetUserRejectUseCase {
+    GetUserRejectUseCaseImpl(repository: repository)
+  }
+  
+  public static func createPatchMatchesCheckPieceUseCase(repository: MatchesRepositoryInterface) -> PatchMatchesCheckPieceUseCase {
+    PatchMatchesCheckPieceUseCaseImpl(repository: repository)
+  }
+  
+  public static func createGetMatchesInfoUseCase(repository: MatchesRepositoryInterface) -> GetMatchesInfoUseCase {
+    GetMatchesInfoUseCaseImpl(repository: repository)
+  }
   
   public static func createAcceptMatchUseCase(repository: MatchesRepositoryInterface) -> AcceptMatchUseCase {
     AcceptMatchUseCaseImpl(repository: repository)

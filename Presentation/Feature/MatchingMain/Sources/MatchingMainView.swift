@@ -18,12 +18,18 @@ struct MatchingMainView: View {
   
   init(
     acceptMatchUseCase: AcceptMatchUseCase,
-    getMatchesProfileBasicUsecase: GetMatchProfileBasicUseCase
+    getMatchesInfoUseCase: GetMatchesInfoUseCase,
+    getMatchContactsUseCase: GetMatchContactsUseCase,
+    getUserRejectUseCase: GetUserRejectUseCase,
+    patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   ) {
     _matchingMainViewModel = .init(
       wrappedValue: .init(
         acceptMatchUseCase: acceptMatchUseCase,
-        getMatchesProfileBasicUseCase: getMatchesProfileBasicUsecase
+        getMatchesInfoUseCase: getMatchesInfoUseCase,
+        getMatchContactsUseCase: getMatchContactsUseCase,
+        getUserRejectUseCase: getUserRejectUseCase,
+        patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase
       )
     )
     _matchingTimerViewModel = .init(wrappedValue: .init())
@@ -35,41 +41,10 @@ struct MatchingMainView: View {
       VStack {
         MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
         VStack(alignment: .leading) {
-          MatchingAnswer(type: matchingMainViewModel.matchingStatus)
-          
-          Spacer()
-            .frame(height: 20)
-          
-          Button {
-            matchingMainViewModel.handleAction(.tapProfileInfo)
-          } label: {
-            profileInfo
-          }
-          
-          HStack(spacing: 4) {
-            Text("나와 같은 가치관")
-            Text("\(matchingMainViewModel.tags.count)개")
-              .foregroundColor(.primaryDefault)
-          }
-          .pretendard(.body_M_M)
-          .foregroundColor(.grayscaleBlack)
-          
-          Divider(weight: .normal, isVertical: false)
-          
-          tags
-          
-          Spacer()
-            .frame(height: 16)
-          
-          matchingButton
+          waitingJudgmentCard
+          waitingMatchingCard
+          profileInfoCard
         }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 20)
-        .background(
-          Rectangle()
-            .fill(Color.grayscaleWhite)
-            .cornerRadius(16)
-        )
       }
       .padding(.horizontal, 20)
     }
@@ -89,6 +64,110 @@ struct MatchingMainView: View {
         matchingMainViewModel.isMatchAcceptAlertPresented = false
       }
     }
+    .pcAlert(isPresented: $matchingMainViewModel.isMatchAcceptAlertPresented) {
+      AlertView(
+        icon: DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage,
+        title: { Text("프로필을 수정해주세요") },
+        message: matchingMainViewModel.profileRejectAlertMessage,
+        secondButtonText: "수정하기",
+        secondButtonAction: { router.setRoute(.createProfile)}
+      )
+    }
+  }
+  
+  private var waitingMatchingCard: some View {
+    VStack {
+      VStack(alignment: .center) {
+        Text("진중한 만남을 위한\n")
+          .foregroundStyle(Color.grayscaleBlack) +
+        Text("매칭 조각")
+          .foregroundStyle(Color.primary) +
+        Text("이 곧 도착할 거예요!")
+          .foregroundStyle(Color.grayscaleBlack)
+        Text("매일 밤 10시에 매칭 조각이 도착해요\n생성한 프로필을 검토하며 기다려 주세요.")
+          .pretendard(.heading_S_M)
+          .foregroundStyle(Color.grayscaleDark3)
+      }
+      .pretendard(.heading_M_SB)
+      .multilineTextAlignment(.center)
+      
+      DesignSystemAsset.Images.imgMatching240.swiftUIImage
+      
+      matchingButton
+    }
+    .padding(.vertical, 20)
+    .padding(.horizontal, 20)
+    .background(
+      Rectangle()
+        .fill(Color.grayscaleWhite)
+        .cornerRadius(16)
+    )
+  }
+  
+  private var waitingJudgmentCard: some View {
+    VStack {
+      VStack(alignment: .center) {
+        Text("진중한 만남")
+          .foregroundStyle(Color.primary) +
+        Text("을 이어가기 위해\n프로필을 살펴보고 있어요")
+          .foregroundStyle(Color.grayscaleBlack)
+        Text("작성 후 24시간 이내에 심사가 진행됩니다.\n생성한 프로필을 검토하며 기다려 주세요.")
+          .pretendard(.heading_S_M)
+          .foregroundStyle(Color.grayscaleDark3)
+      }
+      .pretendard(.heading_M_SB)
+      .multilineTextAlignment(.center)
+      
+      DesignSystemAsset.Images.imgScreening.swiftUIImage
+      
+      matchingButton
+    }
+    .padding(.vertical, 20)
+    .padding(.horizontal, 20)
+    .background(
+      Rectangle()
+        .fill(Color.grayscaleWhite)
+        .cornerRadius(16)
+    )
+  }
+  
+  private var profileInfoCard: some View {
+    VStack(alignment: .leading) {
+      MatchingAnswer(type: matchingMainViewModel.matchingStatus)
+      
+      Spacer()
+        .frame(height: 20)
+      
+      Button {
+        matchingMainViewModel.handleAction(.tapProfileInfo)
+      } label: {
+        profileInfo
+      }
+      
+      HStack(spacing: 4) {
+        Text("나와 같은 가치관")
+        Text("\(matchingMainViewModel.tags.count)개")
+          .foregroundColor(.primaryDefault)
+      }
+      .pretendard(.body_M_M)
+      .foregroundColor(.grayscaleBlack)
+      
+      Divider(weight: .normal, isVertical: false)
+      
+      tags
+      
+      Spacer()
+        .frame(height: 16)
+      
+      matchingButton
+    }
+    .padding(.vertical, 20)
+    .padding(.horizontal, 20)
+    .background(
+      Rectangle()
+        .fill(Color.grayscaleWhite)
+        .cornerRadius(16)
+    )
   }
   
   private var profileInfo: some View {

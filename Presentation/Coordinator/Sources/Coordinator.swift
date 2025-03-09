@@ -19,7 +19,6 @@ import Router
 import SignUp
 import SwiftUI
 import UseCases
-import EditValuePick
 import MatchingMain
 import Splash
 import Settings
@@ -84,11 +83,17 @@ public struct Coordinator {
       // MARK: - 매칭 메인
     case .matchMain:
       let matchesRepository = repositoryFactory.createMatchesRepository()
-      let getMatchMainUseCase = UseCaseFactory.createGetMatchProfileBasicUseCase(repository: matchesRepository)
       let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
+      let getMatchesInfoUseCase = UseCaseFactory.createGetMatchesInfoUseCase(repository: matchesRepository)
+      let getMatchesContactsUseCase = UseCaseFactory.createGetMatchContactsUseCase(repository: matchesRepository)
+      let getUserRejectUseCase = UseCaseFactory.createGetUserRejectUseCase(repository: matchesRepository)
+      let patchMatchesCheckPieceUseCase = UseCaseFactory.createPatchMatchesCheckPieceUseCase(repository: matchesRepository)
       MatchMainViewFactory.createMatchMainView(
-        getMatchProfileBasicUseCase: getMatchMainUseCase,
-        acceptMatchUseCase: acceptMatchUseCase
+        acceptMatchUseCase: acceptMatchUseCase,
+        getMatchesInfoUseCase: getMatchesInfoUseCase,
+        getMatchContactsUseCase: getMatchesContactsUseCase,
+        getUserRejectUseCase: getUserRejectUseCase,
+        patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase
       )
       
       // MARK: - 매칭 상세
@@ -233,8 +238,15 @@ public struct Coordinator {
     case .withdraw:
       WithdrawViewFactory.createWithdrawView()
       
-    case .withdrawConfirm:
-      WithdrawViewFactory.createWithdrawConfirm()
+    case let .withdrawConfirm(reason):
+      let withdrawRepository = repositoryFactory.createWithdrawRepository()
+      let deleteUserAccountUseCase = UseCaseFactory.createDeleteUserAccountUseCase(repository: withdrawRepository)
+      let appleAuthServiceUseCase = UseCaseFactory.createAppleAuthServiceUseCase()
+      WithdrawViewFactory.createWithdrawConfirmView(
+        deleteUserAccountUseCase: deleteUserAccountUseCase,
+        appleAuthServiceUseCase: appleAuthServiceUseCase,
+        reason: reason
+      )
       
     case .splash:
       let userRepository = repositoryFactory.createUserRepository()

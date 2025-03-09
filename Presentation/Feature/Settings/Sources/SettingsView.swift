@@ -69,6 +69,10 @@ struct SettingsView: View {
     .onAppear {
       viewModel.handleAction(.onAppear)
     }
+    .onChange(of: viewModel.destination) { _, destination in
+      guard let destination else { return }
+      router.push(to: destination)
+    }
   }
   
   @ViewBuilder

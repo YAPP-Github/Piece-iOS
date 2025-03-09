@@ -47,6 +47,7 @@ struct TermsAgreementView: View {
     .onChange(of: viewModel.isShowWebView) { _, newValue in
       if newValue, let term = viewModel.selectedTerm {
         router.push(to: .termsWebView(title: term.title, url: term.url))
+        viewModel.isShowWebView = false
       }
     }
     .toolbar(.hidden, for: .navigationBar)

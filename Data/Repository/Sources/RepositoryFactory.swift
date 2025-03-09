@@ -66,4 +66,8 @@ public struct RepositoryFactory {
   public func createSettingsRepository() -> SettingsRepositoryInterface {
     SettingsRepository(networkService: networkService)
   }
+  
+  public func createWithdrawRepository() -> WithdrawRepositoryInterface {
+    WithdrawRepository(networkService: networkService)
+  }
 }
