@@ -93,7 +93,6 @@ final class LoginViewModel: NSObject {
         print("Social login success: \(socialLoginResponse)")
         PCKeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
         PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
-        PCKeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
         PCUserDefaultsService.shared.setSocialLoginType("kakao")
         await MainActor.run {
           isLoginSuccessful = true
@@ -165,7 +164,6 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
     
     print("🍎 identityToken : \(identityToken)")
     print("🍎 authorizationCode : \(authorizationCode)")
-    PCKeychainManager.shared.save(.appleAuthCode, value: authorizationCode)
     
     Task {
       do {
@@ -173,7 +171,6 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         print("Apple Login Success: \(socialLoginResponse)")
         PCKeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
         PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
-        PCKeychainManager.shared.save(.role, value: socialLoginResponse.role.rawValue)
         PCUserDefaultsService.shared.setSocialLoginType("apple")
         await MainActor.run {
           isLoginSuccessful = true
