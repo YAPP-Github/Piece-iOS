@@ -53,10 +53,21 @@ public struct Coordinator {
       )
     case .home:
       let profileRepository = repositoryFactory.createProfileRepository()
+      let matchesRepository = repositoryFactory.createMatchesRepository()
       let termsRepository = repositoryFactory.createTermsRepository()
       let blockContactsRepository = repositoryFactory.createBlockContactsRepository()
       let settingsRepository = repositoryFactory.createSettingsRepository()
+      let userRepository = repositoryFactory.createUserRepository()
+      // profile
       let getProfileUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
+      // matchMain
+      let getUserInfoUseCase = UseCaseFactory.createGetUserInfoUseCase(repository: userRepository)
+      let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
+      let getMatchesInfoUseCase = UseCaseFactory.createGetMatchesInfoUseCase(repository: matchesRepository)
+      let getMatchContactsUseCase = UseCaseFactory.createGetMatchContactsUseCase(repository: matchesRepository)
+      let getUserRejectUseCase = UseCaseFactory.createGetUserRejectUseCase(repository: matchesRepository)
+      let patchMatchesCheckPieceUseCase = UseCaseFactory.createPatchMatchesCheckPieceUseCase(repository: matchesRepository)
+      // setting
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
       let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
@@ -66,6 +77,12 @@ public struct Coordinator {
       let patchLogoutUseCase = UseCaseFactory.createLogoutUseCase(repository: settingsRepository)
       HomeViewFactory.createHomeView(
         getProfileUseCase: getProfileUseCase,
+        getUserInfoUseCase: getUserInfoUseCase,
+        acceptMatchUseCase: acceptMatchUseCase,
+        getMatchesInfoUseCase: getMatchesInfoUseCase,
+        getMatchContactsUseCase: getMatchContactsUseCase,
+        getUserRejectUseCase: getUserRejectUseCase,
+        patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
         contactsPermissionUseCase: contactsPermissionUseCase,
@@ -85,12 +102,15 @@ public struct Coordinator {
       // MARK: - 매칭 메인
     case .matchMain:
       let matchesRepository = repositoryFactory.createMatchesRepository()
+      let userRepository = repositoryFactory.createUserRepository()
+      let getUserInfoUseCase = UseCaseFactory.createGetUserInfoUseCase(repository: userRepository)
       let acceptMatchUseCase = UseCaseFactory.createAcceptMatchUseCase(repository: matchesRepository)
       let getMatchesInfoUseCase = UseCaseFactory.createGetMatchesInfoUseCase(repository: matchesRepository)
       let getMatchesContactsUseCase = UseCaseFactory.createGetMatchContactsUseCase(repository: matchesRepository)
       let getUserRejectUseCase = UseCaseFactory.createGetUserRejectUseCase(repository: matchesRepository)
       let patchMatchesCheckPieceUseCase = UseCaseFactory.createPatchMatchesCheckPieceUseCase(repository: matchesRepository)
       MatchMainViewFactory.createMatchMainView(
+        getUserInfoUseCase: getUserInfoUseCase,
         acceptMatchUseCase: acceptMatchUseCase,
         getMatchesInfoUseCase: getMatchesInfoUseCase,
         getMatchContactsUseCase: getMatchesContactsUseCase,

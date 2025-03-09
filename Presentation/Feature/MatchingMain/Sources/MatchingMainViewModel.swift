@@ -84,6 +84,7 @@ final class MatchingMainViewModel {
   private(set) var profileStatus: String = ""
   private(set) var rejectReasonImage: Bool = false
   private(set) var rejectReasonValues: Bool = false
+  private let getUserInfoUseCase: GetUserInfoUseCase
   private let acceptMatchUseCase: AcceptMatchUseCase
   private let getMatchesInfoUseCase: GetMatchesInfoUseCase
   private let getMatchContactsUseCase: GetMatchContactsUseCase
@@ -104,12 +105,14 @@ final class MatchingMainViewModel {
   var matchingStatus: MatchingAnswer.MatchingStatus = .before
   
   init(
+    getUserInfoUseCase: GetUserInfoUseCase,
     acceptMatchUseCase: AcceptMatchUseCase,
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
     getMatchContactsUseCase: GetMatchContactsUseCase,
     getUserRejectUseCase: GetUserRejectUseCase,
     patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   ) {
+    self.getUserInfoUseCase = getUserInfoUseCase
     self.acceptMatchUseCase = acceptMatchUseCase
     self.getMatchesInfoUseCase = getMatchesInfoUseCase
     self.getMatchContactsUseCase = getMatchContactsUseCase

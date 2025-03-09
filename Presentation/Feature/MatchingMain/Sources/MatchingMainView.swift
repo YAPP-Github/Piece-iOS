@@ -17,6 +17,7 @@ struct MatchingMainView: View {
   @Environment(Router.self) private var router: Router
   
   init(
+    getUserInfoUseCase: GetUserInfoUseCase,
     acceptMatchUseCase: AcceptMatchUseCase,
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
     getMatchContactsUseCase: GetMatchContactsUseCase,
@@ -25,6 +26,7 @@ struct MatchingMainView: View {
   ) {
     _matchingMainViewModel = .init(
       wrappedValue: .init(
+        getUserInfoUseCase: getUserInfoUseCase,
         acceptMatchUseCase: acceptMatchUseCase,
         getMatchesInfoUseCase: getMatchesInfoUseCase,
         getMatchContactsUseCase: getMatchContactsUseCase,
@@ -39,14 +41,23 @@ struct MatchingMainView: View {
     ZStack {
       Color.grayscaleBlack.edgesIgnoringSafeArea(.all)
       VStack {
-        MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
+        HomeNavigationBar(
+          title: "Matching",
+          foregroundColor: .grayscaleWhite,
+          rightIcon: DesignSystemAsset.Icons.alarm32.swiftUIImage,
+          rightIconTap: {
+            // TODO: - 알림버튼 선택시 이동
+          }
+        )
         VStack(alignment: .leading) {
-          waitingJudgmentCard
-          waitingMatchingCard
+//          waitingJudgmentCard
+//          waitingMatchingCard
+          
+          MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
           profileInfoCard
         }
+        .padding(.horizontal, 20)
       }
-      .padding(.horizontal, 20)
     }
     .pcAlert(isPresented: $matchingMainViewModel.isMatchAcceptAlertPresented) {
       AlertView(
