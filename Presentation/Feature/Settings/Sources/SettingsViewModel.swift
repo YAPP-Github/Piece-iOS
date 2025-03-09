@@ -11,6 +11,7 @@ import LocalStorage
 import PCFoundationExtension
 import SwiftUI
 import UseCases
+import Router
 
 @Observable
 final class SettingsViewModel {
@@ -45,6 +46,7 @@ final class SettingsViewModel {
   private let blockContactsUseCase: BlockContactsUseCase
   private let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
   private(set) var tappedTermItem: SettingsTermsItem?
+  private(set) var destination: Route?
   
   init(
     fetchTermsUseCase: FetchTermsUseCase,
@@ -99,7 +101,7 @@ final class SettingsViewModel {
       break
     case .withdrawButtonTapped:
       // TODO: 탈퇴하기
-      break
+      destination = .withdraw
     }
   }
   
