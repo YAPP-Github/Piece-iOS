@@ -20,7 +20,8 @@ struct SettingsView: View {
     contactsPermissionUseCase: ContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
-    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    patchLogoutUseCase: PatchLogoutUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
@@ -29,7 +30,8 @@ struct SettingsView: View {
         contactsPermissionUseCase: contactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
-        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
+        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+        patchLogoutUseCase: patchLogoutUseCase
       )
     )
   }
@@ -66,6 +68,18 @@ struct SettingsView: View {
       .padding(.bottom, 89) // 탭바 높이 만큼 패딩
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .pcAlert(isPresented: $viewModel.showLogoutAlert) {
+      AlertView(
+        title: {
+          Text("로그아웃")
+        },
+        message: "로그아웃하시겠습니까?",
+        firstButtonText: "취소",
+        secondButtonText: "확인",
+        firstButtonAction: { viewModel.showLogoutAlert = false },
+        secondButtonAction: { viewModel.handleAction(.confirmLogoutButton) }
+      )
+    }
     .onAppear {
       viewModel.handleAction(.onAppear)
     }

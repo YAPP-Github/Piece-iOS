@@ -63,6 +63,7 @@ public struct Coordinator {
       let fetchContactsUseCase = UseCaseFactory.createFetchContactsUseCase()
       let blockContactsUseCase = UseCaseFactory.createBlockContactsUseCase(repository: blockContactsRepository)
       let getContactsSyncTimeUseCase = UseCaseFactory.createGetContactsSyncTimeUseCase(repository: settingsRepository)
+      let patchLogoutUseCase = UseCaseFactory.createLogoutUseCase(repository: settingsRepository)
       HomeViewFactory.createHomeView(
         getProfileUseCase: getProfileUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
@@ -70,7 +71,8 @@ public struct Coordinator {
         contactsPermissionUseCase: contactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
-        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
+        getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+        patchLogoutUseCase: patchLogoutUseCase
       )
       
     case .onboarding:

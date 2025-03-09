@@ -15,7 +15,8 @@ public struct SettingsViewFactory {
     contactsPermissionUseCase: ContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
-    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    patchLogoutUseCase: PatchLogoutUseCase
   ) -> some View {
     SettingsView(
       fetchTermsUseCase: fetchTermsUseCase,
@@ -23,7 +24,8 @@ public struct SettingsViewFactory {
       contactsPermissionUseCase: contactsPermissionUseCase,
       fetchContactsUseCase: fetchContactsUseCase,
       blockContactsUseCase: blockContactsUseCase,
-      getContactsSyncTimeUseCase: getContactsSyncTimeUseCase
+      getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+      patchLogoutUseCase: patchLogoutUseCase
     )
   }
   

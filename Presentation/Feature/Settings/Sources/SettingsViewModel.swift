@@ -23,10 +23,12 @@ final class SettingsViewModel {
     case synchronizeContactsButtonTapped
     case termsItemTapped(id: Int)
     case logoutItemTapped
+    case confirmLogoutButton
     case withdrawButtonTapped
   }
   
   var sections = [SettingSection]()
+  var showLogoutAlert: Bool = false
   var isMatchingNotificationOn = false
   var isPushNotificationEnabled = false
   var isBlockContactsEnabled: Bool = false
@@ -45,6 +47,7 @@ final class SettingsViewModel {
   private let fetchContactsUseCase: FetchContactsUseCase
   private let blockContactsUseCase: BlockContactsUseCase
   private let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+  private let patchLogoutUseCase: PatchLogoutUseCase
   private(set) var tappedTermItem: SettingsTermsItem?
   private(set) var destination: Route?
   
@@ -54,7 +57,8 @@ final class SettingsViewModel {
     contactsPermissionUseCase: ContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
-    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+    getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    patchLogoutUseCase: PatchLogoutUseCase
   ) {
     self.fetchTermsUseCase = fetchTermsUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
@@ -62,6 +66,7 @@ final class SettingsViewModel {
     self.fetchContactsUseCase = fetchContactsUseCase
     self.blockContactsUseCase = blockContactsUseCase
     self.getContactsSyncTimeUseCase = getContactsSyncTimeUseCase
+    self.patchLogoutUseCase = patchLogoutUseCase
     addObserver()
   }
   
@@ -97,10 +102,13 @@ final class SettingsViewModel {
       tappedTermItem = termsItems.first(where: { $0.id == id })
 
     case .logoutItemTapped:
-      // TODO: 로그아웃
+      showLogoutAlert = true
+      
+    case .confirmLogoutButton:
+      TapComfirmLogout()
+      
       break
     case .withdrawButtonTapped:
-      // TODO: 탈퇴하기
       destination = .withdraw
     }
   }
@@ -202,5 +210,22 @@ final class SettingsViewModel {
         self.updatedDate = updatedDate
       }
     }
+  }
+  
+  private func TapComfirmLogout() {
+    // logout api 호출
+    Task {
+      do {
+        _ = try await patchLogoutUseCase.execute()
+      } catch {
+        print(error)
+      }
+    }
+    showLogoutAlert = false
+    
+    PCKeychainManager.shared.deleteAll()
+    PCUserDefaultsService.shared.initialize()
+    // 로그아웃 시 splash로 이동
+    destination = .splash
   }
 }
