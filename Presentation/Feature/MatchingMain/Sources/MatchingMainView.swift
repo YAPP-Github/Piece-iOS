@@ -173,9 +173,7 @@ struct MatchingMainView: View {
   private var matchingBasicCard: some View {
     VStack(alignment: .leading) {
       MatchingAnswer(type: matchingMainViewModel.matchingStatus)
-      
-      Spacer()
-        .frame(height: 20)
+        .padding(.bottom, 20)
       
       Button {
         matchingMainViewModel.handleAction(.tapProfileInfo)
@@ -206,8 +204,8 @@ struct MatchingMainView: View {
       Rectangle()
         .fill(Color.grayscaleWhite)
         .cornerRadius(16)
-        .frame(maxHeight: 516)
     )
+    .padding(.bottom, 108)
   }
   
   private var profileInfo: some View {
