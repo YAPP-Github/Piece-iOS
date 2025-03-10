@@ -21,7 +21,6 @@ struct HomeView: View {
     getUserInfoUseCase: GetUserInfoUseCase,
     acceptMatchUseCase: AcceptMatchUseCase,
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
-    getMatchContactsUseCase: GetMatchContactsUseCase,
     getUserRejectUseCase: GetUserRejectUseCase,
     patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
@@ -38,7 +37,6 @@ struct HomeView: View {
         getUserInfoUseCase: getUserInfoUseCase,
         acceptMatchUseCase: acceptMatchUseCase,
         getMatchesInfoUseCase: getMatchesInfoUseCase,
-        getMatchContactsUseCase: getMatchContactsUseCase,
         getUserRejectUseCase: getUserRejectUseCase,
         patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
@@ -73,7 +71,6 @@ struct HomeView: View {
         getUserInfoUseCase: viewModel.getUserInfoUseCase,
         acceptMatchUseCase: viewModel.acceptMatchUseCase,
         getMatchesInfoUseCase: viewModel.getMatchesInfoUseCase,
-        getMatchContactsUseCase: viewModel.getMatchContactsUseCase,
         getUserRejectUseCase: viewModel.getUserRejectUseCase,
         patchMatchesCheckPieceUseCase: viewModel.patchMatchesCheckPieceUseCase
       )

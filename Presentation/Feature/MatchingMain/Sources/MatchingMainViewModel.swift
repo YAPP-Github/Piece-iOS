@@ -61,7 +61,6 @@ final class MatchingMainViewModel {
     case tapProfileInfo // 매칭 조각 확인하고 상대 프로필 눌렀을때
     case tapMatchingButton // 하단 CTA 매칭 버튼 누를시
     case didAcceptMatch // 매칭 수락하기
-    case checkContacts // 연락처 확인하기
   }
   var userRole: String {
     PCUserDefaultsService.shared.getUserRole().rawValue
@@ -93,7 +92,6 @@ final class MatchingMainViewModel {
   private let getUserInfoUseCase: GetUserInfoUseCase
   private let acceptMatchUseCase: AcceptMatchUseCase
   private let getMatchesInfoUseCase: GetMatchesInfoUseCase
-  private let getMatchContactsUseCase: GetMatchContactsUseCase
   private let getUserRejectUseCase: GetUserRejectUseCase
   private let patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   
@@ -114,14 +112,12 @@ final class MatchingMainViewModel {
     getUserInfoUseCase: GetUserInfoUseCase,
     acceptMatchUseCase: AcceptMatchUseCase,
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
-    getMatchContactsUseCase: GetMatchContactsUseCase,
     getUserRejectUseCase: GetUserRejectUseCase,
     patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   ) {
     self.getUserInfoUseCase = getUserInfoUseCase
     self.acceptMatchUseCase = acceptMatchUseCase
     self.getMatchesInfoUseCase = getMatchesInfoUseCase
-    self.getMatchContactsUseCase = getMatchContactsUseCase
     self.getUserRejectUseCase = getUserRejectUseCase
     self.patchMatchesCheckPieceUseCase = patchMatchesCheckPieceUseCase
     
@@ -147,9 +143,6 @@ final class MatchingMainViewModel {
       
     case .didAcceptMatch:
       Task { await acceptMatch() }
-      
-    case .checkContacts:
-      Task { await checkContacts() }
     }
   }
   
@@ -159,7 +152,7 @@ final class MatchingMainViewModel {
       case .acceptMatching:
         isMatchAcceptAlertPresented = true
       case .checkContact:
-        Task { await checkContacts() }
+        destination = .matchResult(nickname: "")
       case .checkMatchingPiece:
         Task { await patchCheckMatchingPiece() }
       case .pending:
@@ -251,14 +244,6 @@ final class MatchingMainViewModel {
   private func acceptMatch() async {
     do {
       _ = try await acceptMatchUseCase.execute()
-    } catch {
-      self.error = error
-    }
-  }
-  
-  private func checkContacts() async {
-    do {
-      _ = try await getMatchContactsUseCase.execute()
     } catch {
       self.error = error
     }
