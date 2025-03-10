@@ -11,6 +11,7 @@ import Router
 import SwiftUI
 import Observation
 import UseCases
+import LocalStorage
 
 @Observable
 final class MatchingMainViewModel {
@@ -62,7 +63,12 @@ final class MatchingMainViewModel {
     case didAcceptMatch // 매칭 수락하기
     case checkContacts // 연락처 확인하기
   }
-  
+  var userRole: String {
+    PCUserDefaultsService.shared.getUserRole().rawValue
+  }
+  var isShowMatchingMainBasicCard: Bool = false
+  var isShowMatchingNodataCard: Bool = false
+  var isShowMatchingPendingCard: Bool = false
   var isMatchAcceptAlertPresented: Bool = false
   var isProfileRejectAlertPresented: Bool {
     rejectReasonImage || rejectReasonValues
@@ -70,7 +76,7 @@ final class MatchingMainViewModel {
   var profileRejectAlertMessage: String {
     var messages: [String] = []
     if rejectReasonImage { messages.append("얼굴이 잘 나온 사진으로 변경해주세요") }
-    if rejectReasonValues { messages.append("가치관 talk을 좀 더 정성스럽게 써주세요")}
+    if rejectReasonValues { messages.append("가치관 talk을 좀 더 정성스럽게 써주세요") }
     return messages.joined(separator: "\n")
   }
   
@@ -120,7 +126,9 @@ final class MatchingMainViewModel {
     self.patchMatchesCheckPieceUseCase = patchMatchesCheckPieceUseCase
     
     Task {
-      await fetchInfo()
+      await getUserRole()
+    //  await fetchInfo()
+      await getMatchesInfo()
       await fetchUserJectState()
     }
   }
@@ -150,7 +158,7 @@ final class MatchingMainViewModel {
       case .checkMatchingPiece:
         Task { await patchCheckMatchingPiece() }
       case .pending:
-        return
+        destination = .previewProfileBasic
       case .responseComplete:
         return
       }
@@ -171,6 +179,33 @@ final class MatchingMainViewModel {
         print(error.localizedDescription)
       }
   }
+  
+  private func getUserRole() async {
+    do {
+      let userInfo = try await getUserInfoUseCase.execute()
+      let userRole = userInfo.role
+      if userRole == .PENDING {
+        isShowMatchingPendingCard = true
+      } else if userRole == .USER {
+        isShowMatchingNodataCard = true
+      } else {
+        isShowMatchingMainBasicCard = true
+      }
+      PCUserDefaultsService.shared.setUserRole(userRole)
+    } catch {
+      print(error.localizedDescription)
+    }
+  }
+  
+  private func getMatchesInfo() async {
+    do {
+      let matchesInfo = try await getMatchesInfoUseCase.execute()
+      dump(matchesInfo)
+    } catch {
+      print(error.localizedDescription)
+    }
+  }
+  
   
   private func fetchUserJectState() async {
     do {
