@@ -18,6 +18,11 @@ struct HomeView: View {
   
   init(
     getProfileUseCase: GetProfileBasicUseCase,
+    getUserInfoUseCase: GetUserInfoUseCase,
+    acceptMatchUseCase: AcceptMatchUseCase,
+    getMatchesInfoUseCase: GetMatchesInfoUseCase,
+    getUserRejectUseCase: GetUserRejectUseCase,
+    patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
     contactsPermissionUseCase: ContactsPermissionUseCase,
@@ -29,6 +34,11 @@ struct HomeView: View {
     _viewModel = .init(
       wrappedValue: .init(
         getProfileUseCase: getProfileUseCase,
+        getUserInfoUseCase: getUserInfoUseCase,
+        acceptMatchUseCase: acceptMatchUseCase,
+        getMatchesInfoUseCase: getMatchesInfoUseCase,
+        getUserRejectUseCase: getUserRejectUseCase,
+        patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
         contactsPermissionUseCase: contactsPermissionUseCase,
@@ -57,9 +67,13 @@ struct HomeView: View {
         getProfileUseCase: viewModel.getProfileUseCase
       )
     case .home:
-      // TODO: - MatchingMainView
-      Rectangle()
-        .fill(Color.red)
+      MatchMainViewFactory.createMatchMainView(
+        getUserInfoUseCase: viewModel.getUserInfoUseCase,
+        acceptMatchUseCase: viewModel.acceptMatchUseCase,
+        getMatchesInfoUseCase: viewModel.getMatchesInfoUseCase,
+        getUserRejectUseCase: viewModel.getUserRejectUseCase,
+        patchMatchesCheckPieceUseCase: viewModel.patchMatchesCheckPieceUseCase
+      )
     case .settings:
       SettingsViewFactory.createSettingsView(
         fetchTermsUseCase: viewModel.fetchTermsUseCase,

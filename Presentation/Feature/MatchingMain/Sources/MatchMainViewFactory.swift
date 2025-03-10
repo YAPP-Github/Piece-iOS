@@ -11,16 +11,16 @@ import UseCases
 public struct MatchMainViewFactory {
   @ViewBuilder
   public static func createMatchMainView(
+    getUserInfoUseCase: GetUserInfoUseCase,
     acceptMatchUseCase: AcceptMatchUseCase,
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
-    getMatchContactsUseCase: GetMatchContactsUseCase,
     getUserRejectUseCase: GetUserRejectUseCase,
     patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   ) -> some View {
     MatchingMainView(
+      getUserInfoUseCase: getUserInfoUseCase,
       acceptMatchUseCase: acceptMatchUseCase,
       getMatchesInfoUseCase: getMatchesInfoUseCase,
-      getMatchContactsUseCase: getMatchContactsUseCase,
       getUserRejectUseCase: getUserRejectUseCase,
       patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase
     )

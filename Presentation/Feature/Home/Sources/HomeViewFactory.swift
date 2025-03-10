@@ -11,7 +11,15 @@ import UseCases
 public struct HomeViewFactory {
   @ViewBuilder
   public static func createHomeView(
+    // profile
     getProfileUseCase: GetProfileBasicUseCase,
+    // matchMain
+    getUserInfoUseCase: GetUserInfoUseCase,
+    acceptMatchUseCase: AcceptMatchUseCase,
+    getMatchesInfoUseCase: GetMatchesInfoUseCase,
+    getUserRejectUseCase: GetUserRejectUseCase,
+    patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase,
+    // settings
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
     contactsPermissionUseCase: ContactsPermissionUseCase,
@@ -21,7 +29,15 @@ public struct HomeViewFactory {
     patchLogoutUseCase: PatchLogoutUseCase
   ) -> some View {
     HomeView(
+      // profile
       getProfileUseCase: getProfileUseCase,
+      // matchMain
+      getUserInfoUseCase: getUserInfoUseCase,
+      acceptMatchUseCase: acceptMatchUseCase,
+      getMatchesInfoUseCase: getMatchesInfoUseCase,
+      getUserRejectUseCase: getUserRejectUseCase,
+      patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
+      // settings
       fetchTermsUseCase: fetchTermsUseCase,
       notificationPermissionUseCase: notificationPermissionUseCase,
       contactsPermissionUseCase: contactsPermissionUseCase,

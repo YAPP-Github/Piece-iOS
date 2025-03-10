@@ -12,23 +12,27 @@ public enum Route: Hashable {
   case splash
   case home
   case onboarding
-  case AvoidContactsGuide
   case login
+  
+  // MARK: - 회원가입
+  case verifyContact
+  case AvoidContactsGuide
   case termsAgreement
   case termsWebView(title: String, url: String)
   case checkPremission
   case completeSignUp
+  
+  // MARK: - 매칭
   case matchMain
   case matchProfileBasic
   case matchValueTalk
   case matchValuePick
-  case verifyContact
   case editValueTalk
   case editValuePick
-  case settingsWebView(title: String, uri: String)
-  case reportUser(nickname: String)
-  case blockUser(matchId: Int, nickname: String)
   case matchResult(nickname: String)
+  
+  // MARK: - 설정
+  case settingsWebView(title: String, uri: String)
   
   // MARK: - 프로필 생성
   case createProfile
@@ -43,4 +47,8 @@ public enum Route: Hashable {
   // MARK: - 탈퇴하기
   case withdraw
   case withdrawConfirm(reason: String)
+  
+  // MARK: - 기타
+  case reportUser(nickname: String)
+  case blockUser(matchId: Int, nickname: String)
 }

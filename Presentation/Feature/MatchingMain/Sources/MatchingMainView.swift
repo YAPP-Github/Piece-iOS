@@ -17,17 +17,17 @@ struct MatchingMainView: View {
   @Environment(Router.self) private var router: Router
   
   init(
+    getUserInfoUseCase: GetUserInfoUseCase,
     acceptMatchUseCase: AcceptMatchUseCase,
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
-    getMatchContactsUseCase: GetMatchContactsUseCase,
     getUserRejectUseCase: GetUserRejectUseCase,
     patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase
   ) {
     _matchingMainViewModel = .init(
       wrappedValue: .init(
+        getUserInfoUseCase: getUserInfoUseCase,
         acceptMatchUseCase: acceptMatchUseCase,
         getMatchesInfoUseCase: getMatchesInfoUseCase,
-        getMatchContactsUseCase: getMatchContactsUseCase,
         getUserRejectUseCase: getUserRejectUseCase,
         patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase
       )
@@ -39,14 +39,29 @@ struct MatchingMainView: View {
     ZStack {
       Color.grayscaleBlack.edgesIgnoringSafeArea(.all)
       VStack {
-        MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
-        VStack(alignment: .leading) {
-          waitingJudgmentCard
-          waitingMatchingCard
-          profileInfoCard
+        HomeNavigationBar(
+          title: "Matching",
+          foregroundColor: .grayscaleWhite,
+          rightIcon: DesignSystemAsset.Icons.alarm32.swiftUIImage,
+          rightIconTap: {
+            // TODO: - 알림버튼 선택시 이동
+          }
+        )
+        VStack(alignment: .center, spacing: 8) {
+          if matchingMainViewModel.isShowMatchingPendingCard {
+            matchingPendingCard
+          } else if matchingMainViewModel.isShowMatchingNodataCard{
+            MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
+            matchingNoDataCard
+          } else if matchingMainViewModel.isShowMatchingMainBasicCard {
+            MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
+            matchingBasicCard
+          }
         }
+        .padding(.horizontal, 20)
+        
+        Spacer()
       }
-      .padding(.horizontal, 20)
     }
     .pcAlert(isPresented: $matchingMainViewModel.isMatchAcceptAlertPresented) {
       AlertView(
@@ -73,11 +88,15 @@ struct MatchingMainView: View {
         secondButtonAction: { router.setRoute(.createProfile)}
       )
     }
+    .onChange(of: matchingMainViewModel.destination) { _, destination in
+      guard let destination else { return }
+      router.push(to: destination)
+    }
   }
   
-  private var waitingMatchingCard: some View {
+  private var matchingNoDataCard: some View {
     VStack {
-      VStack(alignment: .center) {
+      VStack(alignment: .center, spacing: 8) {
         Text("진중한 만남을 위한\n")
           .foregroundStyle(Color.grayscaleBlack) +
         Text("매칭 조각")
@@ -88,14 +107,17 @@ struct MatchingMainView: View {
           .pretendard(.heading_S_M)
           .foregroundStyle(Color.grayscaleDark3)
       }
+      .padding(.top, 40)
+      .padding(.bottom, 20)
       .pretendard(.heading_M_SB)
       .multilineTextAlignment(.center)
       
       DesignSystemAsset.Images.imgMatching240.swiftUIImage
+        .padding(.vertical, 14)
       
       matchingButton
+      .padding(.vertical, 20)
     }
-    .padding(.vertical, 20)
     .padding(.horizontal, 20)
     .background(
       Rectangle()
@@ -104,34 +126,51 @@ struct MatchingMainView: View {
     )
   }
   
-  private var waitingJudgmentCard: some View {
+  private var matchingPendingCard: some View {
     VStack {
-      VStack(alignment: .center) {
-        Text("진중한 만남")
-          .foregroundStyle(Color.primary) +
-        Text("을 이어가기 위해\n프로필을 살펴보고 있어요")
-          .foregroundStyle(Color.grayscaleBlack)
-        Text("작성 후 24시간 이내에 심사가 진행됩니다.\n생성한 프로필을 검토하며 기다려 주세요.")
-          .pretendard(.heading_S_M)
-          .foregroundStyle(Color.grayscaleDark3)
+      Text("심사가 완료되면 소중한 인연이 공개됩니다.")
+        .pretendard(.body_S_M)
+        .foregroundStyle(Color.grayscaleLight1)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 33)
+        .frame(maxWidth: .infinity)
+        .background(
+          Rectangle()
+            .foregroundStyle(Color.grayscaleWhite.opacity(0.1))
+        )
+        .cornerRadius(8)
+      
+      VStack {
+        VStack(alignment: .center, spacing: 8) {
+          Text("진중한 만남")
+            .foregroundStyle(Color.primary) +
+          Text("을 이어가기 위해\n프로필을 살펴보고 있어요")
+            .foregroundStyle(Color.grayscaleBlack)
+          Text("작성 후 24시간 이내에 심사가 진행됩니다.\n생성한 프로필을 검토하며 기다려 주세요.")
+            .pretendard(.heading_S_M)
+            .foregroundStyle(Color.grayscaleDark3)
+        }
+        .padding(.top, 40)
+        .padding(.bottom, 20)
+        .pretendard(.heading_M_SB)
+        .multilineTextAlignment(.center)
+        
+        DesignSystemAsset.Images.imgScreening.swiftUIImage
+          .padding(.vertical, 14)
+        
+        matchingButton
+          .padding(.vertical, 20)
       }
-      .pretendard(.heading_M_SB)
-      .multilineTextAlignment(.center)
-      
-      DesignSystemAsset.Images.imgScreening.swiftUIImage
-      
-      matchingButton
+      .padding(.horizontal, 20)
+      .background(
+        Rectangle()
+          .fill(Color.grayscaleWhite)
+          .cornerRadius(16)
+      )
     }
-    .padding(.vertical, 20)
-    .padding(.horizontal, 20)
-    .background(
-      Rectangle()
-        .fill(Color.grayscaleWhite)
-        .cornerRadius(16)
-    )
   }
   
-  private var profileInfoCard: some View {
+  private var matchingBasicCard: some View {
     VStack(alignment: .leading) {
       MatchingAnswer(type: matchingMainViewModel.matchingStatus)
       
@@ -167,6 +206,7 @@ struct MatchingMainView: View {
       Rectangle()
         .fill(Color.grayscaleWhite)
         .cornerRadius(16)
+        .frame(maxHeight: 516)
     )
   }
   
