@@ -151,13 +151,9 @@ final class MatchingMainViewModel {
       switch matchingButtonState {
       case .acceptMatching:
         isMatchAcceptAlertPresented = true
-      case .checkContact:
-        destination = .matchResult(nickname: "")
       case .checkMatchingPiece:
         Task { await patchCheckMatchingPiece() }
-      case .pending:
-        destination = .previewProfileBasic
-      case .responseComplete:
+      case .pending, .checkContact, .responseComplete:
         return
       }
     }
