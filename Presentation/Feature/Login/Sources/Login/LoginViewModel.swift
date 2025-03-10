@@ -29,7 +29,8 @@ final class LoginViewModel: NSObject {
   }
   
   private let socialLoginUseCase: SocialLoginUseCase
-  private(set) var isLoginSuccessful: Bool = false
+  private(set) var isSuccessfulSignUp: Bool = false
+  private(set) var isSuccessfulLogin: Bool = false
   func handleAction(_ action: Action) {
     switch action {
     case .tapAppleLoginButton:
@@ -95,7 +96,11 @@ final class LoginViewModel: NSObject {
         PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
         PCUserDefaultsService.shared.setSocialLoginType("kakao")
         await MainActor.run {
-          isLoginSuccessful = true
+          if socialLoginResponse.role == .PENDING || socialLoginResponse.role == .USER {
+            isSuccessfulLogin = true
+          } else {
+            isSuccessfulSignUp = true
+          }
         }
       } catch {
         print("Social login failed: \(error.localizedDescription)")
@@ -173,7 +178,11 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
         PCUserDefaultsService.shared.setSocialLoginType("apple")
         await MainActor.run {
-          isLoginSuccessful = true
+          if socialLoginResponse.role == .PENDING || socialLoginResponse.role == .USER {
+            isSuccessfulLogin = true
+          } else {
+            isSuccessfulSignUp = true
+          }
         }
       } catch {
         print("Apple Login Error: \(error.localizedDescription)")
