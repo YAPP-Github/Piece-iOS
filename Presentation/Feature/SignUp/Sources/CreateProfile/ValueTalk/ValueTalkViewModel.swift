@@ -13,7 +13,7 @@ import UseCases
 @Observable
 final class ValueTalkViewModel {
   enum Action {
-    case didTapNextButton
+    case didTapBottomButton
     case updateAnswer(index: Int, answer: String)
   }
   
@@ -43,7 +43,7 @@ final class ValueTalkViewModel {
     case let .updateAnswer(index, answer):
       valueTalks[index].answer = answer
       
-    case .didTapNextButton:
+    case .didTapBottomButton:
       for cardViewModel in cardViewModels {
         valueTalks[cardViewModel.index].answer = cardViewModel.localAnswer
       }

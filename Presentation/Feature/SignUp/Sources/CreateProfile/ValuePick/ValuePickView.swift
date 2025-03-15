@@ -12,13 +12,13 @@ import UseCases
 
 struct ValuePickView: View {
   @Bindable var viewModel: ValuePickViewModel
-  var didTapCreateProfileButton: () -> Void
+  var didTapBottomButton: () -> Void
   
   init(
     profileCreator: ProfileCreator,
     initialValuePicks: [ProfileValuePickModel],
     onUpdateValuePick: @escaping (ProfileValuePickModel) -> Void,
-    didTapCreateProfileButton: @escaping () -> Void
+    didTapBottomButton: @escaping () -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
@@ -27,7 +27,7 @@ struct ValuePickView: View {
         onUpdateValuePick: onUpdateValuePick
       )
     )
-    self.didTapCreateProfileButton = didTapCreateProfileButton
+    self.didTapBottomButton = didTapBottomButton
   }
   
   var body: some View {
@@ -106,8 +106,8 @@ struct ValuePickView: View {
       buttonText: "프로필 생성하기",
       width: .maxWidth
     ) {
-      viewModel.handleAction(.didTapCreateProfileButton)
-      didTapCreateProfileButton()
+      viewModel.handleAction(.didTapBottomButton)
+      didTapBottomButton()
     }
     .padding(.horizontal, 20)
     .padding(.top, 12)

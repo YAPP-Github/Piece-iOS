@@ -74,6 +74,10 @@ struct CreateProfileContainerView: View {
       .animation(.easeInOut, value: viewModel.currentStep)
     }
     .toolbar(.hidden)
+    .onChange(of: viewModel.destination) { _, destination in
+      guard let destination else { return }
+      router.setRoute(destination)
+    }
   }
   
   private var pageIndicator: some View {
@@ -92,7 +96,7 @@ struct CreateProfileContainerView: View {
       profileCreator: viewModel.profileCreator,
       checkNicknameUseCase: viewModel.checkNicknameUseCase,
       uploadProfileImageUseCase: viewModel.uploadProfileImageUseCase,
-      didTapNextButton: { viewModel.handleAction(.didTapNextButton) }
+      didTapBottomButton: { viewModel.handleAction(.didTapBottomButton) }
     )
     .id(createBasicInfo)
   }
@@ -101,7 +105,7 @@ struct CreateProfileContainerView: View {
     ValueTalkView(
       profileCreator: viewModel.profileCreator,
       initialValueTalks: viewModel.valueTalks,
-      didTapNextButton: { viewModel.handleAction(.didTapNextButton) }
+      didTapBottomButton: { viewModel.handleAction(.didTapBottomButton) }
     )
     .id(valueTalk)
   }
@@ -113,11 +117,8 @@ struct CreateProfileContainerView: View {
       onUpdateValuePick: { updatedPick in
         viewModel.handleAction(.updateValuePick(updatedPick))
       },
-      didTapCreateProfileButton: {
-        viewModel.handleAction(.didTapCreateProfileButton)
-        if let profile = viewModel.profile {
-          router.setRoute(.waitingAISummary(profile: profile))
-        }
+      didTapBottomButton: {
+        viewModel.handleAction(.didTapBottomButton)
       }
     )
     .id(valuePick)

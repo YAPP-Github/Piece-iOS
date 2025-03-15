@@ -12,7 +12,7 @@ import UseCases
 @Observable
 final class ValuePickViewModel {
   enum Action {
-    case didTapCreateProfileButton
+    case didTapBottomButton
     case updateValuePick(ProfileValuePickModel)
   }
   
@@ -54,7 +54,7 @@ final class ValuePickViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
-    case .didTapCreateProfileButton:
+    case .didTapBottomButton:
       print("=====================")
       print("📌 버튼 클릭 시 valuePicks 상태:")
         for (i, pick) in valuePicks.enumerated() {

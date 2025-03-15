@@ -19,12 +19,12 @@ struct ValueTalkView: View {
   @Bindable var viewModel: ValueTalkViewModel
   @Environment(Router.self) private var router: Router
   @FocusState private var focusField: Field?
-  var didTapNextButton: () -> Void
+  var didTapBottomButton: () -> Void
 
   init(
     profileCreator: ProfileCreator,
     initialValueTalks: [ValueTalkModel],
-    didTapNextButton: @escaping () -> Void
+    didTapBottomButton: @escaping () -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
@@ -32,7 +32,7 @@ struct ValueTalkView: View {
         initialValueTalks: initialValueTalks
       )
     )
-    self.didTapNextButton = didTapNextButton
+    self.didTapBottomButton = didTapBottomButton
   }
 
   var body: some View {
@@ -107,8 +107,8 @@ struct ValueTalkView: View {
       buttonText: "다음",
       width: .maxWidth
     ) {
-      viewModel.handleAction(.didTapNextButton)
-      didTapNextButton()
+      viewModel.handleAction(.didTapBottomButton)
+      didTapBottomButton()
     }
     .padding(.horizontal, 20)
     .padding(.top, 12)
