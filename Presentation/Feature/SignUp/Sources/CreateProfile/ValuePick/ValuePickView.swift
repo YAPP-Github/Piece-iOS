@@ -103,7 +103,7 @@ struct ValuePickView: View {
   private var buttonArea: some View {
     RoundedButton(
       type: .solid,
-      buttonText: "프로필 생성하기",
+      buttonText: "다음",
       width: .maxWidth
     ) {
       viewModel.handleAction(.didTapBottomButton)

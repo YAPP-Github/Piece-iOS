@@ -47,6 +47,19 @@ struct ValueTalkView: View {
           ScrollView {
             content
           }
+          .overlay(alignment: .bottom) {
+            if viewModel.showToast {
+              PCToast(icon: DesignSystemAsset.Icons.notice20.swiftUIImage, text: "모든 항목을 작성해 주세요")
+                .padding(.bottom, 8)
+                .onAppear {
+                  withAnimation(.easeInOut(duration: 0.5)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak viewModel] in
+                      viewModel?.showToast = false
+                    }
+                  }
+                }
+            }
+          }
           
           buttonArea
         }
@@ -104,7 +117,7 @@ struct ValueTalkView: View {
   private var buttonArea: some View {
     RoundedButton(
       type: .solid,
-      buttonText: "다음",
+      buttonText: "프로필 생성하기",
       width: .maxWidth
     ) {
       viewModel.handleAction(.didTapBottomButton)

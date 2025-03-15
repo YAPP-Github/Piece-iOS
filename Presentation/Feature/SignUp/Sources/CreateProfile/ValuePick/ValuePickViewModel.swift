@@ -37,19 +37,6 @@ final class ValuePickViewModel {
     for (i, pick) in valuePicks.enumerated() {
       print("📌 valuePicks[\(i)]: ID=\(pick.id), selectedAnswer=\(String(describing: pick.selectedAnswer))")
     }
-    
-//    if profileCreator.valuePicks.isEmpty {
-//      self.valuePicks = initialValuePicks
-//      print("📌 initialValuePicks로 초기화")
-//    } else {
-//      self.valuePicks = profileCreator.valuePicks
-//      print("📌 profileCreator.valuePicks로 초기화")
-//    }
-//    
-//    print("📌 초기화된 valuePicks:")
-//    for (i, pick) in valuePicks.enumerated() {
-//      print("📌 valuePicks[\(i)]: ID=\(pick.id), selectedAnswer=\(String(describing: pick.selectedAnswer))")
-//    }
   }
   
   func handleAction(_ action: Action) {
@@ -64,8 +51,10 @@ final class ValuePickViewModel {
       print("📌 isValid: \(isValid)")
       if isValid {
         profileCreator.updateValuePicks(valuePicks)
+        profileCreator.isValuePicksValid(true)
       } else {
         showToast = true
+        profileCreator.isValuePicksValid(false)
       }
       
     case let .updateValuePick(model):

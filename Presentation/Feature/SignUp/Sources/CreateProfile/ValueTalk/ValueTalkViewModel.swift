@@ -20,6 +20,7 @@ final class ValueTalkViewModel {
   let profileCreator: ProfileCreator
   var valueTalks: [ValueTalkModel] = []
   var cardViewModels: [ValueTalkCardViewModel] = []
+  var showToast: Bool = false
   
   init(
     profileCreator: ProfileCreator,
@@ -47,7 +48,15 @@ final class ValueTalkViewModel {
       for cardViewModel in cardViewModels {
         valueTalks[cardViewModel.index].answer = cardViewModel.localAnswer
       }
-      profileCreator.updateValueTalks(valueTalks)
+      
+      let isValid = valueTalks.allSatisfy( { $0.answer?.isEmpty == false })
+      if isValid {
+        profileCreator.updateValueTalks(valueTalks)
+        profileCreator.isValueTalksValid(isValid)
+      } else {
+        showToast = true
+        profileCreator.isValueTalksValid(isValid)
+      }
     }
   }
 }
