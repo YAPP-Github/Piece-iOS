@@ -34,6 +34,8 @@ final class VerifingContactViewModel {
   private(set) var tapNextButtonFlag: Bool = false
   private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
   private(set) var recivedCertificationNumberButtonWidth = Constants.buttonDefaultWidth
+  var verificationFieldInfoText: String = "어떤 경우에도 타인에게 공유하지 마세요"
+  var verrificationFieldInfoTextColor: Color = DesignSystemAsset.Colors.grayscaleDark3.swiftUIColor
   private var timer: Timer?
   private var timeRemaining = Constants.initialTime
   var phoneNumber: String = ""
@@ -81,6 +83,8 @@ final class VerifingContactViewModel {
   }
   
   private func handleReceiveCertificationNumber() async {
+    verificationFieldInfoText = "어떤 경우에도 타인에게 공유하지 마세요"
+    verrificationFieldInfoTextColor = .grayscaleDark3
     do {
       _ = try await sendSMSCodeUseCase.execute(phoneNumber: phoneNumber)
     } catch {
@@ -102,8 +106,12 @@ final class VerifingContactViewModel {
       PCKeychainManager.shared.save(.refreshToken, value: response.refreshToken)
       await MainActor.run {
         isActiveNextButton = true
+        verificationFieldInfoText = "전화번호 인증을 완료했어요"
+        verrificationFieldInfoTextColor = .primaryDefault
       }
     } catch {
+      verificationFieldInfoText = "올바른 인증번호가 아니에요"
+      verrificationFieldInfoTextColor = .systemError
       print(error.localizedDescription)
     }
   }
@@ -119,6 +127,8 @@ final class VerifingContactViewModel {
         self.timeRemaining -= 1
       } else {
         self.stopTimer()
+        verificationFieldInfoText = "유효시간이 지났어요! ‘인증번호 재전송’을 눌러주세요"
+        verrificationFieldInfoTextColor = .systemError
       }
     }
   }
