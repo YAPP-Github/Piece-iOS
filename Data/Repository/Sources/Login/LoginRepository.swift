@@ -5,10 +5,10 @@
 //  Created by eunseou on 2/8/25.
 //
 
-import SwiftUI
 import DTO
-import PCNetwork
 import Entities
+import LocalStorage
+import PCNetwork
 import RepositoryInterfaces
 
 public final class LoginRepository: LoginRepositoryInterface {
@@ -26,7 +26,10 @@ public final class LoginRepository: LoginRepositoryInterface {
     let body = SocialLoginRequsetDTO(providerName: providerName, token: token)
     let endpoint = LoginEndpoint.loginWithOAuth(body: body)
     
-    let responseDTO: SocialLoginResponseDTO = try await networkService.request(endpoint: endpoint)
+    let responseDTO: SocialLoginResponseDTO = try await networkService.requestWithoutAuth(endpoint: endpoint)
+    PCKeychainManager.shared.save(.accessToken, value: responseDTO.accessToken)
+    PCKeychainManager.shared.save(.refreshToken, value: responseDTO.refreshToken)
+    networkService.updateCredentials()
     return responseDTO.toDomain()
   }
   

@@ -92,8 +92,6 @@ final class LoginViewModel: NSObject {
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
         print("Social login success: \(socialLoginResponse)")
-        PCKeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
-        PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
         PCUserDefaultsService.shared.setSocialLoginType("kakao")
         await MainActor.run {
           if socialLoginResponse.role == .PENDING || socialLoginResponse.role == .USER {
@@ -174,8 +172,6 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
-        PCKeychainManager.shared.save(.accessToken, value: socialLoginResponse.accessToken)
-        PCKeychainManager.shared.save(.refreshToken, value: socialLoginResponse.refreshToken)
         PCUserDefaultsService.shared.setSocialLoginType("apple")
         await MainActor.run {
           if socialLoginResponse.role == .PENDING || socialLoginResponse.role == .USER {
