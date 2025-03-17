@@ -34,7 +34,7 @@ public enum LoginEndpoint: TargetType {
       ]
     case .tokenRefresh(body: let body):
       [
-        NetworkHeader.contentType: NetworkHeader.applicationJson
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
       ]
     case .tokenHealthCheck: [:]
     case .registerFcmToken:

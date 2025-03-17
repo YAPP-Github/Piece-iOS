@@ -10,5 +10,7 @@ import ProjectDescriptionHelpers
 
 let project = Project.dynamicFramework(
   name: Modules.Data.LocalStorage.rawValue,
-  dependencies: [.domain(target: .Entities)]
+  dependencies: [
+    .domain(target: .Entities),
+  ]
 )
