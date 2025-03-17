@@ -15,6 +15,7 @@ import UseCases
 import UIKit
 import Entities
 
+@MainActor
 @Observable
 final class SplashViewModel {
   enum Action {
