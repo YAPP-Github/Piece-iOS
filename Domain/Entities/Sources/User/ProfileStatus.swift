@@ -10,8 +10,4 @@ public enum ProfileStatus: String {
   case REJECTED
   case REVISED
   case APPROVED
-  
-  public init(_ status: String) {
-    self = ProfileStatus(rawValue: status) ?? .INCOMPLETE
-  }
 }

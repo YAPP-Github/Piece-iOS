@@ -9,11 +9,13 @@ import LocalStorage
 import Observation
 import PCFirebase
 import PCFoundationExtension
+import PCNetwork
 import Router
 import UseCases
 import UIKit
 import Entities
 
+@MainActor
 @Observable
 final class SplashViewModel {
   enum Action {
@@ -63,13 +65,37 @@ final class SplashViewModel {
         
         guard checkOnboarding() else { return }
         
-        guard let accessToken = checkAccesstoken() else {
-          return
-        }
-        
+        checkAccesstoken()
         try await setRoute()
+      } catch let error as NetworkError {
+        switch error {
+        case .badRequest(let error):
+          print("bad request error: \(error?.message ?? "")")
+        case .unauthorized(let error):
+          if error?.code == "INVALID_REFRESH_TOKEN" {
+            destination = .login
+          }
+        case .forbidden:
+          print("forbidden")
+        case .notFound:
+          print("not fount")
+        case .internalServerError:
+          print("internal server error")
+        case .statusCode(let int):
+          print("status code: \(int)")
+        case .missingStatusCode:
+          print("missing status code")
+        case .emptyResponse:
+          print("empty response")
+        case .encodingFailed:
+          print("encoding failed")
+        case .decodingFailed:
+          print("decoding failed")
+        case .noRefreshToken:
+          destination = .login
+        }
       } catch {
-        print(error.localizedDescription)
+        handleError(error)
       }
     }
   }
@@ -97,18 +123,16 @@ final class SplashViewModel {
     return true
   }
   
-  private func checkAccesstoken() -> String? {
+  private func checkAccesstoken() {
     // 로그인 여부 확인 ( AccessToken 유무 확인 )
     guard let accessToken = PCKeychainManager.shared.read(.accessToken) else {
       print("AccessToken이 없어서 로그인 화면으로 이동")
       destination = .login
-      return nil
+      return
     }
-    print("SpalshView AccessToken: \(accessToken)")
-    
-    return accessToken
+    print("SplashView AccessToken: \(accessToken)")
   }
-
+  
   private func openAppStore() {
     let appId = "6740155700"
     let appStoreUrl = "itms-apps://itunes.apple.com/app/apple-store/\(appId)"
@@ -137,6 +161,56 @@ final class SplashViewModel {
     case .USER:
       print("---USER---")
       destination = .home
+    }
+  }
+  
+  private func handleError(_ error: Error) {
+    if let networkError = error as? NetworkError {
+      handleNetworkError(networkError)
+    } else {
+      // 일반 에러 처리
+      print("Unexpected error: \(error.localizedDescription)")
+    }
+  }
+  
+  private func handleNetworkError(_ error: NetworkError) {
+    switch error {
+    case .badRequest(let apiError):
+      print("Bad request: \(apiError?.message ?? "Unknown error")")
+      
+    case .unauthorized(let apiError):
+      if apiError?.code == "INVALID_REFRESH_TOKEN" {
+        destination = .login
+      } else {
+        print("Unauthorized: \(apiError?.message ?? "Unknown error")")
+      }
+      
+    case .forbidden:
+      print("Forbidden: Access denied")
+      
+    case .notFound:
+      print("Resource not found")
+      
+    case .internalServerError:
+      print("Server error occurred")
+      
+    case .statusCode(let code):
+      print("Unexpected status code: \(code)")
+      
+    case .missingStatusCode:
+      print("Missing status code in response")
+      
+    case .emptyResponse:
+      print("Empty response received")
+      
+    case .encodingFailed:
+      print("Failed to encode request data")
+      
+    case .decodingFailed:
+      print("Failed to decode response data")
+      
+    case .noRefreshToken:
+      destination = .login
     }
   }
 }

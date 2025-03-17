@@ -32,10 +32,19 @@ public enum UserEndpoint: TargetType {
   
   public var headers: [String : String] {
     switch self {
-    case .withdrawWithPiece: [NetworkHeader.contentType : NetworkHeader.applicationJson,
-                     NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
-    case .getUserRole: [ NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
-    case .userReject: [NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+    case .withdrawWithPiece: 
+	  [
+		NetworkHeader.contentType : NetworkHeader.applicationJson,
+       	NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+	  ]
+    case .getUserRole:
+	  [
+		NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+	  ]
+    case .userReject:
+	  [
+		NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+	  ]
     }
   }
   

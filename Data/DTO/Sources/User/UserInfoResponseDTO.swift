@@ -11,7 +11,7 @@ import Foundation
 public struct UserInfoResponseDTO: Decodable {
   public let userId: Int
   public let role: String
-  public let profileStatus: String
+  public let profileStatus: String?
 }
 
 public extension UserInfoResponseDTO {
@@ -19,7 +19,7 @@ public extension UserInfoResponseDTO {
     UserInfoModel(
       id: userId,
       role: UserRole(role),
-      profileStatus: ProfileStatus(profileStatus)
+      profileStatus: ProfileStatus(rawValue: profileStatus ?? "")
     )
   }
 }
