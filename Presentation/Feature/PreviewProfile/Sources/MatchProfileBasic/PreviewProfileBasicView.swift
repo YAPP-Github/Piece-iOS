@@ -230,11 +230,11 @@ struct PreviewProfileBasicView: View {
       icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
       action: {
         router.push(
-          to: .previewProfileValueTalks(
-            nickname: viewModel.matchingBasicInfoModel?.nickname ?? "",
-            description: viewModel.matchingBasicInfoModel?.shortIntroduction ?? "",
-            imageUri: viewModel.photoUri
-          )
+          to: .previewProfileValuePicks(
+              nickname: viewModel.matchingBasicInfoModel?.nickname ?? "",
+              description: viewModel.matchingBasicInfoModel?.shortIntroduction ?? "",
+              imageUri: viewModel.photoUri
+            )
         )
       }
     )

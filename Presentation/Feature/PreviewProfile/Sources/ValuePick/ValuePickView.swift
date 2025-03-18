@@ -131,9 +131,17 @@ struct ValuePickView: View {
   
   private var nextButton: some View {
     CircleButton(
-      type: .disabled,
-      icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage,
-      action: { }
+      type: .solid_primary,
+      icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
+      action: {
+        router.push(
+          to: .previewProfileValueTalks(
+            nickname: viewModel.nickname,
+            description: viewModel.description,
+            imageUri: viewModel.photoUri
+          )
+        )
+      }
     )
   }
 }
