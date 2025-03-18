@@ -52,8 +52,10 @@ struct ValueTalkView: View {
       NavigationBar(
         title: viewModel.navigationTitle,
         titleColor: .grayscaleBlack,
-        rightButtonTap: {
+        rightButton: Button {
           router.popToRoot()
+        } label: {
+          DesignSystemAsset.Icons.close32.swiftUIImage
         },
         backgroundColor: .grayscaleWhite
       )

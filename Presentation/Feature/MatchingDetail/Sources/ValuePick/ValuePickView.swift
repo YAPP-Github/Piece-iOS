@@ -42,9 +42,10 @@ struct ValuePickView: View {
     VStack(spacing: 0) {
       NavigationBar(
         title: viewModel.navigationTitle,
-        titleColor: .grayscaleBlack,
-        rightButtonTap: {
+        rightButton: Button {
           router.popToRoot()
+        } label: {
+          DesignSystemAsset.Icons.close32.swiftUIImage
         },
         backgroundColor: .grayscaleWhite
       )

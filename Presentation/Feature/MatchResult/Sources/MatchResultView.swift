@@ -31,8 +31,10 @@ struct MatchResultView: View {
     VStack(alignment: .center, spacing: 0) {
       NavigationBar(
         title: "",
-        rightButtonTap: {
+        rightButton: Button {
           router.pop()
+        } label: {
+          DesignSystemAsset.Icons.close32.swiftUIImage
         }
       )
       

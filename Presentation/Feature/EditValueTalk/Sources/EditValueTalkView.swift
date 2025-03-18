@@ -48,10 +48,11 @@ struct EditValueTalkView: View {
         NavigationBar(
           title: "가치관 Talk",
           leftButtonTap: { router.pop() },
-          rightButtonTap: { viewModel.handleAction(.didTapSaveButton) },
-          label: viewModel.isEditing ? "저장": "수정",
-          labelColor: viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault,
-          backgroundColor: .clear
+          rightButton: Button { viewModel.handleAction(.didTapSaveButton) } label: {
+            Text(viewModel.isEditing ? "저장": "수정")
+              .pretendard(.body_M_M)
+              .foregroundStyle(viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault)
+          }
         )
         
         ScrollView {

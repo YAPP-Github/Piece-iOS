@@ -19,17 +19,18 @@ struct SettingsWebView: View {
   }
   
   var body: some View {
-    PCWebView(uri: viewModel.uri)
-      .padding(.bottom, 74)
-      .navigationBarModifier {
-        NavigationBar(
-          title: viewModel.title,
-          leftButtonTap: { viewModel.handleAction(.tapBackButton) }
-        )
-      }
-      .onAppear {
-        viewModel.setDismissAction { dismiss() }
-      }
+    VStack {
+      NavigationBar(
+        title: viewModel.title,
+        leftButtonTap: { viewModel.handleAction(.tapBackButton) }
+      )
+      
+      PCWebView(uri: viewModel.uri)
+        .padding(.bottom, 74)
+    }
+    .onAppear {
+      viewModel.setDismissAction { dismiss() }
+    }
   }
 }
 

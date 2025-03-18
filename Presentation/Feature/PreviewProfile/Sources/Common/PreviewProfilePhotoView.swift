@@ -29,10 +29,9 @@ struct PreviewProfilePhotoView: View {
       NavigationBar(
         title: "",
         titleColor: .grayscaleWhite,
-        rightIcon: DesignSystemAsset.Icons.close32.swiftUIImage
-      ) {
-        dismiss()
-      }
+        rightButton: Button { dismiss()
+        } label: { DesignSystemAsset.Icons.close32.swiftUIImage }
+      )
       
       Spacer()
       
