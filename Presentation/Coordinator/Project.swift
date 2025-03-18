@@ -30,6 +30,6 @@ let project = Project.dynamicFramework(
     .presentation(target: .MatchResult),
     .presentation(target: .PreviewProfile),
     .presentation(target: .NotificationList),
-    .presentation(target: .ProfileEdit)
+    .presentation(target: .EditProfile)
   ]
 )

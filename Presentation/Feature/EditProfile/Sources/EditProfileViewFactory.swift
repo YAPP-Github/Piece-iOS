@@ -9,14 +9,14 @@ import Entities
 import SwiftUI
 import UseCases
 
-public struct ProfileEditViewFactory {
-  public static func createProfileEditView(
+public struct EditProfileViewFactory {
+  public static func createEditProfileView(
     updateProfileBasicUseCase: UpdateProfileBasicUseCase,
     getProfileBasicUseCase: GetProfileBasicUseCase,
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase
   ) -> some View {
-    ProfileEditView(
+    EditProfileView(
       updateProfileBasicUseCase: updateProfileBasicUseCase,
       getProfileBasicUseCase: getProfileBasicUseCase,
       checkNicknameUseCase: checkNicknameUseCase,

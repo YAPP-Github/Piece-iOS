@@ -92,7 +92,7 @@ struct ProfileView: View {
     }
     .contentShape(Rectangle())
     .onTapGesture {
-      router.push(to: .profileEdit)
+      router.push(to: .editProfile)
     }
   }
   

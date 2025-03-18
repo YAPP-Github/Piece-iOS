@@ -12,8 +12,8 @@ import Entities
 import UseCases
 import Router
 
-struct ProfileEditView: View {
-  @State var viewModel: ProfileEditViewModel
+struct EditProfileView: View {
+  @State var viewModel: EditProfileViewModel
   @FocusState private var focusField: String?
   @Environment(Router.self) private var router: Router
   

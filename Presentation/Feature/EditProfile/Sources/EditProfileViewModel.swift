@@ -14,7 +14,7 @@ import Entities
 import PCFoundationExtension
 
 @Observable
-final class ProfileEditViewModel {
+final class EditProfileViewModel {
   enum Action {
     case tapNextButton
     case tapVaildNickName

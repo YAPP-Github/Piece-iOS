@@ -9,7 +9,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.staticLibrary(
-  name: Modules.Presentation.ProfileEdit.rawValue,
+  name: Modules.Presentation.EditProfile.rawValue,
   dependencies: [
     .domain(target: .UseCases),
     .presentation(target: .DesignSystem),
