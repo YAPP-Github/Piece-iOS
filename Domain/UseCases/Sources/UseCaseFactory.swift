@@ -197,4 +197,8 @@ public struct UseCaseFactory {
   public static func createGetNotificationsUseCase(repository: NotificationRepositoryInterface) -> GetNotificationsUseCase {
     GetNotificationsUseCaseImpl(repository: repository)
   }
+  
+  public static func createReadNotificationUseCase(repository: NotificationRepositoryInterface) -> ReadNotificationUseCase {
+    ReadNotificationUseCaseImpl(repository: repository)
+  }
 }
