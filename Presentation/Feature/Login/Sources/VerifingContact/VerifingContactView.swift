@@ -80,7 +80,10 @@ struct VerifingContactView: View {
             focusState: $isVerificationCodeFocused,
             focusField: true
           )
-          .infoText("어떤 경우에도 타인에게 공유하지 마세요")
+          .infoText(
+            viewModel.verificationFieldInfoText,
+            color: viewModel.verrificationFieldInfoTextColor
+          )
           .rightText(viewModel.timerText, textColor: .primaryDefault)
           .withButton(
             RoundedButton(
