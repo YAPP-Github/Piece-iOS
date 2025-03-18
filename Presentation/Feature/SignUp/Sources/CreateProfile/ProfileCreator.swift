@@ -8,16 +8,29 @@
 import Entities
 
 final class ProfileCreator {
-  private(set) var isBasicInfoValid: Bool = false
   private(set) var basicInfo: ProfileBasicModel = ProfileBasicModel.empty
   private(set) var valueTalks: [ValueTalkModel] = []
   private(set) var valuePicks: [ProfileValuePickModel] = []
-  private(set) var isValuePicksValid: Bool = false
+  private var isBasicInfoValid: Bool = false
+  private var isValuePicksValid: Bool = false
+  private var isValueTalksValid: Bool = false
   
   func updateBasicInfo(_ profile: ProfileBasicModel) {
     print(profile)
     self.basicInfo = profile
-    isBasicInfoValid = true
+  }
+  
+  func isBasicInfoValid(_ isValid: Bool) {
+    isBasicInfoValid = isValid
+  }
+  
+  func updateValuePicks(_ valuePicks: [ProfileValuePickModel]) {
+    print(valuePicks)
+    self.valuePicks = valuePicks
+  }
+  
+  func isValuePicksValid(_ isValid: Bool) {
+    isValuePicksValid = isValid
   }
   
   func updateValueTalks(_ valueTalks: [ValueTalkModel]) {
@@ -25,14 +38,12 @@ final class ProfileCreator {
     print(valueTalks)
   }
   
-  func updateValuePicks(_ valuePicks: [ProfileValuePickModel]) {
-    print(valuePicks)
-    self.valuePicks = valuePicks
-    isValuePicksValid = true
+  func isValueTalksValid(_ isValid: Bool) {
+    isValueTalksValid = isValid
   }
   
   func isProfileValid() -> Bool {
-    isBasicInfoValid && isValuePicksValid
+    isBasicInfoValid && isValuePicksValid && isValueTalksValid
   }
   
   func createProfile() -> ProfileModel {

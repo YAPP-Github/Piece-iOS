@@ -7,6 +7,7 @@
 
 import Entities
 import Observation
+import Router
 import SwiftUI
 import UseCases
 
@@ -14,19 +15,17 @@ import UseCases
 final class CreateProfileContainerViewModel {
   enum CreateProfileStep: Hashable {
     case basicInfo
-    case valueTalk
     case valuePick
+    case valueTalk
   }
 
   enum Action {
     case didTapBackButton
-    case didTapNextButton
-    case didTapCreateProfileButton
-    case updateValuePick(ProfileValuePickModel)
-    case updateValueTalks([ValueTalkModel])
+    case didTapBottomButton
   }
   
   var currentStep: CreateProfileStep = .basicInfo
+  var valuePickViewModel: ValuePickViewModel?
   
   let profileCreator = ProfileCreator()
   let checkNicknameUseCase: CheckNicknameUseCase
@@ -34,10 +33,9 @@ final class CreateProfileContainerViewModel {
   let getValueTalksUseCase: GetValueTalksUseCase
   let getValuePicksUseCase: GetValuePicksUseCase
   
-  private(set) var profile: ProfileModel?
   private(set) var valueTalks: [ValueTalkModel] = []
-  private(set) var valuePicks: [ProfileValuePickModel] = []
   private(set) var error: Error?
+  private(set) var destination: Route?
   
   init(
     checkNicknameUseCase: CheckNicknameUseCase,
@@ -58,25 +56,10 @@ final class CreateProfileContainerViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .didTapBackButton:
-      moveToPreviousStep()
+      didTapBackButton()
       
-    case .didTapNextButton:
-      moveToNextStep()
-      
-    case .didTapCreateProfileButton:
-      if profileCreator.isProfileValid() {
-        createProfile()
-      }
-      
-    case let .updateValuePick(updatedPick):
-      if let index = valuePicks.firstIndex(where: { $0.id == updatedPick.id }) {
-        valuePicks[index] = updatedPick
-        print("📌 ContainerViewModel - updateValuePick: ID=\(updatedPick.id), selectedAnswer=\(String(describing: updatedPick.selectedAnswer))")
-      }
-      
-    case let .updateValueTalks(updatedTalks):
-      self.valueTalks = updatedTalks
-      print("📌 ContainerViewModel - updateValueTalks: \(updatedTalks.count)개 업데이트")
+    case .didTapBottomButton:
+      didTapBottomButton()
     }
   }
   
@@ -88,7 +71,7 @@ final class CreateProfileContainerViewModel {
       
       let (fetchedTalks, fetchedPicks) = try await (talks, picks)
       self.valueTalks = fetchedTalks
-      self.valuePicks = fetchedPicks.map {
+      let valuePicks = fetchedPicks.map {
         ProfileValuePickModel(
           id: $0.id,
           category: $0.category,
@@ -97,32 +80,41 @@ final class CreateProfileContainerViewModel {
           selectedAnswer: nil
         )
       }
+      self.valuePickViewModel = ValuePickViewModel(
+        profileCreator: profileCreator,
+        initialValuePicks: valuePicks
+      )
+
       error = nil
-      print("📌 ContainerViewModel - 데이터 초기 로드 완료")
     } catch {
       self.error = error
       print(error)
     }
   }
   
-  private func moveToPreviousStep() {
+  private func didTapBackButton() {
     switch currentStep {
     case .basicInfo: break
-    case .valueTalk: currentStep = .basicInfo
-    case .valuePick: currentStep = .valueTalk
+    case .valuePick: currentStep = .basicInfo
+    case .valueTalk: currentStep = .valuePick
     }
   }
   
-  private func moveToNextStep() {
+  private func didTapBottomButton() {
     switch currentStep {
-    case .basicInfo: currentStep = .valueTalk
-    case .valueTalk: currentStep = .valuePick
-    case .valuePick: break
+    case .basicInfo: currentStep = .valuePick
+    case .valuePick: currentStep = .valueTalk
+    case .valueTalk: break
+    }
+    
+    if currentStep == .valueTalk,
+       profileCreator.isProfileValid() {
+      createProfile()
     }
   }
     
   private func createProfile() {
-    profileCreator.updateValuePicks(valuePicks)
-    profile = profileCreator.createProfile()
+    let profile = profileCreator.createProfile()
+    destination = .waitingAISummary(profile: profile)
   }
 }

@@ -53,7 +53,7 @@ struct CreateProfileContainerView: View {
           leftButtonTap: { viewModel.handleAction(.didTapBackButton) }
         )
       }
-
+      
       pageIndicator
       ZStack {
         basicInfoView
@@ -74,13 +74,17 @@ struct CreateProfileContainerView: View {
       .animation(.easeInOut, value: viewModel.currentStep)
     }
     .toolbar(.hidden)
+    .onChange(of: viewModel.destination) { _, destination in
+      guard let destination else { return }
+      router.setRoute(destination)
+    }
   }
   
   private var pageIndicator: some View {
     let step = viewModel.currentStep == .basicInfo
     ? PCPageIndicator.IndicatorStep.first
-    : viewModel.currentStep == .valueTalk ? .second : .third
-
+    : viewModel.currentStep == .valuePick ? .second : .third
+    
     return PCPageIndicator(
       step: step,
       width: screenWidth
@@ -92,7 +96,7 @@ struct CreateProfileContainerView: View {
       profileCreator: viewModel.profileCreator,
       checkNicknameUseCase: viewModel.checkNicknameUseCase,
       uploadProfileImageUseCase: viewModel.uploadProfileImageUseCase,
-      didTapNextButton: { viewModel.handleAction(.didTapNextButton) }
+      didTapBottomButton: { viewModel.handleAction(.didTapBottomButton) }
     )
     .id(createBasicInfo)
   }
@@ -101,25 +105,24 @@ struct CreateProfileContainerView: View {
     ValueTalkView(
       profileCreator: viewModel.profileCreator,
       initialValueTalks: viewModel.valueTalks,
-      didTapNextButton: { viewModel.handleAction(.didTapNextButton) }
+      didTapBottomButton: { viewModel.handleAction(.didTapBottomButton) }
     )
     .id(valueTalk)
   }
   
   private var valuePickView: some View {
-    ValuePickView(
-      profileCreator: viewModel.profileCreator,
-      initialValuePicks: viewModel.valuePicks,
-      onUpdateValuePick: { updatedPick in
-        viewModel.handleAction(.updateValuePick(updatedPick))
-      },
-      didTapCreateProfileButton: {
-        viewModel.handleAction(.didTapCreateProfileButton)
-        if let profile = viewModel.profile {
-          router.setRoute(.waitingAISummary(profile: profile))
-        }
+    Group {
+      if let valuePickViewModel = viewModel.valuePickViewModel {
+        ValuePickView(
+          viewModel: valuePickViewModel,
+          didTapBottomButton: {
+            viewModel.handleAction(.didTapBottomButton)
+          }
+        )
+        .id(valuePick)
+      } else {
+        EmptyView()
       }
-    )
-    .id(valuePick)
+    }
   }
 }

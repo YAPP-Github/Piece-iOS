@@ -234,6 +234,7 @@ final class CreateBasicInfoViewModel {
     
     if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
       didTapnextButton = true
+      profileCreator.isBasicInfoValid(false)
       await isToastVisible()
     } else if isNextButtonEnabled {
       do {
@@ -261,8 +262,10 @@ final class CreateBasicInfoViewModel {
         )
         
         profileCreator.updateBasicInfo(basicInfo)
+        profileCreator.isBasicInfoValid(true)
         print("ProfileCreator에 기본 정보 주입 완료")
       } catch {
+        profileCreator.isBasicInfoValid(false)
         print(error.localizedDescription)
       }
     }

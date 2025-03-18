@@ -19,12 +19,12 @@ struct ValueTalkView: View {
   @Bindable var viewModel: ValueTalkViewModel
   @Environment(Router.self) private var router: Router
   @FocusState private var focusField: Field?
-  var didTapNextButton: () -> Void
+  var didTapBottomButton: () -> Void
 
   init(
     profileCreator: ProfileCreator,
     initialValueTalks: [ValueTalkModel],
-    didTapNextButton: @escaping () -> Void
+    didTapBottomButton: @escaping () -> Void
   ) {
     _viewModel = .init(
       wrappedValue: .init(
@@ -32,7 +32,7 @@ struct ValueTalkView: View {
         initialValueTalks: initialValueTalks
       )
     )
-    self.didTapNextButton = didTapNextButton
+    self.didTapBottomButton = didTapBottomButton
   }
 
   var body: some View {
@@ -46,6 +46,19 @@ struct ValueTalkView: View {
         VStack(spacing: 0) {
           ScrollView {
             content
+          }
+          .overlay(alignment: .bottom) {
+            if viewModel.showToast {
+              PCToast(icon: DesignSystemAsset.Icons.notice20.swiftUIImage, text: "모든 항목을 작성해 주세요")
+                .padding(.bottom, 8)
+                .onAppear {
+                  withAnimation(.easeInOut(duration: 0.5)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak viewModel] in
+                      viewModel?.showToast = false
+                    }
+                  }
+                }
+            }
           }
           
           buttonArea
@@ -104,11 +117,11 @@ struct ValueTalkView: View {
   private var buttonArea: some View {
     RoundedButton(
       type: .solid,
-      buttonText: "다음",
+      buttonText: "프로필 생성하기",
       width: .maxWidth
     ) {
-      viewModel.handleAction(.didTapNextButton)
-      didTapNextButton()
+      viewModel.handleAction(.didTapBottomButton)
+      didTapBottomButton()
     }
     .padding(.horizontal, 20)
     .padding(.top, 12)
