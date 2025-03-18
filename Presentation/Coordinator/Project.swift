@@ -29,5 +29,6 @@ let project = Project.dynamicFramework(
     .presentation(target: .ReportUser),
     .presentation(target: .MatchResult),
     .presentation(target: .PreviewProfile),
+    .presentation(target: .NotificationList),
   ]
 )
