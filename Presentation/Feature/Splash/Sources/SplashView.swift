@@ -31,7 +31,7 @@ struct SplashView: View {
       }
       .onChange(of: viewModel.destination) { _, destination in
         guard let destination else { return }
-        router.push(to: destination)
+        router.setRoute(destination)
       }
       .pcAlert(isPresented: $viewModel.showNeedsForceUpdateAlert) {
         AlertView(

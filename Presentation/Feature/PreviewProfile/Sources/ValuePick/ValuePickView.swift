@@ -131,74 +131,17 @@ struct ValuePickView: View {
   
   private var nextButton: some View {
     CircleButton(
-      type: .disabled,
-      icon: DesignSystemAsset.Icons.arrowLeft32.swiftUIImage,
-      action: { }
+      type: .solid_primary,
+      icon: DesignSystemAsset.Icons.arrowRight32.swiftUIImage,
+      action: {
+        router.push(
+          to: .previewProfileValueTalks(
+            nickname: viewModel.nickname,
+            description: viewModel.description,
+            imageUri: viewModel.photoUri
+          )
+        )
+      }
     )
   }
 }
-
-//#Preview {
-//  ValuePickView(
-//    viewModel: ValuePickViewModel(
-//      description: "음악과 요리를 좋아하는",
-//      nickname: "수줍은 수달",
-//      valuePicks: [
-//        ValuePickModel(
-//          id: 0,
-//          category: "음주",
-//          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
-//          answers: [
-//            ValuePickAnswerModel(
-//              id: 1,
-//              content: "함께 술을 즐기고 싶어요",
-//              isSelected: false
-//            ),
-//            ValuePickAnswerModel(
-//              id: 2,
-//              content: "같이 술을 즐길 수 없어도 괜찮아요",
-//              isSelected: true
-//            ),
-//          ],
-//          isSame: true
-//        ),
-//        ValuePickModel(
-//          id: 1,
-//          category: "음주",
-//          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
-//          answers: [
-//            ValuePickAnswerModel(
-//              id: 1,
-//              content: "함께 술을 즐기고 싶어요",
-//              isSelected: true
-//            ),
-//            ValuePickAnswerModel(
-//              id: 2,
-//              content: "같이 술을 즐길 수 없어도 괜찮아요",
-//              isSelected: false
-//            ),
-//          ],
-//          isSame: true
-//        ),
-//        ValuePickModel(
-//          id: 2,
-//          category: "음주",
-//          question: "연인과 함께 술을 마시는 것을 좋아하나요?",
-//          answers: [
-//            ValuePickAnswerModel(
-//              id: 1,
-//              content: "함께 술을 즐기고 싶어요",
-//              isSelected: true
-//            ),
-//            ValuePickAnswerModel(
-//              id: 2,
-//              content: "같이 술을 즐길 수 없어도 괜찮아요",
-//              isSelected: false
-//            ),
-//          ],
-//          isSame: false
-//        )
-//      ]
-//    )
-//  )
-//}

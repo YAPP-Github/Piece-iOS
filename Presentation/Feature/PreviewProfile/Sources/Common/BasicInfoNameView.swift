@@ -27,6 +27,7 @@ struct BasicInfoNameView: View {
         .pretendard(.heading_L_SB)
         .foregroundStyle(Color.primaryDefault)
     }
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
   
   private let shortIntroduction: String
