@@ -10,6 +10,7 @@ import Observation
 import SwiftUI
 import UseCases
 
+@MainActor
 @Observable
 final class ValueTalkViewModel {
   enum Action {
@@ -45,18 +46,22 @@ final class ValueTalkViewModel {
       valueTalks[index].answer = answer
       
     case .didTapBottomButton:
-      for cardViewModel in cardViewModels {
-        valueTalks[cardViewModel.index].answer = cardViewModel.localAnswer
-      }
-      
-      let isValid = valueTalks.allSatisfy( { $0.answer?.isEmpty == false })
-      if isValid {
-        profileCreator.updateValueTalks(valueTalks)
-        profileCreator.isValueTalksValid(isValid)
-      } else {
-        showToast = true
-        profileCreator.isValueTalksValid(isValid)
-      }
+      didTapBottomButton()
+    }
+  }
+  
+  private func didTapBottomButton() {
+    for cardViewModel in cardViewModels {
+      valueTalks[cardViewModel.index].answer = cardViewModel.localAnswer
+    }
+    
+    let isValid = valueTalks.allSatisfy( { $0.answer?.isEmpty == false })
+    if isValid {
+      profileCreator.updateValueTalks(valueTalks)
+      profileCreator.isValueTalksValid(isValid)
+    } else {
+      showToast = true
+      profileCreator.isValueTalksValid(isValid)
     }
   }
 }

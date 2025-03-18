@@ -15,18 +15,10 @@ struct ValuePickView: View {
   var didTapBottomButton: () -> Void
   
   init(
-    profileCreator: ProfileCreator,
-    initialValuePicks: [ProfileValuePickModel],
-    onUpdateValuePick: @escaping (ProfileValuePickModel) -> Void,
+    viewModel: ValuePickViewModel,
     didTapBottomButton: @escaping () -> Void
   ) {
-    _viewModel = .init(
-      wrappedValue: .init(
-        profileCreator: profileCreator,
-        initialValuePicks: initialValuePicks,
-        onUpdateValuePick: onUpdateValuePick
-      )
-    )
+    self.viewModel = viewModel
     self.didTapBottomButton = didTapBottomButton
   }
   
@@ -107,7 +99,9 @@ struct ValuePickView: View {
       width: .maxWidth
     ) {
       viewModel.handleAction(.didTapBottomButton)
-      didTapBottomButton()
+      if viewModel.isNextButtonEnabled {
+        didTapBottomButton()
+      }
     }
     .padding(.horizontal, 20)
     .padding(.top, 12)

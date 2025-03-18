@@ -22,11 +22,10 @@ final class CreateProfileContainerViewModel {
   enum Action {
     case didTapBackButton
     case didTapBottomButton
-    case updateValuePick(ProfileValuePickModel)
-    case updateValueTalks([ValueTalkModel])
   }
   
   var currentStep: CreateProfileStep = .basicInfo
+  var valuePickViewModel: ValuePickViewModel?
   
   let profileCreator = ProfileCreator()
   let checkNicknameUseCase: CheckNicknameUseCase
@@ -34,9 +33,7 @@ final class CreateProfileContainerViewModel {
   let getValueTalksUseCase: GetValueTalksUseCase
   let getValuePicksUseCase: GetValuePicksUseCase
   
-//  private(set) var profile: ProfileModel?
   private(set) var valueTalks: [ValueTalkModel] = []
-  private(set) var valuePicks: [ProfileValuePickModel] = []
   private(set) var error: Error?
   private(set) var destination: Route?
   
@@ -63,16 +60,6 @@ final class CreateProfileContainerViewModel {
       
     case .didTapBottomButton:
       didTapBottomButton()
-
-    case let .updateValuePick(updatedPick):
-      if let index = valuePicks.firstIndex(where: { $0.id == updatedPick.id }) {
-        valuePicks[index] = updatedPick
-        print("📌 ContainerViewModel - updateValuePick: ID=\(updatedPick.id), selectedAnswer=\(String(describing: updatedPick.selectedAnswer))")
-      }
-      
-    case let .updateValueTalks(updatedTalks):
-      self.valueTalks = updatedTalks
-      print("📌 ContainerViewModel - updateValueTalks: \(updatedTalks.count)개 업데이트")
     }
   }
   
@@ -84,7 +71,7 @@ final class CreateProfileContainerViewModel {
       
       let (fetchedTalks, fetchedPicks) = try await (talks, picks)
       self.valueTalks = fetchedTalks
-      self.valuePicks = fetchedPicks.map {
+      let valuePicks = fetchedPicks.map {
         ProfileValuePickModel(
           id: $0.id,
           category: $0.category,
@@ -93,8 +80,12 @@ final class CreateProfileContainerViewModel {
           selectedAnswer: nil
         )
       }
+      self.valuePickViewModel = ValuePickViewModel(
+        profileCreator: profileCreator,
+        initialValuePicks: valuePicks
+      )
+
       error = nil
-      print("📌 ContainerViewModel - 데이터 초기 로드 완료")
     } catch {
       self.error = error
       print(error)

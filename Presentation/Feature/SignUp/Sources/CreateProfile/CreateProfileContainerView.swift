@@ -53,7 +53,7 @@ struct CreateProfileContainerView: View {
           leftButtonTap: { viewModel.handleAction(.didTapBackButton) }
         )
       }
-
+      
       pageIndicator
       ZStack {
         basicInfoView
@@ -111,16 +111,18 @@ struct CreateProfileContainerView: View {
   }
   
   private var valuePickView: some View {
-    ValuePickView(
-      profileCreator: viewModel.profileCreator,
-      initialValuePicks: viewModel.valuePicks,
-      onUpdateValuePick: { updatedPick in
-        viewModel.handleAction(.updateValuePick(updatedPick))
-      },
-      didTapBottomButton: {
-        viewModel.handleAction(.didTapBottomButton)
+    Group {
+      if let valuePickViewModel = viewModel.valuePickViewModel {
+        ValuePickView(
+          viewModel: valuePickViewModel,
+          didTapBottomButton: {
+            viewModel.handleAction(.didTapBottomButton)
+          }
+        )
+        .id(valuePick)
+      } else {
+        EmptyView()
       }
-    )
-    .id(valuePick)
+    }
   }
 }
