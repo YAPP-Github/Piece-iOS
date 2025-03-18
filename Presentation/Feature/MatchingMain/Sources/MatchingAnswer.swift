@@ -19,7 +19,7 @@ public struct MatchingAnswer: View {
     var icon: Image {
       switch self {
       case .before, .waiting: DesignSystemAsset.Icons.matchingModeLoading20.swiftUIImage
-      case .done, .complete: DesignSystemAsset.Icons.matchingModeLoading20.swiftUIImage
+      case .done, .complete: DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage
       case .green_light: DesignSystemAsset.Icons.matchingModeHeart20.swiftUIImage
       }
     }

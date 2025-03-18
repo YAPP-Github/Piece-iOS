@@ -114,9 +114,10 @@ struct CreateBasicInfoView: View {
                 }
                 .foregroundStyle(Color.primaryDefault)
               }
+    
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 10)
+            .padding(.bottom, 200)
             .background(
               Color.clear
                 .contentShape(Rectangle())
@@ -402,6 +403,8 @@ struct CreateBasicInfoView: View {
               }
             }
           ),
+          focusState: $focusField,
+          focusField: "contact_\(contact.id)",
           image: iconFor(contactType: contact.type),
           showDeleteButton: viewModel.contacts.first != contact,
           tapDeleteButton: {
@@ -415,6 +418,8 @@ struct CreateBasicInfoView: View {
             viewModel.isContactTypeChangeSheetPresented = true
           }
         )
+        .frame(minHeight: 72)
+        .id("contact_\(contact.id)_scroll")
       }
     }
   }

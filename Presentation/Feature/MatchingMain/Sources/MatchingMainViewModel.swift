@@ -137,7 +137,8 @@ final class MatchingMainViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .tapProfileInfo:
-      destination = .previewProfileBasic
+      destination = .matchProfileBasic
+      
     case .tapMatchingButton:
       handleMatchingButtonTap()
       
@@ -147,7 +148,7 @@ final class MatchingMainViewModel {
   }
   
   private func handleMatchingButtonTap() {
-    if matchingButtonDestination == nil {
+    if matchingButtonDestination == nil || matchingButtonDestination == .matchProfileBasic {
       switch matchingButtonState {
       case .acceptMatching:
         isMatchAcceptAlertPresented = true
@@ -240,6 +241,7 @@ final class MatchingMainViewModel {
   private func acceptMatch() async {
     do {
       _ = try await acceptMatchUseCase.execute()
+      await getMatchesInfo()
     } catch {
       self.error = error
     }

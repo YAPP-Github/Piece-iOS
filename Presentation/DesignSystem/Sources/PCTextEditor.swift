@@ -7,14 +7,16 @@
 
 import SwiftUI
 
-public struct PCTextEditor: View {
-  private enum Constant {
-    static let horizontalPadding: CGFloat = 16
-    static let verticalPadding: CGFloat = 14
-    static let maxTextWidth: CGFloat = 243
-  }
-  
+private enum PCTextEditorConstant {
+  static let horizontalPadding: CGFloat = 16
+  static let verticalPadding: CGFloat = 14
+  static let maxTextWidth: CGFloat = 243
+}
+
+public struct PCTextEditor<FocusField: Hashable>: View {
   @Binding private var text: String
+  private var focusState: FocusState<FocusField>.Binding
+  private let focusField: FocusField
   private let action: () -> Void
   private let showDeleteButton: Bool
   private let tapDeleteButton: (() -> Void)?
@@ -22,12 +24,16 @@ public struct PCTextEditor: View {
   
   public init(
     text: Binding<String>,
+    focusState: FocusState<FocusField>.Binding,
+    focusField: FocusField,
     image: Image,
     showDeleteButton: Bool,
     tapDeleteButton: (() -> Void)? = nil,
     action: @escaping () -> Void
   ) {
     self._text = text
+    self.focusState = focusState
+    self.focusField = focusField
     self.image = image
     self.showDeleteButton = showDeleteButton
     self.tapDeleteButton = tapDeleteButton
@@ -49,14 +55,19 @@ public struct PCTextEditor: View {
           Spacer()
         }
         
-        DynamicTextView(text: $text)
+        TextEditor(text: $text)
           .pretendard(.body_M_M)
           .foregroundStyle(Color.grayscaleBlack)
-          .frame(width: Constant.maxTextWidth)
+          .frame(width: PCTextEditorConstant.maxTextWidth)
+          .scrollContentBackground(.hidden)
           .background(Color.grayscaleLight3)
+          .focused(focusState, equals: focusField)
+          .onChange(of: text) { _, newValue in
+            text = newValue
+          }
       }
-      .padding(.horizontal, Constant.horizontalPadding)
-      .padding(.vertical, Constant.verticalPadding)
+      .padding(.horizontal, PCTextEditorConstant.horizontalPadding)
+      .padding(.vertical, PCTextEditorConstant.verticalPadding)
       .background(Color.grayscaleLight3)
       .cornerRadius(8)
       
@@ -78,13 +89,16 @@ public struct PCTextEditor: View {
 #Preview {
   struct PCTextEditorPreview: View {
     @State private var text: String = ""
+    @FocusState private var focusField: String?
+    
     var body: some View {
       PCTextEditor(
         text: $text,
+        focusState: $focusField,
+        focusField: "test",
         image: DesignSystemAsset.Icons.kakao20.swiftUIImage,
         showDeleteButton: true,
-        action: { print("Button tapped")
-        }
+        action: { print("Button tapped") }
       )
       .padding()
     }
