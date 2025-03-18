@@ -14,7 +14,7 @@ public struct NavigationBar<RightButton: View>: View {
     title: String,
     titleColor: Color = .grayscaleBlack,
     leftButtonTap: (() -> Void)? = nil,
-    rightButton: RightButton,
+    rightButton: RightButton = EmptyView(),
     backgroundColor: Color = .clear
   ) {
     self.title = title
@@ -79,7 +79,7 @@ public struct NavigationBar<RightButton: View>: View {
     )
     NavigationBar(
       title: "프로필 생성하기",
-      rightButton: EmptyView(),
       backgroundColor: .grayscaleWhite
     )
-  }}
+  }
+}
