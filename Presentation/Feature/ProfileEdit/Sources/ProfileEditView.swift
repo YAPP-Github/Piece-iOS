@@ -16,7 +16,22 @@ struct ProfileEditView: View {
   @State var viewModel: ProfileEditViewModel
   @FocusState private var focusField: String?
   @Environment(Router.self) private var router: Router
-  var didTapNextButton: () -> Void
+  
+  init(
+    updateProfileBasicUseCase: UpdateProfileBasicUseCase,
+    getProfileBasicUseCase: GetProfileBasicUseCase,
+    checkNicknameUseCase: CheckNicknameUseCase,
+    uploadProfileImageUseCase: UploadProfileImageUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        getProfileBasicUseCase: getProfileBasicUseCase,
+        updateProfileBasicUseCase: updateProfileBasicUseCase,
+        checkNicknameUseCase: checkNicknameUseCase,
+        uploadProfileImageUseCase: uploadProfileImageUseCase
+      )
+    )
+  }
   
   var body: some View {
     ZStack {
@@ -430,9 +445,6 @@ struct ProfileEditView: View {
       width: .maxWidth,
       action: {
         viewModel.handleAction(.tapNextButton)
-        if viewModel.isNextButtonEnabled {
-          didTapNextButton()
-        }
       }
     )
   }

@@ -23,13 +23,19 @@ final class ProfileEditViewModel {
   }
   
   init(
+    getProfileBasicUseCase: GetProfileBasicUseCase,
+    updateProfileBasicUseCase: UpdateProfileBasicUseCase,
     checkNicknameUseCase: CheckNicknameUseCase,
     uploadProfileImageUseCase: UploadProfileImageUseCase
   ) {
+    self.updateProfileBasicUseCase = updateProfileBasicUseCase
+    self.getProfileBasicUseCase = getProfileBasicUseCase
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
   }
   
+  private let updateProfileBasicUseCase: UpdateProfileBasicUseCase
+  private let getProfileBasicUseCase: GetProfileBasicUseCase
   private let checkNicknameUseCase: CheckNicknameUseCase
   private let uploadProfileImageUseCase: UploadProfileImageUseCase
   
