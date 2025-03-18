@@ -44,7 +44,7 @@ struct MatchingMainView: View {
           foregroundColor: .grayscaleWhite,
           rightIcon: DesignSystemAsset.Icons.alarm32.swiftUIImage,
           rightIconTap: {
-            // TODO: - 알림버튼 선택시 이동
+            router.push(to: .notificationList)
           }
         )
         VStack(alignment: .center, spacing: 8) {

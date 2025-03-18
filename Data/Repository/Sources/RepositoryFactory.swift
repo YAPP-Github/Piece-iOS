@@ -70,4 +70,8 @@ public struct RepositoryFactory {
   public func createWithdrawRepository() -> WithdrawRepositoryInterface {
     WithdrawRepository(networkService: networkService)
   }
+  
+  public func createNotificationRepository() -> NotificationRepositoryInterface {
+    NotificationRepository(networkService: networkService)
+  }
 }
