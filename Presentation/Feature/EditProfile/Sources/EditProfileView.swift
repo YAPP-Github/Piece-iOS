@@ -35,6 +35,12 @@ struct EditProfileView: View {
   
   var body: some View {
     ZStack {
+      Color.clear // 배경 영역 - 탭 시 포커스 해제
+        .ignoresSafeArea()
+        .onTapGesture {
+          focusField = nil
+        }
+      
       VStack {
         
         navigationBar
@@ -42,40 +48,9 @@ struct EditProfileView: View {
         ScrollViewReader { proxy in
           ScrollView {
             VStack(alignment: .center, spacing: 32) {
-              title
-              
               // 프로필 이미지
-              Button {
-                viewModel.isProfileImageSheetPresented = true
-              } label: {
-                profileImage
-              }
-              .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
-                ActionSheet(
-                  title: Text("프로필 사진 선택"),
-                  buttons: [
-                    .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
-                    .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
-                    .cancel(Text("취소"))
-                  ]
-                )
-              }
-              .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
-                CameraPicker {
-                  viewModel.setImageFromCamera($0)
-                }
-              }
-              .photosPicker(
-                isPresented: $viewModel.isPhotoSheetPresented,
-                selection: Binding(
-                  get: { viewModel.selectedItem },
-                  set: {
-                    viewModel.selectedItem = $0
-                    Task { await viewModel.loadImage() }
-                  }
-                ),
-                matching: .images
-              )
+              profileImageButton
+              
               // 닉네임
               nicknameTextField.id("nickname_scroll")
               
@@ -120,16 +95,9 @@ struct EditProfileView: View {
               }
     
             }
-            .padding(.horizontal, 20)
             .padding(.bottom, 200)
-            .background(
-              Color.clear
-                .contentShape(Rectangle())
-                .onTapGesture {
-                  focusField = nil
-                }
-            )
           }
+          .padding(.horizontal, 20)
           .scrollIndicators(.hidden)
           .onChange(of: focusField) { _, newValue in
             withAnimation {
@@ -139,10 +107,6 @@ struct EditProfileView: View {
             }
           }
         }
-        
-        nextButton
-          .padding(.horizontal, 20)
-          .padding(.bottom, 10)
       }
       .ignoresSafeArea(.keyboard)
       
@@ -165,6 +129,7 @@ struct EditProfileView: View {
         }
       }
     }
+    .toolbar(.hidden, for: .navigationBar)
   }
   
   private var navigationBar: some View {
@@ -172,52 +137,69 @@ struct EditProfileView: View {
       title: "기본 정보 수정",
       leftButtonTap: { router.pop() },
       rightButtonTap: { },
-      label: "수정",
+      label: "저장",
       labelColor: .primaryDefault
     )
   }
   
-  private var title: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      Text("간단한 정보로\n당신을 표현하세요")
-        .pretendard(.heading_L_SB)
-        .foregroundStyle(Color.grayscaleBlack)
-      Text("작성 후에도 언제든 수정 가능하니,\n편안하게 작성해 주세요.")
-        .pretendard(.body_S_M)
-        .foregroundStyle(Color.grayscaleDark3)
+  private var profileImageButton: some View {
+    Button {
+      viewModel.isProfileImageSheetPresented = true
+    } label: {
+      Group {
+        if let image = viewModel.profileImage {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 120, height: 120)
+            .clipShape(Circle())
+        } else {
+          DesignSystemAsset.Images.profileImageNodata.swiftUIImage
+        }
+      }
+      .overlay(alignment: .bottomTrailing) {
+        DesignSystemAsset.Icons.plus24.swiftUIImage
+          .renderingMode(.template)
+          .foregroundStyle(Color.grayscaleWhite)
+          .background(
+            Circle()
+              .frame(width: 33, height: 33)
+              .foregroundStyle(Color.primaryDefault)
+              .overlay(
+                Circle()
+                  .stroke(Color.white, lineWidth: 3)
+              )
+          )
+      }
+      .padding(.top, 24)
+      .padding(.bottom, 8)
     }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.bottom, 8)
-    .padding(.top, 20)
-  }
-  
-  private var profileImage: some View {
-    Group {
-      if let image = viewModel.profileImage {
-        Image(uiImage: image)
-          .resizable()
-          .scaledToFill()
-          .frame(width: 120, height: 120)
-          .clipShape(Circle())
-      } else {
-        DesignSystemAsset.Images.profileImageNodata.swiftUIImage
+    .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
+      ActionSheet(
+        title: Text("프로필 사진 선택"),
+        buttons: [
+          .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
+          .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
+          .cancel(Text("취소"))
+        ]
+      )
+    }
+    .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
+      CameraPicker {
+        viewModel.setImageFromCamera($0)
       }
     }
-    .overlay(alignment: .bottomTrailing) {
-      DesignSystemAsset.Icons.plus24.swiftUIImage
-        .renderingMode(.template)
-        .foregroundStyle(Color.grayscaleWhite)
-        .background(
-          Circle()
-            .frame(width: 33, height: 33)
-            .foregroundStyle(Color.primaryDefault)
-            .overlay(
-              Circle()
-                .stroke(Color.white, lineWidth: 3)
-            )
-        )
-    }
-    .padding(.bottom, 8)
+    .photosPicker(
+      isPresented: $viewModel.isPhotoSheetPresented,
+      selection: Binding(
+        get: { viewModel.selectedItem },
+        set: {
+          viewModel.selectedItem = $0
+          Task { await viewModel.loadImage() }
+        }
+      ),
+      matching: .images
+    )
   }
   
   private var nicknameTextField: some View {
@@ -436,17 +418,6 @@ struct EditProfileView: View {
         .id("contact_\(contact.id)_scroll")
       }
     }
-  }
-  
-  private var nextButton: some View {
-    RoundedButton(
-      type: .solid,
-      buttonText: "다음",
-      width: .maxWidth,
-      action: {
-        viewModel.handleAction(.tapNextButton)
-      }
-    )
   }
   
   private var locationBottomSheet: some View {
