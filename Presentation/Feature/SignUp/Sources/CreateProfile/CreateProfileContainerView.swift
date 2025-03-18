@@ -83,8 +83,8 @@ struct CreateProfileContainerView: View {
   private var pageIndicator: some View {
     let step = viewModel.currentStep == .basicInfo
     ? PCPageIndicator.IndicatorStep.first
-    : viewModel.currentStep == .valueTalk ? .second : .third
-
+    : viewModel.currentStep == .valuePick ? .second : .third
+    
     return PCPageIndicator(
       step: step,
       width: screenWidth
