@@ -25,6 +25,7 @@ final class SettingsViewModel {
     case logoutItemTapped
     case confirmLogoutButton
     case withdrawButtonTapped
+    case clearDestination
   }
   
   var sections = [SettingSection]()
@@ -110,6 +111,9 @@ final class SettingsViewModel {
       break
     case .withdrawButtonTapped:
       destination = .withdraw
+      
+    case .clearDestination:
+      destination = nil
     }
   }
   
