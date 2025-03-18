@@ -39,6 +39,7 @@ struct ValuePickCard: View {
         .pretendard(.body_M_SB)
         .foregroundStyle(Color.grayscaleBlack)
     }
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
   
   private var category: some View {

@@ -83,6 +83,7 @@ struct ValueTalkView: View {
       .scrollIndicators(.never)
       .padding(.horizontal, 20)
     }
+    .toolbar(.hidden)
     .background(Color.grayscaleLight3)
     .animation(.easeOut(duration: 0.3), value: viewModel.isNameViewVisible)
     .overlay(alignment: .bottom) {
