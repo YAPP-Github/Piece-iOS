@@ -136,9 +136,9 @@ struct EditProfileView: View {
     NavigationBar(
       title: "기본 정보 수정",
       leftButtonTap: { router.pop() },
-      rightButtonTap: { },
+      rightButtonTap: { viewModel.handleAction(.tapConfirmButton) },
       label: "저장",
-      labelColor: .primaryDefault
+      labelColor: viewModel.navigationItemColor
     )
   }
   
@@ -226,6 +226,9 @@ struct EditProfileView: View {
     .onSubmit {
       focusField = "description"
     }
+    .onChange(of: viewModel.nickname) { _, _ in
+      viewModel.isEditing = true
+    }
   }
   
   private var descriptionTextField: some View {
@@ -244,6 +247,9 @@ struct EditProfileView: View {
     .onSubmit {
       focusField = "birthDate"
     }
+    .onChange(of: viewModel.description) { _, _ in
+      viewModel.isEditing = true
+    }
   }
   
   private var birthdateTextField: some View {
@@ -260,9 +266,11 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.birthDate = String(newValue.filter { $0.isNumber }.prefix(8))
+      viewModel.isEditing = true
     }
     .textContentType(.birthdate)
     .keyboardType(.numberPad)
+    
   }
   
   private var locationTextField: some View {
@@ -296,6 +304,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.height = newValue.filter { $0.isNumber }
+      viewModel.isEditing = true
     }
     .keyboardType(.numberPad)
   }
@@ -313,6 +322,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.weight = newValue.filter { $0.isNumber }
+      viewModel.isEditing = true
     }
     .keyboardType(.numberPad)
   }
@@ -334,6 +344,9 @@ struct EditProfileView: View {
       focusField = nil
       viewModel.isJobSheetPresented = true
     }
+    .onChange(of: viewModel.job) { _, _
+      in viewModel.isEditing = true
+    }
   }
   
   private var smokingTextField: some View {
@@ -351,7 +364,7 @@ struct EditProfileView: View {
           focusField = nil
         }
       }
-      Text( viewModel.smokingInfoText)
+      Text(viewModel.smokingInfoText)
         .pretendard(.body_S_M)
         .foregroundStyle(Color.systemError)
     }

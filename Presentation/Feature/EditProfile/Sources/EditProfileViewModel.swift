@@ -16,7 +16,7 @@ import PCFoundationExtension
 @Observable
 final class EditProfileViewModel {
   enum Action {
-    case tapNextButton
+    case tapConfirmButton
     case tapVaildNickName
     case selectCamera
     case selectPhotoLibrary
@@ -32,6 +32,11 @@ final class EditProfileViewModel {
     self.getProfileBasicUseCase = getProfileBasicUseCase
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
+    
+    Task {
+      await getBasicProfile()
+    }
+    isEditing = false
   }
   
   private let updateProfileBasicUseCase: UpdateProfileBasicUseCase
@@ -72,6 +77,14 @@ final class EditProfileViewModel {
     !weight.isEmpty &&
     !job.isEmpty &&
     isContactsValid
+  }
+  var isEditing: Bool = false {
+    didSet {
+      print("isEditing 상태 변경: \(isEditing)")
+    }
+  }
+  var navigationItemColor: Color {
+    isEditing ? .primaryDefault : .grayscaleDark3
   }
   
   // TextField InfoMessage
@@ -217,9 +230,9 @@ final class EditProfileViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
-    case .tapNextButton:
+    case .tapConfirmButton:
       Task {
-        await handleTapNextButton()
+        await handleTapConfirmButton()
       }
     case .selectCamera:
       isCameraPresented = true
@@ -232,7 +245,7 @@ final class EditProfileViewModel {
     }
   }
   
-  private func handleTapNextButton() async {
+  private func handleTapConfirmButton() async {
     print("isNextButtonEnabled: \(isNextButtonEnabled)")
     
     if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
@@ -262,6 +275,8 @@ final class EditProfileViewModel {
           imageUri: imageURL.absoluteString,
           contacts: contacts
         )
+        
+        _ = try await updateProfileBasicUseCase.execute(profile: basicInfo)
         
       } catch {
         print(error.localizedDescription)
@@ -314,6 +329,7 @@ final class EditProfileViewModel {
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
       contacts[index].type = newType
+      isEditing = true
     }
   }
   
@@ -338,6 +354,7 @@ final class EditProfileViewModel {
   func removeContact(at index: Int) {
     guard contacts.indices.contains(index), index != 0 else { return }
     contacts.remove(at: index)
+    isEditing = true
   }
   
   func loadImage() async {
@@ -351,6 +368,7 @@ final class EditProfileViewModel {
          let image = UIImage(data: data) {
         self.profileImage = image  // UIImage로 저장
         self.isValidProfileImage = true
+        self.isEditing = true
       } else {
         print("이미지 데이터를 로드할 수 없습니다.")
       }
@@ -362,5 +380,31 @@ final class EditProfileViewModel {
   func setImageFromCamera(_ image: UIImage) {
     self.profileImage = image
     self.isValidProfileImage = true
+    self.isEditing = true
+  }
+  
+  private func getBasicProfile() async {
+    do {
+      let profile = try await getProfileBasicUseCase.execute()
+      if let imageUrl = URL(string: profile.imageUri),
+         let imageData = try? Data(contentsOf: imageUrl) {
+          profileImage = UIImage(data: imageData)
+      }
+      dump(profile)
+      
+      nickname = profile.nickname
+      description = profile.description
+      birthDate = profile.birthdate
+      location = profile.location
+      height = String(profile.height)
+      weight = String(profile.weight)
+      smokingStatus = profile.smokingStatus
+      snsActivityLevel = profile.snsActivityLevel
+      job = profile.job
+      contacts = profile.contacts
+      
+    } catch {
+      print(error.localizedDescription)
+    }
   }
 }
