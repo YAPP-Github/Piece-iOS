@@ -15,6 +15,7 @@ final class MatchResultViewModel {
   enum Action {
     case onAppear
     case matchingAnimationDidFinish(Bool)
+    case showProfilePhoto
     case didTapContactIcon(ContactButtonModel)
     case didTapCopyButton
   }
@@ -46,7 +47,9 @@ final class MatchResultViewModel {
       
     case let .matchingAnimationDidFinish(didFinish):
       matchingAnimationOpacity = didFinish ? 0 : 1
-      photoOpacity = didFinish ? 1 : 0
+      
+    case .showProfilePhoto:
+      photoOpacity = 1
       
     case let .didTapContactIcon(contact):
       selectedContact = contact

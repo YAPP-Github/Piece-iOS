@@ -45,20 +45,25 @@ struct MatchResultView: View {
             .resizable()
             .scaledToFill()
         }
-        .frame(width: 200, height: 200) // TODO: - 디자인 가이드 확인 후 수정
-        .clipShape(RoundedRectangle(cornerRadius: 8)) // TODO: - 디자인 가이드 확인 후 수정
+        .frame(width: 220, height: 220)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
         .opacity(viewModel.photoOpacity)
         .animation(.easeIn(duration: 0.3), value: viewModel.photoOpacity)
         
         PCLottieView(
           .matching_motion,
           loopMode: .playOnce,
-          width: .infinity,
-          height: .infinity
-        ) { animationFinished in
-            viewModel.handleAction(.matchingAnimationDidFinish(animationFinished))
+          width: 500,
+          height: 500
+        )  { animationFinished in
+          viewModel.handleAction(.matchingAnimationDidFinish(animationFinished))
         }
         .opacity(viewModel.matchingAnimationOpacity)
+        .onAppear {
+          DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            viewModel.handleAction(.showProfilePhoto)
+          }
+        }
       }
       
       buttons
