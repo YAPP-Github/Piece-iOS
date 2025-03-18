@@ -13,6 +13,7 @@ import UseCases
 final class NotificationListViewModel {
   enum Action {
     case loadNotifications
+    case onDisappear
   }
   
   private(set) var notifications: [NotificationItemModel] = []
@@ -20,9 +21,14 @@ final class NotificationListViewModel {
   private(set) var error: Error?
   
   private let getNotificationsUseCase: GetNotificationsUseCase
+  private let readNotificationUseCase: ReadNotificationUseCase
   
-  init(getNotificationsUseCase: GetNotificationsUseCase) {
+  init(
+    getNotificationsUseCase: GetNotificationsUseCase,
+    readNotificationUseCase: ReadNotificationUseCase
+  ) {
     self.getNotificationsUseCase = getNotificationsUseCase
+    self.readNotificationUseCase = readNotificationUseCase
     loadNotifications()
   }
   
@@ -30,6 +36,9 @@ final class NotificationListViewModel {
     switch action {
     case .loadNotifications:
       loadNotifications()
+      
+    case .onDisappear:
+      readNotifications()
     }
   }
   
@@ -53,6 +62,19 @@ final class NotificationListViewModel {
         isEnd = result.isEnd
       } catch {
         self.error = error
+      }
+    }
+  }
+  
+  private func readNotifications() {
+    let unreadNotifications = notifications.filter { !$0.isRead }
+    for notification in unreadNotifications {
+      Task {
+        do {
+          _ = try await readNotificationUseCase.execute(id: notification.id)
+        } catch {
+          self.error = error
+        }
       }
     }
   }

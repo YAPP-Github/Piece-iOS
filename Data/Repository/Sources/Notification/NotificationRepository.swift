@@ -37,4 +37,10 @@ public final class NotificationRepository: NotificationRepositoryInterface {
       return (notifications: responseDTO.compactMap { $0.toDomain() }, isEnd: isEnd)
     }
   }
+  
+  public func readNotification(id: Int) async throws -> VoidModel {
+    let endpoint = NotificationsEndpoint.readNotification(id: id)
+    let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return responseDTO.toDomain()
+  }
 }

@@ -14,8 +14,16 @@ struct NotificationListView: View {
   @State var viewModel: NotificationListViewModel
   @Environment(Router.self) private var router
   
-  init(getNotificationsUseCase: GetNotificationsUseCase) {
-    _viewModel = .init(wrappedValue: .init(getNotificationsUseCase: getNotificationsUseCase))
+  init(
+    getNotificationsUseCase: GetNotificationsUseCase,
+    readNotificationUseCase: ReadNotificationUseCase
+  ) {
+    _viewModel = .init(
+      wrappedValue: .init(
+        getNotificationsUseCase: getNotificationsUseCase,
+        readNotificationUseCase: readNotificationUseCase
+      )
+    )
   }
 
   var body: some View {
@@ -31,6 +39,9 @@ struct NotificationListView: View {
     }
     .toolbar(.hidden)
     .background(.grayscaleWhite)
+    .onDisappear {
+      viewModel.handleAction(.onDisappear)
+    }
   }
   
   @ViewBuilder

@@ -10,7 +10,13 @@ import UseCases
 
 public struct NotificationViewFactory {
   @ViewBuilder
-  public static func createNotificationListView(getNotificationsUseCase: GetNotificationsUseCase) -> some View {
-    NotificationListView(getNotificationsUseCase: getNotificationsUseCase)
+  public static func createNotificationListView(
+    getNotificationsUseCase: GetNotificationsUseCase,
+    readNotificationUseCase: ReadNotificationUseCase
+  ) -> some View {
+    NotificationListView(
+      getNotificationsUseCase: getNotificationsUseCase,
+      readNotificationUseCase: readNotificationUseCase
+    )
   }
 }

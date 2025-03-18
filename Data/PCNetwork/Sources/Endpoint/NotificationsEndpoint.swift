@@ -12,11 +12,14 @@ import LocalStorage
 
 public enum NotificationsEndpoint: TargetType {
   case notifications(cursor: Int?)
+  case readNotification(id: Int)
   
   public var method: HTTPMethod {
     switch self {
     case .notifications:
         .get
+    case .readNotification:
+        .put
     }
   }
   
@@ -24,14 +27,23 @@ public enum NotificationsEndpoint: TargetType {
     switch self {
     case .notifications:
       "api/notifications"
+    case let .readNotification(id):
+      "api/notifications/\(id)/read"
     }
   }
   
   public var headers: [String : String] {
     switch self {
     case .notifications:
-      [NetworkHeader.contentType:NetworkHeader.applicationJson,
-       NetworkHeader.authorization:NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")]
+      [
+        NetworkHeader.contentType:NetworkHeader.applicationJson,
+        NetworkHeader.authorization:NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .readNotification:
+      [
+        NetworkHeader.contentType:NetworkHeader.applicationJson,
+        NetworkHeader.authorization:NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
     }
   }
   
@@ -44,6 +56,9 @@ public enum NotificationsEndpoint: TargetType {
         queryItems.append(queryItem)
       }
       return .query(queryItems)
+      
+    case .readNotification:
+      return .plain
     }
   }
 }

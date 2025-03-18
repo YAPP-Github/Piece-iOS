@@ -311,7 +311,11 @@ public struct Coordinator {
     case .notificationList:
       let notificationRepository = repositoryFactory.createNotificationRepository()
       let getNotificationsUseCase = UseCaseFactory.createGetNotificationsUseCase(repository: notificationRepository)
-      NotificationViewFactory.createNotificationListView(getNotificationsUseCase: getNotificationsUseCase)
+      let readNotificationUseCase = UseCaseFactory.createReadNotificationUseCase(repository: notificationRepository)
+      NotificationViewFactory.createNotificationListView(
+        getNotificationsUseCase: getNotificationsUseCase,
+        readNotificationUseCase: readNotificationUseCase
+      )
     }
   }
 }
