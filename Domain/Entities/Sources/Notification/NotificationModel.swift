@@ -1,13 +1,13 @@
 //
-//  PushNotificationModel.swift
+//  NotificationModel.swift
 //  Entities
 //
 //  Created by summercat on 2/27/25.
 //
 
-public struct PushNotificationModel {
+public struct NotificationModel {
   public let id: Int
-  public let type: PushNotificationType
+  public let type: NotificationType
   public let title: String
   public let body: String
   public let dateTime: String
@@ -15,7 +15,7 @@ public struct PushNotificationModel {
   
   public init(
     id: Int,
-    type: PushNotificationType,
+    type: NotificationType,
     title: String,
     body: String,
     dateTime: String,
