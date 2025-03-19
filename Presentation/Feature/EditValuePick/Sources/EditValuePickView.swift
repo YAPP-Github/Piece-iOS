@@ -31,10 +31,10 @@ struct EditValuePickView: View {
       NavigationBar(
         title: "가치관 Pick",
         leftButtonTap: { router.pop() },
-        rightButtonTap: { viewModel.handleAction(.didTapSaveButton) },
-        label: viewModel.isEditing ? "저장": "수정",
-        labelColor: viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault,
-        backgroundColor: .clear
+        rightButton: Button { viewModel.handleAction(.didTapSaveButton) } label: {
+          Text(viewModel.isEditing ? "저장": "수정")
+            .foregroundStyle(viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault)
+        }
       )
       
       ScrollView {

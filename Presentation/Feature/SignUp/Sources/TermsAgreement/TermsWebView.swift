@@ -24,6 +24,11 @@ struct TermsWebView: View {
         .padding(.bottom, 74)
       
       VStack {
+        NavigationBar(
+          title: viewModel.title,
+          leftButtonTap: { router.pop() }
+        )
+        
         Spacer()
         
         RoundedButton(
@@ -35,12 +40,6 @@ struct TermsWebView: View {
       }
       .padding(.horizontal, 20)
       .padding(.bottom, 10)
-    }
-    .navigationBarModifier {
-      NavigationBar(
-        title: viewModel.title,
-        leftButtonTap: { router.pop() }
-      )
     }
     .toolbar(.hidden, for: .navigationBar)
   }

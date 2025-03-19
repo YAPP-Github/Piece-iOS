@@ -38,9 +38,12 @@ struct PreviewProfileBasicView: View {
     VStack(alignment: .leading, spacing: 0) {
       NavigationBar(
         title: viewModel.navigationTitle,
-        rightButtonTap: {
+        rightButton:Button {
           router.popToRoot()
-        })
+        } label: {
+          DesignSystemAsset.Icons.close32.swiftUIImage
+        }
+      )
       
       VStack(alignment: .leading) {
         title

@@ -38,6 +38,11 @@ struct AvoidContactsGuideView: View {
   var body: some View {
     ZStack {
       VStack {
+        NavigationBar(
+          title: "",
+          leftButtonTap: { router.pop() }
+        )
+        
         title
         
         DesignSystemAsset.Images.imgBlock.swiftUIImage
@@ -52,12 +57,6 @@ struct AvoidContactsGuideView: View {
       }
       .padding([.horizontal, .top], 20)
       .padding(.bottom, 10)
-      .navigationBarModifier {
-        NavigationBar(
-          title: "",
-          leftButtonTap: { router.pop() }
-        )
-      }
       .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
         Button("설정으로 이동") {
           viewModel.handleAction(.showShettingAlert)

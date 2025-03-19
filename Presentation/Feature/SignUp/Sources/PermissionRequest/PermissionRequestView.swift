@@ -35,6 +35,11 @@ struct PermissionRequestView: View {
     ZStack {
       Color.grayscaleWhite.ignoresSafeArea()
       VStack(alignment: .center, spacing: 0) {
+        NavigationBar(
+          title: "",
+          leftButtonTap: { router.pop() }
+        )
+        
         VStack(spacing: 16) {
           title
           
@@ -83,12 +88,6 @@ struct PermissionRequestView: View {
     }
     .onChange(of: viewModel.showToAvoidContactsView) { _, newValue in
       router.push(to: .AvoidContactsGuide)
-    }
-    .navigationBarModifier {
-      NavigationBar(
-        title: "",
-        leftButtonTap: { router.pop() }
-      )
     }
     .alert("필수 권한 요청", isPresented: $viewModel.shouldShowSettingsAlert) {
       Button("설정으로 이동") {
