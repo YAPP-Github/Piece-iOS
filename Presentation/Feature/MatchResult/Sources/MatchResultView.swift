@@ -28,45 +28,30 @@ struct MatchResultView: View {
   }
 
   var body: some View {
-    VStack(alignment: .center, spacing: 0) {
-      NavigationBar(
-        title: "",
-        rightButton: Button {
-          router.pop()
-        } label: {
-          DesignSystemAsset.Icons.close32.swiftUIImage
-        }
-      )
-      
-      headerText
-        .padding(.top, 20)
-      
-      ZStack(alignment: .center) {
-        AsyncImage(url: URL(string: viewModel.imageUri)) { image in
-          image.image?
-            .resizable()
-            .scaledToFill()
-        }
-        .frame(width: 200, height: 200) // TODO: - 디자인 가이드 확인 후 수정
-        .clipShape(RoundedRectangle(cornerRadius: 8)) // TODO: - 디자인 가이드 확인 후 수정
-        .opacity(viewModel.photoOpacity)
-        .animation(.easeIn(duration: 0.3), value: viewModel.photoOpacity)
+    ZStack {
+      VStack(alignment: .center, spacing: 0) {
+        NavigationBar(
+          title: "",
+          rightButton: Button {
+           router.pop()
+          } label: {
+           DesignSystemAsset.Icons.close32.swiftUIImage
+          }
+        )
         
-        PCLottieView(
-          .matching_motion,
-          loopMode: .playOnce,
-          width: .infinity,
-          height: .infinity
-        ) { animationFinished in
-            viewModel.handleAction(.matchingAnimationDidFinish(animationFinished))
-        }
-        .opacity(viewModel.matchingAnimationOpacity)
+        headerText
+          .padding(.top, 20)
+        
+        Spacer()
+        
+        buttons
+        contactCard
+          .padding(.horizontal, 20)
+          .padding(.top, 22)
       }
+      .frame(width: UIScreen.main.bounds.width)
       
-      buttons
-      contactCard
-        .padding(.horizontal, 20)
-        .padding(.top, 22)
+      imageArea
     }
     .background(
       DesignSystemAsset.Images.matchingBG.swiftUIImage
@@ -129,6 +114,36 @@ struct MatchResultView: View {
       RoundedRectangle(cornerRadius: 16)
         .fill(Color.grayscaleWhite)
     )
+  }
+  
+  private var imageArea: some View {
+    ZStack(alignment: .center) {
+      AsyncImage(url: URL(string: viewModel.imageUri)) { image in
+        image.image?
+          .resizable()
+          .scaledToFill()
+      }
+      .frame(width: 220, height: 220)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .opacity(viewModel.photoOpacity)
+      .animation(.easeIn(duration: 0.3), value: viewModel.photoOpacity)
+      
+      PCLottieView(
+        .matching_motion,
+        loopMode: .playOnce,
+        width: 500,
+        height: 500
+      ) { animationFinished in
+        viewModel.handleAction(.matchingAnimationDidFinish(animationFinished))
+      }
+      .opacity(viewModel.matchingAnimationOpacity)
+      .clipped()
+      .onAppear {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+          viewModel.handleAction(.showProfilePhoto)
+        }
+      }
+    }
   }
 }
 

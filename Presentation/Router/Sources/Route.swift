@@ -48,6 +48,9 @@ public enum Route: Hashable {
   case withdraw
   case withdrawConfirm(reason: String)
   
+  // MARK: - 알림
+  case notificationList
+  
   // MARK: - 기타
   case reportUser(nickname: String)
   case blockUser(matchId: Int, nickname: String)

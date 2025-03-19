@@ -20,6 +20,7 @@ import SignUp
 import SwiftUI
 import UseCases
 import MatchingMain
+import NotificationList
 import Splash
 import Settings
 import ReportUser
@@ -304,6 +305,16 @@ public struct Coordinator {
         description: description,
         imageUri: imageUri,
         getProfileValuePicksUseCase: getProfileValuePicksUseCase
+      )
+      
+      // MARK: - 알림
+    case .notificationList:
+      let notificationRepository = repositoryFactory.createNotificationRepository()
+      let getNotificationsUseCase = UseCaseFactory.createGetNotificationsUseCase(repository: notificationRepository)
+      let readNotificationUseCase = UseCaseFactory.createReadNotificationUseCase(repository: notificationRepository)
+      NotificationViewFactory.createNotificationListView(
+        getNotificationsUseCase: getNotificationsUseCase,
+        readNotificationUseCase: readNotificationUseCase
       )
     }
   }

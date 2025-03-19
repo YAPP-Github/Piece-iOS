@@ -6,18 +6,11 @@
 //
 
 import DesignSystem
+import Entities
 import Foundation
 import SwiftUI
 
 struct NotificationItemModel: Identifiable {
-  enum NotificationType {
-    case profileApproved
-    case profileRejected
-    case matchingNew
-    case matchingAccept
-    case matchingSuccess
-  }
-  
   let id: Int
   let type: NotificationType
   let title: String

@@ -47,7 +47,7 @@ struct ProfileView: View {
       foregroundColor: .grayscaleBlack,
       rightIcon: DesignSystemAsset.Icons.alarm32.swiftUIImage
     ) {
-      // TODO: - 알림 리스트로 이동
+      router.push(to: .notificationList)
     }
   }
   
