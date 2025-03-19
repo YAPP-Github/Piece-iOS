@@ -10,7 +10,6 @@ import SwiftUI
 private enum PCTextEditorConstant {
   static let horizontalPadding: CGFloat = 16
   static let verticalPadding: CGFloat = 14
-  static let maxTextWidth: CGFloat = 243
 }
 
 public struct PCTextEditor<FocusField: Hashable>: View {
@@ -58,7 +57,6 @@ public struct PCTextEditor<FocusField: Hashable>: View {
         TextEditor(text: $text)
           .pretendard(.body_M_M)
           .foregroundStyle(Color.grayscaleBlack)
-          .frame(width: PCTextEditorConstant.maxTextWidth)
           .scrollContentBackground(.hidden)
           .background(Color.grayscaleLight3)
           .focused(focusState, equals: focusField)
