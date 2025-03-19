@@ -217,7 +217,7 @@ struct EditProfileView: View {
     )
     .withButton(
       RoundedButton(
-        type: viewModel.isEditing ? .solid : .disabled,
+        type: viewModel.isEditingNickName ? .solid : .disabled,
         buttonText: "중복검사",
         width: .maxWidth,
         action: { viewModel.handleAction(.tapVaildNickName)}
@@ -232,6 +232,7 @@ struct EditProfileView: View {
       focusField = "description"
     }
     .onChange(of: viewModel.nickname) { _, _ in
+      viewModel.isEditingNickName = true
       viewModel.isEditing = true
     }
   }

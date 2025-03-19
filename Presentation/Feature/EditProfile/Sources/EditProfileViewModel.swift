@@ -82,13 +82,16 @@ final class EditProfileViewModel {
       print("isEditing 상태 변경: \(isEditing)")
     }
   }
+  var isEditingNickName: Bool = false
   var navigationItemColor: Color {
     isEditing ? .primaryDefault : .grayscaleDark3
   }
   
   // TextField InfoMessage
   var nicknameInfoText: String {
-    if nickname.isEmpty && didTapnextButton {
+    if !isEditingNickName {
+      return ""
+    } else if nickname.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
     } else if nickname.count > 6 {
       return "6자 이하로 작성해 주세요."
@@ -403,6 +406,7 @@ final class EditProfileViewModel {
       }
       
       isEditing = false
+      isEditingNickName = false
     } catch {
       print(error.localizedDescription)
     }
