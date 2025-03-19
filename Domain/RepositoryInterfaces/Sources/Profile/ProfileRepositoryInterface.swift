@@ -13,7 +13,7 @@ public protocol ProfileRepositoryInterface {
   func getProfileBasic() async throws -> ProfileBasicModel
   func updateProfileBasic(_ profile: ProfileBasicModel) async throws -> ProfileBasicModel
   func getProfileValueTalks() async throws -> [ProfileValueTalkModel]
-  func updateProfileValueTalks(_ valueTalks: [ProfileValueTalkModel]) async throws -> VoidModel
+  func updateProfileValueTalks(_ valueTalks: [ProfileValueTalkModel]) async throws -> [ProfileValueTalkModel]
   func updateProfileValueTalkSummary(profileTalkId: Int, summary: String) async throws -> VoidModel
   func getProfileValuePicks() async throws -> [ProfileValuePickModel]
   func updateProfileValuePicks(_ valuePicks: [ProfileValuePickModel]) async throws -> VoidModel

@@ -9,7 +9,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol UpdateProfileValueTalksUseCase {
-  func execute(valueTalks: [ProfileValueTalkModel]) async throws -> VoidModel
+  func execute(valueTalks: [ProfileValueTalkModel]) async throws -> [ProfileValueTalkModel]
 }
 
 final class UpdateProfileValueTalksUseCaseImpl: UpdateProfileValueTalksUseCase {
@@ -19,7 +19,7 @@ final class UpdateProfileValueTalksUseCaseImpl: UpdateProfileValueTalksUseCase {
     self.repository = repository
   }
   
-  func execute(valueTalks: [ProfileValueTalkModel]) async throws -> VoidModel {
+  func execute(valueTalks: [ProfileValueTalkModel]) async throws -> [ProfileValueTalkModel] {
     try await repository.updateProfileValueTalks(valueTalks)
   }
 }

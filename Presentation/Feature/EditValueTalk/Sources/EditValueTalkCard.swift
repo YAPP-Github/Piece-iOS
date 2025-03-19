@@ -10,7 +10,7 @@ import Entities
 import SwiftUI
 
 struct EditValueTalkCard: View {
-  @State private var viewModel: EditValueTalkCardViewModel
+  @Bindable private var viewModel: EditValueTalkCardViewModel
   private var focusState: FocusState<EditValueTalkView.Field?>.Binding
   let index: Int
   let isEditing: Bool
@@ -88,7 +88,7 @@ struct EditValueTalkCard: View {
   private var answer: some View {
     VStack(spacing: 16) {
       TextEditor(text: Binding(
-        get: { viewModel.localAnswer },
+        get: { viewModel.model.answer },
         set: { viewModel.handleAction(.didUpdateAnswer($0)) }
       ))
         .frame(maxWidth: .infinity, minHeight: 96)
@@ -100,7 +100,7 @@ struct EditValueTalkCard: View {
         .scrollDisabled(true)
         .foregroundStyle(Color.grayscaleBlack)
         .background(alignment: .topLeading) {
-          if viewModel.localAnswer.isEmpty && focusState.wrappedValue != .answerEditor(index) {
+          if viewModel.model.answer.isEmpty && focusState.wrappedValue != .answerEditor(index) {
             Text(viewModel.model.placeholder)
               .pretendard(.body_M_M)
               .foregroundStyle(Color.grayscaleDark3)
@@ -115,8 +115,8 @@ struct EditValueTalkCard: View {
           }
         }
       
-      if !viewModel.localAnswer.isEmpty || focusState.wrappedValue == .answerEditor(index) {
-        TextCountIndicator(count: .constant(viewModel.localAnswer.count), maxCount: 300)
+      if !viewModel.model.answer.isEmpty || focusState.wrappedValue == .answerEditor(index) {
+        TextCountIndicator(count: .constant(viewModel.model.answer.count), maxCount: 300)
           .contentShape(Rectangle())
           .onTapGesture {
             // 카운터 영역 탭 시 포커스 해제

@@ -9,6 +9,7 @@ import Entities
 import Observation
 import UseCases
 
+@MainActor
 @Observable
 final class EditValueTalkViewModel {
   enum Action {
@@ -22,7 +23,7 @@ final class EditValueTalkViewModel {
   var cardViewModels: [EditValueTalkCardViewModel] = []
   var isEditing: Bool = false
   var isEdited: Bool {
-    initialValueTalks == valueTalks
+    initialValueTalks != valueTalks
   }
   
   private(set) var initialValueTalks: [ProfileValueTalkModel] = []
@@ -43,6 +44,7 @@ final class EditValueTalkViewModel {
     self.updateProfileValueTalksUseCase = updateProfileValueTalksUseCase
     self.connectSseUseCase = connectSseUseCase
     self.disconnectSseUseCase = disconnectSseUseCase
+    print("view model init")
     
     Task {
       await fetchValueTalks()
@@ -75,7 +77,6 @@ final class EditValueTalkViewModel {
     if isEditing {
       if isEdited {
         for cardViewModel in cardViewModels {
-          valueTalks[cardViewModel.index].answer = cardViewModel.localAnswer
           valueTalks[cardViewModel.index].summary = cardViewModel.localSummary
         }
         await updateProfileValueTalks()
@@ -117,8 +118,12 @@ final class EditValueTalkViewModel {
   
   private func updateProfileValueTalks() async {
     do {
-      _ = try await updateProfileValueTalksUseCase.execute(valueTalks: valueTalks)
-      initialValueTalks = valueTalks
+      print("update called")
+      print(valueTalks)
+      let updatedValueTalks = try await updateProfileValueTalksUseCase.execute(valueTalks: valueTalks)
+      print("updated")
+      print(updatedValueTalks)
+      initialValueTalks = updatedValueTalks
       isEditing = false
     } catch {
       print(error)
@@ -128,7 +133,7 @@ final class EditValueTalkViewModel {
   // MARK: - AI 요약 관련
   
   private func connectSse() async {
-    sseTask = Task { @MainActor in
+    sseTask = Task {
       do {
         for try await createdSummary in connectSseUseCase.execute() {
           handleSummaryUpdate(createdSummary)
