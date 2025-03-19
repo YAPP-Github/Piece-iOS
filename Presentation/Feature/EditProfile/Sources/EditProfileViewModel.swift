@@ -36,7 +36,6 @@ final class EditProfileViewModel {
     Task {
       await getBasicProfile()
     }
-    isEditing = false
   }
   
   private let updateProfileBasicUseCase: UpdateProfileBasicUseCase
@@ -57,7 +56,7 @@ final class EditProfileViewModel {
   
   // isValid
   var isValidProfileImage: Bool = false
-  var isValidNickname: Bool = false
+  var isValidNickname: Bool = true
   var isDescriptionValid: Bool {
     !description.isEmpty && description.count <= 20
   }
@@ -184,7 +183,7 @@ final class EditProfileViewModel {
   var selectedContactForIconChange: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
   var selectedItem: PhotosPickerItem? = nil
-  var didCheckDuplicates: Bool = false
+  var didCheckDuplicates: Bool = true
   var didTapnextButton: Bool = false
   
   var locations: [String] = ["서울특별시", "경기도", "부산광역시", "대전광역시", "울산광역시", "세종특별자치시", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도", "기타"]
@@ -251,7 +250,7 @@ final class EditProfileViewModel {
     if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
       didTapnextButton = true
       await isToastVisible()
-    } else if isNextButtonEnabled {
+    } else {
       do {
         guard let profileImage = profileImage else { return }
         guard let imageData = profileImage.resizedAndCompressedData(targetSize: CGSize(width: 400, height: 400), compressionQuality: 0.5) else {
@@ -277,7 +276,7 @@ final class EditProfileViewModel {
         )
         
         _ = try await updateProfileBasicUseCase.execute(profile: basicInfo)
-        
+        isEditing = false
       } catch {
         print(error.localizedDescription)
       }
@@ -383,14 +382,10 @@ final class EditProfileViewModel {
     self.isEditing = true
   }
   
+  @MainActor
   private func getBasicProfile() async {
     do {
       let profile = try await getProfileBasicUseCase.execute()
-      if let imageUrl = URL(string: profile.imageUri),
-         let imageData = try? Data(contentsOf: imageUrl) {
-          profileImage = UIImage(data: imageData)
-      }
-      dump(profile)
       
       nickname = profile.nickname
       description = profile.description
@@ -403,8 +398,23 @@ final class EditProfileViewModel {
       job = profile.job
       contacts = profile.contacts
       
+      if let imageUrl = URL(string: profile.imageUri) {
+        profileImage = await fetchImage(from: imageUrl)
+      }
+      
+      isEditing = false
     } catch {
       print(error.localizedDescription)
     }
+  }
+  
+  private func fetchImage(from url: URL) async -> UIImage? {
+      do {
+          let (data, _) = try await URLSession.shared.data(from: url)
+          return UIImage(data: data)
+      } catch {
+          print("이미지 다운로드 실패: \(error.localizedDescription)")
+          return nil
+      }
   }
 }

@@ -217,7 +217,7 @@ struct EditProfileView: View {
     )
     .withButton(
       RoundedButton(
-        type: .solid,
+        type: viewModel.isEditing ? .solid : .disabled,
         buttonText: "중복검사",
         width: .maxWidth,
         action: { viewModel.handleAction(.tapVaildNickName)}
