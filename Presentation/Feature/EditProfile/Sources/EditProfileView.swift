@@ -136,9 +136,14 @@ struct EditProfileView: View {
     NavigationBar(
       title: "기본 정보 수정",
       leftButtonTap: { router.pop() },
-      rightButtonTap: { viewModel.handleAction(.tapConfirmButton) },
-      label: "저장",
-      labelColor: viewModel.navigationItemColor
+      rightButton: Button {
+        viewModel.handleAction(.tapConfirmButton)
+      } label: {
+        Text("저장")
+          .pretendard(.body_M_M)
+          .foregroundStyle(viewModel.navigationItemColor)
+      }
+        .disabled(!viewModel.isEditing)
     )
   }
   
