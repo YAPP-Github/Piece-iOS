@@ -15,6 +15,7 @@ public enum ProfileEndpoint: TargetType {
   case postCheckNickname(String)
   case postUploadImage(Data)
   case getProfileBasic
+  case updateProfileBasic(ProfileBasicRequestDTO)
   case getValueTalks
   case updateValueTalks(ProfileValueTalksRequestDTO)
   case getValuePicks
@@ -27,6 +28,7 @@ public enum ProfileEndpoint: TargetType {
     case .postCheckNickname: .post
     case .postUploadImage: .post
     case .getProfileBasic: .get
+    case .updateProfileBasic: .put
     case .getValueTalks: .get
     case .updateValueTalks: .put
     case .getValuePicks: .get
@@ -40,7 +42,7 @@ public enum ProfileEndpoint: TargetType {
     case .postProfile: "api/profiles"
     case .postCheckNickname: "api/profiles/check-nickname"
     case .postUploadImage: "api/profiles/images"
-    case .getProfileBasic: "api/profiles/basic"
+    case .getProfileBasic, .updateProfileBasic: "api/profiles/basic"
     case .getValueTalks: "api/profiles/valueTalks"
     case .updateValueTalks: "api/profiles/valueTalks"
     case .getValuePicks: "api/profiles/valuePicks"
@@ -62,6 +64,11 @@ public enum ProfileEndpoint: TargetType {
       [NetworkHeader.contentType : NetworkHeader.multipartFormData]
       
     case .getProfileBasic:
+      [
+        NetworkHeader.contentType: NetworkHeader.applicationJson,
+        NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
+      ]
+    case .updateProfileBasic:
       [
         NetworkHeader.contentType: NetworkHeader.applicationJson,
         NetworkHeader.authorization: NetworkHeader.bearer(PCKeychainManager.shared.read(.accessToken) ?? "")
@@ -100,6 +107,7 @@ public enum ProfileEndpoint: TargetType {
     case let .postCheckNickname(string): .query([URLQueryItem(name: "nickname", value: string)])
     case let .postUploadImage(data): .multipart(data)
     case .getProfileBasic: .plain
+    case let .updateProfileBasic(dto): .body(dto)
     case .getValueTalks: .plain
     case let .updateValueTalks(dto): .body(dto)
     case .getValuePicks: .plain

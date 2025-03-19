@@ -92,7 +92,7 @@ struct ProfileView: View {
     }
     .contentShape(Rectangle())
     .onTapGesture {
-      // TODO: - 기본 정보 수정 화면으로 이동
+      router.push(to: .editProfile)
     }
   }
   

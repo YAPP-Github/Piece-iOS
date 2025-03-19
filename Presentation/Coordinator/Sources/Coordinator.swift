@@ -26,6 +26,7 @@ import Settings
 import ReportUser
 import MatchResult
 import PreviewProfile
+import EditProfile
 
 public struct Coordinator {
   public init() { }
@@ -252,6 +253,20 @@ public struct Coordinator {
       EditValuePickViewFactory.createEditValuePickViewFactory(
         getProfileValuePicksUseCase: getProfileValuePicksUseCase,
         updateProfileValuePicksUseCase: updateProfileValuePicksUseCase
+      )
+      
+    case .editProfile:
+      let profileRepository = repositoryFactory.createProfileRepository()
+      let checkNicknameRepositoty = repositoryFactory.createCheckNicknameRepository()
+      let updateProfileBasicUseCase = UseCaseFactory.createUpdateProfileBasicUseCase(repository: profileRepository)
+      let getProfileBasicUseCase = UseCaseFactory.createGetProfileUseCase(repository: profileRepository)
+      let checkNicknameUseCase = UseCaseFactory.createCheckNicknameUseCase(repository: checkNicknameRepositoty)
+      let uploadProfileImageUseCase = UseCaseFactory.createUploadProfileImageUseCase(repository: profileRepository)
+      EditProfileViewFactory.createEditProfileView(
+        updateProfileBasicUseCase: updateProfileBasicUseCase,
+        getProfileBasicUseCase: getProfileBasicUseCase,
+        checkNicknameUseCase: checkNicknameUseCase,
+        uploadProfileImageUseCase: uploadProfileImageUseCase
       )
       
     case .withdraw:

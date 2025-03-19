@@ -33,6 +33,7 @@ public enum Route: Hashable {
   
   // MARK: - 설정
   case settingsWebView(title: String, uri: String)
+  case editProfile
   
   // MARK: - 프로필 생성
   case createProfile

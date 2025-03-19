@@ -93,6 +93,10 @@ public struct UseCaseFactory {
     GetProfileUseCaseImpl(repository: repository)
   }
   
+  public static func createUpdateProfileBasicUseCase(repository: ProfileRepositoryInterface) -> UpdateProfileBasicUseCase {
+    UpdateProfileBasicUseCaseImpl(repository: repository)
+  }
+  
   public static func createProfileUseCase(repository: ProfileRepositoryInterface) -> CreateProfileUseCase {
     CreateProfileUseCaseImpl(repository: repository)
   }
