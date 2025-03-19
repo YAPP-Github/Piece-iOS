@@ -33,7 +33,6 @@ final class EditValueTalkCardViewModel: Equatable {
   var model: ProfileValueTalkModel
   let index: Int
   let isEditingAnswer: Bool
-  var localAnswer: String
   var localSummary: String
   var currentGuideText: String {
     model.guides[guideTextIndex]
@@ -55,7 +54,6 @@ final class EditValueTalkCardViewModel: Equatable {
     self.index = index
     self.isEditingAnswer = isEditingAnswer
     self.onModelUpdate = onModelUpdate
-    self.localAnswer = model.answer
     self.localSummary = model.summary
     startTimer()
   }
@@ -68,7 +66,8 @@ final class EditValueTalkCardViewModel: Equatable {
     switch action {
     case let .didUpdateAnswer(answer):
       let limitedText = answer.count <= 300 ? answer : String(answer.prefix(300))
-      localAnswer = limitedText
+      model.answer = limitedText
+      onModelUpdate(model)
       
     case let .didUpdateSummary(summary):
       let limitedText = summary.count <= 50 ? summary : String(summary.prefix(50))

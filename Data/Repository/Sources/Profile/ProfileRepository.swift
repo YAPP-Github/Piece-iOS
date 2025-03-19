@@ -40,13 +40,13 @@ final class ProfileRepository: ProfileRepositoryInterface {
     return responseDto.responses.map { $0.toDomain() }
   }
   
-  func updateProfileValueTalks(_ valueTalks: [ProfileValueTalkModel]) async throws -> VoidModel {
+  func updateProfileValueTalks(_ valueTalks: [ProfileValueTalkModel]) async throws -> [ProfileValueTalkModel] {
     let requests = valueTalks.map { ProfileValueTalkRequestDTO(profileValueTalkId: $0.id, answer: $0.answer, summary: $0.summary) }
     let requestDto = ProfileValueTalksRequestDTO(profileValueTalkUpdateRequests: requests)
     let endpoint = ProfileEndpoint.updateValueTalks(requestDto)
-    let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    let responseDto: ProfileValueTalksResponseDTO = try await networkService.request(endpoint: endpoint)
     
-    return responseDto.toDomain()
+    return responseDto.responses.map { $0.toDomain() }
   }
   
   func updateProfileValueTalkSummary(profileTalkId: Int, summary: String) async throws -> Entities.VoidModel {

@@ -48,11 +48,7 @@ struct EditValueTalkView: View {
         NavigationBar(
           title: "가치관 Talk",
           leftButtonTap: { router.pop() },
-          rightButton: Button { viewModel.handleAction(.didTapSaveButton) } label: {
-            Text(viewModel.isEditing ? "저장": "수정")
-              .pretendard(.body_M_M)
-              .foregroundStyle(viewModel.isEditing ? Color.grayscaleDark3 : Color.primaryDefault)
-          }
+          rightButton: navigationBarRightButton
         )
         
         ScrollView {
@@ -69,6 +65,21 @@ struct EditValueTalkView: View {
     }
     .onDisappear {
       viewModel.handleAction(.onDisappear)
+    }
+  }
+  
+  private var navigationBarRightButton: some View {
+    Button {
+      viewModel.handleAction(.didTapSaveButton)
+      focusField = nil
+    } label: {
+      Text(viewModel.isEditing ? "저장": "수정")
+        .pretendard(.body_M_M)
+        .foregroundStyle(
+          viewModel.isEditing
+          ? (viewModel.isEdited ? Color.primaryDefault : Color.grayscaleDark3)
+          : Color.primaryDefault)
+        .contentShape(Rectangle())
     }
   }
   
