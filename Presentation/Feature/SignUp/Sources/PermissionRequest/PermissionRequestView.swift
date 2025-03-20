@@ -76,6 +76,7 @@ struct PermissionRequestView: View {
       .padding([.horizontal, .top], 20)
       .padding(.bottom, 10)
     }
+    .toolbar(.hidden)
     .task {
       await viewModel.checkPermissions()
     }

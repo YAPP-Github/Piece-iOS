@@ -72,6 +72,7 @@ struct AvoidContactsGuideView: View {
         .opacity(viewModel.showToast ? 1 : 0)
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
     }
+    .toolbar(.hidden)
     .onChange(of: viewModel.moveToCompleteSignUp) { _, newValue in
       router.push(to: .completeSignUp)
     }
