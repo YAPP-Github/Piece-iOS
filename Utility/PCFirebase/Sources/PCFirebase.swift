@@ -50,11 +50,19 @@ public final class PCFirebase {
       throw PCFirebaseError.remoteConfigNotInitialized
     }
     
+    try await remoteConfig.ensureInitialized()
+    
     do {
       let status = try await remoteConfig.fetchAndActivate()
       guard status == .successFetchedFromRemote || status == .successUsingPreFetchedData else {
         throw PCFirebaseError.fetchFailed
       }
+      
+      let allKeys = remoteConfig.allKeys(from: .remote)
+      for key in allKeys {
+        print("🔥 Firebase RemoteConfig key: \(key), value: \(remoteConfig[key].stringValue ?? "")")
+      }
+
     } catch {
       throw PCFirebaseError.fetchFailed
     }

@@ -77,6 +77,7 @@ final class SplashViewModel {
           }
         case .forbidden:
           print("forbidden")
+          destination = .login
         case .notFound:
           print("not fount")
         case .internalServerError:
@@ -106,12 +107,12 @@ final class SplashViewModel {
     try await PCFirebase.shared.fetchRemoteConfigValues()
     let currentVersion = AppVersion.appVersion()
     let minimumVersion = PCFirebase.shared.minimumVersion()
-    let needsForceUpdate = PCFirebase.shared.needsForceUpdate()
+    let needsForceUpdate = currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
     
     print("currentVersion: \(currentVersion)")
     print("minimumVersion: \(minimumVersion)")
     print("needsForceUpdate: \(needsForceUpdate)")
-    showNeedsForceUpdateAlert = needsForceUpdate && currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+    showNeedsForceUpdateAlert = needsForceUpdate
   }
   
   private func checkOnboarding() -> Bool {
