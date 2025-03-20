@@ -1,7 +1,6 @@
 import DesignSystem
 import PCFirebase
 import LocalStorage
-import PCFirebase
 import Router
 import KakaoSDKCommon
 import KakaoSDKAuth
@@ -17,7 +16,6 @@ struct PieceApp: App {
   init() {
     print("app init")
 
-    
     // Kakao SDK 초기화
     guard let kakaoAppKey = Bundle.main.infoDictionary?["NATIVE_APP_KEY"] as? String else {
       print("Failed to load Kakao App Key")
