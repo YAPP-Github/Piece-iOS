@@ -17,5 +17,6 @@ let project = Project.dynamicFramework(
     .externalDependency(dependency: .Alamofire),
     .data(target: .LocalStorage),
     .data(target: .DTO),
+    .utility(target: .PCFoundationExtension),
   ]
 )
