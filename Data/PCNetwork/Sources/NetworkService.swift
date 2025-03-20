@@ -22,10 +22,18 @@ public class NetworkService {
     let accessToken = PCKeychainManager.shared.read(.accessToken) ?? ""
     let refreshToken = PCKeychainManager.shared.read(.refreshToken) ?? ""
     
+    // Parse expiration time from token
+    var expiration = Date(timeIntervalSinceNow: 60 * 60 * 24) // Default fallback
+    if let claims = accessToken.decodeJWT(),
+       let exp = claims["exp"] as? TimeInterval {
+      expiration = Date(timeIntervalSince1970: exp)
+    }
+    
+    // Create credential and session
     let credential = OAuthCredential(
-      accessToken: PCKeychainManager.shared.read(.accessToken) ?? "",
-      refreshToken: PCKeychainManager.shared.read(.refreshToken) ?? "",
-      expiration: Date(timeIntervalSinceNow: 60 * 60 * 24)
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      expiration: expiration
     )
     
     let authenticator = OAuthAuthenticator()
@@ -163,20 +171,33 @@ public class NetworkService {
   }
   
   public func updateCredentials() {
-    let accessToken = PCKeychainManager.shared.read(.accessToken) ?? ""
-    let refreshToken = PCKeychainManager.shared.read(.refreshToken) ?? ""
-    
-    print("Session 업데이트 - Access Token: \(accessToken)")
-    print("Session 업데이트 - Refresh Token: \(refreshToken)")
-    
-    let credential = OAuthCredential(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      expiration: Date(timeIntervalSinceNow: 60 * 60)
-    )
-    
-    let authenticator = OAuthAuthenticator()
-    let interceptor = AuthenticationInterceptor(authenticator: authenticator, credential: credential)
-    self.session = Session(interceptor: interceptor)
+    authQueue.async { [weak self] in
+      guard let self else { return }
+      
+      let accessToken = PCKeychainManager.shared.read(.accessToken) ?? ""
+      let refreshToken = PCKeychainManager.shared.read(.refreshToken) ?? ""
+      
+      print("🛰 Session 업데이트 - Access Token: \(accessToken)")
+      print("🛰 Session 업데이트 - Refresh Token: \(refreshToken)")
+      
+      var expiration = Date(timeIntervalSinceNow: 60 * 60 * 24) // Default fallback
+      if let claims = accessToken.decodeJWT(),
+         let exp = claims["exp"] as? TimeInterval {
+        expiration = Date(timeIntervalSince1970: exp)
+      }
+      
+      let credential = OAuthCredential(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        expiration: expiration
+      )
+      
+      let authenticator = OAuthAuthenticator()
+      let interceptor = AuthenticationInterceptor(authenticator: authenticator, credential: credential)
+      self.session = Session(
+        interceptor: interceptor,
+        eventMonitors: [self.networkLogger]
+      )
+    }
   }
 }

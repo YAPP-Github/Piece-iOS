@@ -11,6 +11,11 @@ import Foundation
 import LocalStorage
 
 final class OAuthAuthenticator: Authenticator {
+  private let lock = NSLock()
+  private var isRefreshing = false
+  private var retryCount = 0
+  private let maxRetryCount = 3
+  
   func apply(
     _ credential: OAuthCredential,
     to urlRequest: inout URLRequest
@@ -50,16 +55,44 @@ final class OAuthAuthenticator: Authenticator {
     for session: Session,
     completion: @escaping (Result<OAuthCredential, any Error>) -> Void
   ) {
+    lock.lock()
+    
+    if isRefreshing {
+      lock.unlock()
+      print("🛰 Token refresh already in progress")
+      return
+    }
+    
+    if retryCount >= maxRetryCount {
+      lock.unlock()
+      print("🛰 Maximum refresh attemps reached (\(maxRetryCount)")
+      PCKeychainManager.shared.delete(.accessToken)
+      PCKeychainManager.shared.delete(.refreshToken)
+      completion(.failure(NetworkError.noRefreshToken))
+      return
+    }
+      
+    retryCount += 1
+    print("🛰 Token refresh attempt \(retryCount) of \(maxRetryCount)")
+    isRefreshing = true
+    lock.unlock()
+    
+    defer {
+      lock.lock()
+      isRefreshing = false
+      lock.unlock()
+    }
+    
     guard !credential.refreshToken.isEmpty else {
-      print("Refresh Token 없음")
+      print("🛰 Refresh Token 없음")
       PCKeychainManager.shared.delete(.accessToken)
       PCKeychainManager.shared.delete(.refreshToken)
       completion(.failure(NetworkError.noRefreshToken))
       return
     }
     
-    print("토큰 재발급")
-    print("refresh token: \(credential.refreshToken)")
+    print("🛰 토큰 재발급")
+    print("🛰 refresh token: \(credential.refreshToken)")
     let requestDto = TokenRefreshRequestDTO(refreshToken: credential.refreshToken)
     let endpoint = LoginEndpoint.tokenRefresh(body: requestDto)
     let url = endpoint.baseURL.appending(endpoint.path)
@@ -69,11 +102,15 @@ final class OAuthAuthenticator: Authenticator {
       .responseAPI(of: TokenRefreshResponseDTO.self) { result in
         switch result {
         case .success(let tokenData):
-          print("토큰 재발급 성공")
           let accessToken = tokenData.accessToken
           let refreshToken = tokenData.refreshToken
-          print("Access Token: \(accessToken)")
-          print("Refresh Token: \(refreshToken)")
+          print("🛰 토큰 재발급 성공")
+          print("🛰 Access Token: \(accessToken)")
+          print("🛰 Refresh Token: \(refreshToken)")
+          
+          self.lock.lock()
+          self.retryCount = 0
+          self.lock.unlock()
           
           PCKeychainManager.shared.save(.accessToken, value: accessToken)
           PCKeychainManager.shared.save(.refreshToken, value: refreshToken)
@@ -86,7 +123,7 @@ final class OAuthAuthenticator: Authenticator {
           completion(.success(newCredential))
           
         case .failure(let networkError):
-          print("토큰 재발급 실패: \(networkError.errorDescription ?? "알 수 없는 오류")")
+          print("🛰 토큰 재발급 실패: \(networkError.errorDescription ?? "알 수 없는 오류")")
           // 토큰 갱신 실패 시 키체인에서 토큰 삭제
           PCKeychainManager.shared.delete(.accessToken)
           PCKeychainManager.shared.delete(.refreshToken)
