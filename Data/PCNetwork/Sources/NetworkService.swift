@@ -5,28 +5,41 @@
 //  Created by eunseou on 2/1/25.
 //
 
+import Alamofire
 import DTO
 import Foundation
-import Alamofire
 import LocalStorage
+import PCFoundationExtension
 
 public class NetworkService {
   public static let shared = NetworkService()
+  private let authQueue = DispatchQueue(label: "authQueue")
+  private let networkLogger: NetworkLogger
   private var session: Session
   
   private init() {
+    // Get tokens from keychain
+    let accessToken = PCKeychainManager.shared.read(.accessToken) ?? ""
+    let refreshToken = PCKeychainManager.shared.read(.refreshToken) ?? ""
+    
     let credential = OAuthCredential(
       accessToken: PCKeychainManager.shared.read(.accessToken) ?? "",
       refreshToken: PCKeychainManager.shared.read(.refreshToken) ?? "",
       expiration: Date(timeIntervalSinceNow: 60 * 60 * 24)
     )
+    
     let authenticator = OAuthAuthenticator()
     let interceptor = AuthenticationInterceptor(authenticator: authenticator, credential: credential)
-    self.session = Session(interceptor: interceptor)
+    let networkLogger = NetworkLogger()
+    self.networkLogger = networkLogger
+    self.session = Session(
+      interceptor: interceptor,
+      eventMonitors: [networkLogger]
+    )
   }
   
   public func request<T: Decodable>(endpoint: TargetType) async throws -> T {
-    print("request path: \(endpoint.path)")
+    print("🛰 request path: \(endpoint.path)")
     
     return try await withCheckedThrowingContinuation { continuation in
       session.request(endpoint)
@@ -34,11 +47,12 @@ public class NetworkService {
         .responseDecodable(of: APIResponse<T>.self) { response in
           switch response.result {
           case .success(let apiResponse):
-            print("\(apiResponse.status): \(apiResponse.message)")
+            print("🛰 API Response \(apiResponse.status): \(apiResponse.message)")
             continuation.resume(returning: apiResponse.data)
           case .failure(let error):
             if let afError = error.asAFError {
               let networkError = NetworkError.from(afError: afError)
+              print("🛰 NetworkError Description: \(networkError.errorDescription)")
               continuation.resume(throwing: networkError)
             } else {
               continuation.resume(throwing: NetworkError.statusCode(-1))
@@ -55,11 +69,12 @@ public class NetworkService {
         .responseDecodable(of: APIResponse<T>.self) { response in
           switch response.result {
           case .success(let apiResponse):
-            print("\(apiResponse.status): \(apiResponse.message)")
+            print("🛰 API Response \(apiResponse.status): \(apiResponse.message)")
             continuation.resume(returning: apiResponse.data)
           case .failure(let error):
             if let afError = error.asAFError {
               let networkError = NetworkError.from(afError: afError)
+              print("🛰 NetworkError Description: \(networkError.errorDescription)")
               continuation.resume(throwing: networkError)
             } else {
               continuation.resume(throwing: NetworkError.statusCode(-1))
@@ -128,7 +143,7 @@ public class NetworkService {
               // AFError가 있으면 변환
               continuation.finish(throwing: NetworkError.from(afError: error))
             } else if let statusCode = completion.response?.statusCode,
-                        !(200..<300).contains(statusCode) {
+                      !(200..<300).contains(statusCode) {
               // 성공이 아닌 상태 코드가 있으면 변환
               let networkError = NetworkError.from(statusCode: statusCode, data: nil)
               continuation.finish(throwing: networkError)
