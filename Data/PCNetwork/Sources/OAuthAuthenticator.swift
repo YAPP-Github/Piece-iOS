@@ -56,6 +56,7 @@ final class OAuthAuthenticator: Authenticator {
     completion: @escaping (Result<OAuthCredential, any Error>) -> Void
   ) {
     lock.lock()
+    print("🛰 refresh called")
     
     if isRefreshing {
       lock.unlock()
