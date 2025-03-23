@@ -54,6 +54,12 @@ final class CreateBasicInfoViewModel {
     !description.isEmpty && description.count <= 20
   }
   var isValidBirthDate: Bool { isValidBirthDateFormat(birthDate) }
+  var isValidHeight: Bool {
+    (2...3).contains(height.count) && height.allSatisfy(\.isNumber)
+  }
+  var isVaildWeight: Bool {
+    (2...3).contains(weight.count) && weight.allSatisfy(\.isNumber)
+  }
   var isContactsValid: Bool {
     return contacts.allSatisfy { !$0.value.isEmpty }
   }
@@ -63,10 +69,10 @@ final class CreateBasicInfoViewModel {
     isValidBirthDate &&
     !nickname.isEmpty &&
     !description.isEmpty &&
-    !birthDate.isEmpty &&
+    isValidBirthDate &&
     !location.isEmpty &&
-    !height.isEmpty &&
-    !weight.isEmpty &&
+    isValidHeight &&
+    isVaildWeight &&
     !job.isEmpty &&
     isContactsValid
   }
@@ -120,6 +126,8 @@ final class CreateBasicInfoViewModel {
   var heightInfoText: String {
     if height.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
+    } else if !height.isEmpty && !((2...3).contains(height.count) && height.allSatisfy(\.isNumber)) {
+      return "숫자가 정확한 지 확인해 주세요."
     } else {
       return ""
     }
@@ -127,6 +135,8 @@ final class CreateBasicInfoViewModel {
   var weightInfoText: String {
     if weight.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
+    } else if !weight.isEmpty && !((2...3).contains(weight.count) && weight.allSatisfy(\.isNumber)) {
+      return "숫자가 정확한 지 확인해 주세요."
     } else {
       return ""
     }
@@ -284,9 +294,16 @@ final class CreateBasicInfoViewModel {
   }
   
   private func isValidBirthDateFormat(_ date: String) -> Bool {
-    let dateRegex = "^[0-9]{8}$" // YYYYMMDD
+    let dateRegex = #"^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$"# // YYYYMMDD
     let dateTest = NSPredicate(format: "SELF MATCHES %@", dateRegex)
     return dateTest.evaluate(with: date) && date.count == 8
+  }
+  
+  func isAllowedInput(_ input: String) -> Bool {
+      let pattern = #"^[A-Za-z0-9\s[:punct:][:symbol:]]*$"#
+      guard let regex = try? NSRegularExpression(pattern: pattern) else { return false }
+      let range = NSRange(location: 0, length: input.utf16.count)
+      return regex.firstMatch(in: input, options: [], range: range) != nil
   }
   
   func saveSelectedJob() {

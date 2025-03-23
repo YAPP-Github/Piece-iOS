@@ -413,7 +413,8 @@ struct EditProfileView: View {
           text: Binding(
             get: { contact.value },
             set: { newValue in
-              if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
+              if viewModel.isAllowedInput(newValue),
+                 let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
                 viewModel.contacts[index].value = newValue
               }
             }
@@ -433,6 +434,8 @@ struct EditProfileView: View {
             viewModel.isContactTypeChangeSheetPresented = true
           }
         )
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
         .frame(minHeight: 72)
         .id("contact_\(contact.id)_scroll")
       }
