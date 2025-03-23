@@ -120,6 +120,8 @@ final class CreateBasicInfoViewModel {
   var heightInfoText: String {
     if height.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
+    } else if !height.isEmpty && ( height.count >= 4 || height.count < 2 ) {
+      return "숫자가 정확한 지 확인해 주세요."
     } else {
       return ""
     }
@@ -127,6 +129,8 @@ final class CreateBasicInfoViewModel {
   var weightInfoText: String {
     if weight.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
+    } else if !weight.isEmpty && ( weight.count >= 4 || weight.count < 2 ) {
+      return "숫자가 정확한 지 확인해 주세요."
     } else {
       return ""
     }
