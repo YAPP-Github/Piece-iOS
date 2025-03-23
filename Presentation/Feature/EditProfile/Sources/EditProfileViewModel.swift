@@ -61,6 +61,12 @@ final class EditProfileViewModel {
     !description.isEmpty && description.count <= 20
   }
   var isValidBirthDate: Bool { isValidBirthDateFormat(birthDate) }
+  var isValidHeight: Bool {
+    (2...3).contains(height.count) && height.allSatisfy(\.isNumber)
+  }
+  var isVaildWeight: Bool {
+    (2...3).contains(weight.count) && weight.allSatisfy(\.isNumber)
+  }
   var isContactsValid: Bool {
     return contacts.allSatisfy { !$0.value.isEmpty }
   }
@@ -70,10 +76,10 @@ final class EditProfileViewModel {
     isValidBirthDate &&
     !nickname.isEmpty &&
     !description.isEmpty &&
-    !birthDate.isEmpty &&
+    isValidBirthDate &&
     !location.isEmpty &&
-    !height.isEmpty &&
-    !weight.isEmpty &&
+    isValidHeight &&
+    isVaildWeight &&
     !job.isEmpty &&
     isContactsValid
   }
@@ -138,7 +144,7 @@ final class EditProfileViewModel {
   var heightInfoText: String {
     if height.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
-    } else if !height.isEmpty && ( height.count >= 4 || height.count < 2 ) {
+    } else if !height.isEmpty && !((2...3).contains(height.count) && height.allSatisfy(\.isNumber)) {
       return "숫자가 정확한 지 확인해 주세요."
     } else {
       return ""
@@ -147,7 +153,7 @@ final class EditProfileViewModel {
   var weightInfoText: String {
     if weight.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
-    } else if !weight.isEmpty && ( weight.count >= 4 || weight.count < 2 ) {
+    } else if !weight.isEmpty && !((2...3).contains(weight.count) && weight.allSatisfy(\.isNumber)) {
       return "숫자가 정확한 지 확인해 주세요."
     } else {
       return ""
