@@ -12,6 +12,7 @@ import LocalStorage
 import KakaoSDKUser
 import AuthenticationServices
 
+@MainActor
 @Observable
 final class WithdrawConfirmViewModel: NSObject {
   enum Action {

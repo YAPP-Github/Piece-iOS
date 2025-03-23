@@ -79,7 +79,8 @@ final class SplashViewModel {
           print("forbidden")
           destination = .login
         case .notFound:
-          print("not fount")
+          print("not found")
+          destination = .login
         case .internalServerError:
           print("internal server error")
         case .statusCode(let int):
