@@ -299,6 +299,13 @@ final class CreateBasicInfoViewModel {
     return dateTest.evaluate(with: date) && date.count == 8
   }
   
+  func isAllowedInput(_ input: String) -> Bool {
+      let pattern = #"^[A-Za-z0-9\s[:punct:][:symbol:]]*$"#
+      guard let regex = try? NSRegularExpression(pattern: pattern) else { return false }
+      let range = NSRange(location: 0, length: input.utf16.count)
+      return regex.firstMatch(in: input, options: [], range: range) != nil
+  }
+  
   func saveSelectedJob() {
     if isCustomJobSelected {
       self.job = customJobText.isEmpty ? "" : customJobText

@@ -398,7 +398,8 @@ struct CreateBasicInfoView: View {
           text: Binding(
             get: { contact.value },
             set: { newValue in
-              if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
+              if viewModel.isAllowedInput(newValue),
+                 let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
                 viewModel.contacts[index].value = newValue
               }
             }
