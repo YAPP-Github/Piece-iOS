@@ -418,6 +418,8 @@ struct CreateBasicInfoView: View {
             viewModel.isContactTypeChangeSheetPresented = true
           }
         )
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
         .frame(minHeight: 72)
         .id("contact_\(contact.id)_scroll")
       }
