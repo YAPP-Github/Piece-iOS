@@ -42,30 +42,31 @@ struct AvoidContactsGuideView: View {
           title: "",
           leftButtonTap: { router.pop() }
         )
-        
-        title
-        
-        DesignSystemAsset.Images.imgBlock.swiftUIImage
-          .resizable()
-          .frame(width: 300, height: 300)
-        
-        Spacer()
-        
-        denyButton
-        
-        acceptButton
-      }
-      .padding([.horizontal, .top], 20)
-      .padding(.bottom, 10)
-      .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
-        Button("설정으로 이동") {
-          viewModel.handleAction(.showShettingAlert)
+        VStack {
+          title
+          
+          DesignSystemAsset.Images.imgBlock.swiftUIImage
+            .resizable()
+            .frame(width: 300, height: 300)
+          
+          Spacer()
+          
+          denyButton
+          
+          acceptButton
         }
-        Button("취소", role: .cancel) {
-          viewModel.handleAction(.cancelAlert)
+        .padding([.horizontal, .top], 20)
+        .padding(.bottom, 10)
+        .alert("연락처 권한 요청", isPresented: $viewModel.isPresentedAlert) {
+          Button("설정으로 이동") {
+            viewModel.handleAction(.showShettingAlert)
+          }
+          Button("취소", role: .cancel) {
+            viewModel.handleAction(.cancelAlert)
+          }
+        } message: {
+          Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
         }
-      } message: {
-        Text("연락처 권한이 필요합니다. 설정에서 권한을 허용해주세요.")
       }
       
       toast

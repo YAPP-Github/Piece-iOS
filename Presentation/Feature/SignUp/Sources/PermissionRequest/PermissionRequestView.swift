@@ -68,12 +68,12 @@ struct PermissionRequestView: View {
             isRequired: false
           )
         }
+        .padding([.horizontal, .top], 20)
         
         Spacer()
         
         nextButton
       }
-      .padding([.horizontal, .top], 20)
       .padding(.bottom, 10)
     }
     .toolbar(.hidden)
@@ -123,6 +123,7 @@ struct PermissionRequestView: View {
       width: .maxWidth,
       action: { viewModel.handleAction(.tapNextButton) }
     )
+    .padding(.horizontal, 20)
   }
   
   private func PermissionItem(
