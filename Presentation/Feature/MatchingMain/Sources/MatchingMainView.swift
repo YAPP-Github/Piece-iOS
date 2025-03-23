@@ -142,17 +142,19 @@ struct MatchingMainView: View {
       
       VStack {
         VStack(alignment: .center, spacing: 8) {
-          Text("진중한 만남")
-            .foregroundStyle(Color.primary) +
-          Text("을 이어가기 위해\n프로필을 살펴보고 있어요")
-            .foregroundStyle(Color.grayscaleBlack)
+          Group {
+            Text("진중한 만남")
+              .foregroundStyle(Color.primaryDefault) +
+            Text("을 이어가기 위해\n프로필을 살펴보고 있어요")
+              .foregroundStyle(Color.grayscaleBlack)
+          }
+          .pretendard(.heading_M_SB)
           Text("작성 후 24시간 이내에 심사가 진행됩니다.\n생성한 프로필을 검토하며 기다려 주세요.")
-            .pretendard(.heading_S_M)
+            .pretendard(.body_S_M)
             .foregroundStyle(Color.grayscaleDark3)
         }
         .padding(.top, 40)
         .padding(.bottom, 20)
-        .pretendard(.heading_M_SB)
         .multilineTextAlignment(.center)
         
         DesignSystemAsset.Images.imgScreening.swiftUIImage
