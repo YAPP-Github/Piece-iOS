@@ -26,7 +26,8 @@ struct TermsWebView: View {
       VStack {
         NavigationBar(
           title: viewModel.title,
-          leftButtonTap: { router.pop() }
+          leftButtonTap: { router.pop() },
+          backgroundColor: .white
         )
         
         Spacer()
@@ -35,11 +36,14 @@ struct TermsWebView: View {
           type: .solid,
           buttonText: "동의하기",
           width: .maxWidth,
-          action: { viewModel.handleAction(.tapAgreementButton) }
+          action: {
+            viewModel.handleAction(.tapAgreementButton)
+            router.pop()
+          }
         )
+        .padding(.horizontal, 20)
+        .padding(.bottom, 10)
       }
-      .padding(.horizontal, 20)
-      .padding(.bottom, 10)
     }
     .toolbar(.hidden, for: .navigationBar)
   }
