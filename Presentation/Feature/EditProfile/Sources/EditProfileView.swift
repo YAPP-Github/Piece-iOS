@@ -546,42 +546,39 @@ struct EditProfileView: View {
       ),
       height: 479,
       titleText: "연락처 추가",
+      subtitleText: "연락을 주고받고 싶은 연락처를 선택해 작성해주세요.\n1개 이상 필수로 작성해야 합니다.",
       buttonText: "추가하기",
       buttonAction: {
         viewModel.saveSelectedSNSItem()
       }
     ) {
-      VStack {
-        ScrollView{
-          VStack(alignment: .leading) {
-            cellItem(
-              image: DesignSystemAsset.Icons.kakao32.swiftUIImage,
-              text: "카카오톡 아이디",
-              isSelected: viewModel.selectedSNSContactType == .kakao,
-              action: { viewModel.selectedSNSContactType = .kakao  }
-            )
-            cellItem(
-              image: DesignSystemAsset.Icons.kakaoOpenchat32.swiftUIImage,
-              text: "카카오톡 오픈 채팅방",
-              isSelected: viewModel.selectedSNSContactType == .openKakao,
-              action: { viewModel.selectedSNSContactType = .openKakao }
-            )
-            cellItem(
-              image: DesignSystemAsset.Icons.instagram32.swiftUIImage,
-              text: "인스타 아이디",
-              isSelected: viewModel.selectedSNSContactType == .instagram,
-              action: { viewModel.selectedSNSContactType = .instagram }
-            )
-            cellItem(
-              image: DesignSystemAsset.Icons.cellFill32.swiftUIImage,
-              text: "전화번호",
-              isSelected: viewModel.selectedSNSContactType == .phone,
-              action: { viewModel.selectedSNSContactType = .phone }
-            )
-          }
-          .frame(maxWidth: .infinity, alignment: .leading)
-        }
+      VStack(alignment: .leading) {
+        cellItem(
+          image: DesignSystemAsset.Icons.kakao32.swiftUIImage,
+          text: "카카오톡 아이디",
+          isSelected: viewModel.selectedSNSContactType == .kakao,
+          action: { viewModel.selectedSNSContactType = .kakao  }
+        )
+        cellItem(
+          image: DesignSystemAsset.Icons.kakaoOpenchat32.swiftUIImage,
+          text: "카카오톡 오픈 채팅방",
+          isSelected: viewModel.selectedSNSContactType == .openKakao,
+          action: { viewModel.selectedSNSContactType = .openKakao }
+        )
+        cellItem(
+          image: DesignSystemAsset.Icons.instagram32.swiftUIImage,
+          text: "인스타 아이디",
+          isSelected: viewModel.selectedSNSContactType == .instagram,
+          action: { viewModel.selectedSNSContactType = .instagram }
+        )
+        cellItem(
+          image: DesignSystemAsset.Icons.cellFill32.swiftUIImage,
+          text: "전화번호",
+          isSelected: viewModel.selectedSNSContactType == .phone,
+          action: { viewModel.selectedSNSContactType = .phone }
+        )
       }
+      .frame(maxWidth: .infinity, alignment: .leading)
     }
   }
   
