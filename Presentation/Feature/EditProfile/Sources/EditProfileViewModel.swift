@@ -402,7 +402,7 @@ final class EditProfileViewModel {
       
       nickname = profile.nickname
       description = profile.description
-      birthDate = profile.birthdate
+      birthDate = profile.birthdate.toCompactDateString
       location = profile.location
       height = String(profile.height)
       weight = String(profile.weight)
