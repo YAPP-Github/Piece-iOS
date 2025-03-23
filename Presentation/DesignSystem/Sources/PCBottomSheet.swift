@@ -88,7 +88,7 @@ public struct PCBottomSheet<Content: View>: View {
   
   @ViewBuilder
   private var subtitle: some View {
-    Text("Subtitle")
+    Text(subtitleText ?? "")
       .foregroundStyle(Color.grayscaleDark2)
       .pretendard(.body_S_M)
   }
@@ -113,6 +113,7 @@ public struct PCBottomSheet<Content: View>: View {
         isPresented: $isPresented,
         height: 300,
         titleText: "String",
+        subtitleText: "subtitle",
         buttonText: "다움",
         buttonAction: { isPresented = false }
       ) {
