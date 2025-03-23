@@ -30,7 +30,7 @@ public extension ProfileBasicResponseDTO {
       nickname: nickname,
       description: description,
       age: age,
-      birthdate: birthdate.extractYear(),
+      birthdate: birthdate,
       height: height,
       weight: weight,
       job: job,
