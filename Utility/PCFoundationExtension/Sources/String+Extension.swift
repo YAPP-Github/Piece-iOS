@@ -17,6 +17,10 @@ public extension String {
     
     return lastTwoDigits
   }
+  
+  var toCompactDateString: String {
+    return self.replacingOccurrences(of: "-", with: "")
+  }
 }
 
 // MARK: - decodeJWT
