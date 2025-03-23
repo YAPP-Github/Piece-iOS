@@ -104,7 +104,7 @@ struct MatchingMainView: View {
         Text("이 곧 도착할 거예요!")
           .foregroundStyle(Color.grayscaleBlack)
         Text("매일 밤 10시에 매칭 조각이 도착해요\n생성한 프로필을 검토하며 기다려 주세요.")
-          .pretendard(.heading_S_M)
+          .pretendard(.body_S_M)
           .foregroundStyle(Color.grayscaleDark3)
       }
       .padding(.top, 40)
