@@ -284,7 +284,7 @@ final class CreateBasicInfoViewModel {
   }
   
   private func isValidBirthDateFormat(_ date: String) -> Bool {
-    let dateRegex = "^[0-9]{8}$" // YYYYMMDD
+    let dateRegex = #"^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$"# // YYYYMMDD
     let dateTest = NSPredicate(format: "SELF MATCHES %@", dateRegex)
     return dateTest.evaluate(with: date) && date.count == 8
   }
