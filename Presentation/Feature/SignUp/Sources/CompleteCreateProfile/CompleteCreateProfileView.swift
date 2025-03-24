@@ -67,7 +67,7 @@ struct CompleteCreateProfileView: View {
         buttonText: "내 프로필 확인하기",
         width: .maxWidth
       ) {
-        router.setRoute(.previewProfileBasic)
+        router.setRouteAndPush(root: .home, pushTo: .previewProfileBasic)
       }
     }
     .padding(.top, 12)
