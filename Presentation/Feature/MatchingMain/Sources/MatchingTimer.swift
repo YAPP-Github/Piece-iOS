@@ -24,8 +24,7 @@ struct MatchingTimer: View {
     .pretendard(.body_S_M)
     .foregroundStyle(Color.grayscaleLight1)
     .padding(.vertical, 12)
-    .padding(.horizontal, 33)
-    .frame(maxWidth: .infinity)
+    .frame(maxWidth: .infinity, maxHeight: 44)
     .background(
       Rectangle()
         .foregroundStyle(Color.grayscaleWhite.opacity(0.1))
