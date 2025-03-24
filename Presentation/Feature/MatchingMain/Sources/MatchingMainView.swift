@@ -51,10 +51,10 @@ struct MatchingMainView: View {
           if matchingMainViewModel.isShowMatchingPendingCard {
             matchingPendingCard
           } else if matchingMainViewModel.isShowMatchingNodataCard{
-            MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
+            MatchingTimer(matchingTimerViewModel: matchingTimerViewModel, prefixMessage: "소중한 인연이 시작되기까지")
             matchingNoDataCard
           } else if matchingMainViewModel.isShowMatchingMainBasicCard {
-            MatchingTimer(matchingTimerViewModel: matchingTimerViewModel)
+            MatchingTimer(matchingTimerViewModel: matchingTimerViewModel, prefixMessage: "소중한 인연이 사라지기까지")
             matchingBasicCard
           }
         }
