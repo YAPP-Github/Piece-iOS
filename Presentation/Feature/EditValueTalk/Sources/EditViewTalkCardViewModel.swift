@@ -67,8 +67,7 @@ final class EditValueTalkCardViewModel: Equatable {
       onModelUpdate(model)
       
     case let .didUpdateSummary(summary):
-      let limitedText = summary.count <= 50 ? summary : String(summary.prefix(50))
-      localSummary = limitedText
+      localSummary = summary
       
     case .didTapSummaryButton:
       didTapSummaryButton()
