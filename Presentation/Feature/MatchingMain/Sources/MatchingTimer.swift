@@ -11,10 +11,11 @@ import DesignSystem
 // MARK: - 타이머
 struct MatchingTimer: View {
   @Bindable var matchingTimerViewModel: MatchingTimerViewModel
+  let prefixMessage: String
   
   var body: some View {
     HStack(spacing: 4) {
-      Text("소중한 인연이 사라지기까지")
+      Text(prefixMessage)
       Text(matchingTimerViewModel.state.timeString)
         .pretendard(.body_S_SB)
         .foregroundColor(.subDefault)
@@ -34,5 +35,5 @@ struct MatchingTimer: View {
 }
 
 #Preview {
-  MatchingTimer(matchingTimerViewModel: MatchingTimerViewModel())
+  MatchingTimer(matchingTimerViewModel: MatchingTimerViewModel(), prefixMessage: "소중한 인연이 사라지기까지")
 }
