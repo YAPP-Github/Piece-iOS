@@ -15,6 +15,14 @@ public struct UseCaseFactory {
     ContactsPermissionUseCaseImpl()
   }
   
+  public static func createCheckContactsPermissionUseCase() -> CheckContactsPermissionUseCase {
+    CheckContactsPermissionUseCaseImpl()
+  }
+  
+  public static func createRequestContactsPermissionUseCase(checkContactsPermissionUseCase: CheckContactsPermissionUseCase) -> RequestContactsPermissionUseCase {
+    RequestContactsPermissionUseCaseImpl(checkContactsPermissionUseCase: checkContactsPermissionUseCase)
+  }
+  
   public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
     NotificationPermissionUseCaseImpl()
   }
