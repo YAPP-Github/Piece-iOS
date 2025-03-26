@@ -9,6 +9,7 @@ import Entities
 import Observation
 import UseCases
 
+@MainActor
 @Observable
 final class WaitingAISummaryViewModel {
   enum Action {

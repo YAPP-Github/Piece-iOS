@@ -11,6 +11,7 @@ import Foundation
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable
 final class EditValueTalkCardViewModel: Equatable {
   static func == (lhs: EditValueTalkCardViewModel, rhs: EditValueTalkCardViewModel) -> Bool {

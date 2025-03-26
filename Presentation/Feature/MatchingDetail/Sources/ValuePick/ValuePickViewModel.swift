@@ -10,6 +10,7 @@ import Foundation
 import Observation
 import UseCases
 
+@MainActor
 @Observable
 final class ValuePickViewModel {
   private enum Constant {

@@ -10,6 +10,7 @@ import Observation
 import DesignSystem
 import UseCases
 
+@MainActor
 @Observable
 final class TermsAgreementViewModel {
   enum Action {

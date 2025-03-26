@@ -8,6 +8,7 @@
 import Observation
 import UseCases
 
+@MainActor
 @Observable
 final class MatchProfileBasicViewModel {
   enum Action {
