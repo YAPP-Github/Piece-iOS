@@ -214,7 +214,9 @@ final class SettingsViewModel {
             isBlockContactsEnabled = try await requestContactsPermissionUseCase.execute()
           case .restricted, .denied:
             if let url = URL(string: UIApplication.openSettingsURLString) {
-              await UIApplication.shared.open(url)
+              await MainActor.run {
+                UIApplication.shared.open(url)
+              }
             }
           case .authorized, .limited:
             isBlockContactsEnabled = true
