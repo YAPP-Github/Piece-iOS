@@ -8,6 +8,10 @@
 import Entities
 
 public protocol SettingsRepositoryInterface {
+  func getSettingsInfo() async throws -> SettingsInfoModel
+  func putSettingsNotification(isEnabled: Bool) async throws -> VoidModel
+  func putSettingsMatchNotification(isEnabled: Bool) async throws -> VoidModel
+  func putSettingsBlockAcquaintace(isEnabled: Bool) async throws -> VoidModel
   func getContactsSyncTime() async throws -> ContactsSyncTimeModel
   func patchLogout() async throws -> VoidModel
 }
