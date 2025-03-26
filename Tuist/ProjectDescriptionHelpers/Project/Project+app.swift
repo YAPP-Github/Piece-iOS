@@ -39,6 +39,7 @@ extension Project {
           "GIDClientID": "$(GIDClientID)",
           "CFBundleShortVersionString": AppConstants.version,
           "CFBundleVersion": AppConstants.build,
+          "CFBundleDisplayName": AppConstants.bundleDisplayName,
           "CFBundleURLTypes": [
             ["CFBundleURLSchemes": ["kakao$(NATIVE_APP_KEY)"]],
             ["CFBundleURLSchemes": ["\(AppConstants.bundleId)"]]
