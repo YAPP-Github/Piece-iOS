@@ -13,7 +13,7 @@ public enum AppConstants {
   public static let bundleId: String = "com.puzzly.piece"
   public static let bundleDisplayName: Plist.Value = "피스"
   public static let version: Plist.Value = "1.0.0"
-  public static let build: Plist.Value = "2"
+  public static let build: Plist.Value = "6"
   public static let destinations: Set<Destination> = .iOS
   public static let deploymentTargets: DeploymentTargets = .iOS("17.0")
 }
