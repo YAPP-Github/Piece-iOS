@@ -12,6 +12,7 @@ struct SettingsSystemSettingSectionView: View {
   let title: String
   @Binding var isBlockingFriends: Bool
   @Binding var date: Date?
+  @Binding var isSyncingContact: Bool
   let blockContactsToggled: ((Bool) -> Void)?
   let didTapRefreshButton: () -> Void
 
@@ -24,6 +25,7 @@ struct SettingsSystemSettingSectionView: View {
           SettingsSynchronizeContactView(
             title: "연락처 동기화",
             date: $date,
+            isSyncingContact: $isSyncingContact,
             didTapRefreshButton: didTapRefreshButton
           )
         }

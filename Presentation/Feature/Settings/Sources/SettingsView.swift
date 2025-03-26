@@ -108,6 +108,7 @@ struct SettingsView: View {
         title: section.title,
         isBlockingFriends: $viewModel.isBlockContactsEnabled,
         date: $viewModel.updatedDate,
+        isSyncingContact: $viewModel.isSyncingContact,
         blockContactsToggled: { isEnabled in viewModel.handleAction(.blockContactsToggled(isEnabled)) },
         didTapRefreshButton: { viewModel.handleAction(.synchronizeContactsButtonTapped) }
       )

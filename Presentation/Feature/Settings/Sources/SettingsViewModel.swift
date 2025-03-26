@@ -33,6 +33,7 @@ final class SettingsViewModel {
   var isMatchingNotificationOn = false
   var isPushNotificationEnabled = false
   var isBlockContactsEnabled: Bool = false
+  var isSyncingContact: Bool = false
   var updatedDate: Date? = nil
   var termsItems = [SettingsTermsItem]()
   var version = ""
@@ -233,11 +234,18 @@ final class SettingsViewModel {
   private func synchronizeContacts() {
     if isBlockContactsEnabled {
       Task {
-        let userContacts = try await fetchContactsUseCase.execute()
-        _ = try await blockContactsUseCase.execute(phoneNumbers: userContacts)
-        let response = try await getContactsSyncTimeUseCase.execute()
-        let updatedDate = response.syncTime
-        self.updatedDate = updatedDate
+        do {
+          isSyncingContact = true
+          let userContacts = try await fetchContactsUseCase.execute()
+          _ = try await blockContactsUseCase.execute(phoneNumbers: userContacts)
+          let response = try await getContactsSyncTimeUseCase.execute()
+          let updatedDate = response.syncTime
+          self.updatedDate = updatedDate
+          isSyncingContact = false
+        } catch {
+          isSyncingContact = false
+          print(error)
+        }
       }
     }
   }
