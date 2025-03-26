@@ -18,14 +18,14 @@ struct PermissionRequestView: View {
   init(
     cameraPermissionUseCase: CameraPermissionUseCase,
     photoPermissionUseCase: PhotoPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
         cameraPermissionUseCase: cameraPermissionUseCase,
         photoPermissionUseCase: photoPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase,
+        requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase
       )
     )

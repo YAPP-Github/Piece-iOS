@@ -17,18 +17,19 @@ struct AvoidContactsGuideView: View {
     static let denyButtonText = "다음에 할래요"
     static let toastText = "지인 차단 완료"
   }
+  
   @State var viewModel: AvoidContactsGuideViewModel
   @State private var path = NavigationPath()
   @Environment(Router.self) private var router: Router
   
   init(
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
-        contactsPermissionUseCase: contactsPermissionUseCase,
+        requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase
       )
