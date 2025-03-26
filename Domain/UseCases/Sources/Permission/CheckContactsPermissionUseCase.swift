@@ -8,7 +8,7 @@
 import Contacts
 
 public protocol CheckContactsPermissionUseCase {
-  func execute() async throws -> Bool
+  func execute() -> CNAuthorizationStatus
 }
 
 final class CheckContactsPermissionUseCaseImpl: CheckContactsPermissionUseCase {
@@ -18,18 +18,7 @@ final class CheckContactsPermissionUseCaseImpl: CheckContactsPermissionUseCase {
     self.contactStore = contactStore
   }
   
-  public func execute() async throws -> Bool {
-    let status = CNContactStore.authorizationStatus(for: .contacts)
-    
-    switch status {
-    case .notDetermined:
-      return false
-    case .denied, .restricted:
-      return false
-    case .authorized, .limited:
-      return true
-    @unknown default:
-      return false
-    }
+  public func execute() -> CNAuthorizationStatus {
+    return CNContactStore.authorizationStatus(for: .contacts)
   }
 }

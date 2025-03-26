@@ -12,7 +12,8 @@ public struct SettingsViewFactory {
   public static func createSettingsView(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
@@ -21,7 +22,8 @@ public struct SettingsViewFactory {
     SettingsView(
       fetchTermsUseCase: fetchTermsUseCase,
       notificationPermissionUseCase: notificationPermissionUseCase,
-      contactsPermissionUseCase: contactsPermissionUseCase,
+      checkContactsPermissionUseCase: checkContactsPermissionUseCase,
+      requestContactsPermissionUseCase: requestContactsPermissionUseCase,
       fetchContactsUseCase: fetchContactsUseCase,
       blockContactsUseCase: blockContactsUseCase,
       getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,

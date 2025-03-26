@@ -17,7 +17,8 @@ struct SettingsView: View {
   init(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
@@ -27,7 +28,8 @@ struct SettingsView: View {
       wrappedValue: .init(
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase,
+        checkContactsPermissionUseCase: checkContactsPermissionUseCase,
+        requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
         getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,

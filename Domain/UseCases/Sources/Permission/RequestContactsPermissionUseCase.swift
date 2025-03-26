@@ -24,10 +24,19 @@ public final class RequestContactsPermissionUseCaseImpl: RequestContactsPermissi
   }
   
   public func execute() async throws -> Bool {
-    let isAuthorized = try await checkContactsPermissionUseCase.execute()
-    if isAuthorized {
+    let authorizationStatus = checkContactsPermissionUseCase.execute()
+    switch authorizationStatus {
+    case .notDetermined:
+      return try await contactStore.requestAccess(for: .contacts)
+    case .restricted:
+      return try await contactStore.requestAccess(for: .contacts)
+    case .denied:
+      return try await contactStore.requestAccess(for: .contacts)
+    case .authorized:
       return true
-    } else {
+    case .limited:
+      return true
+    @unknown default:
       return try await contactStore.requestAccess(for: .contacts)
     }
   }

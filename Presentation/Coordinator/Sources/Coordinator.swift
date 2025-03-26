@@ -71,7 +71,8 @@ public struct Coordinator {
       // setting
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
-      let contactsPermissionUseCase = UseCaseFactory.createContactsPermissionUseCase()
+      let checkContactsPermissionUseCase = UseCaseFactory.createCheckContactsPermissionUseCase()
+      let requestContactsPermissionUseCase = UseCaseFactory.createRequestContactsPermissionUseCase(checkContactsPermissionUseCase: checkContactsPermissionUseCase)
       let fetchContactsUseCase = UseCaseFactory.createFetchContactsUseCase()
       let blockContactsUseCase = UseCaseFactory.createBlockContactsUseCase(repository: blockContactsRepository)
       let getContactsSyncTimeUseCase = UseCaseFactory.createGetContactsSyncTimeUseCase(repository: settingsRepository)
@@ -85,7 +86,8 @@ public struct Coordinator {
         patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase,
+        checkContactsPermissionUseCase: checkContactsPermissionUseCase,
+        requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
         getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
