@@ -59,10 +59,6 @@ final class EditValueTalkCardViewModel: Equatable {
     startTimer()
   }
   
-  deinit {
-    cancellables.removeAll()
-  }
-  
   func handleAction(_ action: Action) {
     switch action {
     case let .didUpdateAnswer(answer):
@@ -116,4 +112,3 @@ final class EditValueTalkCardViewModel: Equatable {
       .store(in: &cancellables)
   }
 }
-
