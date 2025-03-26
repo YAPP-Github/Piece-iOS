@@ -5,11 +5,12 @@
 //  Created by eunseou on 1/17/25.
 //
 
-import SwiftUI
 import Observation
 import UseCases
+import UIKit
 import Entities
 
+@MainActor
 @Observable
 final class AvoidContactsGuideViewModel {
   enum Action {
@@ -21,16 +22,16 @@ final class AvoidContactsGuideViewModel {
   private(set) var showToast = false
   private(set) var moveToCompleteSignUp: Bool = false
   var isPresentedAlert: Bool = false
-  private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let requestContactsPermissionUseCase: RequestContactsPermissionUseCase
   private let fetchContactsUseCase: FetchContactsUseCase
   private let blockContactsUseCase: BlockContactsUseCase
   
   init(
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase
   ) {
-    self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.requestContactsPermissionUseCase = requestContactsPermissionUseCase
     self.fetchContactsUseCase = fetchContactsUseCase
     self.blockContactsUseCase = blockContactsUseCase
   }
@@ -51,7 +52,7 @@ final class AvoidContactsGuideViewModel {
   @MainActor
   private func handleAcceptButtonTap() async {
     do {
-      let isAuthorized = try await contactsPermissionUseCase.execute()
+      let isAuthorized = try await requestContactsPermissionUseCase.execute()
       
       if isAuthorized {
         await isToastVisible()

@@ -33,6 +33,7 @@ final class SettingsViewModel {
   var isMatchingNotificationOn = false
   var isPushNotificationEnabled = false
   var isBlockContactsEnabled: Bool = false
+  var isSyncingContact: Bool = false
   var updatedDate: Date? = nil
   var termsItems = [SettingsTermsItem]()
   var version = ""
@@ -44,7 +45,8 @@ final class SettingsViewModel {
   private let userDefaults = PCUserDefaultsService.shared
   private let fetchTermsUseCase: FetchTermsUseCase
   private let notificationPermissionUseCase: NotificationPermissionUseCase
-  private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let checkContactsPermissionUseCase: CheckContactsPermissionUseCase
+  private let requestContactsPermissionUseCase: RequestContactsPermissionUseCase
   private let fetchContactsUseCase: FetchContactsUseCase
   private let blockContactsUseCase: BlockContactsUseCase
   private let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
@@ -55,7 +57,8 @@ final class SettingsViewModel {
   init(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
@@ -63,7 +66,8 @@ final class SettingsViewModel {
   ) {
     self.fetchTermsUseCase = fetchTermsUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
-    self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.checkContactsPermissionUseCase = checkContactsPermissionUseCase
+    self.requestContactsPermissionUseCase = requestContactsPermissionUseCase
     self.fetchContactsUseCase = fetchContactsUseCase
     self.blockContactsUseCase = blockContactsUseCase
     self.getContactsSyncTimeUseCase = getContactsSyncTimeUseCase
@@ -101,12 +105,12 @@ final class SettingsViewModel {
       
     case let .termsItemTapped(id):
       tappedTermItem = termsItems.first(where: { $0.id == id })
-
+      
     case .logoutItemTapped:
       showLogoutAlert = true
       
     case .confirmLogoutButton:
-      TapComfirmLogout()
+      tapComfirmLogout()
       
       break
     case .withdrawButtonTapped:
@@ -133,7 +137,8 @@ final class SettingsViewModel {
   
   @objc private func willEnterForeground() {
     Task {
-      await checkPermissions()
+      await checkPushNoficationPermission()
+      await checkContactsPermission()
     }
   }
   
@@ -141,7 +146,8 @@ final class SettingsViewModel {
     fetchAppVersion()
     Task {
       await fetchTerms()
-      await checkPermissions()
+      await checkPushNoficationPermission()
+      await checkContactsPermission()
     }
   }
   
@@ -162,15 +168,27 @@ final class SettingsViewModel {
     }
   }
   
-  private func checkPermissions() async {
+  private func checkPushNoficationPermission() async {
     do {
       let isPushNotificationEnabled = try await notificationPermissionUseCase.execute()
-      let isBlockContactsEnabled = try await contactsPermissionUseCase.execute()
       self.isPushNotificationEnabled = isPushNotificationEnabled
-      self.isBlockContactsEnabled = isBlockContactsEnabled
     } catch {
       print(error)
     }
+  }
+  
+  private func checkContactsPermission() async {
+    let contactsAuthorizationStatus = checkContactsPermissionUseCase.execute()
+    var isBlockContactsEnabled = false
+    switch contactsAuthorizationStatus {
+    case .notDetermined, .restricted, .denied:
+      isBlockContactsEnabled = false
+    case .authorized, .limited:
+      isBlockContactsEnabled = true
+    @unknown default:
+      isBlockContactsEnabled = false
+    }
+    self.isBlockContactsEnabled = isBlockContactsEnabled
   }
   
   private func matchingNotificationToggled(isEnabled: Bool) {
@@ -190,33 +208,51 @@ final class SettingsViewModel {
     if isEnabled {
       Task {
         do {
-          let isBlockContactsEnabled = try await contactsPermissionUseCase.execute()
-          self.isBlockContactsEnabled = isBlockContactsEnabled
+          let authorizationStatus = checkContactsPermissionUseCase.execute()
+          switch authorizationStatus {
+          case .notDetermined:
+            isBlockContactsEnabled = try await requestContactsPermissionUseCase.execute()
+          case .restricted, .denied:
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+              await MainActor.run {
+                UIApplication.shared.open(url)
+              }
+            }
+          case .authorized, .limited:
+            isBlockContactsEnabled = true
+          @unknown default:
+            isBlockContactsEnabled = try await requestContactsPermissionUseCase.execute()
+          }
         } catch {
           print(error)
           self.isBlockContactsEnabled = false
         }
       }
     } else {
-      if let url = URL(string: UIApplication.openSettingsURLString) {
-        UIApplication.shared.open(url)
-      }
+      isBlockContactsEnabled = false
     }
   }
   
   private func synchronizeContacts() {
     if isBlockContactsEnabled {
       Task {
-        let userContacts = try await fetchContactsUseCase.execute()
-        _ = try await blockContactsUseCase.execute(phoneNumbers: userContacts)
-        let response = try await getContactsSyncTimeUseCase.execute()
-        let updatedDate = response.syncTime
-        self.updatedDate = updatedDate
+        do {
+          isSyncingContact = true
+          let userContacts = try await fetchContactsUseCase.execute()
+          _ = try await blockContactsUseCase.execute(phoneNumbers: userContacts)
+          let response = try await getContactsSyncTimeUseCase.execute()
+          let updatedDate = response.syncTime
+          self.updatedDate = updatedDate
+          isSyncingContact = false
+        } catch {
+          isSyncingContact = false
+          print(error)
+        }
       }
     }
   }
   
-  private func TapComfirmLogout() {
+  private func tapComfirmLogout() {
     // logout api 호출
     Task {
       do {

@@ -17,7 +17,8 @@ struct SettingsView: View {
   init(
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
@@ -27,7 +28,8 @@ struct SettingsView: View {
       wrappedValue: .init(
         fetchTermsUseCase: fetchTermsUseCase,
         notificationPermissionUseCase: notificationPermissionUseCase,
-        contactsPermissionUseCase: contactsPermissionUseCase,
+        checkContactsPermissionUseCase: checkContactsPermissionUseCase,
+        requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
         getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
@@ -106,6 +108,7 @@ struct SettingsView: View {
         title: section.title,
         isBlockingFriends: $viewModel.isBlockContactsEnabled,
         date: $viewModel.updatedDate,
+        isSyncingContact: $viewModel.isSyncingContact,
         blockContactsToggled: { isEnabled in viewModel.handleAction(.blockContactsToggled(isEnabled)) },
         didTapRefreshButton: { viewModel.handleAction(.synchronizeContactsButtonTapped) }
       )

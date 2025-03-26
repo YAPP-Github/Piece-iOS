@@ -13,6 +13,7 @@ import _PhotosUI_SwiftUI
 import Entities
 import PCFoundationExtension
 
+@MainActor
 @Observable
 final class EditProfileViewModel {
   enum Action {

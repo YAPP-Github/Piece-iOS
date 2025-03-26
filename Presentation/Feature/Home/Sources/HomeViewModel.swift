@@ -26,7 +26,8 @@ final class HomeViewModel {
     // settings
     fetchTermsUseCase: FetchTermsUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
@@ -43,7 +44,8 @@ final class HomeViewModel {
     // settings
     self.fetchTermsUseCase = fetchTermsUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
-    self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.checkContactsPermissionUseCase = checkContactsPermissionUseCase
+    self.requestContactsPermissionUseCase = requestContactsPermissionUseCase
     self.fetchContactsUseCase = fetchContactsUseCase
     self.blockContactsUseCase = blockContactsUseCase
     self.getContactsSyncTimeUseCase = getContactsSyncTimeUseCase
@@ -62,7 +64,8 @@ final class HomeViewModel {
   // settings
   let fetchTermsUseCase: FetchTermsUseCase
   let notificationPermissionUseCase: NotificationPermissionUseCase
-  let contactsPermissionUseCase: ContactsPermissionUseCase
+  let checkContactsPermissionUseCase: CheckContactsPermissionUseCase
+  let requestContactsPermissionUseCase: RequestContactsPermissionUseCase
   let fetchContactsUseCase: FetchContactsUseCase
   let blockContactsUseCase: BlockContactsUseCase
   let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase

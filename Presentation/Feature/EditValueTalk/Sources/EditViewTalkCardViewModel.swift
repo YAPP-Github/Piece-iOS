@@ -11,6 +11,7 @@ import Foundation
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable
 final class EditValueTalkCardViewModel: Equatable {
   static func == (lhs: EditValueTalkCardViewModel, rhs: EditValueTalkCardViewModel) -> Bool {
@@ -56,10 +57,6 @@ final class EditValueTalkCardViewModel: Equatable {
     self.onModelUpdate = onModelUpdate
     self.localSummary = model.summary
     startTimer()
-  }
-  
-  deinit {
-    cancellables.removeAll()
   }
   
   func handleAction(_ action: Action) {
@@ -115,4 +112,3 @@ final class EditValueTalkCardViewModel: Equatable {
       .store(in: &cancellables)
   }
 }
-

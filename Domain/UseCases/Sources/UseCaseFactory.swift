@@ -11,8 +11,12 @@ import RepositoryInterfaces
 public struct UseCaseFactory {
 
   // MARK: - 권한
-  public static func createContactsPermissionUseCase() -> ContactsPermissionUseCase {
-    ContactsPermissionUseCaseImpl()
+  public static func createCheckContactsPermissionUseCase() -> CheckContactsPermissionUseCase {
+    CheckContactsPermissionUseCaseImpl()
+  }
+  
+  public static func createRequestContactsPermissionUseCase(checkContactsPermissionUseCase: CheckContactsPermissionUseCase) -> RequestContactsPermissionUseCase {
+    RequestContactsPermissionUseCaseImpl(checkContactsPermissionUseCase: checkContactsPermissionUseCase)
   }
   
   public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {

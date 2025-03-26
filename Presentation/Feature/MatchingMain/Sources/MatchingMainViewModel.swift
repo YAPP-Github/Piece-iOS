@@ -13,6 +13,7 @@ import Observation
 import UseCases
 import LocalStorage
 
+@MainActor
 @Observable
 final class MatchingMainViewModel {
   enum MatchingButtonState {

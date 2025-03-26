@@ -6,11 +6,13 @@
 //
 
 import DesignSystem
+import Lottie
 import SwiftUI
 
 struct SettingsSynchronizeContactView: View {
   let title: String
   @Binding var date: Date?
+  @Binding var isSyncingContact: Bool
   let didTapRefreshButton: () -> Void
 
   var body: some View {
@@ -50,10 +52,19 @@ struct SettingsSynchronizeContactView: View {
       Button {
         didTapRefreshButton()
       } label: {
-        DesignSystemAsset.Icons.refresh24.swiftUIImage
-          .resizable()
-          .frame(width: 24, height: 24)
-          .foregroundStyle(Color.grayscaleDark2)
+        if isSyncingContact {
+          PCLottieView(
+            .refresh,
+            loopMode: .loop,
+            width: 24,
+            height: 24
+          )
+        } else {
+          DesignSystemAsset.Icons.refresh24.swiftUIImage
+            .resizable()
+            .frame(width: 24, height: 24)
+            .foregroundStyle(Color.grayscaleDark2)
+        }
       }
     }
     .padding(.vertical, 16)

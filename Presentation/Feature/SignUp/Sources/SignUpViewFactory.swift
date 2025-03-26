@@ -11,12 +11,12 @@ import UseCases
 
 public struct SignUpViewFactory {
   public static func createAvoidContactsGuideView(
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase
   ) -> some View {
     AvoidContactsGuideView(
-      contactsPermissionUseCase: contactsPermissionUseCase,
+      requestContactsPermissionUseCase: requestContactsPermissionUseCase,
       fetchContactsUseCase: fetchContactsUseCase,
       blockContactsUseCase: blockContactsUseCase
     )
@@ -35,13 +35,13 @@ public struct SignUpViewFactory {
   public static func createPermissionRequestView(
     cameraPermissionUseCase: CameraPermissionUseCase,
     photoPermissionUseCase: PhotoPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase
   ) -> some View {
     PermissionRequestView(
       cameraPermissionUseCase: cameraPermissionUseCase,
       photoPermissionUseCase: photoPermissionUseCase,
-      contactsPermissionUseCase: contactsPermissionUseCase,
+      requestContactsPermissionUseCase: requestContactsPermissionUseCase,
       notificationPermissionUseCase: notificationPermissionUseCase
     )
   }

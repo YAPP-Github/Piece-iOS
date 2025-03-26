@@ -23,7 +23,7 @@ final class PermissionRequestViewModel {
   }
   private let cameraPermissionUseCase: CameraPermissionUseCase
   private let photoPermissionUseCase: PhotoPermissionUseCase
-  private let contactsPermissionUseCase: ContactsPermissionUseCase
+  private let requestContactsPermissionUseCase: RequestContactsPermissionUseCase
   private let notificationPermissionUseCase: NotificationPermissionUseCase
   
   enum Action {
@@ -35,12 +35,12 @@ final class PermissionRequestViewModel {
   init(
     cameraPermissionUseCase: CameraPermissionUseCase,
     photoPermissionUseCase: PhotoPermissionUseCase,
-    contactsPermissionUseCase: ContactsPermissionUseCase,
+    requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     notificationPermissionUseCase: NotificationPermissionUseCase
   ) {
     self.cameraPermissionUseCase = cameraPermissionUseCase
     self.photoPermissionUseCase = photoPermissionUseCase
-    self.contactsPermissionUseCase = contactsPermissionUseCase
+    self.requestContactsPermissionUseCase = requestContactsPermissionUseCase
     self.notificationPermissionUseCase = notificationPermissionUseCase
   }
   
@@ -67,7 +67,7 @@ private extension PermissionRequestViewModel {
       isCameraPermissionGranted = await cameraPermissionUseCase.execute()
       isPhotoPermissionGranted = await photoPermissionUseCase.execute()
       isNotificationPermissionGranted = try await notificationPermissionUseCase.execute()
-      isContactsPermissionGranted = try await contactsPermissionUseCase.execute()
+      isContactsPermissionGranted = try await requestContactsPermissionUseCase.execute()
     } catch {
       print("Permission request error: \(error)")
     }
