@@ -109,7 +109,7 @@ final class SettingsViewModel {
       showLogoutAlert = true
       
     case .confirmLogoutButton:
-      TapComfirmLogout()
+      tapComfirmLogout()
       
       break
     case .withdrawButtonTapped:
@@ -242,7 +242,7 @@ final class SettingsViewModel {
     }
   }
   
-  private func TapComfirmLogout() {
+  private func tapComfirmLogout() {
     // logout api 호출
     Task {
       do {
