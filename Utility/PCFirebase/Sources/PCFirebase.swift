@@ -55,15 +55,16 @@ public final class PCFirebase {
     do {
       let status = try await remoteConfig.fetchAndActivate()
       guard status == .successFetchedFromRemote || status == .successUsingPreFetchedData else {
+        print("🔥 Remote config fetch error status: \(status)")
         throw PCFirebaseError.fetchFailed
       }
-      
+        
       let allKeys = remoteConfig.allKeys(from: .remote)
       for key in allKeys {
-        print("🔥 Firebase RemoteConfig key: \(key), value: \(remoteConfig[key].stringValue ?? "")")
+        print("🔥 Firebase RemoteConfig key: \(key), value: \(remoteConfig[key].stringValue)")
       }
-
     } catch {
+      print("🔥 Remote config fetch error details: \(error)")
       throw PCFirebaseError.fetchFailed
     }
   }

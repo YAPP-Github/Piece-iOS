@@ -15,7 +15,16 @@ final class AppDelegate: NSObject, UIApplicationDelegate, ObservableObject {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
   ) -> Bool {
     do {
+      print("🔥 Configure FirebaseApp")
       try PCFirebase.shared.configureFirebaseApp()
+    } catch let error as PCFirebaseError {
+      print("Firebase setup failed: \(error.errorDescription)")
+    } catch {
+      print("Firebase setup failed with unknown error:", error)
+    }
+    
+    do {
+      print("🔥 Firebase RemoteConfig setRemoteConfig")
       try PCFirebase.shared.setRemoteConfig()
     } catch let error as PCFirebaseError {
       print("Firebase setup failed: \(error.errorDescription)")
