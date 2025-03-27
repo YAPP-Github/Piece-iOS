@@ -66,6 +66,7 @@ final class SplashViewModel {
         checkAccesstoken()
         try await setRoute()
       } catch let error as NetworkError {
+        var destination: Route = .login
         switch error {
         case .badRequest(let error):
           print("bad request error: \(error?.message ?? "")")
@@ -87,7 +88,6 @@ final class SplashViewModel {
         case .internalServerError:
           print("internal server error")
           // TODO: - 네트워크 에러 화면으로 라우팅
-          
         case .statusCode(let int):
           print("status code: \(int)")
         case .missingStatusCode:
@@ -99,8 +99,9 @@ final class SplashViewModel {
         case .decodingFailed:
           print("decoding failed")
         case .noRefreshToken:
-          destination = .login
+          print("no refresh token")
         }
+        self.destination = destination
       } catch {
         print("Unexpected error: \(error.localizedDescription)")
         destination = .login
