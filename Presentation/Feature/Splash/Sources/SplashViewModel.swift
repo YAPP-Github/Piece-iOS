@@ -61,10 +61,8 @@ final class SplashViewModel {
     
     Task {
       do {
-        try await checkForceUpdate()
-        
+        await checkForceUpdate()
         guard checkOnboarding() else { return }
-        
         checkAccesstoken()
         try await setRoute()
       } catch let error as NetworkError {
@@ -72,7 +70,12 @@ final class SplashViewModel {
         case .badRequest(let error):
           print("bad request error: \(error?.message ?? "")")
         case .unauthorized(let error):
+          print("unauthorized")
           if error?.code == "INVALID_REFRESH_TOKEN" {
+            print(error?.code)
+            destination = .login
+          } else if error?.code == "EXPIRED_REFRESH_TOKEN" {
+            print(error?.code)
             destination = .login
           }
         case .forbidden:
@@ -83,6 +86,8 @@ final class SplashViewModel {
           destination = .login
         case .internalServerError:
           print("internal server error")
+          // TODO: - 네트워크 에러 화면으로 라우팅
+          
         case .statusCode(let int):
           print("status code: \(int)")
         case .missingStatusCode:
@@ -97,23 +102,29 @@ final class SplashViewModel {
           destination = .login
         }
       } catch {
-        handleError(error)
+        print("Unexpected error: \(error.localizedDescription)")
+        destination = .login
       }
     }
   }
   
   // MARK: - onAppear 시 로직
   
-  private func checkForceUpdate() async throws {
-    try await PCFirebase.shared.fetchRemoteConfigValues()
-    let currentVersion = AppVersion.appVersion()
-    let minimumVersion = PCFirebase.shared.minimumVersion()
-    let needsForceUpdate = currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
-    
-    print("currentVersion: \(currentVersion)")
-    print("minimumVersion: \(minimumVersion)")
-    print("needsForceUpdate: \(needsForceUpdate)")
-    showNeedsForceUpdateAlert = needsForceUpdate
+  private func checkForceUpdate() async {
+    do {
+      try await PCFirebase.shared.fetchRemoteConfigValues()
+      let currentVersion = AppVersion.appVersion()
+      let minimumVersion = PCFirebase.shared.minimumVersion()
+      let needsForceUpdate = currentVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+      
+      print("currentVersion: \(currentVersion)")
+      print("minimumVersion: \(minimumVersion)")
+      print("needsForceUpdate: \(needsForceUpdate)")
+      showNeedsForceUpdateAlert = needsForceUpdate
+    } catch {
+      print("🔥 Failed to check for updates: \(error.localizedDescription)")
+      showNeedsForceUpdateAlert = false
+    }
   }
   
   private func checkOnboarding() -> Bool {
@@ -163,56 +174,6 @@ final class SplashViewModel {
     case .USER:
       print("---USER---")
       destination = .home
-    }
-  }
-  
-  private func handleError(_ error: Error) {
-    if let networkError = error as? NetworkError {
-      handleNetworkError(networkError)
-    } else {
-      // 일반 에러 처리
-      print("Unexpected error: \(error.localizedDescription)")
-    }
-  }
-  
-  private func handleNetworkError(_ error: NetworkError) {
-    switch error {
-    case .badRequest(let apiError):
-      print("Bad request: \(apiError?.message ?? "Unknown error")")
-      
-    case .unauthorized(let apiError):
-      if apiError?.code == "INVALID_REFRESH_TOKEN" {
-        destination = .login
-      } else {
-        print("Unauthorized: \(apiError?.message ?? "Unknown error")")
-      }
-      
-    case .forbidden:
-      print("Forbidden: Access denied")
-      
-    case .notFound:
-      print("Resource not found")
-      
-    case .internalServerError:
-      print("Server error occurred")
-      
-    case .statusCode(let code):
-      print("Unexpected status code: \(code)")
-      
-    case .missingStatusCode:
-      print("Missing status code in response")
-      
-    case .emptyResponse:
-      print("Empty response received")
-      
-    case .encodingFailed:
-      print("Failed to encode request data")
-      
-    case .decodingFailed:
-      print("Failed to decode response data")
-      
-    case .noRefreshToken:
-      destination = .login
     }
   }
 }
