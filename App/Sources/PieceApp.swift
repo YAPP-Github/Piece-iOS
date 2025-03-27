@@ -33,11 +33,12 @@ struct PieceApp: App {
     
     Task {
       do {
+        print("🔥 Firebase RemoteConfig start fetching")
         try await PCFirebase.shared.fetchRemoteConfigValues()
       } catch let error as PCFirebaseError {
-        print("RemoteConfig fetch failed:", error.errorDescription)
+        print("🔥 RemoteConfig fetch failed:", error.errorDescription)
       } catch {
-        print("RemoteConfig fetch failed with unknown error:", error)
+        print("🔥 RemoteConfig fetch failed with unknown error:", error)
       }
     }
     
