@@ -23,13 +23,19 @@ struct HomeView: View {
     getMatchesInfoUseCase: GetMatchesInfoUseCase,
     getUserRejectUseCase: GetUserRejectUseCase,
     patchMatchesCheckPieceUseCase: PatchMatchesCheckPieceUseCase,
+    getSettingsInfoUseCase: GetSettingsInfoUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
-    notificationPermissionUseCase: NotificationPermissionUseCase,
+    checkNotificationPermissionUseCase: CheckNotificationPermissionUseCase,
+    requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase,
+    changeNotificationRegisterStatusUseCase: ChangeNotificationRegisterStatusUseCase,
     checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
     requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    putSettingsNotificationUseCase: PutSettingsNotificationUseCase,
+    putSettingsMatchNotificationUseCase: PutSettingsMatchNotificationUseCase,
+    putSettingsBlockAcquaintanceUseCase: PutSettingsBlockAcquaintanceUseCase,
     patchLogoutUseCase: PatchLogoutUseCase
   ) {
     _viewModel = .init(
@@ -40,13 +46,19 @@ struct HomeView: View {
         getMatchesInfoUseCase: getMatchesInfoUseCase,
         getUserRejectUseCase: getUserRejectUseCase,
         patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
+        getSettingsInfoUseCase: getSettingsInfoUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
-        notificationPermissionUseCase: notificationPermissionUseCase,
+        checkNotificationPermissionUseCase: checkNotificationPermissionUseCase,
+        requestNotificationPermissionUseCase: requestNotificationPermissionUseCase,
+        changeNotificationRegisterStatusUseCase: changeNotificationRegisterStatusUseCase,
         checkContactsPermissionUseCase: checkContactsPermissionUseCase,
         requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
         getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+        putSettingsNotificationUseCase: putSettingsNotificationUseCase,
+        putSettingsMatchNotificationUseCase: putSettingsMatchNotificationUseCase,
+        putSettingsBlockAcquaintanceUseCase: putSettingsBlockAcquaintanceUseCase,
         patchLogoutUseCase: patchLogoutUseCase
       )
     )
@@ -78,13 +90,19 @@ struct HomeView: View {
       )
     case .settings:
       SettingsViewFactory.createSettingsView(
+        getSettingsInfoUseCase: viewModel.getSettingsInfoUseCase,
         fetchTermsUseCase: viewModel.fetchTermsUseCase,
-        notificationPermissionUseCase: viewModel.notificationPermissionUseCase,
+        checkNotificationPermissionUseCase: viewModel.checkNotificationPermissionUseCase,
+        requestNotificationPermissionUseCase: viewModel.requestNotificationPermissionUseCase,
+        changeNotificationRegisterStatusUseCase: viewModel.changeNotificationRegisterStatusUseCase,
         checkContactsPermissionUseCase: viewModel.checkContactsPermissionUseCase,
         requestContactsPermissionUseCase: viewModel.requestContactsPermissionUseCase,
         fetchContactsUseCase: viewModel.fetchContactsUseCase,
         blockContactsUseCase: viewModel.blockContactsUseCase,
         getContactsSyncTimeUseCase: viewModel.getContactsSyncTimeUseCase,
+        putSettingsNotificationUseCase: viewModel.putSettingsNotificationUseCase,
+        putSettingsMatchNotificationUseCase: viewModel.putSettingsMatchNotificationUseCase,
+        putSettingsBlockAcquaintanceUseCase: viewModel.putSettingsBlockAcquaintanceUseCase,
         patchLogoutUseCase: viewModel.patchLogoutUseCase
       )
     }

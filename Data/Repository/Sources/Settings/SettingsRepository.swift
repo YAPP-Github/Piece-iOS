@@ -12,10 +12,38 @@ import RepositoryInterfaces
 
 final class SettingsRepository: SettingsRepositoryInterface {
   private let networkService: NetworkService
-
+  
   init(networkService: NetworkService) {
     self.networkService = networkService
   }
+  
+  func getSettingsInfo() async throws -> SettingsInfoModel {
+    let endpoint = SettingsEndpoint.settingsInfo
+    let response: SettingsInfoResponseDTO = try await networkService.request(endpoint: endpoint)
+    return response.toDomain()
+  }
+  
+  func putSettingsNotification(isEnabled: Bool) async throws -> VoidModel {
+    let requestDto = SettingsNotificationRequestDTO(toggle: isEnabled)
+    let endpoint = SettingsEndpoint.notification(requestDto)
+    let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return response.toDomain()
+  }
+  
+  func putSettingsMatchNotification(isEnabled: Bool) async throws -> VoidModel {
+    let requestDto = SettingsMatchNotificationRequestDTO(toggle: isEnabled)
+    let endpoint = SettingsEndpoint.matchNotification(requestDto)
+    let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return response.toDomain()
+  }
+  
+  func putSettingsBlockAcquaintance(isEnabled: Bool) async throws -> VoidModel {
+    let requestDto = SettingsBlockAcquaintanceRequestDTO(toggle: isEnabled)
+    let endpoint = SettingsEndpoint.blockAcquaintance(requestDto)
+    let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    return response.toDomain()
+  }
+
   
   func getContactsSyncTime() async throws -> ContactsSyncTimeModel {
     let endpoint = SettingsEndpoint.fetchBlockContactsSyncTime
@@ -31,4 +59,3 @@ final class SettingsRepository: SettingsRepositoryInterface {
     return response.toDomain()
   }
 }
-

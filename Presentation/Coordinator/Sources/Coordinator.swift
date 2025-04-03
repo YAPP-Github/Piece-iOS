@@ -69,13 +69,19 @@ public struct Coordinator {
       let getUserRejectUseCase = UseCaseFactory.createGetUserRejectUseCase(repository: matchesRepository)
       let patchMatchesCheckPieceUseCase = UseCaseFactory.createPatchMatchesCheckPieceUseCase(repository: matchesRepository)
       // setting
+      let getSettingsInfoUseCase = UseCaseFactory.createGetSettingsInfoUseCase(repository: settingsRepository)
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
-      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      let checkNotificationPermissionUseCase = UseCaseFactory.createCheckNotificationPermissionUseCase()
+      let requestNotificationPermissionUseCase = UseCaseFactory.createRequestNotificationPermissionUseCase()
+      let changeNotificationRegisterStatusUseCase = UseCaseFactory.createChangeNotificationRegisterStatusUseCase()
       let checkContactsPermissionUseCase = UseCaseFactory.createCheckContactsPermissionUseCase()
       let requestContactsPermissionUseCase = UseCaseFactory.createRequestContactsPermissionUseCase(checkContactsPermissionUseCase: checkContactsPermissionUseCase)
       let fetchContactsUseCase = UseCaseFactory.createFetchContactsUseCase()
       let blockContactsUseCase = UseCaseFactory.createBlockContactsUseCase(repository: blockContactsRepository)
       let getContactsSyncTimeUseCase = UseCaseFactory.createGetContactsSyncTimeUseCase(repository: settingsRepository)
+      let putSettingsNotificationUseCase = UseCaseFactory.createPutSettingsNotificationUseCase(repository: settingsRepository)
+      let putSettingsMatchNotificationUseCase = UseCaseFactory.createPutSettingsMatchNotificationUseCase(repository: settingsRepository)
+      let putSettingsBlockAcquaintanceUseCase = UseCaseFactory.createPutSettingsBlockAcquaintanceUseCase(repository: settingsRepository)
       let patchLogoutUseCase = UseCaseFactory.createLogoutUseCase(repository: settingsRepository)
       HomeViewFactory.createHomeView(
         getProfileUseCase: getProfileUseCase,
@@ -84,13 +90,19 @@ public struct Coordinator {
         getMatchesInfoUseCase: getMatchesInfoUseCase,
         getUserRejectUseCase: getUserRejectUseCase,
         patchMatchesCheckPieceUseCase: patchMatchesCheckPieceUseCase,
+        getSettingsInfoUseCase: getSettingsInfoUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
-        notificationPermissionUseCase: notificationPermissionUseCase,
+        checkNotificationPermissionUseCase: checkNotificationPermissionUseCase,
+        requestNotificationPermissionUseCase: requestNotificationPermissionUseCase,
+        changeNotificationRegisterStatusUseCase: changeNotificationRegisterStatusUseCase,
         checkContactsPermissionUseCase: checkContactsPermissionUseCase,
         requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
         getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+        putSettingsNotificationUseCase: putSettingsNotificationUseCase,
+        putSettingsMatchNotificationUseCase: putSettingsMatchNotificationUseCase,
+        putSettingsBlockAcquaintanceUseCase: putSettingsBlockAcquaintanceUseCase,
         patchLogoutUseCase: patchLogoutUseCase
       )
       
@@ -181,7 +193,7 @@ public struct Coordinator {
       SignUpViewFactory.createTermsWebView(title: title, url: url)
       
     case .checkPremission:
-      let notificationPermissionUseCase = UseCaseFactory.createNotificationPermissionUseCase()
+      let requestNotificationPermissionUseCase = UseCaseFactory.createRequestNotificationPermissionUseCase()
       let cameraPermissionUseCase = UseCaseFactory.createCameraPermissionUseCase()
       let photoPermissionUseCase = UseCaseFactory.createPhotoPermissionUseCase()
       let checkContactsPermissionUseCase = UseCaseFactory.createCheckContactsPermissionUseCase()
@@ -190,7 +202,7 @@ public struct Coordinator {
         cameraPermissionUseCase: cameraPermissionUseCase,
         photoPermissionUseCase: photoPermissionUseCase,
         requestContactsPermissionUseCase: requestContactsPermissionUseCase,
-        notificationPermissionUseCase: notificationPermissionUseCase
+        requestNotificationPermissionUseCase: requestNotificationPermissionUseCase
       )
       
     case .AvoidContactsGuide:

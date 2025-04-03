@@ -19,8 +19,16 @@ public struct UseCaseFactory {
     RequestContactsPermissionUseCaseImpl(checkContactsPermissionUseCase: checkContactsPermissionUseCase)
   }
   
-  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
-    NotificationPermissionUseCaseImpl()
+  public static func createCheckNotificationPermissionUseCase() -> CheckNotificationPermissionUseCase {
+    CheckNotificationPermissionUseCaseImpl()
+  }
+  
+  public static func createRequestNotificationPermissionUseCase() -> RequestNotificationPermissionUseCase {
+    RequestNotificationPermissionUseCaseImpl()
+  }
+  
+  public static func createChangeNotificationRegisterStatusUseCase() -> ChangeNotificationRegisterStatusUseCase {
+    ChangeNotificationRegisterStatusUseCaseImpl()
   }
   
   public static func createCameraPermissionUseCase() -> CameraPermissionUseCase {
@@ -193,6 +201,22 @@ public struct UseCaseFactory {
   }
   
   // MARK: - 설정
+  public static func createGetSettingsInfoUseCase(repository: SettingsRepositoryInterface) -> GetSettingsInfoUseCase {
+    GetSettingsInfoUseCaseImpl(repository: repository)
+  }
+  
+  public static func createPutSettingsNotificationUseCase(repository: SettingsRepositoryInterface) -> PutSettingsNotificationUseCase {
+    PutSettingsNotificationUseCaseImpl(repository: repository)
+  }
+  
+  public static func createPutSettingsMatchNotificationUseCase(repository: SettingsRepositoryInterface) -> PutSettingsMatchNotificationUseCase {
+    PutSettingsMatchNotificationUseCaseImpl(repository: repository)
+  }
+  
+  public static func createPutSettingsBlockAcquaintanceUseCase(repository: SettingsRepositoryInterface) -> PutSettingsBlockAcquaintanceUseCase {
+    PutSettingsBlockAcquaintanceUseCaseImpl(repository: repository)
+  }
+  
   public static func createGetContactsSyncTimeUseCase(repository: SettingsRepositoryInterface) -> GetContactsSyncTimeUseCase {
     GetContactsSyncTimeUseCaseImpl(repository: repository)
   }

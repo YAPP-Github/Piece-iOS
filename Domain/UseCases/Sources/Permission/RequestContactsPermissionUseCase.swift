@@ -11,11 +11,11 @@ public protocol RequestContactsPermissionUseCase {
   func execute() async throws -> Bool
 }
 
-public final class RequestContactsPermissionUseCaseImpl: RequestContactsPermissionUseCase {
+final class RequestContactsPermissionUseCaseImpl: RequestContactsPermissionUseCase {
   private let contactStore: CNContactStore
   private let checkContactsPermissionUseCase: CheckContactsPermissionUseCase
   
-  public init(
+  init(
     contactStore: CNContactStore = CNContactStore(),
     checkContactsPermissionUseCase: CheckContactsPermissionUseCase
   ) {
@@ -23,7 +23,7 @@ public final class RequestContactsPermissionUseCaseImpl: RequestContactsPermissi
     self.checkContactsPermissionUseCase = checkContactsPermissionUseCase
   }
   
-  public func execute() async throws -> Bool {
+  func execute() async throws -> Bool {
     let authorizationStatus = checkContactsPermissionUseCase.execute()
     switch authorizationStatus {
     case .notDetermined:
