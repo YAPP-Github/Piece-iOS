@@ -36,13 +36,13 @@ public struct SignUpViewFactory {
     cameraPermissionUseCase: CameraPermissionUseCase,
     photoPermissionUseCase: PhotoPermissionUseCase,
     requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
-    notificationPermissionUseCase: NotificationPermissionUseCase
+    requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase
   ) -> some View {
     PermissionRequestView(
       cameraPermissionUseCase: cameraPermissionUseCase,
       photoPermissionUseCase: photoPermissionUseCase,
       requestContactsPermissionUseCase: requestContactsPermissionUseCase,
-      notificationPermissionUseCase: notificationPermissionUseCase
+      requestNotificationPermissionUseCase: requestNotificationPermissionUseCase
     )
   }
   

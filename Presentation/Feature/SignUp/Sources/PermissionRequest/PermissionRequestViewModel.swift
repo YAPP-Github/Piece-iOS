@@ -24,7 +24,7 @@ final class PermissionRequestViewModel {
   private let cameraPermissionUseCase: CameraPermissionUseCase
   private let photoPermissionUseCase: PhotoPermissionUseCase
   private let requestContactsPermissionUseCase: RequestContactsPermissionUseCase
-  private let notificationPermissionUseCase: NotificationPermissionUseCase
+  private let requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase
   
   enum Action {
     case showShettingAlert
@@ -36,12 +36,12 @@ final class PermissionRequestViewModel {
     cameraPermissionUseCase: CameraPermissionUseCase,
     photoPermissionUseCase: PhotoPermissionUseCase,
     requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
-    notificationPermissionUseCase: NotificationPermissionUseCase
+    requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase
   ) {
     self.cameraPermissionUseCase = cameraPermissionUseCase
     self.photoPermissionUseCase = photoPermissionUseCase
     self.requestContactsPermissionUseCase = requestContactsPermissionUseCase
-    self.notificationPermissionUseCase = notificationPermissionUseCase
+    self.requestNotificationPermissionUseCase = requestNotificationPermissionUseCase
   }
   
   func handleAction(_ action: Action) {
@@ -62,11 +62,12 @@ final class PermissionRequestViewModel {
 }
 
 private extension PermissionRequestViewModel {
+  // TODO: - request 결과 서버에 보내기
   private func fetchPermissions() async {
     do {
       isCameraPermissionGranted = await cameraPermissionUseCase.execute()
       isPhotoPermissionGranted = await photoPermissionUseCase.execute()
-      isNotificationPermissionGranted = try await notificationPermissionUseCase.execute()
+      isNotificationPermissionGranted = try await requestContactsPermissionUseCase.execute()
       isContactsPermissionGranted = try await requestContactsPermissionUseCase.execute()
     } catch {
       print("Permission request error: \(error)")
