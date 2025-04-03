@@ -15,6 +15,7 @@ import AuthenticationServices
 import UseCases
 import LocalStorage
 
+@MainActor
 @Observable
 final class LoginViewModel: NSObject {
   
@@ -31,6 +32,7 @@ final class LoginViewModel: NSObject {
   private let socialLoginUseCase: SocialLoginUseCase
   private(set) var isSuccessfulSignUp: Bool = false
   private(set) var isSuccessfulLogin: Bool = false
+  
   func handleAction(_ action: Action) {
     switch action {
     case .tapAppleLoginButton:
