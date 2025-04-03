@@ -37,7 +37,7 @@ final class SettingsRepository: SettingsRepositoryInterface {
     return response.toDomain()
   }
   
-  func putSettingsBlockAcquaintace(isEnabled: Bool) async throws -> VoidModel {
+  func putSettingsBlockAcquaintance(isEnabled: Bool) async throws -> VoidModel {
     let requestDto = SettingsBlockAcquaintanceRequestDTO(toggle: isEnabled)
     let endpoint = SettingsEndpoint.blockAcquaintance(requestDto)
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
