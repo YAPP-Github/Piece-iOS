@@ -23,6 +23,18 @@ public struct UseCaseFactory {
     NotificationPermissionUseCaseImpl()
   }
   
+  public static func createCheckNotificationPermissionUseCase() -> CheckNotificationPermissionUseCase {
+    CheckNotificationPermissionUseCaseImpl()
+  }
+  
+  public static func createRequestNotificationPermissionUseCase() -> RequestNotificationPermissionUseCase {
+    RequestNotificationPermissionUseCaseImpl()
+  }
+  
+  public static func createChangeNotificationRegisterStatusUseCase() -> ChangeNotificationRegisterStatusUseCase {
+    ChangeNotificationRegisterStatusUseCaseImpl()
+  }
+  
   public static func createCameraPermissionUseCase() -> CameraPermissionUseCase {
     CameraPermissionUseCaseImpl()
   }
