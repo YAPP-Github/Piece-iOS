@@ -20,6 +20,6 @@ final class PutSettingsBlockAcquaintanceUseCaseImpl: PutSettingsBlockAcquaintanc
   }
   
   func execute(isEnabled: Bool) async throws -> VoidModel {
-    return try await repository.putSettingsBlockAcquaintace(isEnabled: isEnabled)
+    return try await repository.putSettingsBlockAcquaintance(isEnabled: isEnabled)
   }
 }
