@@ -19,10 +19,6 @@ public struct UseCaseFactory {
     RequestContactsPermissionUseCaseImpl(checkContactsPermissionUseCase: checkContactsPermissionUseCase)
   }
   
-  public static func createNotificationPermissionUseCase() -> NotificationPermissionUseCase {
-    NotificationPermissionUseCaseImpl()
-  }
-  
   public static func createCheckNotificationPermissionUseCase() -> CheckNotificationPermissionUseCase {
     CheckNotificationPermissionUseCaseImpl()
   }
