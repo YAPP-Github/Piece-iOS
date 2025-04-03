@@ -15,24 +15,36 @@ struct SettingsView: View {
   @Environment(Router.self) var router
   
   init(
+    getSettingsInfoUseCase: GetSettingsInfoUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
-    notificationPermissionUseCase: NotificationPermissionUseCase,
+    checkNotificationPermissionUseCase: CheckNotificationPermissionUseCase,
+    requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase,
+    changeNotificationRegisterStatusUseCase: ChangeNotificationRegisterStatusUseCase,
     checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
     requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    putSettingsNotificationUseCase: PutSettingsNotificationUseCase,
+    putSettingsMatchNotificationUseCase: PutSettingsMatchNotificationUseCase,
+    putSettingsBlockAcquaintanceUseCase: PutSettingsBlockAcquaintanceUseCase,
     patchLogoutUseCase: PatchLogoutUseCase
   ) {
     _viewModel = .init(
       wrappedValue: .init(
+        getSettingsInfoUseCase: getSettingsInfoUseCase,
         fetchTermsUseCase: fetchTermsUseCase,
-        notificationPermissionUseCase: notificationPermissionUseCase,
+        checkNotificationPermissionUseCase: checkNotificationPermissionUseCase,
+        requestNotificationPermissionUseCase: requestNotificationPermissionUseCase,
+        changeNotificationRegisterStatusUseCase: changeNotificationRegisterStatusUseCase,
         checkContactsPermissionUseCase: checkContactsPermissionUseCase,
         requestContactsPermissionUseCase: requestContactsPermissionUseCase,
         fetchContactsUseCase: fetchContactsUseCase,
         blockContactsUseCase: blockContactsUseCase,
         getContactsSyncTimeUseCase: getContactsSyncTimeUseCase,
+        putSettingsNotificationUseCase: putSettingsNotificationUseCase,
+        putSettingsMatchNotificationUseCase: putSettingsMatchNotificationUseCase,
+        putSettingsBlockAcquaintanceUseCase: putSettingsBlockAcquaintanceUseCase,
         patchLogoutUseCase: patchLogoutUseCase
       )
     )

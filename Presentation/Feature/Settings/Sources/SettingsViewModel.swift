@@ -43,34 +43,52 @@ final class SettingsViewModel {
   let noticeUri = "https://brassy-client-c0a.notion.site/16a2f1c4b96680e79a0be5e5cea6ea8a"
   
   private let userDefaults = PCUserDefaultsService.shared
+  private let getSettingsInfoUseCase: GetSettingsInfoUseCase
   private let fetchTermsUseCase: FetchTermsUseCase
-  private let notificationPermissionUseCase: NotificationPermissionUseCase
+  private let checkNotificationPermissionUseCase: CheckNotificationPermissionUseCase
+  private let requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase
+  private let changeNotificationRegisterStatusUseCase: ChangeNotificationRegisterStatusUseCase
   private let checkContactsPermissionUseCase: CheckContactsPermissionUseCase
   private let requestContactsPermissionUseCase: RequestContactsPermissionUseCase
   private let fetchContactsUseCase: FetchContactsUseCase
   private let blockContactsUseCase: BlockContactsUseCase
   private let getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase
+  private let putSettingsNotificationUseCase: PutSettingsNotificationUseCase
+  private let putSettingsMatchNotificationUseCase: PutSettingsMatchNotificationUseCase
+  private let putSettingsBlockAcquaintanceUseCase: PutSettingsBlockAcquaintanceUseCase
   private let patchLogoutUseCase: PatchLogoutUseCase
   private(set) var tappedTermItem: SettingsTermsItem?
   private(set) var destination: Route?
   
   init(
+    getSettingsInfoUseCase: GetSettingsInfoUseCase,
     fetchTermsUseCase: FetchTermsUseCase,
-    notificationPermissionUseCase: NotificationPermissionUseCase,
+    checkNotificationPermissionUseCase: CheckNotificationPermissionUseCase,
+    requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase,
+    changeNotificationRegisterStatusUseCase: ChangeNotificationRegisterStatusUseCase,
     checkContactsPermissionUseCase: CheckContactsPermissionUseCase,
     requestContactsPermissionUseCase: RequestContactsPermissionUseCase,
     fetchContactsUseCase: FetchContactsUseCase,
     blockContactsUseCase: BlockContactsUseCase,
     getContactsSyncTimeUseCase: GetContactsSyncTimeUseCase,
+    putSettingsNotificationUseCase: PutSettingsNotificationUseCase,
+    putSettingsMatchNotificationUseCase: PutSettingsMatchNotificationUseCase,
+    putSettingsBlockAcquaintanceUseCase: PutSettingsBlockAcquaintanceUseCase,
     patchLogoutUseCase: PatchLogoutUseCase
   ) {
+    self.getSettingsInfoUseCase = getSettingsInfoUseCase
     self.fetchTermsUseCase = fetchTermsUseCase
-    self.notificationPermissionUseCase = notificationPermissionUseCase
     self.checkContactsPermissionUseCase = checkContactsPermissionUseCase
+    self.checkNotificationPermissionUseCase = checkNotificationPermissionUseCase
+    self.requestNotificationPermissionUseCase = requestNotificationPermissionUseCase
+    self.changeNotificationRegisterStatusUseCase = changeNotificationRegisterStatusUseCase
     self.requestContactsPermissionUseCase = requestContactsPermissionUseCase
     self.fetchContactsUseCase = fetchContactsUseCase
     self.blockContactsUseCase = blockContactsUseCase
     self.getContactsSyncTimeUseCase = getContactsSyncTimeUseCase
+    self.putSettingsNotificationUseCase = putSettingsNotificationUseCase
+    self.putSettingsMatchNotificationUseCase = putSettingsMatchNotificationUseCase
+    self.putSettingsBlockAcquaintanceUseCase = putSettingsBlockAcquaintanceUseCase
     self.patchLogoutUseCase = patchLogoutUseCase
     addObserver()
   }
@@ -92,13 +110,19 @@ final class SettingsViewModel {
       ]
       
     case let .matchingNotificationToggled(isEnabled):
-      matchingNotificationToggled(isEnabled: isEnabled)
+      Task {
+        await matchingNotificationToggled(isEnabled: isEnabled)
+      }
       
     case let .pushNotificationToggled(isEnabled):
-      pushNotificationToggled(isEnabled: isEnabled)
+      Task {
+        await pushNotificationToggled(isEnabled: isEnabled)
+      }
       
     case let .blockContactsToggled(isEnabled):
-      blockContactsToggled(isEnabled: isEnabled)
+      Task {
+        await blockContactsToggled(isEnabled: isEnabled)
+      }
       
     case .synchronizeContactsButtonTapped:
       synchronizeContacts()
@@ -145,14 +169,21 @@ final class SettingsViewModel {
   private func onAppear() {
     fetchAppVersion()
     Task {
+      await getSettingsInfo()
       await fetchTerms()
       await checkPushNoficationPermission()
       await checkContactsPermission()
     }
   }
   
-  private func fetchAppVersion() {
-    version = AppVersion.appVersion()
+  private func getSettingsInfo() async {
+    do {
+      let settingsInfo = try await getSettingsInfoUseCase.execute()
+      isMatchingNotificationOn = settingsInfo.isMatchNotificationEnabled
+      isBlockContactsEnabled = settingsInfo.isAcquaintanceBlockEnabled
+    } catch {
+      print(error)
+    }
   }
   
   private func fetchTerms() async {
@@ -168,12 +199,25 @@ final class SettingsViewModel {
     }
   }
   
+  private func fetchAppVersion() {
+    version = AppVersion.appVersion()
+  }
+  
   private func checkPushNoficationPermission() async {
     do {
-      let isPushNotificationEnabled = try await notificationPermissionUseCase.execute()
+      let authorizationStatus = await checkNotificationPermissionUseCase.execute()
+      var isPushNotificationEnabled = false
+      switch authorizationStatus {
+      case .notDetermined, .denied:
+        isPushNotificationEnabled = false
+      case .authorized, .provisional:
+        isPushNotificationEnabled = true
+      case .ephemeral:
+        isPushNotificationEnabled = false
+      @unknown default:
+        isPushNotificationEnabled = false
+      }
       self.isPushNotificationEnabled = isPushNotificationEnabled
-    } catch {
-      print(error)
     }
   }
   
@@ -191,22 +235,56 @@ final class SettingsViewModel {
     self.isBlockContactsEnabled = isBlockContactsEnabled
   }
   
-  private func matchingNotificationToggled(isEnabled: Bool) {
+  private func matchingNotificationToggled(isEnabled: Bool) async {
+    do {
+      _ = try await putSettingsMatchNotificationUseCase.execute(isEnabled: isEnabled)
+    } catch {
+      print(error)
+    }
     isMatchingNotificationOn = isEnabled
   }
   
-  private func pushNotificationToggled(isEnabled: Bool) {
-    isPushNotificationEnabled = isEnabled
+  private func pushNotificationToggled(isEnabled: Bool) async {
+    var isPushNotificationEnabled = self.isPushNotificationEnabled
+    if isEnabled {
+      do {
+      let authorizationStatus = await checkNotificationPermissionUseCase.execute()
+        switch authorizationStatus {
+        case .denied:
+          if let url = URL(string: UIApplication.openSettingsURLString) {
+            await MainActor.run {
+              UIApplication.shared.open(url)
+            }
+          }
+        case .notDetermined, .ephemeral:
+          isPushNotificationEnabled = try await requestNotificationPermissionUseCase.execute()
+        case .authorized, .provisional:
+          break
+        @unknown default:
+          isPushNotificationEnabled = false
+        }
+      } catch {
+        print(error)
+        isPushNotificationEnabled = false
+      }
+    }
+    await changeNotificationRegisterStatusUseCase.execute(isEnabled: isPushNotificationEnabled)
+    self.isPushNotificationEnabled = isPushNotificationEnabled
+
+    do {
+      _ = try await putSettingsNotificationUseCase.execute(isEnabled: isPushNotificationEnabled)
+    } catch {
+      print(error)
+    }
     
     // 푸시알림을 끈 경우 매칭 알림도 같이 Off 처리
-    if !isEnabled {
-      isMatchingNotificationOn = isEnabled
+    if isPushNotificationEnabled == false {
+      await matchingNotificationToggled(isEnabled: isPushNotificationEnabled)
     }
   }
   
-  private func blockContactsToggled(isEnabled: Bool) {
+  private func blockContactsToggled(isEnabled: Bool) async {
     if isEnabled {
-      Task {
         do {
           let authorizationStatus = checkContactsPermissionUseCase.execute()
           switch authorizationStatus {
@@ -227,9 +305,14 @@ final class SettingsViewModel {
           print(error)
           self.isBlockContactsEnabled = false
         }
-      }
     } else {
       isBlockContactsEnabled = false
+    }
+    
+    do {
+      _ = try await putSettingsBlockAcquaintanceUseCase.execute(isEnabled: isEnabled)
+    } catch {
+      print(error)
     }
   }
   
