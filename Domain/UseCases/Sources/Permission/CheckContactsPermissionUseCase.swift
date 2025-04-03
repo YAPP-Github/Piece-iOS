@@ -14,11 +14,11 @@ public protocol CheckContactsPermissionUseCase {
 final class CheckContactsPermissionUseCaseImpl: CheckContactsPermissionUseCase {
   private let contactStore: CNContactStore
   
-  public init(contactStore: CNContactStore = CNContactStore()) {
+  init(contactStore: CNContactStore = CNContactStore()) {
     self.contactStore = contactStore
   }
   
-  public func execute() -> CNAuthorizationStatus {
+  func execute() -> CNAuthorizationStatus {
     return CNContactStore.authorizationStatus(for: .contacts)
   }
 }
