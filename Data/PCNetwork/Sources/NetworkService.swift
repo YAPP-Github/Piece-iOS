@@ -48,11 +48,16 @@ public class NetworkService {
   
   public func request<T: Decodable>(endpoint: TargetType) async throws -> T {
     print("🛰 request path: \(endpoint.path)")
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
     
     return try await withCheckedThrowingContinuation { continuation in
       session.request(endpoint)
         .validate()
-        .responseDecodable(of: APIResponse<T>.self) { response in
+        .responseDecodable(
+          of: APIResponse<T>.self,
+          decoder: decoder
+        ) { response in
           switch response.result {
           case .success(let apiResponse):
             print("🛰 API Response \(apiResponse.status): \(apiResponse.message)")
