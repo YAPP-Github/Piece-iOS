@@ -11,6 +11,7 @@ import Router
 import SwiftUI
 import Observation
 import UseCases
+import Entities
 import LocalStorage
 
 @MainActor
@@ -123,15 +124,7 @@ final class MatchingMainViewModel {
     self.patchMatchesCheckPieceUseCase = patchMatchesCheckPieceUseCase
     
     Task {
-      // 1. 항상 유저 Role을 확인하고 Pending인지 아닌지와 프로필 리젝인지 확인
-      //   (유저가 프로필을 수정할 수 있으니까)
-      //
-      // 2. Pending이 아니라면, GetMatchesInfoUseCase를 호출
-      //   2-1. 상태코드 200이라면, 매칭 조각을 보여준다.
-      //   2-2. 200이 아닌 에러상태라면, 아직 매칭 전으로 간주해서 NoData.
-      
       await getUserRole()
-      await fetchUserRejectState()
     }
   }
   
@@ -180,13 +173,30 @@ final class MatchingMainViewModel {
     do {
       let userInfo = try await getUserInfoUseCase.execute()
       let userRole = userInfo.role
-      if userRole == .PENDING {
-        isShowMatchingPendingCard = true
-        matchingButtonState = .pending
-      } else if userRole == .USER {
-        await getMatchesInfo()
-      }
+      let profileStatus = userInfo.profileStatus
+      
       PCUserDefaultsService.shared.setUserRole(userRole)
+      
+      switch profileStatus {
+      case .REJECTED:
+        // 프로필 상태가 REJECTED 일 경우, 해당 api 호출
+        await fetchUserRejectState()
+      case .INCOMPLETE, .REVISED, .APPROVED:
+        break
+      case .none:
+        break
+      }
+      
+      switch userRole {
+      case .PENDING:
+        // 심사 중 Pending
+        matchingButtonState = .pending
+        isShowMatchingPendingCard = true
+      case .USER:
+        await getMatchesInfo()
+      default: break
+      }
+      
     } catch {
       print("Get User Role :\(error.localizedDescription)")
     }
@@ -198,27 +208,32 @@ final class MatchingMainViewModel {
       let matchStatus = matchesInfo.matchStatus
       await fetchInfo()
       isShowMatchingMainBasicCard = true
-      if matchStatus == "BEFORE_OPEN" {
+      
+      switch matchStatus {
+      case .BEFORE_OPEN:
         // 자신이 매칭 조각 열람 전
-        matchingStatus = .before
+        matchingStatus = .BEFORE_OPEN
         matchingButtonState = .checkMatchingPiece
-      } else if matchStatus == "WAITING" {
+      case .WAITING:
         //자신은 매칭조각 열람, 상대는 매칭 수락 안함(열람했는지도 모름)
-        matchingStatus = .waiting
+        matchingStatus = .WAITING
         matchingButtonState = .acceptMatching
-      } else if matchStatus == "RESPONDED" {
+      case .RESPONDED:
         // 자신은 수락, 상대는 모름
-        matchingStatus = .done
+        matchingStatus = .RESPONDED
         matchingButtonState = .responseComplete
-      } else if matchStatus == "GREEN_LIGHT" {
+      case .GREEN_LIGHT:
         // 자신은 열람만, 상대는 수락
-        matchingStatus = .green_light
+        matchingStatus = .GREEN_LIGHT
         matchingButtonState = .acceptMatching
-      } else if matchStatus == "MATCHED" {
-        // 둘다 수락
-        matchingStatus = .complete
-        matchingButtonState = .checkContact(nickname: "")
+      case .MATCHED:
+          // 둘다 수락
+        matchingStatus = .MATCHED
+          matchingButtonState = .checkContact(nickname: "")
+      case nil:
+        break
       }
+      
     } catch {
       print("Get Match Status :\(error.localizedDescription)")
       isShowMatchingNodataCard = true
