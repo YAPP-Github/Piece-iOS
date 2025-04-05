@@ -125,6 +125,7 @@ final class MatchingMainViewModel {
     
     Task {
       await getUserRole()
+      await getMatchesInfo()
     }
   }
   
@@ -229,7 +230,7 @@ final class MatchingMainViewModel {
       case .MATCHED:
           // 둘다 수락
         matchingStatus = .MATCHED
-          matchingButtonState = .checkContact(nickname: "")
+        matchingButtonState = .checkContact(nickname: "")
       case nil:
         break
       }
