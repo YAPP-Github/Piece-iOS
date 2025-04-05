@@ -125,7 +125,6 @@ final class MatchingMainViewModel {
     
     Task {
       await getUserRole()
-      await getMatchesInfo()
     }
   }
   
@@ -153,21 +152,6 @@ final class MatchingMainViewModel {
         return
       }
     }
-  }
-  
-  private func fetchInfo() async {
-      do {
-        let info = try await getMatchesInfoUseCase.execute()
-        
-        name = info.nickname
-        description = info.description
-        age = info.birthYear
-        location = info.location
-        job = info.job
-        tags = info.matchedValueList
-      } catch {
-        print(error.localizedDescription)
-      }
   }
   
   private func getUserRole() async {
@@ -205,9 +189,8 @@ final class MatchingMainViewModel {
   
   private func getMatchesInfo() async {
     do {
-      let matchesInfo = try await getMatchesInfoUseCase.execute()
+      let matchesInfo = try await getMatchesInfoUseCase.execute() // 매칭 상태 확인해야함
       let matchStatus = matchesInfo.matchStatus
-      await fetchInfo()
       isShowMatchingMainBasicCard = true
       
       switch matchStatus {
@@ -234,6 +217,13 @@ final class MatchingMainViewModel {
       case nil:
         break
       }
+      
+      name = matchesInfo.nickname
+      description = matchesInfo.description
+      age = matchesInfo.birthYear
+      location = matchesInfo.location
+      job = matchesInfo.job
+      tags = matchesInfo.matchedValueList
       
     } catch {
       print("Get Match Status :\(error.localizedDescription)")
