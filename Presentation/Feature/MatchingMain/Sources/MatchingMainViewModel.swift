@@ -107,7 +107,7 @@ final class MatchingMainViewModel {
   }
   var destination: Route?
   var matchingButtonState: MatchingButtonState = .acceptMatching
-  var matchingStatus: MatchingAnswer.MatchingStatus = .before
+  var matchingStatus: MatchStatus = .BEFORE_OPEN
   
   init(
     getUserInfoUseCase: GetUserInfoUseCase,
