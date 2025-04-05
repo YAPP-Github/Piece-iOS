@@ -190,9 +190,7 @@ final class EditProfileViewModel {
   var selectedLocation: String? = nil
   var selectedJob: String? = nil
   var customJobText: String = ""
-  var customLocationText: String = ""
   var isCustomJobSelected: Bool = false
-  var isCustomLocationSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var selectedContactForIconChange: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
@@ -225,15 +223,7 @@ final class EditProfileViewModel {
   var isLocationSheetPresented: Bool = false {
     didSet {
       if isLocationSheetPresented {
-        if !locations.contains(location) && !location.isEmpty {
-          isCustomLocationSelected = true
-          selectedLocation = nil
-          customLocationText = location
-        } else {
-          isCustomLocationSelected = false
-          selectedLocation = location
-          customLocationText = ""
-        }
+        selectedLocation = location
       }
     }
   }
@@ -335,15 +325,11 @@ final class EditProfileViewModel {
   }
   
   func saveSelectedLocation() {
-    if isCustomLocationSelected {
-      self.location = customLocationText.isEmpty ? "" : customLocationText
-    } else if let selectedLocation = selectedLocation {
+    if let selectedLocation = selectedLocation {
       self.location = selectedLocation
     }
     isLocationSheetPresented = false
     selectedLocation = nil
-    customLocationText = ""
-    isCustomLocationSelected = false
   }
   
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {

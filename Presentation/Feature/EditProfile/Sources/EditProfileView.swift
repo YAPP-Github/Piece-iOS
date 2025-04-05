@@ -447,28 +447,9 @@ struct EditProfileView: View {
       VStack(alignment: .leading, spacing: 0) {
         cellItem(
           text: location,
-          isSelected: location == "기타" ? viewModel.isCustomLocationSelected : viewModel.selectedLocation == location,
-          action: {
-            if location == "기타" {
-              viewModel.isCustomLocationSelected = true
-              viewModel.selectedLocation = nil
-            } else {
-              viewModel.isCustomLocationSelected = false
-              viewModel.selectedLocation = location
-            }
-          }
+          isSelected: viewModel.selectedLocation == location,
+          action: { viewModel.selectedLocation = location }
         )
-        
-        if location == "기타" && viewModel.isCustomLocationSelected {
-          PCTextField(
-            title: "",
-            text: $viewModel.customLocationText,
-            focusState: $focusField,
-            focusField: "customLocation"
-          )
-          .padding(.horizontal)
-          .padding(.vertical, 8)
-        }
       }
     }
     
