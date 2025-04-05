@@ -168,13 +168,15 @@ final class SplashViewModel {
       destination = .verifyContact
     case .REGISTER:
       print("---REGISTER---")
-      destination = .termsAgreement
+      destination = .login
     case .PENDING:
       print("---PENDING---")
       destination = .home
     case .USER:
       print("---USER---")
       destination = .home
+    @unknown default:
+      destination = .login
     }
   }
 }
