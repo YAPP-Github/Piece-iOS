@@ -448,7 +448,10 @@ struct EditProfileView: View {
         cellItem(
           text: location,
           isSelected: viewModel.selectedLocation == location,
-          action: { viewModel.selectedLocation = location }
+          action: {
+            viewModel.isEditing = true
+            viewModel.selectedLocation = location
+          }
         )
       }
     }
@@ -478,6 +481,7 @@ struct EditProfileView: View {
           text: job,
           isSelected: job == "기타" ? viewModel.isCustomJobSelected : viewModel.selectedJob == job,
           action: {
+            viewModel.isEditing = true
             if job == "기타" {
               viewModel.isCustomJobSelected = true
               viewModel.selectedJob = nil
