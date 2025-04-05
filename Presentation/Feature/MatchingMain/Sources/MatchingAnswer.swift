@@ -6,77 +6,73 @@
 //
 
 import SwiftUI
+import Entities
 import DesignSystem
 
 public struct MatchingAnswer: View {
-  public enum MatchingStatus {
-    case before
-    case waiting
-    case done
-    case complete
-    case green_light
-    
-    var icon: Image {
-      switch self {
-      case .before, .waiting: DesignSystemAsset.Icons.matchingModeLoading20.swiftUIImage
-      case .done, .complete: DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage
-      case .green_light: DesignSystemAsset.Icons.matchingModeHeart20.swiftUIImage
-      }
-    }
-    
-    var title: String {
-      switch self {
-      case .before: "오픈 전"
-      case .waiting: "응답 대기중"
-      case .done: "응답 완료"
-      case .complete: "매칭 완료"
-      case .green_light: "그린라이트"
-      }
-    }
-    
-    var titleTextColor: Color {
-      switch self {
-      case .before, .waiting: .grayscaleDark2
-      case .done, .complete, .green_light: .primaryDefault
-      }
-    }
-    
-    var description: String {
-      switch self {
-      case .before: "매칭 조각을 확인해주세요!"
-      case .waiting: "매칭에 응답해주세요!"
-      case .done: "상대방의 응답을 기다려봐요!"
-      case .complete: "상대방과 연결되었어요!"
-      case .green_light: "상대방이 매칭을 수락했어요!"
-      }
-    }
-  }
-  
-  public init(type: MatchingStatus) {
+  public init(type: MatchStatus) {
     self.type = type
   }
   
+  private let type: MatchStatus
+  
   public var body: some View {
     HStack(spacing: 8) {
-      type.icon
-      Text(type.title)
+      icon(for: type)
+      Text(title(for: type))
         .pretendard(.body_S_SB)
-        .foregroundColor(type.titleTextColor)
-      Text(type.description)
+        .foregroundColor(titleTextColor(for: type))
+      Text(description(for: type))
         .pretendard(.body_S_M)
         .foregroundColor(.grayscaleDark3)
     }
   }
   
-  private let type: MatchingStatus
+  private func icon(for status: MatchStatus) -> Image {
+    switch status {
+    case .BEFORE_OPEN, .WAITING:
+      return DesignSystemAsset.Icons.matchingModeLoading20.swiftUIImage
+    case .MATCHED, .RESPONDED:
+      return DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage
+    case .GREEN_LIGHT:
+      return DesignSystemAsset.Icons.matchingModeHeart20.swiftUIImage
+    }
+  }
+  
+  private func title(for status: MatchStatus) -> String {
+    switch status {
+    case .BEFORE_OPEN: "오픈 전"
+    case .WAITING: "응답 대기중"
+    case .RESPONDED: "응답 완료"
+    case .MATCHED: "매칭 완료"
+    case .GREEN_LIGHT: "그린라이트"
+    }
+  }
+  
+  private func titleTextColor(for status: MatchStatus) -> Color {
+    switch status {
+    case .BEFORE_OPEN, .WAITING: .grayscaleDark2
+    case .RESPONDED, .MATCHED, .GREEN_LIGHT: .primaryDefault
+    }
+  }
+  
+  private func description(for status: MatchStatus) -> String {
+    switch status {
+    case .BEFORE_OPEN: "매칭 조각을 확인해주세요!"
+    case .WAITING: "매칭에 응답해주세요!"
+    case .RESPONDED: "상대방의 응답을 기다려봐요!"
+    case .MATCHED: "상대방과 연결되었어요!"
+    case .GREEN_LIGHT: "상대방이 매칭을 수락했어요!"
+    }
+  }
 }
 
 #Preview {
   VStack {
-    MatchingAnswer(type: .before)
-    MatchingAnswer(type: .waiting)
-    MatchingAnswer(type: .done)
-    MatchingAnswer(type: .complete)
-    MatchingAnswer(type: .green_light)
+    MatchingAnswer(type: .BEFORE_OPEN)
+    MatchingAnswer(type: .WAITING)
+    MatchingAnswer(type: .RESPONDED)
+    MatchingAnswer(type: .MATCHED)
+    MatchingAnswer(type: .GREEN_LIGHT)
   }
 }

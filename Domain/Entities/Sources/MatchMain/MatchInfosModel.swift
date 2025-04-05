@@ -10,7 +10,7 @@ import SwiftUI
 public struct MatchInfosModel {
   public let matchId: Int
   public let matchedUserId: Int
-  public let matchStatus: String
+  public let matchStatus: MatchStatus?
   public let description: String
   public let nickname: String
   public let birthYear: String
@@ -22,7 +22,7 @@ public struct MatchInfosModel {
   public init(
     matchId: Int,
     matchedUserId: Int,
-    matchStatus: String,
+    matchStatus: MatchStatus?,
     description: String,
     nickname: String,
     birthYear: String,
