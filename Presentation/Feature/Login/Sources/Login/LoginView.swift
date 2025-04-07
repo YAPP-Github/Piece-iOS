@@ -58,11 +58,9 @@ struct LoginView: View {
       .padding(.bottom, 10)
       .padding(.top, 80)
     }
-    .onChange(of: viewModel.isSuccessfulSignUp) { _, newValue in
-      router.push(to: .verifyContact)
-    }
-    .onChange(of: viewModel.isSuccessfulLogin) { _, newValue in
-      router.setRoute(.home)
+    .onChange(of: viewModel.destination) { _, newValue in
+      guard let newValue else { return }
+      router.setRoute(newValue)
     }
     .toolbar(.hidden, for: .navigationBar)
   }

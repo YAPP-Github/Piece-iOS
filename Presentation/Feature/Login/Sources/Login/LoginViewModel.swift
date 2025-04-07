@@ -14,6 +14,8 @@ import KakaoSDKUser
 import AuthenticationServices
 import UseCases
 import LocalStorage
+import Router
+import Entities
 
 @MainActor
 @Observable
@@ -30,8 +32,7 @@ final class LoginViewModel: NSObject {
   }
   
   private let socialLoginUseCase: SocialLoginUseCase
-  private(set) var isSuccessfulSignUp: Bool = false
-  private(set) var isSuccessfulLogin: Bool = false
+  private(set) var destination: Route?
   
   func handleAction(_ action: Action) {
     switch action {
@@ -95,13 +96,7 @@ final class LoginViewModel: NSObject {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
         print("Social login success: \(socialLoginResponse)")
         PCUserDefaultsService.shared.setSocialLoginType("kakao")
-        await MainActor.run {
-          if socialLoginResponse.role == .PENDING || socialLoginResponse.role == .USER {
-            isSuccessfulLogin = true
-          } else {
-            isSuccessfulSignUp = true
-          }
-        }
+        setRoute(userRole: socialLoginResponse.role)
       } catch {
         print("Social login failed: \(error.localizedDescription)")
       }
@@ -175,16 +170,23 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
         PCUserDefaultsService.shared.setSocialLoginType("apple")
-        await MainActor.run {
-          if socialLoginResponse.role == .PENDING || socialLoginResponse.role == .USER {
-            isSuccessfulLogin = true
-          } else {
-            isSuccessfulSignUp = true
-          }
-        }
+        setRoute(userRole: socialLoginResponse.role)
       } catch {
         print("Apple Login Error: \(error.localizedDescription)")
       }
+    }
+  }
+  
+  private func setRoute(userRole: UserRole) {
+    switch userRole {
+    case .NONE:
+      destination = .verifyContact
+    case .REGISTER:
+      destination = .termsAgreement
+    case .PENDING:
+      destination = .home
+    case .USER:
+      destination = .home
     }
   }
 }
