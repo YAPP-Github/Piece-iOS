@@ -15,7 +15,7 @@ struct MaxLengthModifier: ViewModifier {
     content
       .onChange(of: text) { oldValue, newValue in
         if newValue.count > maxLength {
-          text = oldValue
+          text = String(newValue.prefix(maxLength))
         }
       }
   }
