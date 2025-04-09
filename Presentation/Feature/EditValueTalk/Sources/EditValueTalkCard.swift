@@ -180,16 +180,20 @@ struct EditValueTalkCard: View {
           PCLottieView(.refresh)
           Spacer()
         } else {
-          TextEditor(text: Binding(
+          let summaryBinding = Binding<String>(
             get: { viewModel.localSummary },
             set: { viewModel.handleAction(.didUpdateSummary($0)) }
-          ))
+          )
+          TextField(
+            "",
+            text: summaryBinding,
+            axis: .vertical
+          )
+          .maxLength(text: summaryBinding, 50)
           .disabled(viewModel.editingState != .editingSummary)
           .pretendard(.body_M_M)
           .autocorrectionDisabled()
           .textInputAutocapitalization(.none)
-          .scrollContentBackground(.hidden)
-          .scrollDisabled(true)
           .foregroundStyle(viewModel.editingState == .generatingAISummary ? Color.grayscaleDark2 : Color.grayscaleBlack)
           .focused(focusState, equals: .summaryEditor(index))
           .allowsHitTesting(viewModel.editingState == .editingSummary)
