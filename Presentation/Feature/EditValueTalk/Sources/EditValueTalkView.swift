@@ -51,10 +51,21 @@ struct EditValueTalkView: View {
           rightButton: navigationBarRightButton
         )
         
-        ScrollView {
-          valueTalks
+        ScrollViewReader { proxy in
+          ScrollView {
+            valueTalks
+            Spacer()
+              .frame(height: 60)
+          }
+          .onChange(of: focusField) { _, newValue in
+            if case let .answerEditor(id) = newValue {
+                withAnimation {
+                  proxy.scrollTo(id, anchor: .top)
+              }
+            }
+          }
+          .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
       }
       .frame(maxHeight: .infinity)
     }
@@ -91,9 +102,11 @@ struct EditValueTalkView: View {
       EditValueTalkCard(
         viewModel: cardViewModel,
         focusState: $focusField,
-        index: index,
+        index: cardViewModel.model.id,
         isEditing: viewModel.isEditing
       )
+      .id(cardViewModel.model.id)
+      
       if index < viewModel.cardViewModels.count - 1 {
         Divider(weight: .thick)
       }
