@@ -32,7 +32,10 @@ public struct Coordinator {
   public init() { }
   
   // MARK: - Repositories
-  private let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
+  private let repositoryFactory = RepositoryFactory(
+    networkService: NetworkService.shared,
+    sseService: SSEService.shared
+  )
   
   // MARK: - UseCases
   

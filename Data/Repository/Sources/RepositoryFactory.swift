@@ -10,9 +10,14 @@ import RepositoryInterfaces
 
 public struct RepositoryFactory {
   private let networkService: NetworkService
+  private let sseService: SSEService
   
-  public init(networkService: NetworkService) {
+  public init(
+    networkService: NetworkService,
+    sseService: SSEService
+  ) {
     self.networkService = networkService
+    self.sseService = sseService
   }
   
   public func createUserRepository() -> UserRepositoryInterface {
@@ -60,7 +65,7 @@ public struct RepositoryFactory {
   }
 
   public func createSseRepository() -> SSERepositoryInterface {
-    SSERepository(networkService: networkService)
+    SSERepository(sseService: sseService)
   }
   
   public func createSettingsRepository() -> SettingsRepositoryInterface {

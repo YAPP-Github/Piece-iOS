@@ -126,55 +126,6 @@ public class NetworkService {
     }
   }
   
-  public func connectSse(endpoint: TargetType) -> AsyncThrowingStream<ProfileValueTalkAISummaryResponseDTO, Error> {
-    return AsyncThrowingStream { continuation in
-      let request = session.streamRequest(endpoint)
-        .validate()
-        .responseStream { stream in
-          switch stream.event {
-          case let .stream(result):
-            switch result {
-            case let .success(data):
-              do {
-                let decodedData = try JSONDecoder().decode(ProfileValueTalkAISummaryResponseDTO.self, from: data)
-                continuation.yield(decodedData)
-              } catch {
-                continuation.finish(throwing: NetworkError.decodingFailed)
-              }
-            case let .failure(error):
-              if let afError = error.asAFError {
-                let networkError = NetworkError.from(afError: afError)
-                continuation.finish(throwing: networkError)
-              } else {
-                continuation.finish(throwing: error)
-              }
-            }
-            
-          case let .complete(completion):
-            // 스트림 완료 처리
-            if let error = completion.error {
-              // AFError가 있으면 변환
-              continuation.finish(throwing: NetworkError.from(afError: error))
-            } else if let statusCode = completion.response?.statusCode,
-                      !(200..<300).contains(statusCode) {
-              // 성공이 아닌 상태 코드가 있으면 변환
-              let networkError = NetworkError.from(statusCode: statusCode, data: nil)
-              continuation.finish(throwing: networkError)
-            } else if completion.response == nil {
-              // 응답이 없으면 missingStatusCode
-              continuation.finish(throwing: NetworkError.missingStatusCode)
-            } else {
-              // 정상 종료
-              continuation.finish()
-            }
-          }
-        }
-      continuation.onTermination = { _ in
-        request.cancel()
-      }
-    }
-  }
-  
   public func updateCredentials() {
     authQueue.async { [weak self] in
       guard let self else { return }

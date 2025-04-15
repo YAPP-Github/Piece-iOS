@@ -10,7 +10,7 @@ import Entities
 import PCNetwork
 import RepositoryInterfaces
 
-final class SettingsRepository: SettingsRepositoryInterface {
+final class SettingsRepository: SettingsRepositoryInterface { 
   private let networkService: NetworkService
   
   init(networkService: NetworkService) {
@@ -43,7 +43,6 @@ final class SettingsRepository: SettingsRepositoryInterface {
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return response.toDomain()
   }
-
   
   func getContactsSyncTime() async throws -> ContactsSyncTimeModel {
     let endpoint = SettingsEndpoint.fetchBlockContactsSyncTime

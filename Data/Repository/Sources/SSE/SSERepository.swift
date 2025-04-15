@@ -7,23 +7,24 @@
 
 import DTO
 import Entities
+import Foundation
 import PCNetwork
 import RepositoryInterfaces
 
 public final class SSERepository: SSERepositoryInterface {
-  private let networkService: NetworkService
+  private let sseService: SSEService
   
-  public init(networkService: NetworkService) {
-    self.networkService = networkService
+  public init(sseService: SSEService) {
+    self.sseService = sseService
   }
   
   public func connectSse() -> AsyncThrowingStream<AISummaryModel, Error> {
     let endpoint = SSEEndpoint.connect
-    
+
     return AsyncThrowingStream { continuation in
       Task {
         do {
-          for try await dto in networkService.connectSse(endpoint: endpoint) {
+          for try await dto in sseService.connectSSE(endpoint: endpoint) {
             let entity = AISummaryModel(profileValueTalkId: dto.profileValueTalkId, summary: dto.summary)
             continuation.yield(entity)
           }
@@ -32,16 +33,12 @@ public final class SSERepository: SSERepositoryInterface {
           continuation.finish(throwing: error)
         }
       }
-      
-      continuation.onTermination = { [weak self] _ in
-        Task { try? await self?.disconnectSse() }
-      }
     }
   }
   
   public func disconnectSse() async throws -> VoidModel {
     let endpoint = SSEEndpoint.disconnect
-    let responseDto: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
+    let responseDto: VoidResponseDTO = try await sseService.disconnectSSE(endpoint: endpoint)
     
     return responseDto.toDomain()
   }
