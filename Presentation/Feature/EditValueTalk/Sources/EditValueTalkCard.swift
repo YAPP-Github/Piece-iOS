@@ -8,6 +8,7 @@
 import DesignSystem
 import Entities
 import SwiftUI
+import PCFoundationExtension
 
 struct EditValueTalkCard: View {
   @Bindable private var viewModel: EditValueTalkCardViewModel
@@ -212,7 +213,7 @@ struct EditValueTalkCard: View {
       .padding(.vertical, 10)
       .background(
         RoundedRectangle(cornerRadius: 8)
-          .foregroundStyle(Color.grayscaleLight3)
+          .foregroundStyle(Color.primaryLight)
       )
       .contentShape(Rectangle())
       .onTapGesture {
