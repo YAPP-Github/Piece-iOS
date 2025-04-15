@@ -80,7 +80,10 @@ public final class PCNotificationService: NSObject, UNUserNotificationCenterDele
       
       // TODO: - 서버에 FCM 토큰을 전송하는 로직
       // Note: This callback is fired at each app startup and whenever a new token is generated.
-      let repositoryFactory = RepositoryFactory(networkService: NetworkService.shared)
+      let repositoryFactory = RepositoryFactory(
+        networkService: NetworkService.shared,
+        sseService: SSEService.shared
+      )
       let loginRepository = repositoryFactory.createLoginRepository()
       let registerFcmTokenUseCase = UseCaseFactory.createRegisterFcmTokenUseCase(repository: loginRepository)
       Task {
