@@ -35,15 +35,15 @@ public final class LoginRepository: LoginRepositoryInterface {
   
   public func sendSMSCode(phoneNumber: String) async throws -> VoidModel {
     let body = SMSCodeRequestDTO(phoneNumber: phoneNumber)
-    let endpoint = LoginEndpoint.sendSMSCode(body: body)
+    let endpoint = RegisterEndpoint.sendSMSCode(body: body)
     let responseDTO: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
   
-  public func verifySMSCode(phoneNumber: String, code: String) async throws -> SocialLoginResultModel {
+  public func verifySMSCode(phoneNumber: String, code: String) async throws -> VerifySMSCodeResponseModel {
     let body = VerifySMSCodeRequestDTO(phoneNumber: phoneNumber, code: code)
-    let endpoint = LoginEndpoint.verifySMSCode(body: body)
-    let responseDTO: SocialLoginResponseDTO = try await networkService.request(endpoint: endpoint)
+    let endpoint = RegisterEndpoint.verifySMSCode(body: body)
+    let responseDTO: VerifySMSCodeResponseDTO = try await networkService.request(endpoint: endpoint)
     return responseDTO.toDomain()
   }
   
