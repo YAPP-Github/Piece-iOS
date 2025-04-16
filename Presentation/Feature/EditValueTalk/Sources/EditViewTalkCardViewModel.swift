@@ -62,8 +62,7 @@ final class EditValueTalkCardViewModel: Equatable {
   func handleAction(_ action: Action) {
     switch action {
     case let .didUpdateAnswer(answer):
-      let limitedText = answer.count <= 300 ? answer : String(answer.prefix(300))
-      model.answer = limitedText
+      model.answer = answer
       onModelUpdate(model)
       
     case let .didUpdateSummary(summary):

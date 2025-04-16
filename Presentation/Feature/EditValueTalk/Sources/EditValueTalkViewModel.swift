@@ -44,7 +44,6 @@ final class EditValueTalkViewModel {
     self.updateProfileValueTalksUseCase = updateProfileValueTalksUseCase
     self.connectSseUseCase = connectSseUseCase
     self.disconnectSseUseCase = disconnectSseUseCase
-    print("view model init")
     
     Task {
       await fetchValueTalks()
@@ -75,10 +74,12 @@ final class EditValueTalkViewModel {
   
   private func didTapSaveButton() async {
     if isEditing {
-      if isEdited {
-        for cardViewModel in cardViewModels {
-          valueTalks[cardViewModel.index].summary = cardViewModel.localSummary
+      for cardViewModel in cardViewModels {
+        if let index = valueTalks.firstIndex(where: { $0.id == cardViewModel.model.id }) {
+          valueTalks[index] = cardViewModel.model
         }
+      }
+      if isEdited {
         await updateProfileValueTalks()
       }
     } else {
@@ -108,11 +109,9 @@ final class EditValueTalkViewModel {
   }
   
   private func handleValueTalkUpdate(_ model: ProfileValueTalkModel) {
-    Task { @MainActor in
-      if let index = valueTalks.firstIndex(where: { $0.id == model.id }) {
-        valueTalks[index] = model
-        cardViewModels[index].model = model
-      }
+    if let index = valueTalks.firstIndex(where: { $0.id == model.id }) {
+      valueTalks[index] = model
+      cardViewModels[index].model = model
     }
   }
   
