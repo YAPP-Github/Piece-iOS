@@ -11,7 +11,7 @@ import Entities
 public protocol LoginRepositoryInterface {
   func socialLogin(providerName: SocialLoginType, token: String) async throws -> SocialLoginResultModel
   func sendSMSCode(phoneNumber: String) async throws -> VoidModel
-  func verifySMSCode(phoneNumber: String, code: String) async throws -> SocialLoginResultModel
+  func verifySMSCode(phoneNumber: String, code: String) async throws -> VerifySMSCodeResponseModel
   func checkTokenHealth(token: String) async throws -> VoidModel
   func registerFcmToken(token: String) async throws -> VoidModel
 }

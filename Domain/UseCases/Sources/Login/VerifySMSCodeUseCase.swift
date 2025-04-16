@@ -10,7 +10,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol VerifySMSCodeUseCase {
-  func execute(phoneNumber: String, code: String) async throws -> SocialLoginResultModel
+  func execute(phoneNumber: String, code: String) async throws -> VerifySMSCodeResponseModel
 }
 
 final class VerifySMSCodeUseCaseImpl: VerifySMSCodeUseCase {
@@ -20,7 +20,7 @@ final class VerifySMSCodeUseCaseImpl: VerifySMSCodeUseCase {
     self.repository = repository
   }
   
-  func execute(phoneNumber: String, code: String) async throws -> SocialLoginResultModel {
+  func execute(phoneNumber: String, code: String) async throws -> VerifySMSCodeResponseModel {
     return try await repository.verifySMSCode(phoneNumber: phoneNumber, code: code)
   }
 }

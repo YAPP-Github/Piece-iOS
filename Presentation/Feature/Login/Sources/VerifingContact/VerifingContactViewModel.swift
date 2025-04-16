@@ -29,11 +29,13 @@ final class VerifingContactViewModel {
   private let sendSMSCodeUseCase: SendSMSCodeUseCase
   private let verifySMSCodeUseCase: VerifySMSCodeUseCase
   
+  var showDuplicatePhoneNumberAlert: Bool = false
   private(set) var showVerificationField: Bool = false
   private(set) var isActiveNextButton: Bool = false
   private(set) var tapNextButtonFlag: Bool = false
   private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
   private(set) var recivedCertificationNumberButtonWidth = Constants.buttonDefaultWidth
+  private(set) var oauthProviderName: String = ""
   var verificationFieldInfoText: String = "어떤 경우에도 타인에게 공유하지 마세요"
   var verrificationFieldInfoTextColor: Color = DesignSystemAsset.Colors.grayscaleDark3.swiftUIColor
   private var timer: Timer?
@@ -102,8 +104,19 @@ final class VerifingContactViewModel {
     do {
       print(phoneNumber, verificationCode)
       let response = try await verifySMSCodeUseCase.execute(phoneNumber: phoneNumber, code: verificationCode)
-      PCKeychainManager.shared.save(.accessToken, value: response.accessToken)
-      PCKeychainManager.shared.save(.refreshToken, value: response.refreshToken)
+      if let accessToken = response.accessToken {
+        PCKeychainManager.shared.save(.accessToken, value: accessToken)
+      }
+      if let refreshToken = response.refreshToken {
+        PCKeychainManager.shared.save(.refreshToken, value: refreshToken)
+      }
+      if response.isPhoneNumberDuplicated {
+        if let oauthProviderName = response.oauthProvider {
+          self.oauthProviderName = oauthProviderName.description
+        }
+        showDuplicatePhoneNumberAlert = true
+      }
+      
       await MainActor.run {
         isActiveNextButton = true
         verificationFieldInfoText = "전화번호 인증을 완료했어요"
