@@ -165,7 +165,7 @@ final class SplashViewModel {
     switch userRole {
     case .NONE:
       print("---NONE---")
-      destination = .verifyContact
+      destination = .login
     case .REGISTER:
       print("---REGISTER---")
       destination = .login
