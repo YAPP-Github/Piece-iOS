@@ -10,3 +10,13 @@ public enum SocialLoginType: String, Encodable {
   case kakao
   case google
 }
+
+public extension SocialLoginType {
+  var description: String {
+    switch self {
+    case .apple: "애플"
+    case .kakao: "카카오"
+    case .google: "구글"
+    }
+  }
+}

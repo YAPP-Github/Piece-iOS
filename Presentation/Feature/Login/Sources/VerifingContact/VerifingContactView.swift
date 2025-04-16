@@ -31,7 +31,6 @@ struct VerifingContactView: View {
   
   var body: some View {
     ZStack {
-      
       Color.clear
         .contentShape(Rectangle())
         .onTapGesture {
@@ -128,6 +127,22 @@ struct VerifingContactView: View {
       .ignoresSafeArea(.keyboard)
       .toolbar(.hidden, for: .navigationBar)
     }
+    .pcAlert(
+      isPresented: $viewModel.showDuplicatePhoneNumberAlert) {
+        AlertView(
+          icon: DesignSystemAsset.Icons.notice40.swiftUIImage,
+          title: {
+            Text("\(viewModel.oauthProviderName) 계정으로 가입되어 있어요")
+              .pretendard(.heading_M_SB)
+              .foregroundStyle(.grayscaleBlack)
+          },
+          message: "가입하신 수단으로 다시 로그인해 주세요.",
+          secondButtonText: "확인",
+          secondButtonAction: {
+            router.setRoute(.login)
+          }
+        )
+      }
   }
 }
 //
