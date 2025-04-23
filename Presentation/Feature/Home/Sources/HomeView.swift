@@ -15,6 +15,7 @@ import UseCases
 
 struct HomeView: View {
   @State private var viewModel: HomeViewModel
+  @State private var showProfileToast: Bool = false
   
   init(
     getProfileUseCase: GetProfileBasicUseCase,
@@ -65,9 +66,20 @@ struct HomeView: View {
   }
 
   var body: some View {
-    ZStack {
+    ZStack(alignment: .bottom) {
       content
-      TabBarView(viewModel: viewModel.tabbarViewModel)
+      
+      PCToast(
+        isVisible: $showProfileToast,
+        icon: DesignSystemAsset.Icons.notice20.swiftUIImage,
+        text: "아직 심사중이에요"
+      )
+      .padding(.bottom, 100)
+      
+      TabBarView(
+        viewModel: viewModel.tabbarViewModel,
+        showToast: $showProfileToast
+      )
     }
     .toolbar(.hidden)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
