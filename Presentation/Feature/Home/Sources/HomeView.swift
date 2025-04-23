@@ -65,9 +65,12 @@ struct HomeView: View {
   }
 
   var body: some View {
-    ZStack {
+    ZStack(alignment: .bottom) {
       content
-      TabBarView(viewModel: viewModel.tabbarViewModel)
+      TabBarView(
+        viewModel: viewModel.tabbarViewModel,
+        showToast: $viewModel.showProfileToast
+      )
     }
     .toolbar(.hidden)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
