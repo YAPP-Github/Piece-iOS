@@ -29,17 +29,12 @@ struct ValuePickView: View {
           content
         }
         .overlay(alignment: .bottom) {
-          if viewModel.showToast {
-            PCToast(icon: DesignSystemAsset.Icons.notice20.swiftUIImage, text: "모든 항목을 작성해 주세요")
-              .padding(.bottom, 8)
-              .onAppear {
-                withAnimation(.easeInOut(duration: 0.5)) {
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak viewModel] in
-                    viewModel?.showToast = false
-                  }
-                }
-              }
-          }
+          PCToast(
+            isVisible: $viewModel.showToast,
+            icon: DesignSystemAsset.Icons.notice20.swiftUIImage,
+            text: "모든 항목을 작성해 주세요"
+          )
+          .padding(.bottom, 8)
         }
         
         buttonArea

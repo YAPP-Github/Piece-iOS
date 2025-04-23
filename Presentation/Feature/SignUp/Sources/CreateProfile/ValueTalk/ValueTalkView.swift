@@ -36,36 +36,38 @@ struct ValueTalkView: View {
   }
 
   var body: some View {
-    GeometryReader { proxy in
-      ZStack {
-        Color.clear
-          .contentShape(Rectangle())
-          .onTapGesture {
-            focusField = nil
-          }
-        VStack(spacing: 0) {
+    ZStack {
+      Color.clear
+        .contentShape(Rectangle())
+        .onTapGesture {
+          focusField = nil
+        }
+      
+      VStack(spacing: 0) {
+        ScrollViewReader { proxy in
           ScrollView {
             content
           }
-          .overlay(alignment: .bottom) {
-            if viewModel.showToast {
-              PCToast(icon: DesignSystemAsset.Icons.notice20.swiftUIImage, text: "모든 항목을 작성해 주세요")
-                .padding(.bottom, 8)
-                .onAppear {
-                  withAnimation(.easeInOut(duration: 0.5)) {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak viewModel] in
-                      viewModel?.showToast = false
-                    }
-                  }
-                }
+          .onChange(of: focusField) { _, newValue in
+            if case let .valueTalkEditor(id) = newValue {
+              withAnimation {
+                proxy.scrollTo(id, anchor: .top)
+              }
             }
           }
-          
-          buttonArea
+          .overlay(alignment: .bottom) {
+            PCToast(
+              isVisible: $viewModel.showToast,
+              icon: DesignSystemAsset.Icons.notice20.swiftUIImage,
+              text: "모든 항목을 작성해 주세요"
+            )
+            .padding(.bottom, 8)
+          }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea(.keyboard)
+        
+        buttonArea
       }
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
   }
 
@@ -100,7 +102,7 @@ struct ValueTalkView: View {
   private var valueTalks: some View {
     ForEach(
       Array(zip(viewModel.cardViewModels.indices, viewModel.cardViewModels)),
-      id: \.0
+      id: \.1.model.id
     ) { index, valueTalk in
       ValueTalkCard(
         viewModel: Binding(
@@ -108,6 +110,8 @@ struct ValueTalkView: View {
         set: { viewModel.cardViewModels[index] = $0 }),
         focusState: $focusField
       )
+      .id(valueTalk.model.id)
+      
       if index < viewModel.valueTalks.count - 1 {
         Divider(weight: .thick, isVertical: false)
       }
