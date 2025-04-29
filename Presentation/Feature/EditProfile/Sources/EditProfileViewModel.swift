@@ -347,6 +347,7 @@ final class EditProfileViewModel {
       } else {
         // 새 연락처 추가 시 처리
         contacts.append(ContactModel(type: selectedType, value: ""))
+        isEditing = true
       }
     }
     
