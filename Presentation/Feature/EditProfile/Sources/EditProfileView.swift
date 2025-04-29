@@ -363,10 +363,12 @@ struct EditProfileView: View {
       HStack {
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
           viewModel.smokingStatus = "흡연"
+          viewModel.isEditing = true
           focusField = nil
         }
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
           viewModel.smokingStatus = "비흡연"
+          viewModel.isEditing = true
           focusField = nil
         }
       }
@@ -388,6 +390,7 @@ struct EditProfileView: View {
           text: "활동"
         ) {
           viewModel.snsActivityLevel = "활동"
+          viewModel.isEditing = true
         }
         SelectCard(
           isEditing: true,
@@ -395,6 +398,7 @@ struct EditProfileView: View {
           text: "은둔"
         ){
           viewModel.snsActivityLevel = "은둔"
+          viewModel.isEditing = true
         }
       }
       Text(viewModel.snsInfoText)
@@ -416,6 +420,7 @@ struct EditProfileView: View {
               if viewModel.isAllowedInput(newValue),
                  let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
                 viewModel.contacts[index].value = newValue
+                viewModel.isEditing = true
               }
             }
           ),
@@ -448,7 +453,10 @@ struct EditProfileView: View {
         cellItem(
           text: location,
           isSelected: viewModel.selectedLocation == location,
-          action: { viewModel.selectedLocation = location }
+          action: {
+            viewModel.isEditing = true
+            viewModel.selectedLocation = location
+          }
         )
       }
     }
@@ -478,6 +486,7 @@ struct EditProfileView: View {
           text: job,
           isSelected: job == "기타" ? viewModel.isCustomJobSelected : viewModel.selectedJob == job,
           action: {
+            viewModel.isEditing = true
             if job == "기타" {
               viewModel.isCustomJobSelected = true
               viewModel.selectedJob = nil

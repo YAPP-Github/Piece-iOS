@@ -74,7 +74,6 @@ final class EditProfileViewModel {
   var isNextButtonEnabled: Bool {
     return isValidProfileImage &&
     didCheckDuplicates && isValidNickname &&
-    isValidBirthDate &&
     !nickname.isEmpty &&
     !description.isEmpty &&
     isValidBirthDate &&
@@ -82,7 +81,8 @@ final class EditProfileViewModel {
     isValidHeight &&
     isVaildWeight &&
     !job.isEmpty &&
-    isContactsValid
+    isContactsValid &&
+    !isEditingNickName
   }
   var isEditing: Bool = false {
     didSet {
@@ -198,8 +198,8 @@ final class EditProfileViewModel {
   var didCheckDuplicates: Bool = true
   var didTapnextButton: Bool = false
   
-  var locations: [String] = ["서울특별시", "경기도", "부산광역시", "대전광역시", "울산광역시", "세종특별자치시", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도", "제주특별자치도"]
-  var jobs: [String] = ["학생", "직장인", "전문직", "사업가", "프리랜서", "기타"]
+  var locations: [String] = Locations.all
+  var jobs: [String] = Jobs.all
   
   // Sheet
   var isPhotoSheetPresented: Bool = false
@@ -290,6 +290,7 @@ final class EditProfileViewModel {
   private func handleTapVaildNicknameButton() async {
     isValidNickname = (try? await checkNicknameUseCase.execute(nickname: nickname)) ?? false
     didCheckDuplicates = true
+    isEditingNickName = false
   }
   
   @MainActor
@@ -347,6 +348,7 @@ final class EditProfileViewModel {
       } else {
         // 새 연락처 추가 시 처리
         contacts.append(ContactModel(type: selectedType, value: ""))
+        isEditing = true
       }
     }
     

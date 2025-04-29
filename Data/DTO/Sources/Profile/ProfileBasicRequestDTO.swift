@@ -41,6 +41,14 @@ public struct ProfileBasicRequestDTO: Encodable {
 
 public extension ProfileBasicModel{
   func toDTO() -> ProfileBasicRequestDTO {
+    // 연도, 월, 일을 추출
+    let year = birthdate.prefix(4)
+    let month = birthdate.dropFirst(4).prefix(2)
+    let day = birthdate.dropFirst(6).prefix(2)
+    
+    // yyyy-MM-dd 형식으로 조합
+    let formattedBirthDate = "\(year)-\(month)-\(day)"
+    
     let contactsDict = contacts.reduce(into: [String: String]()) { dict, contact in
       dict[contact.type.rawValue] = contact.value
     }
@@ -49,7 +57,7 @@ public extension ProfileBasicModel{
       nickname: nickname,
       description: description,
       age: age ?? 0,
-      birthdate: birthdate,
+      birthdate: formattedBirthDate,
       height: height,
       weight: weight,
       job: job,
