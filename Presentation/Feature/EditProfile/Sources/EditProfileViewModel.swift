@@ -74,7 +74,6 @@ final class EditProfileViewModel {
   var isNextButtonEnabled: Bool {
     return isValidProfileImage &&
     didCheckDuplicates && isValidNickname &&
-    isValidBirthDate &&
     !nickname.isEmpty &&
     !description.isEmpty &&
     isValidBirthDate &&
@@ -82,7 +81,8 @@ final class EditProfileViewModel {
     isValidHeight &&
     isVaildWeight &&
     !job.isEmpty &&
-    isContactsValid
+    isContactsValid &&
+    !isEditingNickName
   }
   var isEditing: Bool = false {
     didSet {
@@ -290,6 +290,7 @@ final class EditProfileViewModel {
   private func handleTapVaildNicknameButton() async {
     isValidNickname = (try? await checkNicknameUseCase.execute(nickname: nickname)) ?? false
     didCheckDuplicates = true
+    isEditingNickName = false
   }
   
   @MainActor
