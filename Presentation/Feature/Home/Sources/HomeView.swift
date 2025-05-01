@@ -77,7 +77,7 @@ struct HomeView: View {
       .padding(.bottom, 100)
       
       TabBarView(
-        viewModel: viewModel.tabbarViewModel,
+        viewModel: viewModel,
         showToast: $showProfileToast
       )
     }
@@ -87,7 +87,7 @@ struct HomeView: View {
   
   @ViewBuilder
   private var content: some View {
-    switch viewModel.tabbarViewModel.selectedTab {
+    switch viewModel.selectedTab {
     case .profile:
       ProfileViewFactory.createProfileView(
         getProfileUseCase: viewModel.getProfileUseCase

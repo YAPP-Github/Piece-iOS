@@ -10,11 +10,11 @@ import SwiftUI
 
 // MARK: - 탭바 뷰
 struct TabBarView: View {
-  @State private var viewModel: TabBarViewModel
+  @State private var viewModel: HomeViewModel
   @Binding var showToast: Bool
   
   init(
-    viewModel: TabBarViewModel,
+    viewModel: HomeViewModel,
     showToast: Binding<Bool> = .constant(false)
   ) {
     self.viewModel = viewModel
@@ -89,13 +89,5 @@ struct TabBarView: View {
       }
     }
     .frame(height: 80)
-  }
-}
-
-// MARK: - Preivew
-#Preview {
-  ZStack {
-    Color.black.ignoresSafeArea()
-    TabBarView(viewModel: TabBarViewModel())
   }
 }
