@@ -51,6 +51,7 @@ struct ReportUserView: View {
       bottomButton
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .toolbar(.hidden)
     .pcAlert(isPresented: $viewModel.showBlockAlert) {
       AlertView(
         title: {
