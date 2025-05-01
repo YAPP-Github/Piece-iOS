@@ -23,7 +23,6 @@ struct BlockUserView: View {
       )
     )
   }
-    
   
   var body: some View {
     VStack(spacing: 0) {
@@ -36,6 +35,7 @@ struct BlockUserView: View {
       content
     }
     .frame(maxWidth: .infinity)
+    .toolbar(.hidden)
     .pcAlert(isPresented: $viewModel.isBlockUserAlertPresented) {
       AlertView(
         title: {
@@ -85,7 +85,7 @@ struct BlockUserView: View {
         .pretendard(.heading_L_SB)
         .foregroundStyle(Color.grayscaleBlack)
       
-      Text("차단하면 상대방의 매칭이 즉시 종료되며,\n 상대방에게 차단 사실을 알리지 않습니다.")
+      Text("차단하면 상대방의 매칭이 즉시 종료되며,\n상대방에게 차단 사실을 알리지 않습니다.")
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
     }
