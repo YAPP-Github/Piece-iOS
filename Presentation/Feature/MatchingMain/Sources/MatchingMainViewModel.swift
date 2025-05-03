@@ -214,8 +214,6 @@ final class MatchingMainViewModel {
           // 둘다 수락
         matchingStatus = .MATCHED
         matchingButtonState = .checkContact(nickname: "")
-      case nil:
-        break
       }
       
       name = matchesInfo.nickname
