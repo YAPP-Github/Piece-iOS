@@ -239,11 +239,13 @@ struct ValuePickView: View {
   
   private var acceptButton: some View {
     RoundedButton(
-      type: .solid,
+      type: viewModel.isAcceptButtonEnabled ? .solid : .disabled,
       buttonText: Constant.accepetButtonText,
       icon: nil,
       rounding: true,
-      action: { viewModel.handleAction(.didTapAcceptButton) }
+      action: {
+        if viewModel.isAcceptButtonEnabled { viewModel.handleAction(.didTapAcceptButton) }
+      }
     )
   }
   
