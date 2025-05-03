@@ -7,6 +7,7 @@
 
 import Entities
 import Foundation
+import LocalStorage
 import Observation
 import UseCases
 
@@ -40,6 +41,19 @@ final class ValuePickViewModel {
     self.acceptMatchUseCase = acceptMatchUseCase
     self.refuseMatchUseCase = refuseMatchUseCase
     
+    var isAcceptButtonEnabled = false
+    if let matchStatus = PCUserDefaultsService.shared.getMatchStatus() {
+      switch matchStatus {
+      case .BEFORE_OPEN: isAcceptButtonEnabled = true
+      case .WAITING: isAcceptButtonEnabled = true
+      case .REFUSED: isAcceptButtonEnabled = false
+      case .RESPONDED: isAcceptButtonEnabled = false
+      case .GREEN_LIGHT: isAcceptButtonEnabled = false
+      case .MATCHED: isAcceptButtonEnabled = false
+      }
+    }
+    self.isAcceptButtonEnabled = isAcceptButtonEnabled
+    
     Task {
       await fetchMatchValueTalk()
       await fetchMatchPhoto()
@@ -63,6 +77,7 @@ final class ValuePickViewModel {
   private(set) var sameWithMeCount: Int = 0
   private(set) var differentFromMeCount: Int = 0
   private(set) var photoUri: String = ""
+  private(set) var isAcceptButtonEnabled: Bool
   private var valuePicks: [MatchValuePickItemModel] = []
   private let getMatchValuePickUseCase: GetMatchValuePickUseCase
   private let getMatchPhotoUseCase: GetMatchPhotoUseCase

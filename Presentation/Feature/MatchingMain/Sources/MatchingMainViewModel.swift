@@ -202,6 +202,9 @@ final class MatchingMainViewModel {
         //자신은 매칭조각 열람, 상대는 매칭 수락 안함(열람했는지도 모름)
         matchingStatus = .WAITING
         matchingButtonState = .acceptMatching
+      case .REFUSED:
+        matchingStatus = .REFUSED
+        matchingButtonState = .responseComplete
       case .RESPONDED:
         // 자신은 수락, 상대는 모름
         matchingStatus = .RESPONDED

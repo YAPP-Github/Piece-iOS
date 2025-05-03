@@ -32,7 +32,7 @@ public struct MatchingAnswer: View {
     switch status {
     case .BEFORE_OPEN, .WAITING:
       return DesignSystemAsset.Icons.matchingModeLoading20.swiftUIImage
-    case .MATCHED, .RESPONDED:
+    case .MATCHED, .RESPONDED, .REFUSED:
       return DesignSystemAsset.Icons.matchingModeCheck20.swiftUIImage
     case .GREEN_LIGHT:
       return DesignSystemAsset.Icons.matchingModeHeart20.swiftUIImage
@@ -43,6 +43,7 @@ public struct MatchingAnswer: View {
     switch status {
     case .BEFORE_OPEN: "오픈 전"
     case .WAITING: "응답 대기중"
+    case .REFUSED: "응답 완료"
     case .RESPONDED: "응답 완료"
     case .MATCHED: "매칭 완료"
     case .GREEN_LIGHT: "그린라이트"
@@ -52,7 +53,7 @@ public struct MatchingAnswer: View {
   private func titleTextColor(for status: MatchStatus) -> Color {
     switch status {
     case .BEFORE_OPEN, .WAITING: .grayscaleDark2
-    case .RESPONDED, .MATCHED, .GREEN_LIGHT: .primaryDefault
+    case .REFUSED, .RESPONDED, .MATCHED, .GREEN_LIGHT: .primaryDefault
     }
   }
   
@@ -60,6 +61,7 @@ public struct MatchingAnswer: View {
     switch status {
     case .BEFORE_OPEN: "매칭 조각을 확인해주세요!"
     case .WAITING: "매칭에 응답해주세요!"
+    case .REFUSED: "상대방의 응답을 기다려봐요!"
     case .RESPONDED: "상대방의 응답을 기다려봐요!"
     case .MATCHED: "상대방과 연결되었어요!"
     case .GREEN_LIGHT: "상대방이 매칭을 수락했어요!"
