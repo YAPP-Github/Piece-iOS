@@ -53,6 +53,27 @@ public final class PCUserDefaultsService {
       _ = PCUserDefaults.setObjectFor(key: .userRole, object: newValue.rawValue)
     }
   }
+  
+  var matchedUserId: Int? {
+    get {
+      PCUserDefaults.objectFor(key: .matchedUserId) as? Int
+    }
+    set {
+      _ = PCUserDefaults.setObjectFor(key: .matchedUserId, object: newValue)
+    }
+  }
+  
+  var matchStatus: MatchStatus? {
+    get {
+      if let value = PCUserDefaults.objectFor(key: .matchStatus) as? String {
+        return MatchStatus(value)
+      }
+      return nil
+    }
+    set {
+      _ = PCUserDefaults.setObjectFor(key: .matchStatus, object: newValue)
+    }
+  }
 }
 
 public extension PCUserDefaultsService {
@@ -92,6 +113,8 @@ public extension PCUserDefaultsService {
   func resetFirstLaunch() {
     isFirstLaunch = true
     didSeeOnboarding = false
+    matchedUserId = nil
+    matchStatus = nil
   }
   
   func getUserRole() -> UserRole {
@@ -100,5 +123,21 @@ public extension PCUserDefaultsService {
   
   func setUserRole(_ userRole: UserRole) {
     self.userRole = userRole
+  }
+  
+  func getMatchedUserId() -> Int? {
+    matchedUserId
+  }
+  
+  func setMatchedUserId(_ id: Int) {
+    matchedUserId = id
+  }
+  
+  func getMatchStatus() -> MatchStatus? {
+    matchStatus
+  }
+  
+  func setMatchStatus(_ status: MatchStatus) {
+    matchStatus = status
   }
 }
