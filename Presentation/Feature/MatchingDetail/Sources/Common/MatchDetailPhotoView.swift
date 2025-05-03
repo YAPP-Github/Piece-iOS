@@ -6,6 +6,8 @@
 //
 
 import DesignSystem
+import Entities
+import LocalStorage
 import Router
 import SwiftUI
 
@@ -15,6 +17,7 @@ struct MatchDetailPhotoView: View {
   @Environment(Router.self) private var router: Router
   @Environment(\.dismiss) private var dismiss
   @State private var isAlertPresented: Bool = false
+  @State private var isAcceptButtonEnabled: Bool
   
   init(
     nickname: String,
@@ -22,6 +25,19 @@ struct MatchDetailPhotoView: View {
   ) {
     self.nickname = nickname
     self.uri = uri
+    
+    var isAcceptButtonEnabled = false
+    if let matchStatus = PCUserDefaultsService.shared.getMatchStatus() {
+      switch matchStatus {
+      case .BEFORE_OPEN: isAcceptButtonEnabled = true
+      case .WAITING: isAcceptButtonEnabled = true
+      case .REFUSED: isAcceptButtonEnabled = false
+      case .RESPONDED: isAcceptButtonEnabled = false
+      case .GREEN_LIGHT: isAcceptButtonEnabled = false
+      case .MATCHED: isAcceptButtonEnabled = false
+      }
+    }
+    self.isAcceptButtonEnabled = isAcceptButtonEnabled
   }
   
   var body: some View {
@@ -53,11 +69,11 @@ struct MatchDetailPhotoView: View {
       Spacer()
       
       RoundedButton(
-        type: .solid,
+        type: isAcceptButtonEnabled ? .solid : .disabled,
         buttonText: "매칭 수락하기",
         rounding: true
       ) {
-        isAlertPresented.toggle()
+        if isAcceptButtonEnabled { isAlertPresented.toggle() }
       }
     }
     .pcAlert(isPresented: $isAlertPresented) {
