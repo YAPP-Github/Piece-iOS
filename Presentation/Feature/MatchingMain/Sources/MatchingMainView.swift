@@ -211,6 +211,8 @@ struct MatchingMainView: View {
   }
   
   private var profileInfo: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      VStack(alignment: .leading, spacing: 4) {
         Text(matchingMainViewModel.description)
           .multilineTextAlignment(.leading)
         Text("\(matchingMainViewModel.name)입니다")
