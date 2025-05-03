@@ -183,6 +183,8 @@ struct MatchingMainView: View {
         profileInfo
       }
       
+      Divider(weight: .normal, isVertical: false)
+      
       HStack(spacing: 4) {
         Text("나와 같은 가치관")
         Text("\(matchingMainViewModel.tags.count)개")
@@ -190,8 +192,6 @@ struct MatchingMainView: View {
       }
       .pretendard(.body_M_M)
       .foregroundColor(.grayscaleBlack)
-      
-      Divider(weight: .normal, isVertical: false)
       
       tags
       
