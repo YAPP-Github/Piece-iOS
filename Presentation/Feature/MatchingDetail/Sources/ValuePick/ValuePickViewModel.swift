@@ -84,9 +84,9 @@ final class ValuePickViewModel {
       case .all:
         displayedValuePicks = valuePicks
       case .same:
-        displayedValuePicks = valuePicks.filter { $0.sameWithMe }
+        displayedValuePicks = valuePicks.filter { $0.isSameWithMe }
       case .different:
-        displayedValuePicks = valuePicks.filter { !$0.sameWithMe }
+        displayedValuePicks = valuePicks.filter { !$0.isSameWithMe }
       }
       
     case .didTapPhotoButton:
@@ -114,8 +114,8 @@ final class ValuePickViewModel {
       valuePickModel = entity
       valuePicks = entity.valuePicks
       displayedValuePicks = entity.valuePicks
-      sameWithMeCount = entity.valuePicks.filter { $0.sameWithMe }.count
-      differentFromMeCount = entity.valuePicks.filter { !$0.sameWithMe }.count
+      sameWithMeCount = entity.valuePicks.filter { $0.isSameWithMe }.count
+      differentFromMeCount = entity.valuePicks.filter { !$0.isSameWithMe }.count
       
       error = nil
     } catch {

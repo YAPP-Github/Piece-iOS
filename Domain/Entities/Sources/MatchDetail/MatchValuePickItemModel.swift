@@ -9,7 +9,7 @@ public struct MatchValuePickItemModel: Identifiable {
   public var id: String { question }
   public let category: String
   public let question: String
-  public let sameWithMe: Bool
+  public let isSameWithMe: Bool
   public let answers: [ValuePickAnswerModel]
   public let selectedAnswer: Int
   
@@ -22,7 +22,7 @@ public struct MatchValuePickItemModel: Identifiable {
   ) {
     self.category = category
     self.question = question
-    self.sameWithMe = sameWithMe
+    self.isSameWithMe = sameWithMe
     self.answers = answers
     self.selectedAnswer = selectedAnswer
   }
