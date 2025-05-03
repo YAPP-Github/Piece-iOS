@@ -35,6 +35,7 @@ struct ReportUserView: View {
           Spacer()
             .frame(height: 40)
           reportReasons
+          reportReasonEditor
         }
         .scrollIndicators(.hidden)
         .onChange(of: isEditingReportReason) { _, newValue in
@@ -46,6 +47,7 @@ struct ReportUserView: View {
             }
           }
         }
+        .padding(.horizontal, 20)
       }
       
       bottomButton
@@ -84,7 +86,6 @@ struct ReportUserView: View {
       title
       description
     }
-    .padding(.horizontal, 20)
     .padding(.top, 20)
   }
   
@@ -106,7 +107,6 @@ struct ReportUserView: View {
     ForEach(viewModel.reportReasons) { reason in
       reportItem(reason: reason)
     }
-    .padding(.horizontal, 20)
   }
   
   private func reportItem(reason: ReportReason) -> some View {
@@ -127,31 +127,33 @@ struct ReportUserView: View {
 
   private var reportReasonEditor: some View {
     VStack(spacing: 0) {
-      TextEditor(text: Binding(
-        get: { viewModel.reportReason },
-        set: { viewModel.handleAction(.didUpdateReportReason($0)) }
-      ))
-      .frame(maxWidth: .infinity, minHeight: 96)
-      .fixedSize(horizontal: false, vertical: true)
-      .pretendard(.body_M_M)
-      .autocorrectionDisabled()
-      .textInputAutocapitalization(.none)
-      .scrollContentBackground(.hidden)
-      .scrollDisabled(true)
-      .foregroundStyle(Color.grayscaleBlack)
-      .background(alignment: .topLeading) {
+      ZStack(alignment: .topLeading) {
+        TextEditor(text: Binding(
+          get: { viewModel.reportReason },
+          set: { viewModel.handleAction(.didUpdateReportReason($0)) }
+        ))
+        .frame(maxWidth: .infinity, minHeight: 96)
+        .pretendard(.body_M_M)
+        .autocorrectionDisabled()
+        .textInputAutocapitalization(.none)
+        .scrollContentBackground(.hidden)
+        .scrollDisabled(true)
+        .foregroundStyle(Color.grayscaleBlack)
+        .focused($isEditingReportReason)
+        
         if viewModel.reportReason.isEmpty && !isEditingReportReason {
           Text(viewModel.placeholder)
             .pretendard(.body_M_M)
             .foregroundStyle(Color.grayscaleDark3)
             .padding(.top, 4) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
+            .allowsHitTesting(false)
         }
       }
-      .focused($isEditingReportReason)
-      
+      .fixedSize(horizontal: false, vertical: true)
+        
       if !viewModel.reportReason.isEmpty || isEditingReportReason {
-        TextCountIndicator(count: .constant(viewModel.reportReason.count), maxCount: 100)
-      }
+          TextCountIndicator(count: .constant(viewModel.reportReason.count), maxCount: 100)
+        }
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 10) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
@@ -160,6 +162,7 @@ struct ReportUserView: View {
         .foregroundStyle(Color.grayscaleLight3)
     )
     .id(textEditorId)
+    .opacity(viewModel.showReportReasonEditor ? 1 : 0)
   }
   
   private var bottomButton: some View {
