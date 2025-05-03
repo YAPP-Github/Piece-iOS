@@ -71,7 +71,7 @@ public final class PCUserDefaultsService {
       return nil
     }
     set {
-      _ = PCUserDefaults.setObjectFor(key: .matchStatus, object: newValue)
+      _ = PCUserDefaults.setObjectFor(key: .matchStatus, object: newValue?.rawValue)
     }
   }
 }
