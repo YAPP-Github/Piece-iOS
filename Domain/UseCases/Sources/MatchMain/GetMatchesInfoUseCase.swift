@@ -5,8 +5,8 @@
 //  Created by eunseou on 2/15/25.
 //
 
-import SwiftUI
 import Entities
+import LocalStorage
 import RepositoryInterfaces
 
 public protocol GetMatchesInfoUseCase {
@@ -21,6 +21,10 @@ final class GetMatchesInfoUseCaseImpl: GetMatchesInfoUseCase {
   }
   
   func execute() async throws -> MatchInfosModel {
-    return try await repository.getMatchInfos()
+    let matchInfo = try await repository.getMatchInfos()
+    PCUserDefaultsService.shared.setMatchedUserId(matchInfo.matchedUserId)
+    PCUserDefaultsService.shared.setMatchStatus(matchInfo.matchStatus)
+    
+    return matchInfo
   }
 }
