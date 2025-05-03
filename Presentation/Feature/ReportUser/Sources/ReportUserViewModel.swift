@@ -5,6 +5,7 @@
 // Created by summercat on 2025/02/16.
 //
 
+import LocalStorage
 import Observation
 import UseCases
 
@@ -54,8 +55,11 @@ final class ReportUserViewModel {
   
   private func reportUser() async {
     do {
-      let result = try await reportUserUseCase.execute()
-      showBlockResultAlert = true
+      let reason = selectedReportReason == .other ? reportReason : selectedReportReason?.rawValue ?? ""
+      if let id = PCUserDefaultsService.shared.getMatchedUserId() {
+        let result = try await reportUserUseCase.execute(id: id, reason: reason)
+        showBlockResultAlert = true
+      }
     } catch {
       print(error)
     }
