@@ -10,7 +10,7 @@ import DTO
 import LocalStorage
 
 public enum ReportsEndpoint: TargetType {
-  case report
+  case report(ReportsRequestDTO)
   
   public var method: Alamofire.HTTPMethod {
     switch self {
@@ -33,7 +33,7 @@ public enum ReportsEndpoint: TargetType {
   
   public var requestType: RequestType {
     switch self {
-    case .report: .plain
+    case let .report(dto): .body(dto)
     }
   }
 }

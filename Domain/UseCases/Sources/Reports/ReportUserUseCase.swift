@@ -9,7 +9,7 @@ import Entities
 import RepositoryInterfaces
 
 public protocol ReportUserUseCase {
-  func execute() async throws -> VoidModel
+  func execute(id: Int, reason: String) async throws -> VoidModel
 }
 
 final class ReportUserUseCaseImpl: ReportUserUseCase {
@@ -19,7 +19,10 @@ final class ReportUserUseCaseImpl: ReportUserUseCase {
     self.repository = repository
   }
   
-  func execute() async throws -> VoidModel {
-    try await repository.reportUser()
+  func execute(
+    id: Int,
+    reason: String
+  ) async throws -> VoidModel {
+    try await repository.reportUser(id: id, reason: reason)
   }
 }

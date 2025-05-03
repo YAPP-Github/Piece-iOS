@@ -10,4 +10,6 @@ public enum UserDefaultsKeys: String {
   case didSeeOnboarding
   case socialLoginType
   case userRole
+  case matchedUserId
+  case matchStatus
 }

@@ -13,4 +13,8 @@ public enum MatchStatus: String {
   case RESPONDED
   case GREEN_LIGHT
   case MATCHED
+  
+  public init(_ status: String) {
+    self = MatchStatus(rawValue: status) ?? .BEFORE_OPEN
+  }
 }

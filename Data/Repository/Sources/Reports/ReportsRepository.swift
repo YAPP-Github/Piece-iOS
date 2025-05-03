@@ -17,8 +17,15 @@ final class ReportsRepository: ReportsRepositoryInterface {
     self.networkService = networkService
   }
   
-  func reportUser() async throws -> VoidModel {
-    let endpoint = ReportsEndpoint.report
+  func reportUser(
+    id: Int,
+    reason: String
+  ) async throws -> VoidModel {
+    let requestDto = ReportsRequestDTO(
+      reportedUserId: id,
+      reason: reason
+    )
+    let endpoint = ReportsEndpoint.report(requestDto)
     let response: VoidResponseDTO = try await networkService.request(endpoint: endpoint)
     
     return response.toDomain()

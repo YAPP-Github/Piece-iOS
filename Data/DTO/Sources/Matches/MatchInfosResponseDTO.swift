@@ -11,7 +11,7 @@ import Entities
 public struct MatchInfosResponseDTO: Decodable {
   public let matchId: Int
   public let matchedUserId: Int
-  public let matchStatus: MatchStatus?
+  public let matchStatus: MatchStatus
   public let description: String
   public let nickname: String
   public let birthYear: String
