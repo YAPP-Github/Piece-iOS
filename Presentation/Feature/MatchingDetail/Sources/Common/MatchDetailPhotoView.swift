@@ -61,10 +61,11 @@ struct MatchDetailPhotoView: View {
       AsyncImage(url: URL(string: uri)) { image in
         image.image?
           .resizable()
-          .scaledToFill()
+          .aspectRatio(contentMode: .fit)
       }
       .frame(width: 180, height: 180)
-      .clipShape(Circle())
+      .background(.grayscaleBlack)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
       
       Spacer()
       
