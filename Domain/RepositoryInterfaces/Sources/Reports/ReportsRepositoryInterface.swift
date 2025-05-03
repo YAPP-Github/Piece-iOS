@@ -8,5 +8,5 @@
 import Entities
 
 public protocol ReportsRepositoryInterface {
-  func reportUser() async throws -> VoidModel
+  func reportUser(id: Int, reason: String) async throws -> VoidModel
 }
