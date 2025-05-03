@@ -34,7 +34,7 @@ struct ValuePickCard: View {
       HStack(alignment: .center) {
         category
         Spacer()
-        if model.sameWithMe {
+        if model.isSameWithMe {
           Badge(badgeText: "나와 같은")
         }
       }

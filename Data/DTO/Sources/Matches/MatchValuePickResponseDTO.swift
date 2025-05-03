@@ -11,7 +11,7 @@ import Foundation
 public struct MatchValuePickResponseDTO: Decodable {
   public let category: String
   public let question: String
-  public let sameWithMe: Bool
+  public let isSameWithMe: Bool
   public let answers: [ValuePickAnswerResponseDTO]
   public let selectedAnswer: Int
 }
@@ -21,7 +21,7 @@ public extension MatchValuePickResponseDTO {
     MatchValuePickItemModel(
       category: category,
       question: question,
-      sameWithMe: sameWithMe,
+      sameWithMe: isSameWithMe,
       answers: answers.map { ValuePickAnswerModel(number: $0.number, content: $0.content) },
       selectedAnswer: selectedAnswer
     )
