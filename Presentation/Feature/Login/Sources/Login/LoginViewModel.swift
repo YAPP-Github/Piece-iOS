@@ -31,6 +31,8 @@ final class LoginViewModel: NSObject {
     self.socialLoginUseCase = socialLoginUseCase
   }
   
+  let inquiriesUri = "https://kd0n5.channel.io/home"
+  var showBannedAlert: Bool = false
   private let socialLoginUseCase: SocialLoginUseCase
   private(set) var destination: Route?
   
@@ -187,6 +189,9 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
       destination = .home
     case .USER:
       destination = .home
+    case .BANNED:
+      destination = nil
+      showBannedAlert = true
     }
   }
 }

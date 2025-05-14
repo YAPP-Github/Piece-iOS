@@ -15,11 +15,15 @@ public struct PCToast: View {
   public init(
     isVisible: Binding<Bool>,
     icon: Image? = nil,
-    text: String
+    text: String,
+    textColor: Color = .grayscaleWhite,
+    backgroundColor: Color = .grayscaleDark2
   ) {
     self._isVisible = isVisible
     self.icon = icon
     self.text = text
+    self.textColor = textColor
+    self.backgroundColor = backgroundColor
   }
   
   public var body: some View {
@@ -28,17 +32,17 @@ public struct PCToast: View {
         .renderingMode(.template)
         .resizable()
         .frame(width: 20, height: 20)
-        .foregroundStyle(Color.grayscaleWhite)
+        .foregroundStyle(textColor)
       
       Text(text)
         .pretendard(.body_S_M)
-        .foregroundStyle(Color.grayscaleWhite)
+        .foregroundStyle(textColor)
     }
     .padding(.horizontal, 20)
     .padding(.vertical, 8)
     .background(
       RoundedRectangle(cornerRadius: 12)
-        .foregroundStyle(Color.grayscaleDark2)
+        .foregroundStyle(backgroundColor)
     )
     .opacity(isVisible ? 1 : 0)
     .animation(.easeInOut, value: isVisible)
@@ -50,6 +54,9 @@ public struct PCToast: View {
       }
     }
   }
+  
+  private let textColor: Color
+  private let backgroundColor: Color
 }
 
 #Preview {
