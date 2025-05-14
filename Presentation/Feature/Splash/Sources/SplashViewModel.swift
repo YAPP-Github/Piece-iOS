@@ -23,7 +23,9 @@ final class SplashViewModel {
     case openAppStore
   }
   
+  let inquiriesUri = "https://kd0n5.channel.io/home"
   var showNeedsForceUpdateAlert: Bool = false
+  var showBannedAlert: Bool = false
   private(set) var destination: Route?
   
   private let getUserInfoUseCase: GetUserInfoUseCase
@@ -175,6 +177,10 @@ final class SplashViewModel {
     case .USER:
       print("---USER---")
       destination = .home
+    case .BANNED:
+      print("---BANNED---")
+      showBannedAlert = true
+      destination = nil
     @unknown default:
       destination = .login
     }
