@@ -393,37 +393,8 @@ struct CreateBasicInfoView: View {
       Text("연락처")
         .pretendard(.body_S_M)
         .foregroundStyle(Color.grayscaleDark3)
-      ForEach(viewModel.contacts, id: \.id) { contact in
-        PCTextEditor(
-          text: Binding(
-            get: { contact.value },
-            set: { newValue in
-              if viewModel.isAllowedInput(newValue),
-                 let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
-                viewModel.contacts[index].value = newValue
-              }
-            }
-          ),
-          focusState: $focusField,
-          focusField: "contact_\(contact.id)",
-          image: iconFor(contactType: contact.type),
-          showDeleteButton: viewModel.contacts.first != contact,
-          tapDeleteButton: {
-            if let index = viewModel.contacts.firstIndex(where: { $0.id == contact.id }) {
-              viewModel.removeContact(at: index)
-            }
-          },
-          action: {
-            focusField = nil
-            viewModel.selectedContactForIconChange = contact
-            viewModel.isContactTypeChangeSheetPresented = true
-          }
-        )
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled(true)
-        .frame(minHeight: 72)
-        .id("contact_\(contact.id)_scroll")
-      }
+      
+      CreateContactContainer(viewModel: viewModel, focusField: $focusField)
     }
   }
   
@@ -563,23 +534,9 @@ struct CreateBasicInfoView: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
     }
-  }
-  
-  private func iconFor(contactType: ContactModel.ContactType) -> Image {
-    switch contactType {
-    case .kakao:
-      return DesignSystemAsset.Icons.kakao32.swiftUIImage
-    case .openKakao:
-      return DesignSystemAsset.Icons.kakaoOpenchat32.swiftUIImage
-    case .instagram:
-      return DesignSystemAsset.Icons.instagram32.swiftUIImage
-    case .phone:
-      return DesignSystemAsset.Icons.cellFill32.swiftUIImage
-    default:
-      return Image(systemName: "questionmark")
     }
   }
-  
+
   private func cellItem(
     image: Image? = nil,
     text: String,
@@ -622,6 +579,117 @@ struct CreateBasicInfoView: View {
       Rectangle()
         .foregroundStyle(Color.grayscaleDark2)
         .cornerRadius(12)
+    )
+  }
+}
+
+fileprivate struct CreateContactContainer: View {
+  @Bindable var viewModel: CreateBasicInfoViewModel
+  private var focusField: FocusState<String?>.Binding
+  
+  fileprivate init(
+    viewModel: CreateBasicInfoViewModel,
+    focusField: FocusState<String?>.Binding
+  ) {
+    self._viewModel = Bindable(wrappedValue: viewModel)
+    self.focusField = focusField
+  }
+  
+  fileprivate var body: some View {
+    ScrollViewReader { proxy in
+      VStack {
+        contactFields
+      }
+      .onChange(of: focusField.wrappedValue) { _, newValue in
+        withAnimation {
+          if let field = newValue {
+            proxy.scrollTo("\(field)_scroll", anchor: .center)
+          }
+        }
+      }
+      .onChange(of: viewModel.contacts) { oldValue, newValue in
+        handleContactsChange(oldValue: oldValue, newValue: newValue)
+      }
+    }
+  }
+  
+  private var contactFields: some View {
+    ForEach(viewModel.contacts, id: \.id) { contact in
+      HStack(spacing: 16) {
+        PCContactField(
+          contact: bindingForContact(id: contact.id),
+          action: {
+            viewModel.selectedContactForIconChange = contact
+            viewModel.isContactTypeChangeSheetPresented = true
+          }
+        )
+        .focused(focusField, equals: "contact_\(contact.id)")
+        .id("contact_\(contact.id)_scroll")
+        
+        if viewModel.canDeleteContactField(contact: contact) {
+          DeleteButton {
+            viewModel.removeContact(for: contact)
+          }
+        }
+      }
+    }
+  }
+  
+  private func bindingForContact(id: UUID) -> Binding<ContactDisplayModel> {
+    Binding<ContactDisplayModel>(
+      get: {
+        guard let contact = viewModel.contacts.first(where: { $0.id == id }) else {
+          return ContactDisplayModel(id: id, type: .unknown, value: "")
+        }
+        return ContactDisplayModel(
+          id: contact.id,
+          type: ContactDisplayModel.ContactType(rawValue: contact.type.rawValue) ?? .unknown,
+          value: contact.value
+        )
+      },
+      set: { newContact in
+        guard let index = viewModel.contacts.firstIndex(where: { $0.id == id }) else { return }
+        if viewModel.isAllowedInput(newContact.value) {
+          viewModel.contacts[index].value = newContact.value
+          viewModel.contacts[index].type = ContactModel.ContactType(rawValue: newContact.type.rawValue) ?? .unknown
+        }
+      }
+    )
+  }
+  
+  private func handleContactsChange(oldValue: [ContactModel], newValue: [ContactModel]) {
+    let oldIds = Set(oldValue.map { $0.id })
+    let newIds = Set(newValue.map { $0.id })
+
+    if let addedId = newIds.subtracting(oldIds).first {
+      self.focusField.wrappedValue = "contact_\(addedId)"
+      return
+    }
+
+    for (old, new) in zip(oldValue, newValue) {
+      if old.id == new.id && old != new {
+        self.focusField.wrappedValue = "contact_\(new.id)"
+        return
+      }
+    }
+  }
+}
+
+fileprivate struct DeleteButton: View {
+  private let action: (() -> Void)?
+  
+  fileprivate init(action: (() -> Void)?) {
+    self.action = action
+  }
+  
+  fileprivate var body: some View {
+    Button(
+      action: { action?() },
+      label: {
+        DesignSystemAsset.Icons.deletCircle20.swiftUIImage
+          .renderingMode(.template)
+          .foregroundStyle(Color.grayscaleLight1)
+      }
     )
   }
 }
