@@ -335,7 +335,7 @@ final class EditProfileViewModel {
   
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
-      contacts[index].type = newType
+      contacts[index] = ContactModel(type: newType, value: contact.value)
       isEditing = true
     }
   }
