@@ -79,7 +79,7 @@ struct CreateBasicInfoView: View {
               descriptionTextField.id("description_scroll")
               
               // 생년월일
-              birthdateTextField.id("birthdate_scroll")
+              birthdateTextField.id("birthDate_scroll")
               
               // 활동지역
               locationTextField.id("location_scroll")
