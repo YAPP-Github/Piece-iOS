@@ -534,6 +534,8 @@ struct CreateBasicInfoView: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
     }
+    .onAppear {
+      focusField = nil
     }
   }
 

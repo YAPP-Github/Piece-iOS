@@ -35,14 +35,7 @@ struct EditProfileView: View {
   
   var body: some View {
     ZStack {
-      Color.clear // 배경 영역 - 탭 시 포커스 해제
-        .ignoresSafeArea()
-        .onTapGesture {
-          focusField = nil
-        }
-      
       VStack {
-        
         navigationBar
         
         ScrollViewReader { proxy in
@@ -95,9 +88,16 @@ struct EditProfileView: View {
               }
     
             }
-            .padding(.bottom, 200)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 260)
+            .background(
+              Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                  focusField = nil
+                }
+            )
           }
-          .padding(.horizontal, 20)
           .scrollIndicators(.hidden)
           .onChange(of: focusField) { _, newValue in
             withAnimation {
@@ -543,6 +543,8 @@ struct EditProfileView: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
     }
+    .onAppear {
+      focusField = nil
     }
   }
   
