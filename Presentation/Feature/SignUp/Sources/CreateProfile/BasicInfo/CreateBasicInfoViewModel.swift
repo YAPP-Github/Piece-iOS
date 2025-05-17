@@ -369,3 +369,21 @@ final class CreateBasicInfoViewModel {
     self.isValidProfileImage = true
   }
 }
+
+// MARK: ContactContainer
+extension CreateBasicInfoViewModel {
+  func canDeleteContactField(contact: ContactModel) -> Bool {
+    guard let index = contacts.firstIndex(where: { $0.id == contact.id }) else {
+      return false
+    }
+    return index > 0
+  }
+  
+  func removeContact(for contact: ContactModel) {
+    if let index = contacts.firstIndex(where: { $0.id == contact.id }),
+        index > 0 {
+      contacts.remove(at: index)
+    }
+  }
+}
+
