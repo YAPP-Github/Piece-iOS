@@ -10,6 +10,7 @@ public enum UserRole: String {
   case REGISTER
   case PENDING
   case USER
+  case BANNED
   
   public init(_ role: String) {
     self = UserRole(rawValue: role) ?? .NONE
