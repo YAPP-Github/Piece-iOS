@@ -10,6 +10,109 @@ import SwiftUI
 public struct PCBottomSheet<Content: View>: View {
   @Binding var isPresented: Bool
   private var height: CGFloat = 300
+public protocol BottomSheetItemRepresentable: Hashable, Identifiable {
+  associatedtype Body: View
+  @ViewBuilder func render() -> Body
+  
+  var id: UUID { get }
+  var text: String { get }
+  var state: BottomSheetItemState { get }
+}
+
+public enum BottomSheetItemState {
+  case selected
+  case unselected
+  case disable
+  
+  var foregroundColor: Color {
+    switch self {
+    case .selected:
+      Color.primaryDefault
+    case .unselected:
+      Color.grayscaleBlack
+    case .disable:
+      Color.grayscaleDark3
+    }
+  }
+}
+
+public struct BottomSheetIconItem: BottomSheetItemRepresentable {
+  public var id: UUID = UUID()
+  public var text: String
+  public var state: BottomSheetItemState = .unselected
+  public var icon: String
+  
+  public func render() -> some View {
+    HStack {
+      DesignSystemImages(name: icon).swiftUIImage
+        .renderingMode(.template)
+        .foregroundStyle(state.foregroundColor)
+      Text(text)
+        .pretendard(.body_M_M)
+        .foregroundStyle(state.foregroundColor)
+      Spacer()
+      if state != .unselected {
+        DesignSystemAsset.Icons.check24.swiftUIImage
+          .renderingMode(.template)
+          .foregroundStyle(state.foregroundColor)
+      }
+    }
+    .frame(maxWidth: .infinity)
+  }
+  
+  public init(
+    id: UUID = UUID(),
+    text: String,
+    state: BottomSheetItemState = .unselected,
+    icon: String
+  ) {
+    self.id = id
+    self.text = text
+    self.state = state
+    self.icon = icon
+  }
+}
+
+extension BottomSheetIconItem {
+  public static let defaultContactItems: [BottomSheetIconItem] = [
+    .init(text: "카카오톡 아이디", icon: "kakao-32"),
+    .init(text: "카카오톡 오픈 채팅방", icon: "kakao-openchat-32"),
+    .init(text: "인스타 아이디", icon: "instagram-32"),
+    .init(text: "전화번호", icon: "cell-fill-32")
+  ]
+}
+
+public struct BottomSheetTextItem: BottomSheetItemRepresentable {
+  public var id: UUID
+  public var text: String
+  public var state: BottomSheetItemState = .unselected
+  
+  public func render() -> some View {
+    HStack {
+      Text(text)
+        .pretendard(.body_M_M)
+        .foregroundStyle(state.foregroundColor)
+      Spacer()
+      if state == .selected {
+        DesignSystemAsset.Icons.check24.swiftUIImage
+          .renderingMode(.template)
+          .foregroundStyle(state.foregroundColor)
+      }
+    }
+    .frame(maxWidth: .infinity)
+  }
+  
+  public init(
+    id: UUID = UUID(),
+    text: String,
+    state: BottomSheetItemState = .unselected
+  ) {
+    self.id = id
+    self.text = text
+    self.state = state
+  }
+}
+
   private let titleText: String
   private let subtitleText: String?
   private let buttonText: String
