@@ -25,7 +25,18 @@ public struct ContactModel: Hashable, Identifiable {
     self.value = value
   }
 }
+
 public extension ContactModel.ContactType {
+  var icon: String {
+    switch self {
+    case .kakao: return "kakao-32"
+    case .openKakao: return "kakao-openchat-32"
+    case .instagram: return "instagram-32"
+    case .phone: return "cell-fill-32"
+    default: return "unknown"
+    }
+  }
+
   static func from(iconName: String) -> ContactModel.ContactType {
     switch iconName {
     case "kakao-32": return .kakao

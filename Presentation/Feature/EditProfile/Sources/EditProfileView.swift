@@ -86,7 +86,6 @@ struct EditProfileView: View {
                 }
                 .foregroundStyle(Color.primaryDefault)
               }
-    
               .opacity(viewModel.canAddMoreContact ? 1 : 0)
               .disabled(!viewModel.canAddMoreContact)
             }
@@ -511,8 +510,7 @@ fileprivate struct EditContactContainer: View {
         PCContactField(
           contact: bindingForContact(id: contact.id),
           action: {
-            viewModel.selectedContactForIconChange = contact
-            viewModel.isContactTypeChangeSheetPresented = true
+            viewModel.handleAction(.tapChangeContact(contact))
           }
         )
         .focused(focusField, equals: "contact_\(contact.id)")

@@ -22,6 +22,7 @@ final class EditProfileViewModel {
     case selectCamera
     case selectPhotoLibrary
     case tapAddContact
+    case tapChangeContact(ContactModel)
   }
   
   init(
@@ -194,6 +195,7 @@ final class EditProfileViewModel {
   var isCustomJobSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var selectedContactForIconChange: ContactModel? = nil
+  var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
   var selectedItem: PhotosPickerItem? = nil
   var didCheckDuplicates: Bool = true
@@ -201,6 +203,7 @@ final class EditProfileViewModel {
   
   var locations: [String] = Locations.all
   var jobs: [String] = Jobs.all
+  var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
   var isPhotoSheetPresented: Bool = false
@@ -252,6 +255,11 @@ final class EditProfileViewModel {
     case .tapAddContact:
       isSNSSheetPresented = true
       updateBottomSheetItems()
+    case .tapChangeContact(let prevContact):
+      isContactTypeChangeSheetPresented = true
+      updateBottomSheetItems()
+      changeBottomSheetItem(with: prevContact)
+      prevSelectedContact = prevContact
     }
   }
   
@@ -449,6 +457,19 @@ extension EditProfileViewModel {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }),
        index > 0 {
       removeContact(at: index)
+// MARK: - Mutation
+
+extension EditProfileViewModel {
+  func changeBottomSheetItem(with targetContact: ContactModel) {
+    if let contactIndex = contacts.firstIndex(where: { $0.id == targetContact.id }) {
+      let targetIcon = contacts[contactIndex].type.icon
+      
+      if let itemIndex = contactBottomSheetItems.firstIndex(where: { $0.icon == targetIcon }) {
+        contactBottomSheetItems[itemIndex].state = .selected
+      }
+    }
+  }
+  
   func updateBottomSheetItems() {
     contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
       var copy = item
@@ -465,6 +486,8 @@ extension EditProfileViewModel {
   }
     }
   }
+}
+
 // MARK: Constant
 extension EditProfileViewModel {
   private enum Constant {
