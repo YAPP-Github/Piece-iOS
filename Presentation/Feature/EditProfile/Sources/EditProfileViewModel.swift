@@ -261,6 +261,7 @@ final class EditProfileViewModel {
       updateLocationBottomSheetItems()
     case .tapJob:
       isJobSheetPresented = true
+      updateJobBottomSheetItems()
     case .tapAddContact:
       isSNSSheetPresented = true
       updateBottomSheetItems()
@@ -456,6 +457,10 @@ extension EditProfileViewModel {
     locationItems.contains(where: { $0.state == .selected })
   }
   
+  var isJobBottomSheetButtonEnable: Bool {
+    jobItems.contains(where: { $0.state == .selected })
+  }
+  
   var isContactBottomSheetButtonEnable: Bool {
       contactBottomSheetItems.contains(where: { $0.state == .selected })
   }
@@ -485,6 +490,16 @@ extension EditProfileViewModel {
     }
   }
   
+  func updateJobBottomSheetItems() {
+    for index in jobItems.indices {
+      jobItems[index].state = .unselected
+    }
+
+    if let index = jobItems.firstIndex(where: { $0.text == job }) {
+      jobItems[index].state = .selected
+    }
+  }
+  
   func updateBottomSheetItems() {
     contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
       var copy = item
@@ -508,6 +523,19 @@ extension EditProfileViewModel {
           locationItems[i].state = .selected
         } else if locationItems[i].state == .selected {
           locationItems[i].state = .unselected
+        }
+      }
+    }
+  }
+  
+  func tapJobRowItem(_ item: any BottomSheetItemRepresentable) {
+    if let index = jobItems.firstIndex(where: { $0.id == item.id }),
+       item.state == .unselected {
+      jobItems.enumerated().forEach { (i, item) in
+        if jobItems[i].state == .unselected, i == index {
+          jobItems[i].state = .selected
+        } else if jobItems[i].state == .selected {
+          jobItems[i].state = .unselected
         }
       }
     }
@@ -564,7 +592,11 @@ extension EditProfileViewModel {
   }
   
   func tapJobBottomSheetSaveButton() {
-    // TODO: job 적용 로직
+    if let selectedItem = jobItems.first(where: { $0.state == .selected }) {
+      job = selectedItem.text
+    }
+    
+    isJobSheetPresented = false
   }
 }
 

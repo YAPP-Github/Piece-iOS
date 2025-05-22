@@ -136,12 +136,12 @@ struct EditProfileView: View {
     }
     .sheet(isPresented: $viewModel.isJobSheetPresented) {
       PCBottomSheet<BottomSheetTextItem>(
-        isButtonEnabled: .constant(true),
+        isButtonEnabled: Binding(projectedValue: .constant(viewModel.isJobBottomSheetButtonEnable)),
         items: $viewModel.jobItems,
         titleText: "직업",
         buttonText: "적용하기",
         buttonAction: { viewModel.handleAction(.saveJob) },
-        onTapRowItem: { viewModel.tapRowItem($0) }
+        onTapRowItem: { viewModel.tapJobRowItem($0) }
       )
       .presentationDetents([.height(562)])
     }
