@@ -155,13 +155,13 @@ struct CreateBasicInfoView: View {
     }
     .sheet(isPresented: $viewModel.isLocationSheetPresented) {
       PCBottomSheet<BottomSheetTextItem>(
-        isButtonEnabled: .constant(true),
+        isButtonEnabled: Binding(projectedValue: .constant(viewModel.isLocationBottomSheetButtonEnable)),
         items: $viewModel.locationItems,
         titleText: "활동 지역",
         subtitleText: "주로 활동하는 지역을 선택해주세요.",
         buttonText: "적용하기",
         buttonAction: { viewModel.handleAction(.saveLocation) },
-        onTapRowItem: { viewModel.tapRowItem($0) }
+        onTapRowItem: { viewModel.tapLocationRowItem($0) }
       )
       .presentationDetents([.height(602)])
     }

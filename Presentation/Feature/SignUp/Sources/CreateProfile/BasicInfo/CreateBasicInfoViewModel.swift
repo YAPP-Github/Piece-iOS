@@ -239,6 +239,7 @@ final class CreateBasicInfoViewModel {
       }
     case .tapLocation:
       isLocationSheetPresented = true
+      updateLocationBottomSheetItems()
     case .tapJob:
       isJobSheetPresented = true
     case .tapAddContact:
@@ -394,6 +395,10 @@ extension CreateBasicInfoViewModel {
     }
   }
   
+  var isLocationBottomSheetButtonEnable: Bool {
+    locationItems.contains(where: { $0.state == .selected })
+  }
+  
   var isContactBottomSheetButtonEnable: Bool {
       contactBottomSheetItems.contains(where: { $0.state == .selected })
   }
@@ -411,6 +416,16 @@ extension CreateBasicInfoViewModel {
     }
   }
   
+  func updateLocationBottomSheetItems() {
+    for index in locationItems.indices {
+      locationItems[index].state = .unselected
+    }
+
+    if let index = locationItems.firstIndex(where: { $0.text == location }) {
+      locationItems[index].state = .selected
+    }
+  }
+  
   func updateBottomSheetItems() {
     contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
       var copy = item
@@ -423,6 +438,19 @@ extension CreateBasicInfoViewModel {
       }
       
       return copy
+    }
+  }
+  
+  func tapLocationRowItem(_ item: any BottomSheetItemRepresentable) {
+    if let index = locationItems.firstIndex(where: { $0.id == item.id }),
+       item.state == .unselected {
+      locationItems.enumerated().forEach { (i, item) in
+        if locationItems[i].state == .unselected, i == index {
+          locationItems[i].state = .selected
+        } else if locationItems[i].state == .selected {
+          locationItems[i].state = .unselected
+        }
+      }
     }
   }
   
@@ -469,9 +497,11 @@ extension CreateBasicInfoViewModel {
   }
   
   func tapLocationBottomSheetSaveButton() {
-    // TODO: location 적용 로직
+    if let selectedItem = locationItems.first(where: { $0.state == .selected }) {
+      location = selectedItem.text
+    }
     
-    isLocationSheetPresented = true
+    isLocationSheetPresented = false
   }
   
   func tapJobBottomSheetSaveButton() {
