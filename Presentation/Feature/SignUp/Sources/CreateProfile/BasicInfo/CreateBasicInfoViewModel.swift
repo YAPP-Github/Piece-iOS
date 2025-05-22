@@ -400,6 +400,12 @@ extension CreateBasicInfoViewModel {
       contacts.remove(at: index)
     }
   }
+  
+  var isContactBottomSheetButtonEnable: Bool {
+      contactBottomSheetItems.contains(where: { $0.state == .selected })
+  }
+}
+
 // MARK: - Mutation
 
 extension CreateBasicInfoViewModel {
@@ -424,6 +430,19 @@ extension CreateBasicInfoViewModel {
       }
       
       return copy
+    }
+  }
+  
+  func tapRowItem(_ item: any BottomSheetItemRepresentable) {
+    if let index = contactBottomSheetItems.firstIndex(where: { $0.id == item.id }),
+       item.state == .unselected {
+      contactBottomSheetItems.enumerated().forEach { (i, item) in
+        if contactBottomSheetItems[i].state == .unselected, i == index {
+          contactBottomSheetItems[i].state = .selected
+        } else if contactBottomSheetItems[i].state == .selected {
+          contactBottomSheetItems[i].state = .unselected
+        }
+      }
     }
   }
 }
