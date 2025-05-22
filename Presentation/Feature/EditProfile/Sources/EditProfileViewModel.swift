@@ -335,7 +335,7 @@ final class EditProfileViewModel {
   
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
-      contacts[index].type = newType
+      contacts[index] = ContactModel(type: newType, value: contact.value)
       isEditing = true
     }
   }
@@ -426,5 +426,22 @@ final class EditProfileViewModel {
           print("이미지 다운로드 실패: \(error.localizedDescription)")
           return nil
       }
+  }
+}
+
+// MARK: ContactContainer
+extension EditProfileViewModel {
+  func canDeleteContactField(contact: ContactModel) -> Bool {
+    guard let index = contacts.firstIndex(where: { $0.id == contact.id }) else {
+      return false
+    }
+    return index > 0
+  }
+  
+  func removeContact(for contact: ContactModel) {
+    if let index = contacts.firstIndex(where: { $0.id == contact.id }),
+       index > 0 {
+      removeContact(at: index)
+    }
   }
 }
