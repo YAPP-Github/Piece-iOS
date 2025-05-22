@@ -174,7 +174,6 @@ final class CreateBasicInfoViewModel {
   // temp
   var smokingStatus: String = ""
   var snsActivityLevel: String = ""
-  var selectedLocation: String? = nil
   var selectedJob: String? = nil
   var customJobText: String = ""
   var isCustomJobSelected: Bool = false
@@ -209,13 +208,7 @@ final class CreateBasicInfoViewModel {
       }
     }
   }
-  var isLocationSheetPresented: Bool = false {
-    didSet {
-      if isLocationSheetPresented {
-        selectedLocation = location
-      }
-    }
-  }
+  var isLocationSheetPresented: Bool = false
   var canAddMoreContact: Bool {
     contacts.count < Constant.contactModelCount
   }
@@ -339,20 +332,6 @@ final class CreateBasicInfoViewModel {
     selectedJob = nil
     customJobText = ""
     isCustomJobSelected = false
-  }
-  
-  func saveSelectedLocation() {
-    if let selectedLocation = selectedLocation {
-      self.location = selectedLocation
-    }
-    isLocationSheetPresented = false
-    selectedLocation = nil
-  }
-  
-  func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
-    if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
-      contacts[index] = ContactModel(type: newType, value: contact.value)
-    }
   }
   
   func loadImage() async {

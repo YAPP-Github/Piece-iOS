@@ -193,7 +193,6 @@ final class EditProfileViewModel {
   // temp
   var smokingStatus: String = ""
   var snsActivityLevel: String = ""
-  var selectedLocation: String? = nil
   var selectedJob: String? = nil
   var customJobText: String = ""
   var isCustomJobSelected: Bool = false
@@ -228,13 +227,7 @@ final class EditProfileViewModel {
       }
     }
   }
-  var isLocationSheetPresented: Bool = false {
-    didSet {
-      if isLocationSheetPresented {
-        selectedLocation = location
-      }
-    }
-  }
+  var isLocationSheetPresented: Bool = false
   var canAddMoreContact: Bool {
     contacts.count < Constant.contactModelCount
   }
@@ -356,14 +349,6 @@ final class EditProfileViewModel {
     selectedJob = nil
     customJobText = ""
     isCustomJobSelected = false
-  }
-  
-  func saveSelectedLocation() {
-    if let selectedLocation = selectedLocation {
-      self.location = selectedLocation
-    }
-    isLocationSheetPresented = false
-    selectedLocation = nil
   }
   
   func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
