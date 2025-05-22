@@ -87,6 +87,8 @@ struct EditProfileView: View {
                 .foregroundStyle(Color.primaryDefault)
               }
     
+              .opacity(viewModel.canAddMoreContact ? 1 : 0)
+              .disabled(!viewModel.canAddMoreContact)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 260)

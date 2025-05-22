@@ -208,6 +208,9 @@ final class CreateBasicInfoViewModel {
       }
     }
   }
+  var canAddMoreContact: Bool {
+    contacts.count < Constant.contactModelCount
+  }
   var isSNSSheetPresented: Bool = false
   var isProfileImageSheetPresented: Bool = false
   var showToast: Bool = false
@@ -387,3 +390,8 @@ extension CreateBasicInfoViewModel {
   }
 }
 
+// MARK: Constant
+extension CreateBasicInfoViewModel {
+  private enum Constant {
+    static let contactModelCount: Int = 4
+  }

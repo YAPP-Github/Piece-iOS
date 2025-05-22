@@ -227,6 +227,9 @@ final class EditProfileViewModel {
       }
     }
   }
+  var canAddMoreContact: Bool {
+    contacts.count < Constant.contactModelCount
+  }
   var isSNSSheetPresented: Bool = false
   var isProfileImageSheetPresented: Bool = false
   var showToast: Bool = false
@@ -443,5 +446,10 @@ extension EditProfileViewModel {
        index > 0 {
       removeContact(at: index)
     }
+  }
+// MARK: Constant
+extension EditProfileViewModel {
+  private enum Constant {
+    static let contactModelCount: Int = 4
   }
 }
