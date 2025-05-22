@@ -24,6 +24,7 @@ final class EditProfileViewModel {
     case tapAddContact
     case tapChangeContact(ContactModel)
     case saveContact
+    case editContact
   }
   
   init(
@@ -263,6 +264,8 @@ final class EditProfileViewModel {
       prevSelectedContact = prevContact
     case .saveContact:
       tapContactBottomSheetSaveButton()
+    case .editContact:
+      tapContactBottomSheetEditButton()
     }
   }
   
@@ -506,6 +509,23 @@ extension EditProfileViewModel {
       }
     }
   }
+  
+  func tapContactBottomSheetEditButton() {
+    if let prevSelectedContact,
+       let selectedItem = contactBottomSheetItems.first(where: { $0.state == .selected }) {
+      let newType = ContactModel.ContactType.from(iconName: selectedItem.icon)
+      
+      if newType != .unknown,
+         let targetIndex = contacts.firstIndex(where: { $0.id == prevSelectedContact.id }) {
+        let changedContact = ContactModel(type: newType, value: prevSelectedContact.value)
+        contacts[targetIndex] = changedContact
+      }
+    }
+
+    prevSelectedContact = nil
+    isContactTypeChangeSheetPresented = false
+  }
+
   func tapContactBottomSheetSaveButton() {
     if let selectedItem = contactBottomSheetItems.first(where: { $0.state == .selected }) {
       let newType = ContactModel.ContactType.from(iconName: selectedItem.icon)
