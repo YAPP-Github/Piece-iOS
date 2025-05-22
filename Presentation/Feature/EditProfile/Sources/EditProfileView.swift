@@ -145,7 +145,7 @@ struct EditProfileView: View {
       )
       .presentationDetents([.height(562)])
     }
-    .sheet(isPresented: $viewModel.isSNSSheetPresented) {
+    .sheet(isPresented: $viewModel.isContactSheetPresented) {
       PCBottomSheet<BottomSheetIconItem>(
         isButtonEnabled: Binding(projectedValue: .constant(viewModel.isContactBottomSheetButtonEnable)),
         items: $viewModel.contactBottomSheetItems,
@@ -153,7 +153,7 @@ struct EditProfileView: View {
         subtitleText: "연락을 주고받고 싶은 연락처를 선택해 작성해주세요.\n1개 이상 필수로 작성해야 합니다.",
         buttonText: "적용하기",
         buttonAction: { viewModel.handleAction(.saveContact) },
-        onTapRowItem: { viewModel.tapRowItem($0) }
+        onTapRowItem: { viewModel.tapContactRowItem($0) }
       )
       .presentationDetents([.height(458)])
     }
@@ -165,7 +165,7 @@ struct EditProfileView: View {
         subtitleText: "연락을 주고받고 싶은 연락처를 선택해 작성해주세요.\n1개 이상 필수로 작성해야 합니다.",
         buttonText: "적용하기",
         buttonAction: { viewModel.handleAction(.editContact) },
-        onTapRowItem: { viewModel.tapRowItem($0) }
+        onTapRowItem: { viewModel.tapContactRowItem($0) }
       )
       .presentationDetents([.height(458)])
     }

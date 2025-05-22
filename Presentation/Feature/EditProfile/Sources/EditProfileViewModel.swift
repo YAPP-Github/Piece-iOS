@@ -231,7 +231,7 @@ final class EditProfileViewModel {
   var canAddMoreContact: Bool {
     contacts.count < Constant.contactModelCount
   }
-  var isSNSSheetPresented: Bool = false
+  var isContactSheetPresented: Bool = false
   var isProfileImageSheetPresented: Bool = false
   var showToast: Bool = false
   
@@ -256,12 +256,12 @@ final class EditProfileViewModel {
       isJobSheetPresented = true
       updateJobBottomSheetItems()
     case .tapAddContact:
-      isSNSSheetPresented = true
-      updateBottomSheetItems()
+      isContactSheetPresented = true
+      updateContactBottomSheetItems()
     case .tapChangeContact(let prevContact):
       isContactTypeChangeSheetPresented = true
-      updateBottomSheetItems()
-      changeBottomSheetItem(with: prevContact)
+      updateContactBottomSheetItems()
+      changeContactBottomSheetItem(with: prevContact)
       prevSelectedContact = prevContact
     case .saveLocation:
       tapLocationBottomSheetSaveButton()
@@ -422,81 +422,19 @@ final class EditProfileViewModel {
   }
 }
 
-// MARK: ContactContainer
+// MARK: - Location
 extension EditProfileViewModel {
-  func canDeleteContactField(contact: ContactModel) -> Bool {
-    guard let index = contacts.firstIndex(where: { $0.id == contact.id }) else {
-      return false
-    }
-    return index > 0
-  }
-  
-  func removeContact(for contact: ContactModel) {
-    if let index = contacts.firstIndex(where: { $0.id == contact.id }),
-       index > 0 {
-      contacts.remove(at: index)
-    }
-  }
-
   var isLocationBottomSheetButtonEnable: Bool {
     locationItems.contains(where: { $0.state == .selected })
-  }
-  
-  var isJobBottomSheetButtonEnable: Bool {
-    jobItems.contains(where: { $0.state == .selected })
-  }
-  
-  var isContactBottomSheetButtonEnable: Bool {
-      contactBottomSheetItems.contains(where: { $0.state == .selected })
-  }
-}
-
-
-// MARK: - Mutation
-
-extension EditProfileViewModel {
-  func changeBottomSheetItem(with targetContact: ContactModel) {
-    if let contactIndex = contacts.firstIndex(where: { $0.id == targetContact.id }) {
-      let targetIcon = contacts[contactIndex].type.icon
-      
-      if let itemIndex = contactBottomSheetItems.firstIndex(where: { $0.icon == targetIcon }) {
-        contactBottomSheetItems[itemIndex].state = .selected
-      }
-    }
   }
   
   func updateLocationBottomSheetItems() {
     for index in locationItems.indices {
       locationItems[index].state = .unselected
     }
-
+    
     if let index = locationItems.firstIndex(where: { $0.text == location }) {
       locationItems[index].state = .selected
-    }
-  }
-  
-  func updateJobBottomSheetItems() {
-    for index in jobItems.indices {
-      jobItems[index].state = .unselected
-    }
-
-    if let index = jobItems.firstIndex(where: { $0.text == job }) {
-      jobItems[index].state = .selected
-    }
-  }
-  
-  func updateBottomSheetItems() {
-    contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
-      var copy = item
-      let type = ContactModel.ContactType.from(iconName: item.icon)
-      
-      if contacts.contains(where: { $0.type == type }) {
-        copy.state = .disable
-      } else {
-        copy.state = .unselected
-      }
-      
-      return copy
     }
   }
   
@@ -513,6 +451,31 @@ extension EditProfileViewModel {
     }
   }
   
+  func tapLocationBottomSheetSaveButton() {
+    if let selectedItem = locationItems.first(where: { $0.state == .selected }) {
+      location = selectedItem.text
+    }
+    
+    isLocationSheetPresented = false
+  }
+}
+
+// MARK: - Job
+extension EditProfileViewModel {
+  var isJobBottomSheetButtonEnable: Bool {
+    jobItems.contains(where: { $0.state == .selected })
+  }
+  
+  func updateJobBottomSheetItems() {
+    for index in jobItems.indices {
+      jobItems[index].state = .unselected
+    }
+    
+    if let index = jobItems.firstIndex(where: { $0.text == job }) {
+      jobItems[index].state = .selected
+    }
+  }
+  
   func tapJobRowItem(_ item: any BottomSheetItemRepresentable) {
     if let index = jobItems.firstIndex(where: { $0.id == item.id }),
        item.state == .unselected {
@@ -526,7 +489,61 @@ extension EditProfileViewModel {
     }
   }
   
-  func tapRowItem(_ item: any BottomSheetItemRepresentable) {
+  func tapJobBottomSheetSaveButton() {
+    if let selectedItem = jobItems.first(where: { $0.state == .selected }) {
+      job = selectedItem.text
+    }
+    
+    isJobSheetPresented = false
+  }
+}
+
+// MARK: - Contact
+extension EditProfileViewModel {
+  var isContactBottomSheetButtonEnable: Bool {
+    contactBottomSheetItems.contains(where: { $0.state == .selected })
+  }
+  
+  func canDeleteContactField(contact: ContactModel) -> Bool {
+    guard let index = contacts.firstIndex(where: { $0.id == contact.id }) else {
+      return false
+    }
+    return index > 0
+  }
+  
+  func removeContact(for contact: ContactModel) {
+    if let index = contacts.firstIndex(where: { $0.id == contact.id }),
+       index > 0 {
+      contacts.remove(at: index)
+    }
+  }
+  
+  func changeContactBottomSheetItem(with targetContact: ContactModel) {
+    if let contactIndex = contacts.firstIndex(where: { $0.id == targetContact.id }) {
+      let targetIcon = contacts[contactIndex].type.icon
+      
+      if let itemIndex = contactBottomSheetItems.firstIndex(where: { $0.icon == targetIcon }) {
+        contactBottomSheetItems[itemIndex].state = .selected
+      }
+    }
+  }
+  
+  func updateContactBottomSheetItems() {
+    contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
+      var copy = item
+      let type = ContactModel.ContactType.from(iconName: item.icon)
+      
+      if contacts.contains(where: { $0.type == type }) {
+        copy.state = .disable
+      } else {
+        copy.state = .unselected
+      }
+      
+      return copy
+    }
+  }
+  
+  func tapContactRowItem(_ item: any BottomSheetItemRepresentable) {
     if let index = contactBottomSheetItems.firstIndex(where: { $0.id == item.id }),
        item.state == .unselected {
       contactBottomSheetItems.enumerated().forEach { (i, item) in
@@ -550,11 +567,11 @@ extension EditProfileViewModel {
         contacts[targetIndex] = changedContact
       }
     }
-
+    
     prevSelectedContact = nil
     isContactTypeChangeSheetPresented = false
   }
-
+  
   func tapContactBottomSheetSaveButton() {
     if let selectedItem = contactBottomSheetItems.first(where: { $0.state == .selected }) {
       let newType = ContactModel.ContactType.from(iconName: selectedItem.icon)
@@ -564,24 +581,8 @@ extension EditProfileViewModel {
         contacts.append(newContact)
       }
     }
-
-    isSNSSheetPresented = false
-  }
-
-  func tapLocationBottomSheetSaveButton() {
-    if let selectedItem = locationItems.first(where: { $0.state == .selected }) {
-      location = selectedItem.text
-    }
     
-    isLocationSheetPresented = false
-  }
-  
-  func tapJobBottomSheetSaveButton() {
-    if let selectedItem = jobItems.first(where: { $0.state == .selected }) {
-      job = selectedItem.text
-    }
-    
-    isJobSheetPresented = false
+    isContactSheetPresented = false
   }
 }
 
