@@ -54,7 +54,7 @@ public struct PCContactField: View {
   
   // MARK: - Computed Properties
   private var estimatedLineCount: Int {
-    max(1, Int(contactFieldHeight / PCContactFieldConstant.lineHeight))
+    max(1, Int(contactFieldHeight / Constant.lineHeight))
   }
   
   // MARK: - Initializer
@@ -72,8 +72,8 @@ public struct PCContactField: View {
       contactTypeButtonView
       contactField
     }
-    .padding(.horizontal, PCContactFieldConstant.horizontalPadding)
-    .padding(.vertical, PCContactFieldConstant.verticalPadding)
+    .padding(.horizontal, Constant.horizontalPadding)
+    .padding(.vertical, Constant.verticalPadding)
     .background(Color.grayscaleLight3)
     .cornerRadius(8)
   }
@@ -122,7 +122,7 @@ public struct PCContactField: View {
 
 // MARK: Extenstion
 extension PCContactField {
-  private enum PCContactFieldConstant {
+  private enum Constant {
     static let horizontalPadding: CGFloat = 16
     static let verticalPadding: CGFloat = 14
     static let lineHeight: CGFloat = 24.0
