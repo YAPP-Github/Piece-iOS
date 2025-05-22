@@ -189,8 +189,6 @@ final class EditProfileViewModel {
       return ""
     }
   }
-  var contactInfoText: String = ""
-  var showAdditionalContactError: Bool = false
   
   // temp
   var smokingStatus: String = ""
@@ -200,7 +198,6 @@ final class EditProfileViewModel {
   var customJobText: String = ""
   var isCustomJobSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
-  var selectedContactForIconChange: ContactModel? = nil
   var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
   var selectedItem: PhotosPickerItem? = nil
@@ -374,31 +371,6 @@ final class EditProfileViewModel {
     }
   }
   
-  func saveSelectedSNSItem() {
-    if let selectedType = selectedSNSContactType {
-      if let contact = selectedContactForIconChange {
-        // 아이콘 변경 시 처리
-        updateContactType(for: contact, newType: selectedType)
-      } else {
-        // 새 연락처 추가 시 처리
-        contacts.append(ContactModel(type: selectedType, value: ""))
-        isEditing = true
-      }
-    }
-    
-    // 상태 초기화
-    isSNSSheetPresented = false
-    isContactTypeChangeSheetPresented = false
-    selectedSNSContactType = nil
-    selectedContactForIconChange = nil
-  }
-  
-  func removeContact(at index: Int) {
-    guard contacts.indices.contains(index), index != 0 else { return }
-    contacts.remove(at: index)
-    isEditing = true
-  }
-  
   func loadImage() async {
     guard let selectedItem else {
       print("선택된 아이템이 없습니다.")
@@ -475,7 +447,10 @@ extension EditProfileViewModel {
   func removeContact(for contact: ContactModel) {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }),
        index > 0 {
-      removeContact(at: index)
+      contacts.remove(at: index)
+    }
+  }
+  
   var isContactBottomSheetButtonEnable: Bool {
       contactBottomSheetItems.contains(where: { $0.state == .selected })
   }
