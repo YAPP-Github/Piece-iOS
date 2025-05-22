@@ -23,6 +23,7 @@ final class EditProfileViewModel {
     case selectPhotoLibrary
     case tapAddContact
     case tapChangeContact(ContactModel)
+    case saveContact
   }
   
   init(
@@ -260,6 +261,8 @@ final class EditProfileViewModel {
       updateBottomSheetItems()
       changeBottomSheetItem(with: prevContact)
       prevSelectedContact = prevContact
+    case .saveContact:
+      tapContactBottomSheetSaveButton()
     }
   }
   
@@ -503,6 +506,19 @@ extension EditProfileViewModel {
       }
     }
   }
+  func tapContactBottomSheetSaveButton() {
+    if let selectedItem = contactBottomSheetItems.first(where: { $0.state == .selected }) {
+      let newType = ContactModel.ContactType.from(iconName: selectedItem.icon)
+      
+      if newType != .unknown {
+        let newContact = ContactModel(type: newType, value: "")
+        contacts.append(newContact)
+      }
+    }
+
+    isSNSSheetPresented = false
+  }
+
 }
 
 // MARK: Constant
