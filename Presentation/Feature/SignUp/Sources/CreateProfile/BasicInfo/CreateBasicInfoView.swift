@@ -322,7 +322,7 @@ struct CreateBasicInfoView: View {
     .disabled(true)
     .onTapGesture {
       focusField = nil
-      viewModel.isLocationSheetPresented = true
+      viewModel.handleAction(.tapLocation)
     }
   }
   
@@ -375,7 +375,7 @@ struct CreateBasicInfoView: View {
     .disabled(true)
     .onTapGesture {
       focusField = nil
-      viewModel.isJobSheetPresented = true
+      viewModel.handleAction(.tapJob)
     }
   }
   

@@ -20,8 +20,12 @@ final class CreateBasicInfoViewModel {
     case tapVaildNickName
     case selectCamera
     case selectPhotoLibrary
+    case tapLocation
+    case tapJob
     case tapAddContact
     case tapChangeContact(ContactModel)
+    case saveLocation
+    case saveJob
     case saveContact
     case editContact
   }
@@ -184,8 +188,9 @@ final class CreateBasicInfoViewModel {
   var didCheckDuplicates: Bool = false
   var didTapnextButton: Bool = false
   
-  var locations: [String] = Locations.all
+  var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
   var jobs: [String] = Jobs.all
+  var jobItems: [BottomSheetTextItem] = Jobs.all.map { BottomSheetTextItem(text: $0) }
   var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
@@ -235,6 +240,10 @@ final class CreateBasicInfoViewModel {
       Task {
         await handleTapVaildNicknameButton()
       }
+    case .tapLocation:
+      isLocationSheetPresented = true
+    case .tapJob:
+      isJobSheetPresented = true
     case .tapAddContact:
       isSNSSheetPresented = true
       updateBottomSheetItems()
@@ -243,6 +252,10 @@ final class CreateBasicInfoViewModel {
       updateBottomSheetItems()
       changeBottomSheetItem(with: prevContact)
       prevSelectedContact = prevContact
+    case .saveLocation:
+      tapLocationBottomSheetSaveButton()
+    case .saveJob:
+      tapJobBottomSheetSaveButton()
     case .saveContact:
       tapContactBottomSheetSaveButton()
     case .editContact:
@@ -481,6 +494,17 @@ extension CreateBasicInfoViewModel {
     isSNSSheetPresented = false
   }
   
+  func tapLocationBottomSheetSaveButton() {
+    // TODO: location 적용 로직
+    
+    isLocationSheetPresented = true
+  }
+  
+  func tapJobBottomSheetSaveButton() {
+    // TODO: job 적용 로직
+    
+    isJobSheetPresented = true
+  }
 }
 
 // MARK: Constant

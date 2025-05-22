@@ -332,7 +332,7 @@ struct EditProfileView: View {
     .disabled(true)
     .onTapGesture {
       focusField = nil
-      viewModel.isLocationSheetPresented = true
+      viewModel.handleAction(.tapLocation)
     }
   }
   
@@ -387,7 +387,7 @@ struct EditProfileView: View {
     .disabled(true)
     .onTapGesture {
       focusField = nil
-      viewModel.isJobSheetPresented = true
+      viewModel.handleAction(.tapJob)
     }
     .onChange(of: viewModel.job) { _, _
       in viewModel.isEditing = true
