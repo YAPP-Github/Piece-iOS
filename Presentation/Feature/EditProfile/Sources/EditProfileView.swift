@@ -76,7 +76,7 @@ struct EditProfileView: View {
               
               Button {
                 focusField = nil
-                viewModel.isSNSSheetPresented = true
+                viewModel.handleAction(.tapAddContact)
               } label: {
                 HStack(spacing: 4) {
                   Text("연락처 추가하기")

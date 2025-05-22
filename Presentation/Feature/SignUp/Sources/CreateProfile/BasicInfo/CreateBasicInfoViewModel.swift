@@ -20,6 +20,7 @@ final class CreateBasicInfoViewModel {
     case tapVaildNickName
     case selectCamera
     case selectPhotoLibrary
+    case tapAddContact
   }
   
   init(
@@ -229,6 +230,9 @@ final class CreateBasicInfoViewModel {
       Task {
         await handleTapVaildNicknameButton()
       }
+    case .tapAddContact:
+      isSNSSheetPresented = true
+      updateBottomSheetItems()
     }
   }
   
@@ -386,6 +390,20 @@ extension CreateBasicInfoViewModel {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }),
         index > 0 {
       contacts.remove(at: index)
+    }
+  }
+  func updateBottomSheetItems() {
+    contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
+      var copy = item
+      let type = ContactModel.ContactType.from(iconName: item.icon)
+      
+      if contacts.contains(where: { $0.type == type }) {
+        copy.state = .disable
+      } else {
+        copy.state = .unselected
+      }
+      
+      return copy
     }
   }
 }
