@@ -20,6 +20,14 @@ final class CreateBasicInfoViewModel {
     case tapVaildNickName
     case selectCamera
     case selectPhotoLibrary
+    case tapLocation
+    case tapJob
+    case tapAddContact
+    case tapChangeContact(ContactModel)
+    case saveLocation
+    case saveJob
+    case saveContact
+    case editContact
   }
   
   init(
@@ -162,8 +170,6 @@ final class CreateBasicInfoViewModel {
       return ""
     }
   }
-  var contactInfoText: String = ""
-  var showAdditionalContactError: Bool = false
   
   // temp
   var smokingStatus: String = ""
@@ -173,14 +179,16 @@ final class CreateBasicInfoViewModel {
   var customJobText: String = ""
   var isCustomJobSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
-  var selectedContactForIconChange: ContactModel? = nil
+  var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
   var selectedItem: PhotosPickerItem? = nil
   var didCheckDuplicates: Bool = false
   var didTapnextButton: Bool = false
   
-  var locations: [String] = Locations.all
+  var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
   var jobs: [String] = Jobs.all
+  var jobItems: [BottomSheetTextItem] = Jobs.all.map { BottomSheetTextItem(text: $0) }
+  var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
   var isPhotoSheetPresented: Bool = false
@@ -208,6 +216,9 @@ final class CreateBasicInfoViewModel {
       }
     }
   }
+  var canAddMoreContact: Bool {
+    contacts.count < Constant.contactModelCount
+  }
   var isSNSSheetPresented: Bool = false
   var isProfileImageSheetPresented: Bool = false
   var showToast: Bool = false
@@ -226,6 +237,26 @@ final class CreateBasicInfoViewModel {
       Task {
         await handleTapVaildNicknameButton()
       }
+    case .tapLocation:
+      isLocationSheetPresented = true
+    case .tapJob:
+      isJobSheetPresented = true
+    case .tapAddContact:
+      isSNSSheetPresented = true
+      updateBottomSheetItems()
+    case .tapChangeContact(let prevContact):
+      isContactTypeChangeSheetPresented = true
+      updateBottomSheetItems()
+      changeBottomSheetItem(with: prevContact)
+      prevSelectedContact = prevContact
+    case .saveLocation:
+      tapLocationBottomSheetSaveButton()
+    case .saveJob:
+      tapJobBottomSheetSaveButton()
+    case .saveContact:
+      tapContactBottomSheetSaveButton()
+    case .editContact:
+      tapContactBottomSheetEditButton()
     }
   }
   
@@ -322,29 +353,6 @@ final class CreateBasicInfoViewModel {
     }
   }
   
-  func saveSelectedSNSItem() {
-    if let selectedType = selectedSNSContactType {
-      if let contact = selectedContactForIconChange {
-        // 아이콘 변경 시 처리
-        updateContactType(for: contact, newType: selectedType)
-      } else {
-        // 새 연락처 추가 시 처리
-        contacts.append(ContactModel(type: selectedType, value: ""))
-      }
-    }
-    
-    // 상태 초기화
-    isSNSSheetPresented = false
-    isContactTypeChangeSheetPresented = false
-    selectedSNSContactType = nil
-    selectedContactForIconChange = nil
-  }
-  
-  func removeContact(at index: Int) {
-    guard contacts.indices.contains(index), index != 0 else { return }
-    contacts.remove(at: index)
-  }
-  
   func loadImage() async {
     guard let selectedItem else {
       print("선택된 아이템이 없습니다.")
@@ -385,5 +393,97 @@ extension CreateBasicInfoViewModel {
       contacts.remove(at: index)
     }
   }
+  
+  var isContactBottomSheetButtonEnable: Bool {
+      contactBottomSheetItems.contains(where: { $0.state == .selected })
+  }
 }
 
+// MARK: - Mutation
+
+extension CreateBasicInfoViewModel {
+  func changeBottomSheetItem(with targetContact: ContactModel) {
+    if let contactIndex = contacts.firstIndex(where: { $0.id == targetContact.id }) {
+      let targetIcon = contacts[contactIndex].type.icon
+      if let itemIndex = contactBottomSheetItems.firstIndex(where: { $0.icon == targetIcon }) {
+        contactBottomSheetItems[itemIndex].state = .selected
+      }
+    }
+  }
+  
+  func updateBottomSheetItems() {
+    contactBottomSheetItems = BottomSheetIconItem.defaultContactItems.map { item in
+      var copy = item
+      let type = ContactModel.ContactType.from(iconName: item.icon)
+      
+      if contacts.contains(where: { $0.type == type }) {
+        copy.state = .disable
+      } else {
+        copy.state = .unselected
+      }
+      
+      return copy
+    }
+  }
+  
+  func tapRowItem(_ item: any BottomSheetItemRepresentable) {
+    if let index = contactBottomSheetItems.firstIndex(where: { $0.id == item.id }),
+       item.state == .unselected {
+      contactBottomSheetItems.enumerated().forEach { (i, item) in
+        if contactBottomSheetItems[i].state == .unselected, i == index {
+          contactBottomSheetItems[i].state = .selected
+        } else if contactBottomSheetItems[i].state == .selected {
+          contactBottomSheetItems[i].state = .unselected
+        }
+      }
+    }
+  }
+  
+  func tapContactBottomSheetEditButton() {
+    if let prevSelectedContact,
+       let selectedItem = contactBottomSheetItems.first(where: { $0.state == .selected }) {
+      let newType = ContactModel.ContactType.from(iconName: selectedItem.icon)
+      
+      if newType != .unknown,
+         let targetIndex = contacts.firstIndex(where: { $0.id == prevSelectedContact.id }) {
+        let changedContact = ContactModel(type: newType, value: prevSelectedContact.value)
+        contacts[targetIndex] = changedContact
+      }
+    }
+
+    prevSelectedContact = nil
+    isContactTypeChangeSheetPresented = false
+  }
+
+  func tapContactBottomSheetSaveButton() {
+    if let selectedItem = contactBottomSheetItems.first(where: { $0.state == .selected }) {
+      let newType = ContactModel.ContactType.from(iconName: selectedItem.icon)
+      
+      if newType != .unknown {
+        let newContact = ContactModel(type: newType, value: "")
+        contacts.append(newContact)
+      }
+    }
+
+    isSNSSheetPresented = false
+  }
+  
+  func tapLocationBottomSheetSaveButton() {
+    // TODO: location 적용 로직
+    
+    isLocationSheetPresented = true
+  }
+  
+  func tapJobBottomSheetSaveButton() {
+    // TODO: job 적용 로직
+    
+    isJobSheetPresented = true
+  }
+}
+
+// MARK: Constant
+extension CreateBasicInfoViewModel {
+  private enum Constant {
+    static let contactModelCount: Int = 4
+  }
+}

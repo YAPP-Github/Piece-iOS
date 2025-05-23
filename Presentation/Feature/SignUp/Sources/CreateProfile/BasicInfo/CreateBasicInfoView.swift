@@ -104,7 +104,7 @@ struct CreateBasicInfoView: View {
               
               Button {
                 focusField = nil
-                viewModel.isSNSSheetPresented = true
+                viewModel.handleAction(.tapAddContact)
               } label: {
                 HStack(spacing: 4) {
                   Text("연락처 추가하기")
@@ -114,7 +114,8 @@ struct CreateBasicInfoView: View {
                 }
                 .foregroundStyle(Color.primaryDefault)
               }
-    
+              .opacity(viewModel.canAddMoreContact ? 1 : 0)
+              .disabled(!viewModel.canAddMoreContact)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 200)
@@ -142,15 +143,6 @@ struct CreateBasicInfoView: View {
       }
       .ignoresSafeArea(.keyboard)
       
-      if viewModel.isJobSheetPresented {
-        jobBottomSheet
-      }
-      if viewModel.isLocationSheetPresented {
-        locationBottomSheet
-      }
-      if viewModel.isSNSSheetPresented || viewModel.isContactTypeChangeSheetPresented {
-        snsBottomSheet
-      }
       VStack {
         Spacer()
         if viewModel.showToast {
@@ -160,6 +152,53 @@ struct CreateBasicInfoView: View {
             .animation(.easeInOut(duration: 0.5), value: viewModel.showToast)
         }
       }
+    }
+    .sheet(isPresented: $viewModel.isLocationSheetPresented) {
+      PCBottomSheet<BottomSheetTextItem>(
+        isButtonEnabled: .constant(true),
+        items: $viewModel.locationItems,
+        titleText: "활동 지역",
+        subtitleText: "주로 활동하는 지역을 선택해주세요.",
+        buttonText: "적용하기",
+        buttonAction: { viewModel.handleAction(.saveLocation) },
+        onTapRowItem: { viewModel.tapRowItem($0) }
+      )
+      .presentationDetents([.height(602)])
+    }
+    .sheet(isPresented: $viewModel.isJobSheetPresented) {
+      PCBottomSheet<BottomSheetTextItem>(
+        isButtonEnabled: .constant(true),
+        items: $viewModel.jobItems,
+        titleText: "직업",
+        buttonText: "적용하기",
+        buttonAction: { viewModel.handleAction(.saveJob) },
+        onTapRowItem: { viewModel.tapRowItem($0) }
+      )
+      .presentationDetents([.height(562)])
+    }
+    .sheet(isPresented: $viewModel.isSNSSheetPresented) {
+      PCBottomSheet<BottomSheetIconItem>(
+        isButtonEnabled: Binding(projectedValue: .constant(viewModel.isContactBottomSheetButtonEnable)),
+        items: $viewModel.contactBottomSheetItems,
+        titleText: "연락처",
+        subtitleText: "연락을 주고받고 싶은 연락처를 선택해 작성해주세요.\n1개 이상 필수로 작성해야 합니다.",
+        buttonText: "적용하기",
+        buttonAction: { viewModel.handleAction(.saveContact) },
+        onTapRowItem: { viewModel.tapRowItem($0) }
+      )
+      .presentationDetents([.height(458)])
+    }
+    .sheet(isPresented: $viewModel.isContactTypeChangeSheetPresented) {
+      PCBottomSheet<BottomSheetIconItem>(
+        isButtonEnabled: Binding(projectedValue: .constant(viewModel.isContactBottomSheetButtonEnable)),
+        items: $viewModel.contactBottomSheetItems,
+        titleText: "연락처",
+        subtitleText: "연락을 주고받고 싶은 연락처를 선택해 작성해주세요.\n1개 이상 필수로 작성해야 합니다.",
+        buttonText: "적용하기",
+        buttonAction: { viewModel.handleAction(.editContact) },
+        onTapRowItem: { viewModel.tapRowItem($0) }
+      )
+      .presentationDetents([.height(458)])
     }
   }
   
@@ -283,7 +322,7 @@ struct CreateBasicInfoView: View {
     .disabled(true)
     .onTapGesture {
       focusField = nil
-      viewModel.isLocationSheetPresented = true
+      viewModel.handleAction(.tapLocation)
     }
   }
   
@@ -336,7 +375,7 @@ struct CreateBasicInfoView: View {
     .disabled(true)
     .onTapGesture {
       focusField = nil
-      viewModel.isJobSheetPresented = true
+      viewModel.handleAction(.tapJob)
     }
   }
   
@@ -412,161 +451,6 @@ struct CreateBasicInfoView: View {
     )
   }
   
-  private var locationBottomSheet: some View {
-    func makeLocationCell(_ location: String) -> some View {
-      VStack(alignment: .leading, spacing: 0) {
-        cellItem(
-          text: location,
-          isSelected: viewModel.selectedLocation == location,
-          action: { viewModel.selectedLocation = location }
-        )
-      }
-    }
-    
-    return PCBottomSheet(
-      isPresented: $viewModel.isLocationSheetPresented,
-      height: 623,
-      titleText: "활동지역 선택",
-      buttonText: "저장하기",
-      buttonAction: { viewModel.saveSelectedLocation() }
-    ) {
-      ScrollView {
-        VStack(alignment: .leading, spacing: 0) {
-          ForEach(viewModel.locations, id: \.self) { location in
-            makeLocationCell(location)
-          }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-      }
-    }
-  }
-  
-  private var jobBottomSheet: some View {
-    func makeJobCell(_ job: String) -> some View {
-      VStack(alignment: .leading, spacing: 0) {
-        cellItem(
-          text: job,
-          isSelected: job == "기타" ? viewModel.isCustomJobSelected : viewModel.selectedJob == job,
-          action: {
-            if job == "기타" {
-              viewModel.isCustomJobSelected = true
-              viewModel.selectedJob = nil
-            } else {
-              viewModel.isCustomJobSelected = false
-              viewModel.selectedJob = job
-            }
-          }
-        )
-        
-        if job == "기타" && viewModel.isCustomJobSelected {
-          PCTextField(
-            title: "",
-            text: $viewModel.customJobText,
-            focusState: $focusField,
-            focusField: "customJob"
-          )
-          .padding(.horizontal)
-          .padding(.vertical, 8)
-        }
-      }
-    }
-    
-    return PCBottomSheet(
-      isPresented: $viewModel.isJobSheetPresented,
-      height: 431,
-      titleText: "직업 선택",
-      buttonText: "저장하기",
-      buttonAction: { viewModel.saveSelectedJob() }
-    ) {
-      ScrollView {
-        VStack(alignment: .leading, spacing: 0) {
-          ForEach(viewModel.jobs, id: \.self) { job in
-            makeJobCell(job)
-          }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-      }
-    }
-  }
-  
-  private var snsBottomSheet: some View {
-    PCBottomSheet(
-      isPresented:  Binding(
-        get: { viewModel.isSNSSheetPresented || viewModel.isContactTypeChangeSheetPresented },
-        set: { isPresented in
-          viewModel.isSNSSheetPresented = isPresented
-          viewModel.isContactTypeChangeSheetPresented = isPresented
-        }
-      ),
-      height: 479,
-      titleText: "연락처 추가",
-      subtitleText: "연락을 주고받고 싶은 연락처를 선택해 작성해주세요.\n1개 이상 필수로 작성해야 합니다.",
-      buttonText: "추가하기",
-      buttonAction: {
-        viewModel.saveSelectedSNSItem()
-      }
-    ) {
-      VStack(alignment: .leading) {
-        cellItem(
-          image: DesignSystemAsset.Icons.kakao32.swiftUIImage,
-          text: "카카오톡 아이디",
-          isSelected: viewModel.selectedSNSContactType == .kakao,
-          action: { viewModel.selectedSNSContactType = .kakao  }
-        )
-        cellItem(
-          image: DesignSystemAsset.Icons.kakaoOpenchat32.swiftUIImage,
-          text: "카카오톡 오픈 채팅방",
-          isSelected: viewModel.selectedSNSContactType == .openKakao,
-          action: { viewModel.selectedSNSContactType = .openKakao }
-        )
-        cellItem(
-          image: DesignSystemAsset.Icons.instagram32.swiftUIImage,
-          text: "인스타 아이디",
-          isSelected: viewModel.selectedSNSContactType == .instagram,
-          action: { viewModel.selectedSNSContactType = .instagram }
-        )
-        cellItem(
-          image: DesignSystemAsset.Icons.cellFill32.swiftUIImage,
-          text: "전화번호",
-          isSelected: viewModel.selectedSNSContactType == .phone,
-          action: { viewModel.selectedSNSContactType = .phone }
-        )
-      }
-      .frame(maxWidth: .infinity, alignment: .leading)
-    }
-    .onAppear {
-      focusField = nil
-    }
-  }
-
-  private func cellItem(
-    image: Image? = nil,
-    text: String,
-    isSelected: Bool = false,
-    action: @escaping () -> Void
-  ) -> some View {
-    Button(action: action) {
-      HStack {
-        if let image {
-          image
-            .renderingMode(.template)
-            .foregroundStyle(isSelected ? Color.primaryDefault : Color.grayscaleBlack)
-        }
-        Text(text)
-          .pretendard(.body_M_M)
-          .foregroundStyle(isSelected ? Color.primaryDefault : Color.grayscaleBlack)
-        Spacer()
-        if isSelected {
-          DesignSystemAsset.Icons.check24.swiftUIImage
-            .renderingMode(.template)
-            .foregroundStyle(Color.primaryDefault)
-        }
-      }
-      .padding(.vertical, 12)
-      .frame(maxWidth: .infinity)
-    }
-  }
-  
   private var toast: some View {
     HStack {
       DesignSystemAsset.Icons.notice20.swiftUIImage
@@ -621,8 +505,7 @@ fileprivate struct CreateContactContainer: View {
         PCContactField(
           contact: bindingForContact(id: contact.id),
           action: {
-            viewModel.selectedContactForIconChange = contact
-            viewModel.isContactTypeChangeSheetPresented = true
+            viewModel.handleAction(.tapChangeContact(contact))
           }
         )
         .focused(focusField, equals: "contact_\(contact.id)")
