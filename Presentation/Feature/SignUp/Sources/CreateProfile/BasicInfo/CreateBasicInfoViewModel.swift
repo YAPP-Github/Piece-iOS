@@ -178,9 +178,6 @@ final class CreateBasicInfoViewModel {
   // temp
   var smokingStatus: String = ""
   var snsActivityLevel: String = ""
-  var selectedJob: String? = nil
-  var customJobText: String = ""
-  var isCustomJobSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
@@ -189,29 +186,13 @@ final class CreateBasicInfoViewModel {
   var didTapnextButton: Bool = false
   
   var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
-  var jobs: [String] = Jobs.all
   var jobItems: [BottomSheetTextItem]
   var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
   var isPhotoSheetPresented: Bool = false
   var isCameraPresented: Bool  = false
-  var isJobSheetPresented: Bool = false {
-    didSet {
-      if isJobSheetPresented {
-        // 바텀시트가 열릴 때 현재 job이 jobs 배열에 없다면 custom으로 간주
-        if !jobs.contains(job) && !job.isEmpty {
-          isCustomJobSelected = true
-          selectedJob = nil
-          customJobText = job
-        } else {
-          isCustomJobSelected = false
-          selectedJob = job
-          customJobText = ""
-        }
-      }
-    }
-  }
+  var isJobSheetPresented: Bool = false
   var isLocationSheetPresented: Bool = false
   var canAddMoreContact: Bool {
     contacts.count < Constant.contactModelCount
@@ -324,18 +305,6 @@ final class CreateBasicInfoViewModel {
       guard let regex = try? NSRegularExpression(pattern: pattern) else { return false }
       let range = NSRange(location: 0, length: input.utf16.count)
       return regex.firstMatch(in: input, options: [], range: range) != nil
-  }
-  
-  func saveSelectedJob() {
-    if isCustomJobSelected {
-      self.job = customJobText.isEmpty ? "" : customJobText
-    } else if let selectedJob = selectedJob {
-      self.job = selectedJob
-    }
-    isJobSheetPresented = false
-    selectedJob = nil
-    customJobText = ""
-    isCustomJobSelected = false
   }
   
   func loadImage() async {
