@@ -41,10 +41,13 @@ final class EditProfileViewModel {
     self.getProfileBasicUseCase = getProfileBasicUseCase
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
+    self.jobItems = Jobs.all.map { BottomSheetTextItem(text: $0) }
     
     Task {
       await getBasicProfile()
     }
+    
+    setupJobItemsWithEtc()
   }
   
   private let updateProfileBasicUseCase: UpdateProfileBasicUseCase
@@ -206,7 +209,7 @@ final class EditProfileViewModel {
   
   var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
   var jobs: [String] = Jobs.all
-  var jobItems: [BottomSheetTextItem] = Jobs.all.map { BottomSheetTextItem(text: $0) }
+  var jobItems: [BottomSheetTextItem]
   var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
@@ -463,6 +466,35 @@ extension EditProfileViewModel {
 
 // MARK: - Job
 extension EditProfileViewModel {
+  /// 불러온 job으로부터 etc 바인딩을 위함
+  private func initializeEtcTextFromJob() {
+    if !job.isEmpty && !(jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.text == job
+      case .custom:
+        return false
+      }
+    }) {
+      etcText = job
+    }
+  }
+  
+  func setupJobItemsWithEtc() {
+    let etcItem = BottomSheetTextItem(
+      text: "기타",
+      value: Binding(
+      get: { self.etcText },
+      set: { self.etcText = $0.replacingOccurrences(of: " ", with: "") })
+    )
+    
+    if let index = jobItems.firstIndex(where: { $0.text == "기타" }) {
+      jobItems[index] = etcItem
+    }
+    
+    initializeEtcTextFromJob()
+  }
+  
   var isJobBottomSheetButtonEnable: Bool {
     jobItems.contains(where: { $0.state == .selected })
   }
