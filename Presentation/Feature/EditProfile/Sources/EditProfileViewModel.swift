@@ -511,7 +511,14 @@ extension EditProfileViewModel {
       jobItems[index].state = .unselected
     }
     
-    if let index = jobItems.firstIndex(where: { $0.text == job }) {
+    if let index = jobItems.firstIndex(where: { item in
+      switch item.type {
+      case .normal:
+        item.text == job
+      case .custom:
+        !item.value.isEmpty && item.value == job
+      }
+    }) {
       jobItems[index].state = .selected
     }
   }
