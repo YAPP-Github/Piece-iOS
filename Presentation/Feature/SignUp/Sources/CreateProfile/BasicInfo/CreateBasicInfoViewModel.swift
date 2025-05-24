@@ -459,7 +459,12 @@ extension CreateBasicInfoViewModel {
   
   func tapJobBottomSheetSaveButton() {
     if let selectedItem = jobItems.first(where: { $0.state == .selected }) {
-      job = selectedItem.text
+      switch selectedItem.type {
+      case .normal(let text):
+        job = text
+      case .custom:
+        job = selectedItem.value
+      }
     }
     
     isJobSheetPresented = false
