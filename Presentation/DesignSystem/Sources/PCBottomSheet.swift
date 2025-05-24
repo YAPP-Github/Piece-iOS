@@ -99,6 +99,31 @@ public struct BottomSheetTextItem: BottomSheetItemRepresentable {
   }
   
   public func render() -> some View {
+    switch type {
+    case .normal:
+      label
+      
+    case .custom:
+      VStack(alignment: .leading, spacing: 0) {
+        Spacer()
+          .frame(maxHeight: 19)
+        
+        label
+        .frame(height: 24)
+        
+        Spacer()
+          .frame(maxHeight: 19)
+        
+        if state == .selected {
+          textField
+          
+          Spacer()
+        }
+      }
+    }
+  }
+  
+  private var label: some View {
     HStack {
       Text(text)
         .pretendard(.body_M_M)
@@ -110,7 +135,22 @@ public struct BottomSheetTextItem: BottomSheetItemRepresentable {
           .foregroundStyle(state.foregroundColor)
       }
     }
-    .frame(maxWidth: .infinity)
+  }
+  private var textField: some View {
+    TextField("자유롭게 작성해주세요", text: $value)
+      .autocorrectionDisabled()
+      .multilineTextAlignment(.leading)
+      .textInputAutocapitalization(.none)
+      .pretendard(.body_M_M)
+      .frame(height: 52)
+      .padding(.horizontal, 16)
+      .background(.grayscaleLight3)
+      .cornerRadius(8)
+      .onAppear {
+        UITextField.appearance().clearButtonMode = .whileEditing
+      }
+  }
+
   public func hash(into hasher: inout Hasher) {
       hasher.combine(id)
   }
@@ -227,8 +267,13 @@ public struct PCBottomSheet<T: BottomSheetItemRepresentable>: View {
       Button(action: {
         onTapRowItem?(item)
       }) {
-        item.render()
-          .frame(height: 62)
+        if item.text == "기타", item.state == .selected {
+          item.render()
+            .frame(height: 130)
+        } else {
+          item.render()
+            .frame(height: 62)
+        }
       }
     }
   }
