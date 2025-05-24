@@ -251,21 +251,29 @@ public struct PCBottomSheet<T: BottomSheetItemRepresentable>: View {
   
   @ViewBuilder
   private var content: some View {
-    if items.count > 6 {
-      ScrollView {
-        itemList
+    ScrollViewReader { proxy in
+      if items.count > 6 {
+        ScrollView {
+          itemList(proxy: proxy)
+        }
+        .scrollIndicators(.hidden)
+        .frame(height: 400)
+      } else {
+        ScrollView {
+          itemList(proxy: proxy)
+        }
+        .scrollIndicators(.hidden)
       }
-      .scrollIndicators(.hidden)
-      .frame(height: 400)
-    } else {
-      itemList
     }
   }
   
-  private var itemList: some View {
-    ForEach(items) { item in
+  private func itemList(proxy: ScrollViewProxy) -> some View {
+    ForEach(items, id: \.id) { item in
       Button(action: {
         onTapRowItem?(item)
+        withAnimation {
+          proxy.scrollTo(item.id, anchor: .center)
+        }
       }) {
         if item.text == "기타", item.state == .selected {
           item.render()
