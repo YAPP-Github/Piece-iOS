@@ -79,10 +79,24 @@ extension BottomSheetIconItem {
   ]
 }
 
+public enum BottomSheetItemType {
+    case normal(String)
+    case custom(String)
+}
+
 public struct BottomSheetTextItem: BottomSheetItemRepresentable {
+  @Binding public var value: String
+  
   public var id: UUID
-  public var text: String
+  public var type: BottomSheetItemType
   public var state: BottomSheetItemState = .unselected
+  
+  public var text: String {
+    switch type {
+    case .normal(let text), .custom(let text):
+      return text
+    }
+  }
   
   public func render() -> some View {
     HStack {
@@ -97,6 +111,12 @@ public struct BottomSheetTextItem: BottomSheetItemRepresentable {
       }
     }
     .frame(maxWidth: .infinity)
+  public func hash(into hasher: inout Hasher) {
+      hasher.combine(id)
+  }
+  
+  public static func == (lhs: BottomSheetTextItem, rhs: BottomSheetTextItem) -> Bool {
+      lhs.id == rhs.id
   }
   
   public init(
@@ -105,8 +125,21 @@ public struct BottomSheetTextItem: BottomSheetItemRepresentable {
     state: BottomSheetItemState = .unselected
   ) {
     self.id = id
-    self.text = text
+    self.type = .normal(text)
     self.state = state
+    self._value = .constant("")
+  }
+
+  public init(
+    id: UUID = UUID(),
+    text: String,
+    state: BottomSheetItemState = .unselected,
+    value: Binding<String>
+  ) {
+    self.id = id
+    self.type = .custom(text)
+    self.state = state
+    self._value = value
   }
 }
 
