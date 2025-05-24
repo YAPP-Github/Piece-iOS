@@ -417,7 +417,14 @@ extension CreateBasicInfoViewModel {
   }
   
   var isJobBottomSheetButtonEnable: Bool {
-    jobItems.contains(where: { $0.state == .selected })
+    jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.state == .selected
+      case .custom:
+        return !etcText.isEmpty && item.state == .selected
+      }
+    }
   }
   
   func updateJobBottomSheetItems() {
