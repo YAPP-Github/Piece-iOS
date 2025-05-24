@@ -53,6 +53,7 @@ final class CreateBasicInfoViewModel {
   var height: String = ""
   var weight: String = ""
   var job: String = ""
+  var etcText: String = ""
   var contacts: [ContactModel] = [ContactModel(type: .kakao, value: "")]
   
   // isValid
