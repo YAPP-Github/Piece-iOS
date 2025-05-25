@@ -41,10 +41,13 @@ final class EditProfileViewModel {
     self.getProfileBasicUseCase = getProfileBasicUseCase
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
+    self.jobItems = Jobs.all.map { BottomSheetTextItem(text: $0) }
     
     Task {
       await getBasicProfile()
     }
+    
+    setupJobItemsWithEtc()
   }
   
   private let updateProfileBasicUseCase: UpdateProfileBasicUseCase
@@ -61,6 +64,7 @@ final class EditProfileViewModel {
   var height: String = ""
   var weight: String = ""
   var job: String = ""
+  var etcText: String = ""
   var contacts: [ContactModel] = [ContactModel(type: .kakao, value: "")]
   
   // isValid
@@ -193,9 +197,6 @@ final class EditProfileViewModel {
   // temp
   var smokingStatus: String = ""
   var snsActivityLevel: String = ""
-  var selectedJob: String? = nil
-  var customJobText: String = ""
-  var isCustomJobSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
@@ -204,29 +205,13 @@ final class EditProfileViewModel {
   var didTapnextButton: Bool = false
   
   var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
-  var jobs: [String] = Jobs.all
-  var jobItems: [BottomSheetTextItem] = Jobs.all.map { BottomSheetTextItem(text: $0) }
+  var jobItems: [BottomSheetTextItem]
   var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
   var isPhotoSheetPresented: Bool = false
   var isCameraPresented: Bool  = false
-  var isJobSheetPresented: Bool = false {
-    didSet {
-      if isJobSheetPresented {
-        // 바텀시트가 열릴 때 현재 job이 jobs 배열에 없다면 custom으로 간주
-        if !jobs.contains(job) && !job.isEmpty {
-          isCustomJobSelected = true
-          selectedJob = nil
-          customJobText = job
-        } else {
-          isCustomJobSelected = false
-          selectedJob = job
-          customJobText = ""
-        }
-      }
-    }
-  }
+  var isJobSheetPresented: Bool = false
   var isLocationSheetPresented: Bool = false
   var canAddMoreContact: Bool {
     contacts.count < Constant.contactModelCount
@@ -254,6 +239,7 @@ final class EditProfileViewModel {
       updateLocationBottomSheetItems()
     case .tapJob:
       isJobSheetPresented = true
+      initializeEtcTextFromJob()
       updateJobBottomSheetItems()
     case .tapAddContact:
       isContactSheetPresented = true
@@ -337,25 +323,6 @@ final class EditProfileViewModel {
       guard let regex = try? NSRegularExpression(pattern: pattern) else { return false }
       let range = NSRange(location: 0, length: input.utf16.count)
       return regex.firstMatch(in: input, options: [], range: range) != nil
-  }
-  
-  func saveSelectedJob() {
-    if isCustomJobSelected {
-      self.job = customJobText.isEmpty ? "" : customJobText
-    } else if let selectedJob = selectedJob {
-      self.job = selectedJob
-    }
-    isJobSheetPresented = false
-    selectedJob = nil
-    customJobText = ""
-    isCustomJobSelected = false
-  }
-  
-  func updateContactType(for contact: ContactModel, newType: ContactModel.ContactType) {
-    if let index = contacts.firstIndex(where: { $0.id == contact.id }) {
-      contacts[index] = ContactModel(type: newType, value: contact.value)
-      isEditing = true
-    }
   }
   
   func loadImage() async {
@@ -462,8 +429,44 @@ extension EditProfileViewModel {
 
 // MARK: - Job
 extension EditProfileViewModel {
+  /// 불러온 job으로부터 etc 바인딩을 위함
+  private func initializeEtcTextFromJob() {
+    if !job.isEmpty && !(jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.text == job
+      case .custom:
+        return false
+      }
+    }) {
+      etcText = job
+    }
+  }
+  
+  func setupJobItemsWithEtc() {
+    let etcItem = BottomSheetTextItem(
+      text: "기타",
+      value: Binding(
+      get: { self.etcText },
+      set: { self.etcText = $0.replacingOccurrences(of: " ", with: "") })
+    )
+    
+    if let index = jobItems.firstIndex(where: { $0.text == "기타" }) {
+      jobItems[index] = etcItem
+    }
+    
+    initializeEtcTextFromJob()
+  }
+  
   var isJobBottomSheetButtonEnable: Bool {
-    jobItems.contains(where: { $0.state == .selected })
+    jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.state == .selected
+      case .custom:
+        return !etcText.isEmpty && item.state == .selected
+      }
+    }
   }
   
   func updateJobBottomSheetItems() {
@@ -471,7 +474,14 @@ extension EditProfileViewModel {
       jobItems[index].state = .unselected
     }
     
-    if let index = jobItems.firstIndex(where: { $0.text == job }) {
+    if let index = jobItems.firstIndex(where: { item in
+      switch item.type {
+      case .normal:
+        item.text == job
+      case .custom:
+        !item.value.isEmpty && item.value == job
+      }
+    }) {
       jobItems[index].state = .selected
     }
   }
@@ -491,7 +501,12 @@ extension EditProfileViewModel {
   
   func tapJobBottomSheetSaveButton() {
     if let selectedItem = jobItems.first(where: { $0.state == .selected }) {
-      job = selectedItem.text
+      switch selectedItem.type {
+      case .normal(let text):
+        job = text
+      case .custom:
+        job = selectedItem.value
+      }
     }
     
     isJobSheetPresented = false

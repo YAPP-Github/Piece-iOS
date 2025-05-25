@@ -38,6 +38,9 @@ final class CreateBasicInfoViewModel {
     self.profileCreator = profileCreator
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
+    self.jobItems = Jobs.all.map { BottomSheetTextItem(text: $0) }
+    
+    setupJobItemsWithEtc()
   }
   
   private let checkNicknameUseCase: CheckNicknameUseCase
@@ -53,6 +56,7 @@ final class CreateBasicInfoViewModel {
   var height: String = ""
   var weight: String = ""
   var job: String = ""
+  var etcText: String = ""
   var contacts: [ContactModel] = [ContactModel(type: .kakao, value: "")]
   
   // isValid
@@ -174,9 +178,6 @@ final class CreateBasicInfoViewModel {
   // temp
   var smokingStatus: String = ""
   var snsActivityLevel: String = ""
-  var selectedJob: String? = nil
-  var customJobText: String = ""
-  var isCustomJobSelected: Bool = false
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
@@ -185,29 +186,13 @@ final class CreateBasicInfoViewModel {
   var didTapnextButton: Bool = false
   
   var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
-  var jobs: [String] = Jobs.all
-  var jobItems: [BottomSheetTextItem] = Jobs.all.map { BottomSheetTextItem(text: $0) }
+  var jobItems: [BottomSheetTextItem]
   var contactBottomSheetItems: [BottomSheetIconItem] = BottomSheetIconItem.defaultContactItems
   
   // Sheet
   var isPhotoSheetPresented: Bool = false
   var isCameraPresented: Bool  = false
-  var isJobSheetPresented: Bool = false {
-    didSet {
-      if isJobSheetPresented {
-        // 바텀시트가 열릴 때 현재 job이 jobs 배열에 없다면 custom으로 간주
-        if !jobs.contains(job) && !job.isEmpty {
-          isCustomJobSelected = true
-          selectedJob = nil
-          customJobText = job
-        } else {
-          isCustomJobSelected = false
-          selectedJob = job
-          customJobText = ""
-        }
-      }
-    }
-  }
+  var isJobSheetPresented: Bool = false
   var isLocationSheetPresented: Bool = false
   var canAddMoreContact: Bool {
     contacts.count < Constant.contactModelCount
@@ -235,6 +220,7 @@ final class CreateBasicInfoViewModel {
       updateLocationBottomSheetItems()
     case .tapJob:
       isJobSheetPresented = true
+      initializeEtcTextFromJob()
       updateJobBottomSheetItems()
     case .tapAddContact:
       isContactSheetPresented = true
@@ -322,18 +308,6 @@ final class CreateBasicInfoViewModel {
       return regex.firstMatch(in: input, options: [], range: range) != nil
   }
   
-  func saveSelectedJob() {
-    if isCustomJobSelected {
-      self.job = customJobText.isEmpty ? "" : customJobText
-    } else if let selectedJob = selectedJob {
-      self.job = selectedJob
-    }
-    isJobSheetPresented = false
-    selectedJob = nil
-    customJobText = ""
-    isCustomJobSelected = false
-  }
-  
   func loadImage() async {
     guard let selectedItem else {
       print("선택된 아이템이 없습니다.")
@@ -399,8 +373,42 @@ extension CreateBasicInfoViewModel {
 
 // MARK: - Job
 extension CreateBasicInfoViewModel {
+  /// "etcText"는 저장된 "job"에 종속됨
+  private func initializeEtcTextFromJob() {
+    if !job.isEmpty && !(jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.text == job
+      case .custom:
+        return false
+      }
+    }) {
+      etcText = job
+    }
+  }
+  
+  func setupJobItemsWithEtc() {
+    let etcItem = BottomSheetTextItem(
+      text: "기타",
+      value: Binding(
+      get: { self.etcText },
+      set: { self.etcText = $0.replacingOccurrences(of: " ", with: "") })
+    )
+    
+    if let index = jobItems.firstIndex(where: { $0.text == "기타" }) {
+      jobItems[index] = etcItem
+    }
+  }
+  
   var isJobBottomSheetButtonEnable: Bool {
-    jobItems.contains(where: { $0.state == .selected })
+    jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.state == .selected
+      case .custom:
+        return !etcText.isEmpty && item.state == .selected
+      }
+    }
   }
   
   func updateJobBottomSheetItems() {
@@ -408,7 +416,14 @@ extension CreateBasicInfoViewModel {
       jobItems[index].state = .unselected
     }
     
-    if let index = jobItems.firstIndex(where: { $0.text == job }) {
+    if let index = jobItems.firstIndex(where: { item in
+      switch item.type {
+      case .normal:
+        item.text == job
+      case .custom:
+        !item.value.isEmpty && item.value == job
+      }
+    }) {
       jobItems[index].state = .selected
     }
   }
@@ -428,7 +443,12 @@ extension CreateBasicInfoViewModel {
   
   func tapJobBottomSheetSaveButton() {
     if let selectedItem = jobItems.first(where: { $0.state == .selected }) {
-      job = selectedItem.text
+      switch selectedItem.type {
+      case .normal(let text):
+        job = text
+      case .custom:
+        job = selectedItem.value
+      }
     }
     
     isJobSheetPresented = false
