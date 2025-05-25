@@ -223,6 +223,7 @@ final class CreateBasicInfoViewModel {
       updateJobBottomSheetItems()
     case .tapAddContact:
       isContactSheetPresented = true
+      initializeEtcTextFromJob()
       updateContactBottomSheetItems()
     case .tapChangeContact(let prevContact):
       isContactTypeChangeSheetPresented = true
@@ -372,6 +373,20 @@ extension CreateBasicInfoViewModel {
 
 // MARK: - Job
 extension CreateBasicInfoViewModel {
+  /// "etcText"는 저장된 "job"에 종속됨
+  private func initializeEtcTextFromJob() {
+    if !job.isEmpty && !(jobItems.contains { item in
+      switch item.type {
+      case .normal:
+        return item.text == job
+      case .custom:
+        return false
+      }
+    }) {
+      etcText = job
+    }
+  }
+  
   func setupJobItemsWithEtc() {
     let etcItem = BottomSheetTextItem(
       text: "기타",

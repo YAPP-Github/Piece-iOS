@@ -239,6 +239,7 @@ final class EditProfileViewModel {
       updateLocationBottomSheetItems()
     case .tapJob:
       isJobSheetPresented = true
+      initializeEtcTextFromJob()
       updateJobBottomSheetItems()
     case .tapAddContact:
       isContactSheetPresented = true
