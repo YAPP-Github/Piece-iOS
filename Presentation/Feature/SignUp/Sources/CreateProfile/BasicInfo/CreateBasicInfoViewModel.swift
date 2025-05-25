@@ -220,10 +220,10 @@ final class CreateBasicInfoViewModel {
       updateLocationBottomSheetItems()
     case .tapJob:
       isJobSheetPresented = true
+      initializeEtcTextFromJob()
       updateJobBottomSheetItems()
     case .tapAddContact:
       isContactSheetPresented = true
-      initializeEtcTextFromJob()
       updateContactBottomSheetItems()
     case .tapChangeContact(let prevContact):
       isContactTypeChangeSheetPresented = true
