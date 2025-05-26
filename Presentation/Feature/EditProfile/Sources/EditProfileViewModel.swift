@@ -17,6 +17,7 @@ import PCFoundationExtension
 @Observable
 final class EditProfileViewModel {
   enum Action {
+    case onAppear
     case tapConfirmButton
     case tapVaildNickName
     case selectCamera
@@ -42,12 +43,6 @@ final class EditProfileViewModel {
     self.checkNicknameUseCase = checkNicknameUseCase
     self.uploadProfileImageUseCase = uploadProfileImageUseCase
     self.jobItems = Jobs.all.map { BottomSheetTextItem(text: $0) }
-    
-    Task {
-      await getBasicProfile()
-    }
-    
-    setupJobItemsWithEtc()
   }
   
   private let updateProfileBasicUseCase: UpdateProfileBasicUseCase
@@ -222,6 +217,12 @@ final class EditProfileViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
+    case .onAppear:
+      Task {
+        await getBasicProfile()
+      }
+      
+      setupJobItemsWithEtc()
     case .tapConfirmButton:
       Task {
         await handleTapConfirmButton()

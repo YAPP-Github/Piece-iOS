@@ -169,6 +169,9 @@ struct EditProfileView: View {
       )
       .presentationDetents([.height(458)])
     }
+    .onAppear {
+      viewModel.handleAction(.onAppear)
+    }
   }
   
   private var navigationBar: some View {
