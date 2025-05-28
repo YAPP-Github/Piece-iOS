@@ -9,8 +9,7 @@ import SwiftUI
 import Observation
 import KakaoSDKAuth
 import KakaoSDKUser
-//import GoogleSignIn
-//import GoogleSignInSwift
+import GoogleSignIn
 import AuthenticationServices
 import UseCases
 import LocalStorage
@@ -46,8 +45,10 @@ final class LoginViewModel: NSObject {
       Task {
         await handleKakaoLoginButton()
       }
-    case .tapGoogleLoginButton: break
-     // handleGoogleLoginButton()
+    case .tapGoogleLoginButton:
+      Task {
+        await handleGoogleLoginButton()
+      }
     }
   }
   
@@ -105,44 +106,35 @@ final class LoginViewModel: NSObject {
     }
   }
   
-  private func handleGoogleLoginButton() {
-    // TODO: - Google Login Action
-//    guard let rootViewController = UIApplication.shared.connectedScenes
-//      .compactMap({ $0 as? UIWindowScene })
-//      .flatMap({ $0.windows })
-//      .first(where: { $0.isKeyWindow }) else {
-//      print("❌ RootViewController를 찾을 수 없습니다.")
-//      return
-//    }
+  private func handleGoogleLoginButton() async {
+    guard let rootViewController = self.rootViewController else {
+      print("Google Login Error: RootViewController is nil")
+      return
+    }
     
-//    GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signInResult, error in
-//      if let error = error {
-//        print("Google Login failed: \(error.localizedDescription)")
-//        return
-//      }
-//      
-//      guard let result = signInResult else {
-//        print("Google Login failed: signInResult is nil")
-//        return
-//      }
-//      
-//      // ID Token 가져오기
-//      guard let idToken = result.user.idToken?.tokenString else {
-//        print("Google ID Token is missing")
-//        return
-//      }
-//      
-//      print("🟢 Google ID Token: \(idToken)")
-//      
-//      Task {
-//        do {
-//          let socialLoginResponse = try await self.socialLoginUseCase.execute(providerName: .google, token: idToken)
-//          print("Google Login Success: \(socialLoginResponse)")
-//        } catch {
-//          print("Google Login Error: \(error.localizedDescription)")
-//        }
-//      }
-//    }
+    do {
+      let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+      guard let idToken = result.user.idToken?.tokenString else {
+        print("Google Login Error: ID Token is nil")
+        return
+      }
+      await handleGoogleLoginSuccess(idToken)
+    } catch {
+      print("Google Login Error: \(error.localizedDescription)")
+    }
+  }
+  
+  private func handleGoogleLoginSuccess(_ idToken: String) async {
+    print("🟢 Google ID Token: \(idToken)")
+    
+    do {
+      let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .google, token: idToken)
+      print("Google Login Success: \(socialLoginResponse)")
+      PCUserDefaultsService.shared.setSocialLoginType("google")
+      setRoute(userRole: socialLoginResponse.role)
+    } catch {
+      print("Social login failed: \(error.localizedDescription)")
+    }
   }
 }
 
@@ -193,5 +185,15 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
       destination = nil
       showBannedAlert = true
     }
+  }
+}
+
+private extension LoginViewModel {
+  var rootViewController: UIViewController? {
+    return UIApplication.shared.connectedScenes
+      .filter({ $0.activationState == .foregroundActive })
+      .compactMap { $0 as? UIWindowScene }
+      .compactMap { $0.keyWindow }
+      .first?.rootViewController
   }
 }
