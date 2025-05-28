@@ -14,6 +14,9 @@ let packageSettings = PackageSettings(
     "KakaoSDKAuth": .framework,
     "KakaoSDKCommon": .framework,
     "KakaoSDKUser": .framework,
+    "GTMAppAuth": .framework,
+    "AppAuth": .framework,
+    "GoogleSignIn": .framework,
   ],
   baseSettings: .settings()
 //      .settings(

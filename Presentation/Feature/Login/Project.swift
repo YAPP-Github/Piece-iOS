@@ -17,5 +17,6 @@ let project = Project.staticLibrary(
     .presentation(target: .Router),
     .externalDependency(dependency: .KakaoSDKAuth),
     .externalDependency(dependency: .KakaoSDKUser),
+    .externalDependency(dependency: .GoogleSignIn),
   ]
 )
