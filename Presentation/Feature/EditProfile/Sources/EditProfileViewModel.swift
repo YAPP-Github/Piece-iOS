@@ -100,6 +100,7 @@ final class EditProfileViewModel {
   var navigationItemColor: Color {
     isEditing ? .primaryDefault : .grayscaleDark3
   }
+  var isInitialLoad: Bool = true
   
   // TextField InfoMessage
   var nicknameInfoText: String {
@@ -374,6 +375,7 @@ final class EditProfileViewModel {
       
       isEditing = false
       isEditingNickName = false
+      isInitialLoad = false
     } catch {
       print(error.localizedDescription)
     }
