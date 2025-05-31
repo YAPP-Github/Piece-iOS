@@ -180,6 +180,7 @@ struct EditProfileView: View {
       leftButtonTap: { router.pop() },
       rightButton: Button {
         viewModel.handleAction(.tapConfirmButton)
+        focusField = nil
       } label: {
         Text("저장")
           .pretendard(.body_M_M)
