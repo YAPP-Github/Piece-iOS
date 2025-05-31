@@ -36,13 +36,14 @@ extension Project {
             "kakaokompassauth",
             "kakaolink"
           ],
-          "GIDClientID": "$(GIDClientID)",
+          "GIDClientID": "$(GIDClientID).apps.googleusercontent.com",
           "CFBundleShortVersionString": AppConstants.version,
           "CFBundleVersion": AppConstants.build,
           "CFBundleDisplayName": AppConstants.bundleDisplayName,
           "CFBundleURLTypes": [
             ["CFBundleURLSchemes": ["kakao$(NATIVE_APP_KEY)"]],
-            ["CFBundleURLSchemes": ["\(AppConstants.bundleId)"]]
+            ["CFBundleURLSchemes": ["\(AppConstants.bundleId)"]],
+            ["CFBundleURLSchemes": ["com.googleusercontent.apps.$(GIDClientID)"]],
           ],
           "ITSAppUsesNonExemptEncryption": false,
         ]
