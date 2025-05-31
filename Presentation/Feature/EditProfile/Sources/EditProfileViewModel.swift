@@ -30,6 +30,7 @@ final class EditProfileViewModel {
     case saveJob
     case saveContact
     case editContact
+    case updateEditingState
   }
   
   init(
@@ -49,6 +50,9 @@ final class EditProfileViewModel {
   private let getProfileBasicUseCase: GetProfileBasicUseCase
   private let checkNicknameUseCase: CheckNicknameUseCase
   private let uploadProfileImageUseCase: UploadProfileImageUseCase
+  
+  // 초기 패치해온 프로필 데이터
+  private var initialProfile: ProfileBasicModel?
   
   // TextField Bind
   var profileImage: UIImage? = nil
@@ -259,6 +263,8 @@ final class EditProfileViewModel {
       tapContactBottomSheetSaveButton()
     case .editContact:
       tapContactBottomSheetEditButton()
+    case .updateEditingState:
+      updateEditingState()
     }
   }
   
@@ -357,7 +363,10 @@ final class EditProfileViewModel {
   private func getBasicProfile() async {
     do {
       let profile = try await getProfileBasicUseCase.execute()
+      // 초기 프로필 저장
+      initialProfile = profile
       
+      // 현재 데이터 바인딩
       nickname = profile.nickname
       description = profile.description
       birthDate = profile.birthdate.toCompactDateString
@@ -389,6 +398,25 @@ final class EditProfileViewModel {
           print("이미지 다운로드 실패: \(error.localizedDescription)")
           return nil
       }
+  }
+  
+  private func updateEditingState() {
+    guard let initial = initialProfile else { return }
+    
+    let hasChanges =
+    nickname != initial.nickname ||
+    description != initial.description ||
+    birthDate != initial.birthdate.toCompactDateString ||
+    location != initial.location ||
+    height != String(initial.height) ||
+    weight != String(initial.weight) ||
+    smokingStatus != initial.smokingStatus ||
+    snsActivityLevel != initial.snsActivityLevel ||
+    job != initial.job ||
+    contacts.map { $0.type } != initial.contacts.map { $0.type } ||
+    contacts.map { $0.value } != initial.contacts.map { $0.value }
+    
+    isEditing = hasChanges
   }
 }
 
@@ -427,6 +455,7 @@ extension EditProfileViewModel {
     }
     
     isLocationSheetPresented = false
+    updateEditingState()
   }
 }
 
@@ -513,6 +542,7 @@ extension EditProfileViewModel {
     }
     
     isJobSheetPresented = false
+    updateEditingState()
   }
 }
 
@@ -533,6 +563,7 @@ extension EditProfileViewModel {
     if let index = contacts.firstIndex(where: { $0.id == contact.id }),
        index > 0 {
       contacts.remove(at: index)
+      updateEditingState()
     }
   }
   
@@ -543,6 +574,8 @@ extension EditProfileViewModel {
       if let itemIndex = contactBottomSheetItems.firstIndex(where: { $0.icon == targetIcon }) {
         contactBottomSheetItems[itemIndex].state = .selected
       }
+      
+      updateEditingState()
     }
   }
   
@@ -588,6 +621,7 @@ extension EditProfileViewModel {
     
     prevSelectedContact = nil
     isContactTypeChangeSheetPresented = false
+    updateEditingState()
   }
   
   func tapContactBottomSheetSaveButton() {
@@ -601,6 +635,7 @@ extension EditProfileViewModel {
     }
     
     isContactSheetPresented = false
+    updateEditingState()
   }
 }
 

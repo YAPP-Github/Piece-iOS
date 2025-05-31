@@ -275,7 +275,7 @@ struct EditProfileView: View {
     }
     .onChange(of: viewModel.nickname) { _, _ in
       viewModel.isEditingNickName = true
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
   }
   
@@ -296,7 +296,7 @@ struct EditProfileView: View {
       focusField = "birthDate"
     }
     .onChange(of: viewModel.description) { _, _ in
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
   }
   
@@ -314,7 +314,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.birthDate = String(newValue.filter { $0.isNumber }.prefix(8))
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
     .textContentType(.birthdate)
     .keyboardType(.numberPad)
@@ -352,7 +352,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.height = newValue.filter { $0.isNumber }
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
     .keyboardType(.numberPad)
   }
@@ -370,7 +370,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.weight = newValue.filter { $0.isNumber }
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
     .keyboardType(.numberPad)
   }
@@ -392,8 +392,8 @@ struct EditProfileView: View {
       focusField = nil
       viewModel.handleAction(.tapJob)
     }
-    .onChange(of: viewModel.job) { _, _
-      in viewModel.isEditing = true
+    .onChange(of: viewModel.job) { _, _ in
+      viewModel.handleAction(.updateEditingState)
     }
   }
   
@@ -405,13 +405,13 @@ struct EditProfileView: View {
       HStack {
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
           viewModel.smokingStatus = "흡연"
-          viewModel.isEditing = true
           focusField = nil
+          viewModel.handleAction(.updateEditingState)
         }
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
           viewModel.smokingStatus = "비흡연"
-          viewModel.isEditing = true
           focusField = nil
+          viewModel.handleAction(.updateEditingState)
         }
       }
       Text(viewModel.smokingInfoText)
@@ -432,7 +432,7 @@ struct EditProfileView: View {
           text: "활동"
         ) {
           viewModel.snsActivityLevel = "활동"
-          viewModel.isEditing = true
+          viewModel.handleAction(.updateEditingState)
         }
         SelectCard(
           isEditing: true,
@@ -440,7 +440,7 @@ struct EditProfileView: View {
           text: "은둔"
         ){
           viewModel.snsActivityLevel = "은둔"
-          viewModel.isEditing = true
+          viewModel.handleAction(.updateEditingState)
         }
       }
       Text(viewModel.snsInfoText)
@@ -545,7 +545,7 @@ fileprivate struct EditContactContainer: View {
         if viewModel.isAllowedInput(newContact.value) {
           viewModel.contacts[index].value = newContact.value
           viewModel.contacts[index].type = ContactModel.ContactType(rawValue: newContact.type.rawValue) ?? .unknown
-          viewModel.isEditing = true
+          viewModel.handleAction(.updateEditingState)
         }
       }
     )
