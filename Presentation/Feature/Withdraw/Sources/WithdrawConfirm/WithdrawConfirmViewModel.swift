@@ -48,6 +48,8 @@ final class WithdrawConfirmViewModel: NSObject {
       await revokeAppleIDCredential()
     case "kakao":
       await revokeKakao()
+    case "google":
+      await revokeGoogle()
     default:
       print("Unsupported login type: \(socialLoginType)")
     }
@@ -119,6 +121,32 @@ final class WithdrawConfirmViewModel: NSObject {
       }
     } catch {
       print("\(error.localizedDescription)")
+    }
+  }
+  
+  private func revokeGoogle() async {
+    print("🔍 Google 탈퇴 진행")
+    
+    do {
+      _ = try await deleteUserAccountUseCase.execute(
+        providerName: "google",
+        oauthCredential: "",
+        reason: withdrawReason
+      )
+      print("✅ DeleteUserAccount success")
+      
+      await MainActor.run {
+        initialize()
+      }
+    } catch let error as NSError {
+      if error.localizedDescription.contains("Status Code: 200") {
+        print("✅ DeleteUserAccount 성공 (Status 200)")
+        await MainActor.run {
+          initialize()
+        }
+      } else {
+        print("\(error.localizedDescription)")
+      }
     }
   }
   
