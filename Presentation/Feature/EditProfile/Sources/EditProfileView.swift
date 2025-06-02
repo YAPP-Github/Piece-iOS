@@ -518,7 +518,11 @@ fileprivate struct EditContactContainer: View {
         }
       }
       .onChange(of: viewModel.contacts) { oldValue, newValue in
-        handleContactsChange(oldValue: oldValue, newValue: newValue)
+        if !viewModel.isInitialLoad {
+          handleContactsChange(oldValue: oldValue, newValue: newValue)
+        } else {
+          viewModel.isInitialLoad = false
+        }
       }
     }
   }
@@ -568,10 +572,6 @@ fileprivate struct EditContactContainer: View {
   }
   
   private func handleContactsChange(oldValue: [ContactModel], newValue: [ContactModel]) {
-    if viewModel.isInitialLoad {
-      return
-    }
-    
     let oldIds = Set(oldValue.map { $0.id })
     let newIds = Set(newValue.map { $0.id })
 
