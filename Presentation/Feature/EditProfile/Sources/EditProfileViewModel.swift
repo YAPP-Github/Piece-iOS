@@ -296,6 +296,7 @@ final class EditProfileViewModel {
           smokingStatus: smokingStatus,
           snsActivityLevel: snsActivityLevel,
           imageUri: imageURL.absoluteString,
+          pendingImageUrl: nil,
           contacts: contacts
         )
         
