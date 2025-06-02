@@ -31,6 +31,7 @@ final class EditProfileViewModel {
     case saveContact
     case editContact
     case updateEditingState
+    case updateEditingNicknameState
   }
   
   init(
@@ -54,6 +55,7 @@ final class EditProfileViewModel {
   // 초기 패치해온 프로필 데이터
   private var initialProfile: ProfileBasicModel?
   
+  var nicknameState: NicknameState = .normal
   // TextField Bind
   var profileImage: UIImage? = nil
   var nickname: String = ""
@@ -68,7 +70,6 @@ final class EditProfileViewModel {
   
   // isValid
   var isValidProfileImage: Bool = false
-  var isValidNickname: Bool = true
   var isDescriptionValid: Bool {
     !description.isEmpty && description.count <= 20
   }
@@ -93,42 +94,17 @@ final class EditProfileViewModel {
     isVaildWeight &&
     !job.isEmpty &&
     isContactsValid &&
-    !isEditingNickName
   }
   var isEditing: Bool = false {
     didSet {
       print("isEditing 상태 변경: \(isEditing)")
     }
   }
-  var isEditingNickName: Bool = false
   var navigationItemColor: Color {
     isEditing ? .primaryDefault : .grayscaleDark3
   }
   var isInitialLoad: Bool = true
   
-  // TextField InfoMessage
-  var nicknameInfoText: String {
-    if !isEditingNickName {
-      return ""
-    } else if nickname.isEmpty && didTapnextButton {
-      return "필수 항목을 입력해 주세요."
-    } else if nickname.count > 6 {
-      return "6자 이하로 작성해 주세요."
-    } else if didCheckDuplicates && !isValidNickname {
-      return "이미 사용 중인 닉네임입니다."
-    } else if didCheckDuplicates && isValidNickname {
-      return "사용할 수 있는 닉네임입니다."
-    } else {
-      return ""
-    }
-  }
-  var nicknameInfoTextColor: Color  {
-    if didCheckDuplicates && isValidNickname {
-      return Color.primaryDefault
-    } else {
-      return Color.systemError
-    }
-  }
   var descriptionInfoText: String {
     if description.isEmpty && didTapnextButton {
       return "필수 항목을 입력해 주세요."
@@ -201,7 +177,6 @@ final class EditProfileViewModel {
   var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
   var selectedItem: PhotosPickerItem? = nil
-  var didCheckDuplicates: Bool = true
   var didTapnextButton: Bool = false
   
   var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
@@ -265,6 +240,8 @@ final class EditProfileViewModel {
       tapContactBottomSheetEditButton()
     case .updateEditingState:
       updateEditingState()
+    case .updateEditingNicknameState:
+      updateEditingNicknameState()
     }
   }
   
@@ -309,9 +286,9 @@ final class EditProfileViewModel {
   }
   
   private func handleTapVaildNicknameButton() async {
-    isValidNickname = (try? await checkNicknameUseCase.execute(nickname: nickname)) ?? false
-    didCheckDuplicates = true
-    isEditingNickName = false
+    let isValidNickname = (try? await checkNicknameUseCase.execute(nickname: nickname)) ?? false
+    let nickNameState: NicknameState = isValidNickname ? .success : .duplicated
+    updateEditingNicknameState(to: nickNameState)
   }
   
   @MainActor
@@ -399,13 +376,31 @@ final class EditProfileViewModel {
           print("이미지 다운로드 실패: \(error.localizedDescription)")
           return nil
       }
+  private func updateEditingNicknameState(to state: NicknameState? = nil) {
+    if let state {
+      nicknameState = state
+      return
+    }
+    
+    guard let initial = initialProfile else { return }
+    
+    nicknameState = determineNicknameState(initial: initial)
+    updateEditingState()
+  }
+  
+  private func determineNicknameState(initial: ProfileBasicModel) -> NicknameState {
+      guard nickname != initial.nickname else { return .normal }
+      guard !nickname.isEmpty else { return .empty }
+      guard nickname.count <= 6 else { return .overLength }
+      
+      return .editing
   }
   
   private func updateEditingState() {
     guard let initial = initialProfile else { return }
     
     let hasChanges =
-    nickname != initial.nickname ||
+    (nicknameState.isEnableConfirmButton && nickname != initial.nickname) ||
     description != initial.description ||
     birthDate != initial.birthdate.toCompactDateString ||
     location != initial.location ||
@@ -644,5 +639,59 @@ extension EditProfileViewModel {
 extension EditProfileViewModel {
   private enum Constant {
     static let contactModelCount: Int = 4
+  }
+  
+  enum NicknameState {
+    case empty // 비어있을 때, 텍스트 입력 시 지정 가능
+    case normal // 초기와 같음, 텍스트 입력 시 지정 가능
+    case editing // 초기와 다름, 텍스트 입력 시 지정 가능
+    case overLength // 6글자 초과, 텍스트 입력 시 지정 가능
+    case duplicated // 중복된 상태, 중복버튼 누를 때 지정 가능
+    case success // 가능한 닉네임, 중복버튼 누를 떄 지정 가능
+    case unchecked // 수정은 했지만 중복검사 안함, 저장버튼 누를 때만 지정 가능 (저장버튼 누를때 editing인 경우 unchecked로 넘어감)
+    
+    var infoText: String {
+      switch self {
+      case .normal, .editing, .empty:
+        return ""
+      case .duplicated:
+        return "이미 사용 중인 닉네임입니다."
+      case .success:
+        return "사용할 수 있는 닉네임입니다."
+      case .overLength:
+        return "6자 이하로 작성해주세요."
+      case .unchecked:
+        return "닉네임 중복 검사를 진행해 주세요."
+      }
+    }
+    
+    var infoTextColor: Color {
+      switch self {
+      case .normal, .editing, .empty:
+        return Color.clear
+      case .duplicated, .overLength, .unchecked:
+        return Color.systemError
+      case .success:
+        return Color.primaryDefault
+      }
+    }
+    
+    var isEnableNickNameCheckButton: Bool {
+      switch self {
+      case .editing, .unchecked, .duplicated:
+        return true
+      case .empty, .normal, .success, .overLength:
+        return false
+      }
+    }
+    
+    var isEnableConfirmButton: Bool {
+      switch self {
+      case .success, .editing, .normal:
+        return true
+      case .empty, .duplicated, .overLength, .unchecked:
+        return false
+      }
+    }
   }
 }

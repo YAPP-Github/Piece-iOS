@@ -260,23 +260,22 @@ struct EditProfileView: View {
     )
     .withButton(
       RoundedButton(
-        type: viewModel.isEditingNickName ? .solid : .disabled,
+        type: viewModel.nicknameState.isEnableNickNameCheckButton ? .solid : .disabled,
         buttonText: "중복검사",
         width: .maxWidth,
         action: { viewModel.handleAction(.tapVaildNickName)}
       )
     )
     .infoText(
-      viewModel.nicknameInfoText,
-      color: viewModel.nicknameInfoTextColor
+      viewModel.nicknameState.infoText,
+      color: viewModel.nicknameState.infoTextColor
     )
     .textMaxLength(6)
     .onSubmit {
       focusField = "description"
     }
     .onChange(of: viewModel.nickname) { _, _ in
-      viewModel.isEditingNickName = true
-      viewModel.handleAction(.updateEditingState)
+      viewModel.handleAction(.updateEditingNicknameState)
     }
   }
   
