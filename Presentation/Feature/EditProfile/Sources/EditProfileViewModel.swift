@@ -59,6 +59,7 @@ final class EditProfileViewModel {
   
   var imageState: ImageState = .normal
   var nicknameState: NicknameState = .normal
+  
   // TextField Bind
   var profileImageUrl: String = ""
   var nickname: String = ""
@@ -85,9 +86,10 @@ final class EditProfileViewModel {
   var isContactsValid: Bool {
     return contacts.allSatisfy { !$0.value.isEmpty }
   }
-  var isNextButtonEnabled: Bool {
-    return isValidProfileImage &&
-    didCheckDuplicates && isValidNickname &&
+  
+  var isConfirmButtonEnable: Bool {
+    isEditing &&
+    nicknameState.isEnableConfirmButton && // success editing normal
     !nickname.isEmpty &&
     !description.isEmpty &&
     isValidBirthDate &&
@@ -95,17 +97,15 @@ final class EditProfileViewModel {
     isValidHeight &&
     isVaildWeight &&
     !job.isEmpty &&
-    isContactsValid &&
+    isContactsValid
   }
-  var isEditing: Bool = false {
-    didSet {
-      print("isEditing 상태 변경: \(isEditing)")
-    }
+  
+  var isEditing: Bool = false
   var canEditImage: Bool {
     imageState != .pending
   }
   var navigationItemColor: Color {
-    isEditing ? .primaryDefault : .grayscaleDark3
+    isConfirmButtonEnable ? .primaryDefault : .grayscaleDark3
   }
   var isInitialLoad: Bool = true
   
@@ -258,21 +258,16 @@ final class EditProfileViewModel {
   }
   
   private func handleTapConfirmButton() async {
-    print("isNextButtonEnabled: \(isNextButtonEnabled)")
+    if nicknameState == .editing {
+      updateEditingNicknameState(to: .unchecked)
+    }
     
-    if profileImage == nil || nickname.isEmpty || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
+    if profileImageUrl.isEmpty || !nicknameState.isEnableConfirmButton || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
       didTapnextButton = true
       await isToastVisible()
     } else {
       do {
-        guard let profileImage = profileImage else { return }
-        guard let imageData = profileImage.resizedAndCompressedData(targetSize: CGSize(width: 400, height: 400), compressionQuality: 0.5) else {
-          print("이미지 데이터 변환 실패")
-          return
-        }
-        
-        let imageURL = try await uploadProfileImageUseCase.execute(image: imageData)
-        print("이미지 업로드 성공: \(imageURL)")
+        guard !profileImageUrl.isEmpty else { return }
         
         let basicInfo = ProfileBasicModel(
           nickname: nickname,
@@ -289,8 +284,12 @@ final class EditProfileViewModel {
           contacts: contacts
         )
         
-        _ = try await updateProfileBasicUseCase.execute(profile: basicInfo)
-        isEditing = false
+        let updatedProfile = try await updateProfileBasicUseCase.execute(profile: basicInfo)
+        initialProfile = updatedProfile
+        imageState = .pending
+        updateEditingState()
+        updateEditingNicknameState()
+        didTapnextButton = false
       } catch {
         print(error.localizedDescription)
       }

@@ -186,7 +186,7 @@ struct EditProfileView: View {
           .pretendard(.body_M_M)
           .foregroundStyle(viewModel.navigationItemColor)
       }
-        .disabled(!viewModel.isEditing)
+        .disabled(!viewModel.isConfirmButtonEnable)
     )
   }
   
