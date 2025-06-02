@@ -32,6 +32,8 @@ final class EditProfileViewModel {
     case editContact
     case updateEditingState
     case updateEditingNicknameState
+    case setImageFromCamera(UIImage)
+    case selectPhoto(PhotosPickerItem?)
   }
   
   init(
@@ -55,9 +57,10 @@ final class EditProfileViewModel {
   // 초기 패치해온 프로필 데이터
   private var initialProfile: ProfileBasicModel?
   
+  var imageState: ImageState = .normal
   var nicknameState: NicknameState = .normal
   // TextField Bind
-  var profileImage: UIImage? = nil
+  var profileImageUrl: String = ""
   var nickname: String = ""
   var description: String = ""
   var birthDate: String = ""
@@ -69,7 +72,6 @@ final class EditProfileViewModel {
   var contacts: [ContactModel] = [ContactModel(type: .kakao, value: "")]
   
   // isValid
-  var isValidProfileImage: Bool = false
   var isDescriptionValid: Bool {
     !description.isEmpty && description.count <= 20
   }
@@ -99,6 +101,8 @@ final class EditProfileViewModel {
     didSet {
       print("isEditing 상태 변경: \(isEditing)")
     }
+  var canEditImage: Bool {
+    imageState != .pending
   }
   var navigationItemColor: Color {
     isEditing ? .primaryDefault : .grayscaleDark3
@@ -194,6 +198,9 @@ final class EditProfileViewModel {
   var isContactSheetPresented: Bool = false
   var isProfileImageSheetPresented: Bool = false
   var showToast: Bool = false
+  var canShowPendingOverlay: Bool {
+      imageState == .pending
+  }
   
   func handleAction(_ action: Action) {
     switch action {
@@ -242,6 +249,11 @@ final class EditProfileViewModel {
       updateEditingState()
     case .updateEditingNicknameState:
       updateEditingNicknameState()
+    case .setImageFromCamera(let image):
+        Task { await setImageFromCamera(image) }
+    case .selectPhoto(let item):
+        selectedItem = item
+        Task { await loadImage() }
     }
   }
   
@@ -272,7 +284,7 @@ final class EditProfileViewModel {
           location: location,
           smokingStatus: smokingStatus,
           snsActivityLevel: snsActivityLevel,
-          imageUri: imageURL.absoluteString,
+          imageUri: profileImageUrl,
           pendingImageUrl: nil,
           contacts: contacts
         )
@@ -311,6 +323,23 @@ final class EditProfileViewModel {
       return regex.firstMatch(in: input, options: [], range: range) != nil
   }
   
+  private func uploadProfileImage(_ image: UIImage) async {
+    guard let imageData = image.resizedAndCompressedData(
+      targetSize: CGSize(width: 400, height: 400),
+      compressionQuality: 0.5
+    ) else { return }
+    
+    do {
+      let imageURL = try await uploadProfileImageUseCase.execute(image: imageData)
+      profileImageUrl = imageURL.absoluteString
+      self.imageState = .editing
+      handleAction(.updateEditingState)
+      print("이미지 업로드 성공: \(imageURL)")
+    } catch {
+      print("이미지 업로드 중 오류 발생: \(error.localizedDescription)")
+    }
+  }
+  
   func loadImage() async {
     guard let selectedItem else {
       print("선택된 아이템이 없습니다.")
@@ -320,9 +349,7 @@ final class EditProfileViewModel {
     do {
       if let data = try await selectedItem.loadTransferable(type: Data.self),
          let image = UIImage(data: data) {
-        self.profileImage = image  // UIImage로 저장
-        self.isValidProfileImage = true
-        self.isEditing = true
+        await uploadProfileImage(image)
       } else {
         print("이미지 데이터를 로드할 수 없습니다.")
       }
@@ -331,10 +358,8 @@ final class EditProfileViewModel {
     }
   }
   
-  func setImageFromCamera(_ image: UIImage) {
-    self.profileImage = image
-    self.isValidProfileImage = true
-    self.isEditing = true
+  func setImageFromCamera(_ image: UIImage) async {
+    await uploadProfileImage(image)
   }
   
   @MainActor
@@ -355,27 +380,34 @@ final class EditProfileViewModel {
       snsActivityLevel = profile.snsActivityLevel
       job = profile.job
       contacts = profile.contacts
-      
-      if let imageUrl = URL(string: profile.imageUri) {
-        profileImage = await fetchImage(from: imageUrl)
-      }
-      
-      isEditing = false
-      isEditingNickName = false
-      isInitialLoad = false
+
+      setImageState(for: profile)
+      setImage(for: profile)
     } catch {
       print(error.localizedDescription)
     }
   }
   
-  private func fetchImage(from url: URL) async -> UIImage? {
-      do {
-          let (data, _) = try await URLSession.shared.data(from: url)
-          return UIImage(data: data)
-      } catch {
-          print("이미지 다운로드 실패: \(error.localizedDescription)")
-          return nil
-      }
+  private func setImageState(for profile: ProfileBasicModel) {
+    if profile.pendingImageUrl != nil {
+      self.imageState = .pending
+    } else {
+      self.imageState = .normal
+    }
+  }
+  
+  private func setImage(for profile: ProfileBasicModel) {
+    switch imageState {
+    case .normal:
+      profileImageUrl = profile.imageUri
+    case .pending:
+      guard let pendingImageUrl = profile.pendingImageUrl else { return }
+      profileImageUrl = pendingImageUrl
+    default:
+      break
+    }
+  }
+
   private func updateEditingNicknameState(to state: NicknameState? = nil) {
     if let state {
       nicknameState = state
@@ -400,6 +432,7 @@ final class EditProfileViewModel {
     guard let initial = initialProfile else { return }
     
     let hasChanges =
+    imageState == .editing ||
     (nicknameState.isEnableConfirmButton && nickname != initial.nickname) ||
     description != initial.description ||
     birthDate != initial.birthdate.toCompactDateString ||
@@ -639,6 +672,12 @@ extension EditProfileViewModel {
 extension EditProfileViewModel {
   private enum Constant {
     static let contactModelCount: Int = 4
+  }
+  
+  enum ImageState {
+    case normal // 심사중 아님
+    case editing // 이미지 변경했는데 아직 저장안함
+    case pending // 이미지 심사중
   }
   
   enum NicknameState {
