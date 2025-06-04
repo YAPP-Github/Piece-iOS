@@ -81,6 +81,7 @@ struct VerifingContactView: View {
             viewModel.phoneNumber = newValue.filter { $0.isNumber }
           }
           .textContentType(.telephoneNumber)
+          .disabled(viewModel.isPhoneVerificationCompleted)
           
           if viewModel.showVerificationField {
             PCTextField(
@@ -104,6 +105,7 @@ struct VerifingContactView: View {
                 }
               )
             )
+            .disabled(viewModel.isPhoneVerificationCompleted)
           }
           Spacer()
           
