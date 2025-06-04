@@ -69,13 +69,6 @@ final class HomeViewModel {
     self.putSettingsMatchNotificationUseCase = putSettingsMatchNotificationUseCase
     self.putSettingsBlockAcquaintanceUseCase = putSettingsBlockAcquaintanceUseCase
     self.patchLogoutUseCase = patchLogoutUseCase
-    
-    let userRole = PCUserDefaultsService.shared.getUserRole()
-    if userRole == .USER {
-      isProfileTabDisabled = false
-    } else {
-      isProfileTabDisabled = true
-    }
   }
   
   // profile
@@ -104,5 +97,7 @@ final class HomeViewModel {
   
   // MARK: - State
   var selectedTab: Tab = .home
-  var isProfileTabDisabled: Bool
+  var isProfileTabDisabled: Bool {
+    PCUserDefaultsService.shared.getUserRole() != .USER
+  }
 }
