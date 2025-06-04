@@ -42,20 +42,23 @@ final class WithdrawConfirmViewModel: NSObject {
   }
   
   private func handleConfirmWithdraw() async {
-    let socialLoginType = PCUserDefaultsService.shared.getSocialLoginType()
+    guard let socialLoginType = PCUserDefaultsService.shared.getSocialLoginType() else {
+      print("Unsupported login type")
+      return
+    }
+    let providerName = socialLoginType.rawValue
+    
     switch socialLoginType {
-    case "apple":
-      await revokeAppleIDCredential()
-    case "kakao":
-      await revokeKakao()
-    case "google":
-      await revokeGoogle()
-    default:
-      print("Unsupported login type: \(socialLoginType)")
+    case .apple:
+      await revokeAppleIDCredential(with: providerName)
+    case .kakao:
+      await revokeKakao(with: providerName)
+    case .google:
+      await revokeGoogle(with: providerName)
     }
   }
   
-  private func revokeKakao() async {
+  private func revokeKakao(with providerName: String) async {
     print("🔍 Kakao 탈퇴 진행")
     
     await withCheckedContinuation { continuation in
@@ -72,7 +75,7 @@ final class WithdrawConfirmViewModel: NSObject {
     do {
       do {
         _ = try await deleteUserAccountUseCase.execute(
-          providerName: "kakao",
+          providerName: providerName,
           oauthCredential: "",
           reason: withdrawReason
         )
@@ -95,7 +98,7 @@ final class WithdrawConfirmViewModel: NSObject {
     }
   }
   
-  private func revokeAppleIDCredential() async {
+  private func revokeAppleIDCredential(with providerName: String) async {
     print("🔍 Apple 탈퇴 진행")
     
     do {
@@ -103,7 +106,7 @@ final class WithdrawConfirmViewModel: NSObject {
       print("✅ Apple authorization code : \(appleIDProvider.authorizationCode)")
       do {
         _ = try await deleteUserAccountUseCase.execute(
-          providerName: "apple",
+          providerName: providerName,
           oauthCredential: appleIDProvider.authorizationCode,
           reason: withdrawReason
         )
@@ -124,12 +127,12 @@ final class WithdrawConfirmViewModel: NSObject {
     }
   }
   
-  private func revokeGoogle() async {
+  private func revokeGoogle(with providerName: String) async {
     print("🔍 Google 탈퇴 진행")
     
     do {
       _ = try await deleteUserAccountUseCase.execute(
-        providerName: "google",
+        providerName: providerName,
         oauthCredential: "",
         reason: withdrawReason
       )

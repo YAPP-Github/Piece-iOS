@@ -98,7 +98,8 @@ final class LoginViewModel: NSObject {
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .kakao, token: token)
         print("Social login success: \(socialLoginResponse)")
-        PCUserDefaultsService.shared.setSocialLoginType("kakao")
+        let socialLoginType = SocialLoginType.kakao
+        PCUserDefaultsService.shared.setSocialLoginType(socialLoginType)
         setRoute(userRole: socialLoginResponse.role)
       } catch {
         print("Social login failed: \(error.localizedDescription)")
@@ -130,7 +131,8 @@ final class LoginViewModel: NSObject {
     do {
       let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .google, token: idToken)
       print("Google Login Success: \(socialLoginResponse)")
-      PCUserDefaultsService.shared.setSocialLoginType("google")
+      let socialLoginType = SocialLoginType.google
+      PCUserDefaultsService.shared.setSocialLoginType(socialLoginType)
       setRoute(userRole: socialLoginResponse.role)
     } catch {
       print("Social login failed: \(error.localizedDescription)")
@@ -163,7 +165,8 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
       do {
         let socialLoginResponse = try await socialLoginUseCase.execute(providerName: .apple, token: authorizationCode)
         print("Apple Login Success: \(socialLoginResponse)")
-        PCUserDefaultsService.shared.setSocialLoginType("apple")
+        let socialLoginType = SocialLoginType.apple
+        PCUserDefaultsService.shared.setSocialLoginType(socialLoginType)
         setRoute(userRole: socialLoginResponse.role)
       } catch {
         print("Apple Login Error: \(error.localizedDescription)")
