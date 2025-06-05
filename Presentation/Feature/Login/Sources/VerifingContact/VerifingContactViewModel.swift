@@ -104,12 +104,6 @@ final class VerifingContactViewModel {
     do {
       print(phoneNumber, verificationCode)
       let response = try await verifySMSCodeUseCase.execute(phoneNumber: phoneNumber, code: verificationCode)
-      if let accessToken = response.accessToken {
-        PCKeychainManager.shared.save(.accessToken, value: accessToken)
-      }
-      if let refreshToken = response.refreshToken {
-        PCKeychainManager.shared.save(.refreshToken, value: refreshToken)
-      }
       if response.isPhoneNumberDuplicated {
         if let oauthProviderName = response.oauthProvider {
           self.oauthProviderName = oauthProviderName.description
