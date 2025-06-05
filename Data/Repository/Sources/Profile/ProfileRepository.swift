@@ -7,6 +7,7 @@
 
 import DTO
 import Entities
+import LocalStorage
 import Foundation
 import PCNetwork
 import RepositoryInterfaces
@@ -22,6 +23,9 @@ final class ProfileRepository: ProfileRepositoryInterface {
     let dto = profile.toDto()
     let endpoint = ProfileEndpoint.postProfile(dto)
     let responseDto: PostProfileResponseDTO = try await networkService.request(endpoint: endpoint)
+    PCKeychainManager.shared.save(.accessToken, value: responseDto.accessToken)
+    PCKeychainManager.shared.save(.refreshToken, value: responseDto.refreshToken)
+    networkService.updateCredentials()
     
     return responseDto.toDomain()
   }
