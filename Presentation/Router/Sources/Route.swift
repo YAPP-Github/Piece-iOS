@@ -18,7 +18,7 @@ public enum Route: Hashable {
   case verifyContact
   case AvoidContactsGuide
   case termsAgreement
-  case termsWebView(title: String, url: String)
+  case termsWebView(term: TermModel)
   case checkPremission
   case completeSignUp
   

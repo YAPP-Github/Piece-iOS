@@ -192,8 +192,8 @@ public struct Coordinator {
       let fetchTermsUseCase = UseCaseFactory.createFetchTermsUseCase(repository: termsRepository)
       SignUpViewFactory.createTermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
       
-    case let .termsWebView(title, url):
-      SignUpViewFactory.createTermsWebView(title: title, url: url)
+    case let .termsWebView(term):
+      SignUpViewFactory.createTermsWebView(term: term)
       
     case .checkPremission:
       let requestNotificationPermissionUseCase = UseCaseFactory.createRequestNotificationPermissionUseCase()
