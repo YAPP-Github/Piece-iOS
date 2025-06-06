@@ -31,7 +31,7 @@ final class VerifingContactViewModel {
   
   var showDuplicatePhoneNumberAlert: Bool = false
   private(set) var showVerificationField: Bool = false
-  private(set) var isActiveNextButton: Bool = false
+  private(set) var isPhoneVerificationCompleted: Bool = false
   private(set) var tapNextButtonFlag: Bool = false
   private(set) var recivedCertificationNumberButtonText: String = "인증번호 받기"
   private(set) var recivedCertificationNumberButtonWidth = Constants.buttonDefaultWidth
@@ -43,10 +43,14 @@ final class VerifingContactViewModel {
   var phoneNumber: String = ""
   var verificationCode: String = ""
   var isVerificationCodeValid: Bool {
-      !verificationCode.isEmpty && verificationCode.count >= 4
+    !verificationCode.isEmpty
+    && verificationCode.count >= 4
+    && !isPhoneVerificationCompleted
   }
   var isPhoneNumberValid: Bool {
-      !phoneNumber.isEmpty && (phoneNumber.count == 11 || phoneNumber.count == 10)
+    !phoneNumber.isEmpty
+    && (phoneNumber.count == 11 || phoneNumber.count == 10)
+    && !isPhoneVerificationCompleted
   }
   var phoneNumberTextfieldButtonType: RoundedButton.ButtonType {
     buttonType(for: isPhoneNumberValid)
@@ -55,10 +59,12 @@ final class VerifingContactViewModel {
     buttonType(for: isVerificationCodeValid)
   }
   var nextButtonType: RoundedButton.ButtonType {
-    buttonType(for: isActiveNextButton)
+    buttonType(for: isPhoneVerificationCompleted)
   }
   var timerText: String {
-    timeRemaining.formattedTime
+    isPhoneVerificationCompleted
+    ? ""
+    : timeRemaining.formattedTime
   }
   
   init(
@@ -118,7 +124,7 @@ final class VerifingContactViewModel {
       }
       
       await MainActor.run {
-        isActiveNextButton = true
+        isPhoneVerificationCompleted = true
         verificationFieldInfoText = "전화번호 인증을 완료했어요"
         verrificationFieldInfoTextColor = .primaryDefault
       }
