@@ -180,12 +180,13 @@ struct EditProfileView: View {
       leftButtonTap: { router.pop() },
       rightButton: Button {
         viewModel.handleAction(.tapConfirmButton)
+        focusField = nil
       } label: {
         Text("저장")
           .pretendard(.body_M_M)
           .foregroundStyle(viewModel.navigationItemColor)
       }
-        .disabled(!viewModel.isEditing)
+        .disabled(!viewModel.isConfirmButtonEnable)
     )
   }
   
@@ -193,34 +194,9 @@ struct EditProfileView: View {
     Button {
       viewModel.isProfileImageSheetPresented = true
     } label: {
-      Group {
-        if let image = viewModel.profileImage {
-          Image(uiImage: image)
-            .resizable()
-            .scaledToFill()
-            .frame(width: 120, height: 120)
-            .clipShape(Circle())
-        } else {
-          DesignSystemAsset.Images.profileImageNodata.swiftUIImage
-        }
-      }
-      .overlay(alignment: .bottomTrailing) {
-        DesignSystemAsset.Icons.plus24.swiftUIImage
-          .renderingMode(.template)
-          .foregroundStyle(Color.grayscaleWhite)
-          .background(
-            Circle()
-              .frame(width: 33, height: 33)
-              .foregroundStyle(Color.primaryDefault)
-              .overlay(
-                Circle()
-                  .stroke(Color.white, lineWidth: 3)
-              )
-          )
-      }
-      .padding(.top, 24)
-      .padding(.bottom, 8)
+      profileImageView
     }
+    .disabled(!viewModel.canEditImage)
     .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
       ActionSheet(
         title: Text("프로필 사진 선택"),
@@ -232,21 +208,62 @@ struct EditProfileView: View {
       )
     }
     .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
-      CameraPicker {
-        viewModel.setImageFromCamera($0)
-      }
+      CameraPicker { viewModel.handleAction(.setImageFromCamera($0)) }
     }
     .photosPicker(
       isPresented: $viewModel.isPhotoSheetPresented,
       selection: Binding(
         get: { viewModel.selectedItem },
-        set: {
-          viewModel.selectedItem = $0
-          Task { await viewModel.loadImage() }
-        }
+        set: { viewModel.handleAction(.selectPhoto($0)) }
       ),
       matching: .images
     )
+  }
+  
+  private var profileImageView: some View {
+    AsyncImage(url: URL(string: viewModel.profileImageUrl)) { image in
+      image
+        .resizable()
+        .scaledToFill()
+        .frame(width: 120, height: 120)
+        .clipShape(Circle())
+        .overlay {
+          if viewModel.canShowPendingOverlay {
+            pendingOverlay
+          }
+        }
+    } placeholder: {
+      DesignSystemAsset.Images.profileImageNodata.swiftUIImage
+    }
+    .overlay(alignment: .bottomTrailing) {
+      profileEditButton
+        .padding(.bottom, 6)
+        .padding(.trailing, 6)
+    }
+  }
+  
+  private var pendingOverlay: some View {
+    Text("심사중")
+      .pretendard(.heading_S_SB)
+      .foregroundStyle(Color.grayscaleWhite)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(Color.alphaBlack40)
+      .clipShape(Circle())
+  }
+  
+  private var profileEditButton: some View {
+    DesignSystemAsset.Icons.pencilFill24.swiftUIImage
+      .renderingMode(.template)
+      .foregroundStyle(Color.grayscaleWhite)
+      .background(
+        Circle()
+          .frame(width: 36, height: 36)
+          .foregroundStyle(viewModel.canShowPendingOverlay ? Color.grayscaleLight1 : Color.primaryDefault)
+          .overlay(
+            Circle()
+              .stroke(Color.white, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+          )
+      )
   }
   
   private var nicknameTextField: some View {
@@ -259,23 +276,22 @@ struct EditProfileView: View {
     )
     .withButton(
       RoundedButton(
-        type: viewModel.isEditingNickName ? .solid : .disabled,
+        type: viewModel.nicknameState.isEnableNickNameCheckButton ? .solid : .disabled,
         buttonText: "중복검사",
         width: .maxWidth,
         action: { viewModel.handleAction(.tapVaildNickName)}
       )
     )
     .infoText(
-      viewModel.nicknameInfoText,
-      color: viewModel.nicknameInfoTextColor
+      viewModel.nicknameState.infoText,
+      color: viewModel.nicknameState.infoTextColor
     )
     .textMaxLength(6)
     .onSubmit {
       focusField = "description"
     }
     .onChange(of: viewModel.nickname) { _, _ in
-      viewModel.isEditingNickName = true
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingNicknameState)
     }
   }
   
@@ -296,7 +312,7 @@ struct EditProfileView: View {
       focusField = "birthDate"
     }
     .onChange(of: viewModel.description) { _, _ in
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
   }
   
@@ -314,7 +330,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.birthDate = String(newValue.filter { $0.isNumber }.prefix(8))
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
     .textContentType(.birthdate)
     .keyboardType(.numberPad)
@@ -352,7 +368,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.height = newValue.filter { $0.isNumber }
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
     .keyboardType(.numberPad)
   }
@@ -370,7 +386,7 @@ struct EditProfileView: View {
     )
     .onChange { newValue in
       viewModel.weight = newValue.filter { $0.isNumber }
-      viewModel.isEditing = true
+      viewModel.handleAction(.updateEditingState)
     }
     .keyboardType(.numberPad)
   }
@@ -392,8 +408,8 @@ struct EditProfileView: View {
       focusField = nil
       viewModel.handleAction(.tapJob)
     }
-    .onChange(of: viewModel.job) { _, _
-      in viewModel.isEditing = true
+    .onChange(of: viewModel.job) { _, _ in
+      viewModel.handleAction(.updateEditingState)
     }
   }
   
@@ -405,13 +421,13 @@ struct EditProfileView: View {
       HStack {
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "흡연", text: "흡연") {
           viewModel.smokingStatus = "흡연"
-          viewModel.isEditing = true
           focusField = nil
+          viewModel.handleAction(.updateEditingState)
         }
         SelectCard(isEditing: true, isSelected: viewModel.smokingStatus == "비흡연", text: "비흡연") {
           viewModel.smokingStatus = "비흡연"
-          viewModel.isEditing = true
           focusField = nil
+          viewModel.handleAction(.updateEditingState)
         }
       }
       Text(viewModel.smokingInfoText)
@@ -432,7 +448,7 @@ struct EditProfileView: View {
           text: "활동"
         ) {
           viewModel.snsActivityLevel = "활동"
-          viewModel.isEditing = true
+          viewModel.handleAction(.updateEditingState)
         }
         SelectCard(
           isEditing: true,
@@ -440,7 +456,7 @@ struct EditProfileView: View {
           text: "은둔"
         ){
           viewModel.snsActivityLevel = "은둔"
-          viewModel.isEditing = true
+          viewModel.handleAction(.updateEditingState)
         }
       }
       Text(viewModel.snsInfoText)
@@ -502,7 +518,11 @@ fileprivate struct EditContactContainer: View {
         }
       }
       .onChange(of: viewModel.contacts) { oldValue, newValue in
-        handleContactsChange(oldValue: oldValue, newValue: newValue)
+        if !viewModel.isInitialLoad {
+          handleContactsChange(oldValue: oldValue, newValue: newValue)
+        } else {
+          viewModel.isInitialLoad = false
+        }
       }
     }
   }
@@ -545,7 +565,7 @@ fileprivate struct EditContactContainer: View {
         if viewModel.isAllowedInput(newContact.value) {
           viewModel.contacts[index].value = newContact.value
           viewModel.contacts[index].type = ContactModel.ContactType(rawValue: newContact.type.rawValue) ?? .unknown
-          viewModel.isEditing = true
+          viewModel.handleAction(.updateEditingState)
         }
       }
     )
