@@ -40,3 +40,18 @@ public class TermModel: Identifiable, Hashable {
   }
 }
 
+// MARK: - Function
+
+extension TermModel {
+  public func agree() {
+    self.isChecked = true
+  }
+  
+  public func disAgree() {
+    self.isChecked = false
+  }
+  
+  public func toggleAgreement() {
+    self.isChecked.toggle()
+  }
+}

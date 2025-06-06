@@ -27,7 +27,7 @@ final class TermsWebViewModel {
   func handleAction(_ action: Action) {
     switch action {
     case .tapAgreementButton:
-      term?.isChecked = true
+      term.agree()
     }
   }
 }
