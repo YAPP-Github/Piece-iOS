@@ -46,7 +46,7 @@ struct TermsAgreementView: View {
     .background(.grayscaleWhite)
     .onChange(of: viewModel.isShowWebView) { _, newValue in
       if newValue, let term = viewModel.selectedTerm {
-        router.push(to: .termsWebView(title: term.title, url: term.url))
+        router.push(to: .termsWebView(term: term))
         viewModel.isShowWebView = false
       }
     }

@@ -16,6 +16,7 @@ let project = Project.staticLibrary(
     .presentation(target: .PCWebView),
     .utility(target: .PCFoundationExtension),
     .domain(target: .UseCases),
+    .domain(target: .Entities),
   ]
 )
 

@@ -28,8 +28,8 @@ public struct SignUpViewFactory {
     TermsAgreementView(fetchTermsUseCase: fetchTermsUseCase)
   }
   
-  public static func createTermsWebView(title: String, url: String) -> some View {
-    TermsWebView(title: title, url: url)
+  public static func createTermsWebView(term: TermModel) -> some View {
+    TermsWebView(term: term)
   }
   
   public static func createPermissionRequestView(

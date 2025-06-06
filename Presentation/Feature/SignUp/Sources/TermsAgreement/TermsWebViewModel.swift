@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Entities
 import Observation
 
 @Observable
@@ -14,13 +15,13 @@ final class TermsWebViewModel {
     case tapAgreementButton
   }
   
-  var term: TermModel?
-  let title: String
-  let url: String
+  private(set) var term: TermModel
   
-  init(title: String, url: String) {
-    self.title = title
-    self.url = url
+  var title: String { term.title }
+  var url: String { term.url }
+  
+  init(term: TermModel) {
+    self.term = term
   }
   
   func handleAction(_ action: Action) {
