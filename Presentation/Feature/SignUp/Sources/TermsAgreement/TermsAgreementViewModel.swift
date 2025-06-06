@@ -34,7 +34,7 @@ final class TermsAgreementViewModel {
     isAllChecked ? .solid : .disabled
   }
   private let fetchTermsUseCase: FetchTermsUseCase
-  var selectedTerm: TermModel?
+  weak var selectedTerm: TermModel?
   
   func handleAction(_ action: Action) {
     switch action {
