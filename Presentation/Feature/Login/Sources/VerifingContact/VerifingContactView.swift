@@ -82,6 +82,7 @@ struct VerifingContactView: View {
             viewModel.phoneNumber = newValue.filter { $0.isNumber }
           }
           .textContentType(.telephoneNumber)
+          .keyboardType(.numberPad)
           .disabled(viewModel.isPhoneVerificationCompleted)
           
           if viewModel.showVerificationField {
@@ -106,6 +107,7 @@ struct VerifingContactView: View {
                 }
               )
             )
+            .keyboardType(.numberPad)
             .disabled(viewModel.isPhoneVerificationCompleted)
           }
           Spacer()
