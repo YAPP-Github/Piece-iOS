@@ -12,11 +12,11 @@ import UseCases
 
 struct VerifingContactView: View {
   @State var viewModel: VerifingContactViewModel
-  @Environment(\.scenePhase) var scenePhase
   @FocusState private var isPhoneNumberFocused: Bool
   @FocusState private var isVerificationCodeFocused: Bool
   
   @Environment(Router.self) private var router: Router
+  @Environment(\.scenePhase) private var scenePhase
   
   init(
     sendSMSCodeUseCase: SendSMSCodeUseCase,
