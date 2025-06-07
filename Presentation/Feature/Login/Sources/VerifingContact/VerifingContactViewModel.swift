@@ -15,7 +15,7 @@ import LocalStorage
 @Observable
 final class VerifingContactViewModel {
   private enum Constants {
-    static let initialTime: Int = 300
+    static let initialTime: TimeInterval = 300.0
     static let buttonDefaultWidth: CGFloat = 111
     static let buttonExpandedWidth: CGFloat = 125
   }
@@ -40,7 +40,8 @@ final class VerifingContactViewModel {
   var verificationFieldInfoText: String = "어떤 경우에도 타인에게 공유하지 마세요"
   var verrificationFieldInfoTextColor: Color = DesignSystemAsset.Colors.grayscaleDark3.swiftUIColor
   private var timer: Timer?
-  private var timeRemaining = Constants.initialTime
+  private var timeRemaining: TimeInterval = Constants.initialTime
+  private var isTimerRunning: Bool = false // 타이머 실행 상태 추적
   var phoneNumber: String = ""
   var verificationCode: String = ""
   var isVerificationCodeValid: Bool {
@@ -104,6 +105,7 @@ final class VerifingContactViewModel {
     await MainActor.run {
       recivedCertificationNumberButtonText = "인증번호 재전송"
       recivedCertificationNumberButtonWidth = Constants.buttonExpandedWidth
+      timeRemaining = Constants.initialTime
       startTimer()
       showVerificationField = true
     }
@@ -150,8 +152,8 @@ final class VerifingContactViewModel {
   }
   
   private func startTimer() {
-    timeRemaining = Constants.initialTime
     stopTimer()
+    isTimerRunning = true
     
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
       guard let self = self else { return }
@@ -159,9 +161,7 @@ final class VerifingContactViewModel {
       if self.timeRemaining > 0 {
         self.timeRemaining -= 1
       } else {
-        self.stopTimer()
-        verificationFieldInfoText = "유효시간이 지났어요! ‘인증번호 재전송’을 눌러주세요"
-        verrificationFieldInfoTextColor = .systemError
+        handleTimeExpired()
       }
     }
   }
@@ -169,10 +169,18 @@ final class VerifingContactViewModel {
   private func stopTimer() {
     timer?.invalidate()
     timer = nil
+    isTimerRunning = false
+  }
+  
   private func pauseTimerIfNeeded() {
   }
   private func resumeTimerIfNeeded() {
   }
+  
+  private func handleTimeExpired() {
+    stopTimer()
+    verificationFieldInfoText = "유효시간이 지났어요! ‘인증번호 재전송’을 눌러주세요"
+    verrificationFieldInfoTextColor = .systemError
   }
   
   deinit {
