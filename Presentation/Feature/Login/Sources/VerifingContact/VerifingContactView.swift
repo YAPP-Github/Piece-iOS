@@ -12,6 +12,7 @@ import UseCases
 
 struct VerifingContactView: View {
   @State var viewModel: VerifingContactViewModel
+  @Environment(\.scenePhase) var scenePhase
   @FocusState private var isPhoneNumberFocused: Bool
   @FocusState private var isVerificationCodeFocused: Bool
   
@@ -125,6 +126,9 @@ struct VerifingContactView: View {
       .padding(.horizontal, 20)
       .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
         router.setRoute(.termsAgreement)
+      }
+      .onChange(of: scenePhase) {
+        viewModel.handleAction(.updateScenePhase(scenePhase))
       }
       .ignoresSafeArea(.keyboard)
       .toolbar(.hidden, for: .navigationBar)

@@ -21,6 +21,7 @@ final class VerifingContactViewModel {
   }
   
   enum Action {
+    case updateScenePhase(ScenePhase)
     case reciveCertificationNumber
     case checkCertificationNumber
     case tapNextButton
@@ -77,6 +78,8 @@ final class VerifingContactViewModel {
   
   func handleAction(_ action: Action) {
     switch action {
+    case .updateScenePhase(let scenePhase):
+      handleScenePhase(for: scenePhase)
     case .reciveCertificationNumber:
       Task { await handleReceiveCertificationNumber() }
     case .checkCertificationNumber:
@@ -135,6 +138,17 @@ final class VerifingContactViewModel {
     }
   }
   
+  private func handleScenePhase(for scenePhase: ScenePhase) {
+    switch scenePhase {
+    case .background:
+      pauseTimerIfNeeded()
+    case .active:
+      resumeTimerIfNeeded()
+    default:
+      break
+    }
+  }
+  
   private func startTimer() {
     timeRemaining = Constants.initialTime
     stopTimer()
@@ -155,6 +169,10 @@ final class VerifingContactViewModel {
   private func stopTimer() {
     timer?.invalidate()
     timer = nil
+  private func pauseTimerIfNeeded() {
+  }
+  private func resumeTimerIfNeeded() {
+  }
   }
   
   deinit {
