@@ -42,6 +42,7 @@ final class VerifingContactViewModel {
   private var timer: Timer?
   private var timeRemaining: TimeInterval = Constants.initialTime
   private var isTimerRunning: Bool = false // 타이머 실행 상태 추적
+  private var backgroundTime: Date?
   var phoneNumber: String = ""
   var verificationCode: String = ""
   var isVerificationCodeValid: Bool {
@@ -173,8 +174,25 @@ final class VerifingContactViewModel {
   }
   
   private func pauseTimerIfNeeded() {
+    if isTimerRunning {
+      stopTimer()
+      backgroundTime = Date()
+    }
   }
+  
   private func resumeTimerIfNeeded() {
+    if !isTimerRunning, let backgroundTime {
+      let timeInBackground = Date().timeIntervalSince(backgroundTime)
+      timeRemaining -= timeInBackground
+      
+      if timeRemaining > 0 {
+        startTimer()
+      } else {
+        handleTimeExpired()
+      }
+      
+      self.backgroundTime = nil
+    }
   }
   
   private func handleTimeExpired() {
