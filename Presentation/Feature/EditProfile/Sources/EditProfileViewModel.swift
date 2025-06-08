@@ -286,7 +286,7 @@ final class EditProfileViewModel {
         
         let updatedProfile = try await updateProfileBasicUseCase.execute(profile: basicInfo)
         initialProfile = updatedProfile
-        imageState = .pending
+        pendingStateIfNeeded()
         updateEditingState()
         updateEditingNicknameState()
         didTapnextButton = false
@@ -445,6 +445,11 @@ final class EditProfileViewModel {
     contacts.map { $0.value } != initial.contacts.map { $0.value }
     
     isEditing = hasChanges
+  }
+  private func pendingStateIfNeeded() {
+    if imageState == .editing {
+      imageState = .pending
+    }
   }
 }
 
