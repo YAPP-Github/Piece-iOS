@@ -79,7 +79,7 @@ final class CreateBasicInfoViewModel {
   var isNextButtonEnabled: Bool {
     return isValidProfileImage &&
     nicknameState.isEnableNextButton &&
-    !description.isEmpty &&
+    !isDescriptionValid &&
     isValidBirthDate &&
     !location.isEmpty &&
     isValidHeight &&
@@ -230,7 +230,7 @@ final class CreateBasicInfoViewModel {
       break
     }
     
-    if profileImage == nil || !nicknameState.isEnableNextButton || description.isEmpty || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
+    if profileImage == nil || !nicknameState.isEnableNextButton || !isDescriptionValid || birthDate.isEmpty || location.isEmpty || height.isEmpty || weight.isEmpty || job.isEmpty || !isContactsValid {
       didTapnextButton = true
       profileCreator.isBasicInfoValid(false)
       await isToastVisible()
