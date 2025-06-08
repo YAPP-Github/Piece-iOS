@@ -9,6 +9,7 @@ import SwiftUI
 import Observation
 import DesignSystem
 import UseCases
+import Entities
 
 @MainActor
 @Observable
@@ -34,19 +35,19 @@ final class TermsAgreementViewModel {
     isAllChecked ? .solid : .disabled
   }
   private let fetchTermsUseCase: FetchTermsUseCase
-  var selectedTerm: TermModel?
+  weak var selectedTerm: TermModel?
   
   func handleAction(_ action: Action) {
     switch action {
     case .toggleAll:
-      let newState = !isAllChecked
-      terms.indices.forEach {
-        terms[$0].isChecked = newState
+      let shouldAgree = !isAllChecked
+      terms.forEach {
+        shouldAgree ? $0.agree() : $0.disAgree()
       }
     case .toggleTerm(let id):
-      if let index = terms.firstIndex(where: { $0.id == id }) {
-        terms[index].isChecked.toggle()
-      }
+      terms
+        .first(where: { $0.id == id })?
+        .toggleAgreement()
     case .tapChevronButton(let term):
       selectedTerm = term
       isShowWebView = true

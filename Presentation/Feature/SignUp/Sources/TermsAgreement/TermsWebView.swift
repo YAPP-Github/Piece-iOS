@@ -9,13 +9,14 @@ import DesignSystem
 import PCWebView
 import SwiftUI
 import Router
+import Entities
 
 struct TermsWebView: View {
   @State var viewModel: TermsWebViewModel
   @Environment(Router.self) private var router: Router
   
-  init(title: String, url: String) {
-    _viewModel = .init(wrappedValue: .init(title: title, url: url))
+  init(term: TermModel) {
+    _viewModel = .init(wrappedValue: .init(term: term))
   }
   
   var body: some View {
