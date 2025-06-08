@@ -31,7 +31,7 @@ final class EditProfileViewModel {
     case saveContact
     case editContact
     case updateEditingState
-    case updateEditingNicknameState
+    case updateNickname(value: String)
     case setImageFromCamera(UIImage)
     case selectPhoto(PhotosPickerItem?)
   }
@@ -247,8 +247,8 @@ final class EditProfileViewModel {
       tapContactBottomSheetEditButton()
     case .updateEditingState:
       updateEditingState()
-    case .updateEditingNicknameState:
-      updateEditingNicknameState()
+    case .updateNickname(let value):
+      handleUpdateNickname(value)
     case .setImageFromCamera(let image):
         Task { await setImageFromCamera(image) }
     case .selectPhoto(let item):
@@ -407,6 +407,11 @@ final class EditProfileViewModel {
     }
   }
 
+  private func handleUpdateNickname(_ newValue: String) {
+    nickname = newValue.replacingOccurrences(of: " ", with: "")
+    updateEditingNicknameState()
+  }
+  
   private func updateEditingNicknameState(to state: NicknameState? = nil) {
     if let state {
       nicknameState = state
