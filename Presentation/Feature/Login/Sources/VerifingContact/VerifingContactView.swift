@@ -16,6 +16,7 @@ struct VerifingContactView: View {
   @FocusState private var isVerificationCodeFocused: Bool
   
   @Environment(Router.self) private var router: Router
+  @Environment(\.scenePhase) private var scenePhase
   
   init(
     sendSMSCodeUseCase: SendSMSCodeUseCase,
@@ -81,6 +82,7 @@ struct VerifingContactView: View {
             viewModel.phoneNumber = newValue.filter { $0.isNumber }
           }
           .textContentType(.telephoneNumber)
+          .keyboardType(.numberPad)
           .disabled(viewModel.isPhoneVerificationCompleted)
           
           if viewModel.showVerificationField {
@@ -105,6 +107,7 @@ struct VerifingContactView: View {
                 }
               )
             )
+            .keyboardType(.numberPad)
             .disabled(viewModel.isPhoneVerificationCompleted)
           }
           Spacer()
@@ -125,6 +128,9 @@ struct VerifingContactView: View {
       .padding(.horizontal, 20)
       .onChange(of: viewModel.tapNextButtonFlag) { _, newValue in
         router.setRoute(.termsAgreement)
+      }
+      .onChange(of: scenePhase) {
+        viewModel.handleAction(.updateScenePhase(scenePhase))
       }
       .ignoresSafeArea(.keyboard)
       .toolbar(.hidden, for: .navigationBar)
