@@ -255,19 +255,22 @@ struct CreateBasicInfoView: View {
     )
     .withButton(
       RoundedButton(
-        type: .solid,
+        type: viewModel.nicknameState.isEnableNickNameCheckButton ? .solid : .disabled,
         buttonText: "중복검사",
         width: .maxWidth,
-        action: { viewModel.handleAction(.tapVaildNickName)}
+        action: { viewModel.handleAction(.tapVaildNickName) }
       )
     )
     .infoText(
-      viewModel.nicknameInfoText,
-      color: viewModel.nicknameInfoTextColor
+      viewModel.nicknameState.infoText,
+      color: viewModel.nicknameState.infoTextColor
     )
     .textMaxLength(6)
     .onSubmit {
       focusField = "description"
+    }
+    .onChange(of: viewModel.nickname) { _, newValue in
+      viewModel.handleAction(.updateNickname(value: newValue))
     }
   }
   
