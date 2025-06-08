@@ -44,6 +44,12 @@ public final class LoginRepository: LoginRepositoryInterface {
     let body = VerifySMSCodeRequestDTO(phoneNumber: phoneNumber, code: code)
     let endpoint = RegisterEndpoint.verifySMSCode(body: body)
     let responseDTO: VerifySMSCodeResponseDTO = try await networkService.request(endpoint: endpoint)
+    if let accessToken = responseDTO.accessToken,
+       let refreshToken = responseDTO.refreshToken {
+      PCKeychainManager.shared.save(.accessToken, value: accessToken)
+      PCKeychainManager.shared.save(.refreshToken, value: refreshToken)
+      networkService.updateCredentials()
+    }
     return responseDTO.toDomain()
   }
   
