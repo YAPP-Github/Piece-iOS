@@ -11,6 +11,7 @@ import Foundation
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable
 final class ValueTalkCardViewModel: Hashable {
   static func == (lhs: ValueTalkCardViewModel, rhs: ValueTalkCardViewModel) -> Bool {

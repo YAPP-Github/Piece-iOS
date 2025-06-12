@@ -92,34 +92,31 @@ struct EditValueTalkCard: View {
         get: { viewModel.model.answer },
         set: { viewModel.handleAction(.didUpdateAnswer($0)) }
       ))
-        .frame(maxWidth: .infinity, minHeight: 96)
-        .fixedSize(horizontal: false, vertical: true)
-        .pretendard(.body_M_M)
-        .autocorrectionDisabled()
-        .textInputAutocapitalization(.none)
-        .scrollContentBackground(.hidden)
-        .scrollDisabled(true)
-        .foregroundStyle(Color.grayscaleBlack)
-        .background(alignment: .topLeading) {
-          if viewModel.model.answer.isEmpty && focusState.wrappedValue != .answerEditor(id) {
-            Text(viewModel.model.placeholder)
-              .pretendard(.body_M_M)
-              .foregroundStyle(Color.grayscaleDark3)
-              .padding(.top, 4)
-          }
+      .frame(maxWidth: .infinity, minHeight: 96, maxHeight: .infinity)
+      .fixedSize(horizontal: false, vertical: true)
+      .pretendard(.body_M_M)
+      .autocorrectionDisabled()
+      .textInputAutocapitalization(.none)
+      .scrollContentBackground(.hidden)
+      .foregroundStyle(Color.grayscaleBlack)
+      .background(alignment: .topLeading) {
+        if viewModel.model.answer.isEmpty && focusState.wrappedValue != .answerEditor(id) {
+          Text(viewModel.model.placeholder)
+            .pretendard(.body_M_M)
+            .foregroundStyle(Color.grayscaleDark3)
+            .padding(.top, 4)
         }
-        .focused(focusState, equals: .answerEditor(id))
-        .allowsHitTesting(isEditing) // 편집 모드에서만 탭 가능하도록
-        .onTapGesture {
-          if isEditing {
-            focusState.wrappedValue = .answerEditor(id)
-          }
-        }
-      
-      if focusState.wrappedValue == .answerEditor(id) {
-        TextCountIndicator(count: .constant(viewModel.model.answer.count), maxCount: 300)
-          .contentShape(Rectangle())
       }
+      .focused(focusState, equals: .answerEditor(id))
+      .allowsHitTesting(isEditing) // 편집 모드에서만 탭 가능하도록
+      .onTapGesture {
+        if isEditing {
+          focusState.wrappedValue = .answerEditor(id)
+        }
+      }
+      
+      TextCountIndicator(count: .constant(viewModel.model.answer.count), maxCount: 300)
+        .opacity(!viewModel.model.answer.isEmpty || focusState.wrappedValue == .answerEditor(viewModel.model.id) ? 1 : 0)
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 14)

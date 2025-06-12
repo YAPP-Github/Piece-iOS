@@ -70,27 +70,25 @@ struct ValueTalkCard: View {
         get: { viewModel.localAnswer },
         set: { viewModel.handleAction(.didUpdateAnswer($0)) }
       ))
-        .frame(maxWidth: .infinity, minHeight: 96)
-        .fixedSize(horizontal: false, vertical: true)
-        .pretendard(.body_M_M)
-        .autocorrectionDisabled()
-        .textInputAutocapitalization(.none)
-        .scrollContentBackground(.hidden)
-        .scrollDisabled(true)
-        .foregroundStyle(Color.grayscaleBlack)
-        .background(alignment: .topLeading) {
-          if viewModel.localAnswer.isEmpty && focusState.wrappedValue != .valueTalkEditor(viewModel.model.id) {
-            Text(viewModel.model.placeholder)
-              .pretendard(.body_M_M)
-              .foregroundStyle(Color.grayscaleDark3)
-              .padding(.top, 4) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
-          }
+      .frame(maxWidth: .infinity, minHeight: 96, maxHeight: .infinity)
+      .fixedSize(horizontal: false, vertical: true)
+      .pretendard(.body_M_M)
+      .autocorrectionDisabled()
+      .textInputAutocapitalization(.none)
+      .scrollContentBackground(.hidden)
+      .foregroundStyle(Color.grayscaleBlack)
+      .background(alignment: .topLeading) {
+        if viewModel.localAnswer.isEmpty && focusState.wrappedValue != .valueTalkEditor(viewModel.model.id) {
+          Text(viewModel.model.placeholder)
+            .pretendard(.body_M_M)
+            .foregroundStyle(Color.grayscaleDark3)
+            .padding(.top, 4) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
         }
-        .focused(focusState, equals: .valueTalkEditor(viewModel.model.id))
-      
-      if !viewModel.localAnswer.isEmpty || focusState.wrappedValue == .valueTalkEditor(viewModel.model.id) {
-        TextCountIndicator(count: .constant(viewModel.localAnswer.count), maxCount: 300)
       }
+      .focused(focusState, equals: .valueTalkEditor(viewModel.model.id))
+      
+      TextCountIndicator(count: .constant(viewModel.localAnswer.count), maxCount: 300)
+        .opacity(!viewModel.localAnswer.isEmpty || focusState.wrappedValue == .valueTalkEditor(viewModel.model.id) ? 1 : 0)
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 10) // 폰트 내 lineHeight로 인해서 상단이 패딩이 더 커보이는 것 보졍
