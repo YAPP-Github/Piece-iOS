@@ -93,12 +93,11 @@ struct EditValueTalkCard: View {
         set: { viewModel.handleAction(.didUpdateAnswer($0)) }
       ))
       .frame(maxWidth: .infinity, minHeight: 96, maxHeight: .infinity)
+      .fixedSize(horizontal: false, vertical: true)
       .pretendard(.body_M_M)
       .autocorrectionDisabled()
       .textInputAutocapitalization(.none)
       .scrollContentBackground(.hidden)
-      .scrollDisabled(true)
-      .fixedSize(horizontal: false, vertical: true)
       .foregroundStyle(Color.grayscaleBlack)
       .background(alignment: .topLeading) {
         if viewModel.model.answer.isEmpty && focusState.wrappedValue != .answerEditor(id) {
