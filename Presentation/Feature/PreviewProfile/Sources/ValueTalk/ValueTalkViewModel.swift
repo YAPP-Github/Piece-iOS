@@ -10,6 +10,7 @@ import Foundation
 import Observation
 import UseCases
 
+@MainActor
 @Observable
 final class ValueTalkViewModel {
   private enum Constant {
