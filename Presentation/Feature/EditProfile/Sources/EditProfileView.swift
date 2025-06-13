@@ -290,8 +290,8 @@ struct EditProfileView: View {
     .onSubmit {
       focusField = "description"
     }
-    .onChange(of: viewModel.nickname) { _, _ in
-      viewModel.handleAction(.updateEditingNicknameState)
+    .onChange(of: viewModel.nickname) { _, newValue in
+      viewModel.handleAction(.updateNickname(value: newValue))
     }
   }
   
