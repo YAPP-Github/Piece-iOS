@@ -155,7 +155,7 @@ struct EditProfileView: View {
         buttonAction: { viewModel.handleAction(.saveContact) },
         onTapRowItem: { viewModel.tapContactRowItem($0) }
       )
-      .presentationDetents([.height(458)])
+      .presentationDetents([.height(479)])
     }
     .sheet(isPresented: $viewModel.isContactTypeChangeSheetPresented) {
       PCBottomSheet<BottomSheetIconItem>(
@@ -167,7 +167,7 @@ struct EditProfileView: View {
         buttonAction: { viewModel.handleAction(.editContact) },
         onTapRowItem: { viewModel.tapContactRowItem($0) }
       )
-      .presentationDetents([.height(458)])
+      .presentationDetents([.height(479)])
     }
     .onAppear {
       viewModel.handleAction(.onAppear)
