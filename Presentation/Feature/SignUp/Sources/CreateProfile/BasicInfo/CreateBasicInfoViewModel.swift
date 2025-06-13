@@ -79,7 +79,7 @@ final class CreateBasicInfoViewModel {
   var isNextButtonEnabled: Bool {
     return isValidProfileImage &&
     nicknameState.isEnableNextButton &&
-    !isDescriptionValid &&
+    isDescriptionValid &&
     isValidBirthDate &&
     !location.isEmpty &&
     isValidHeight &&

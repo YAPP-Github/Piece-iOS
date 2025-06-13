@@ -90,7 +90,7 @@ final class EditProfileViewModel {
   var isConfirmButtonEnable: Bool {
     isEditing &&
     nicknameState.isEnableConfirmButton &&
-    !isDescriptionValid &&
+    isDescriptionValid &&
     isValidBirthDate &&
     !location.isEmpty &&
     isValidHeight &&
