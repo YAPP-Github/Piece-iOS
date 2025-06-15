@@ -208,12 +208,15 @@ struct EditProfileView: View {
       )
     }
     .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
-      CameraPicker { viewModel.handleAction(.setImageFromCamera($0)) }
+      CameraPicker { image in
+        let imageData = image.resizedAndCompressedData(targetSize: .init(width: 400, height: 400))
+        viewModel.handleAction(.setImageFromCamera(imageData))
+      }
     }
     .photosPicker(
       isPresented: $viewModel.isPhotoSheetPresented,
       selection: Binding(
-        get: { viewModel.selectedItem },
+        get: { viewModel.selectedPhotoPickerItem },
         set: { viewModel.handleAction(.selectPhoto($0)) }
       ),
       matching: .images
@@ -221,24 +224,50 @@ struct EditProfileView: View {
   }
   
   private var profileImageView: some View {
+    Group {
+      switch viewModel.imageState {
+      case .editing:
+        profileImageDataView
+      case .normal:
+        profileImageUrlView
+      case .pending:
+        profileImageUrlView
+          .overlay {
+            pendingOverlay
+          }
+      }
+    }
+    .overlay(alignment: .bottomTrailing) {
+      profileEditButton
+        .padding(.bottom, 6)
+        .padding(.trailing, 6)
+    }
+  }
+  
+  private var profileImageDataView: some View {
+    Group {
+      if let imageData = viewModel.profileImageData,
+         let uiImage = UIImage(data: imageData) {
+        Image(uiImage: uiImage)
+          .resizable()
+          .scaledToFill()
+          .frame(width: 120, height: 120)
+          .clipShape(Circle())
+      } else {
+        DesignSystemAsset.Images.profileImageNodata.swiftUIImage
+      }
+    }
+  }
+  
+  private var profileImageUrlView: some View {
     AsyncImage(url: URL(string: viewModel.profileImageUrl)) { image in
       image
         .resizable()
         .scaledToFill()
         .frame(width: 120, height: 120)
         .clipShape(Circle())
-        .overlay {
-          if viewModel.canShowPendingOverlay {
-            pendingOverlay
-          }
-        }
     } placeholder: {
       DesignSystemAsset.Images.profileImageNodata.swiftUIImage
-    }
-    .overlay(alignment: .bottomTrailing) {
-      profileEditButton
-        .padding(.bottom, 6)
-        .padding(.trailing, 6)
     }
   }
   
