@@ -223,26 +223,35 @@ struct CreateBasicInfoView: View {
           .resizable()
           .scaledToFill()
           .frame(width: 120, height: 120)
-          .clipShape(Circle())
+          .clipShape(RoundedRectangle(cornerRadius: 20))
       } else {
         DesignSystemAsset.Images.profileImageNodata.swiftUIImage
       }
     }
     .overlay(alignment: .bottomTrailing) {
-      DesignSystemAsset.Icons.plus24.swiftUIImage
-        .renderingMode(.template)
-        .foregroundStyle(Color.grayscaleWhite)
-        .background(
-          Circle()
-            .frame(width: 33, height: 33)
-            .foregroundStyle(Color.primaryDefault)
-            .overlay(
-              Circle()
-                .stroke(Color.white, lineWidth: 3)
-            )
-        )
+      profileImageButton(
+        viewModel.profileImage != nil
+        ? DesignSystemAsset.Icons.pencilFill24.swiftUIImage
+        : DesignSystemAsset.Icons.plus24.swiftUIImage
+      )
     }
-    .padding(.bottom, 8)
+  }
+  
+  private func profileImageButton(_ image: Image) -> some View {
+    image
+      .renderingMode(.template)
+      .foregroundStyle(Color.grayscaleWhite)
+      .background(
+        Circle()
+          .frame(width: 36, height: 36)
+          .foregroundStyle(Color.primaryDefault)
+          .overlay(
+            Circle()
+              .stroke(Color.white, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+          )
+      )
+      .padding(.bottom, 10)
+      .padding(.trailing, 10)
   }
   
   private var nicknameTextField: some View {

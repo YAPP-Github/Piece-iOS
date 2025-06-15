@@ -226,7 +226,7 @@ struct EditProfileView: View {
         .resizable()
         .scaledToFill()
         .frame(width: 120, height: 120)
-        .clipShape(Circle())
+        .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay {
           if viewModel.canShowPendingOverlay {
             pendingOverlay
@@ -237,8 +237,8 @@ struct EditProfileView: View {
     }
     .overlay(alignment: .bottomTrailing) {
       profileEditButton
-        .padding(.bottom, 6)
-        .padding(.trailing, 6)
+        .padding(.bottom, 10)
+        .padding(.trailing, 10)
     }
   }
   
@@ -248,7 +248,7 @@ struct EditProfileView: View {
       .foregroundStyle(Color.grayscaleWhite)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(Color.alphaBlack40)
-      .clipShape(Circle())
+      .clipShape(RoundedRectangle(cornerRadius: 20))
   }
   
   private var profileEditButton: some View {
