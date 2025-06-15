@@ -92,12 +92,21 @@ public extension PCUserDefaultsService {
     self.didSeeOnboarding = didSeeOnboarding
   }
   
-  func setSocialLoginType(_ type: String) {
-    self.socialLoginType = type
+  func setSocialLoginType(_ type: SocialLoginType) {
+    self.socialLoginType = type.rawValue
   }
   
-  func getSocialLoginType() -> String {
-    socialLoginType
+  func getSocialLoginType() -> SocialLoginType? {
+    switch socialLoginType {
+    case "apple":
+      return .apple
+    case "kakao":
+      return .kakao
+    case "google":
+      return .google
+    default:
+      return nil
+    }
   }
   
   /// 첫 실행 여부 확인

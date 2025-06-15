@@ -8,6 +8,7 @@
 import Alamofire
 import DTO
 import LocalStorage
+import Entities
 
 public enum UserEndpoint: TargetType {
   case withdrawWithPiece(WithdrawRequestDTO)
@@ -24,7 +25,10 @@ public enum UserEndpoint: TargetType {
   
   public var path: String {
     switch self {
-    case .withdrawWithPiece: "api/users"
+    case .withdrawWithPiece(let dto):
+      dto.providerName == SocialLoginType.apple.rawValue
+      ? "api/users/oauth"
+      : "api/users"
     case .getUserRole: "api/users/info"
     case .userReject: "api/users/reject"
     }
