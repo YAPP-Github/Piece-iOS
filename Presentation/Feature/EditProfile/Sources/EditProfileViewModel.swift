@@ -31,8 +31,8 @@ final class EditProfileViewModel {
     case saveContact
     case editContact
     case updateEditingState
-    case updateNickname(value: String)
-    case setImageFromCamera(UIImage)
+    case updateEditingNicknameState
+    case setImageFromCamera(Data?)
     case selectPhoto(PhotosPickerItem?)
   }
   
@@ -61,6 +61,7 @@ final class EditProfileViewModel {
   var nicknameState: NicknameState = .normal
   
   // TextField Bind
+  var profileImageData: Data? = nil
   var profileImageUrl: String = ""
   var nickname: String = ""
   var description: String = ""
@@ -179,7 +180,7 @@ final class EditProfileViewModel {
   var selectedSNSContactType: ContactModel.ContactType? = nil
   var prevSelectedContact: ContactModel? = nil
   var isContactTypeChangeSheetPresented: Bool = false
-  var selectedItem: PhotosPickerItem? = nil
+  var selectedPhotoPickerItem: PhotosPickerItem? = nil
   var didTapnextButton: Bool = false
   
   var locationItems: [BottomSheetTextItem] = Locations.all.map { BottomSheetTextItem(text: $0) }
@@ -246,13 +247,13 @@ final class EditProfileViewModel {
       tapContactBottomSheetEditButton()
     case .updateEditingState:
       updateEditingState()
-    case .updateNickname(let value):
-      handleUpdateNickname(value)
-    case .setImageFromCamera(let image):
-        Task { await setImageFromCamera(image) }
+    case .updateEditingNicknameState:
+      updateEditingNicknameState()
+    case .setImageFromCamera(let imageData):
+      setImageFromCamera(imageData)
     case .selectPhoto(let item):
-        selectedItem = item
-        Task { await loadImage() }
+      selectedPhotoPickerItem = item
+      Task { await setImageFromAlbum() }
     }
   }
   
@@ -266,7 +267,7 @@ final class EditProfileViewModel {
       await isToastVisible()
     } else {
       do {
-        guard !profileImageUrl.isEmpty else { return }
+        await uploadProfileImageIfNeeded()
         
         let basicInfo = ProfileBasicModel(
           nickname: nickname,
@@ -285,7 +286,7 @@ final class EditProfileViewModel {
         
         let updatedProfile = try await updateProfileBasicUseCase.execute(profile: basicInfo)
         initialProfile = updatedProfile
-        imageState = .pending
+        pendingStateIfNeeded()
         updateEditingState()
         updateEditingNicknameState()
         didTapnextButton = false
@@ -321,43 +322,43 @@ final class EditProfileViewModel {
       return regex.firstMatch(in: input, options: [], range: range) != nil
   }
   
-  private func uploadProfileImage(_ image: UIImage) async {
-    guard let imageData = image.resizedAndCompressedData(
-      targetSize: CGSize(width: 400, height: 400),
-      compressionQuality: 0.5
-    ) else { return }
-    
-    do {
-      let imageURL = try await uploadProfileImageUseCase.execute(image: imageData)
-      profileImageUrl = imageURL.absoluteString
-      self.imageState = .editing
-      handleAction(.updateEditingState)
-      print("이미지 업로드 성공: \(imageURL)")
-    } catch {
-      print("이미지 업로드 중 오류 발생: \(error.localizedDescription)")
-    }
-  }
-  
-  func loadImage() async {
-    guard let selectedItem else {
-      print("선택된 아이템이 없습니다.")
+  private func uploadProfileImageIfNeeded() async {
+    guard let imageData = self.profileImageData else {
+      print("DEBUG: 업로드할 이미지 없음")
       return
     }
     
     do {
-      if let data = try await selectedItem.loadTransferable(type: Data.self),
-         let image = UIImage(data: data) {
-        await uploadProfileImage(image)
-      } else {
-        print("이미지 데이터를 로드할 수 없습니다.")
-      }
+      let imageURL = try await uploadProfileImageUseCase.execute(image: imageData)
+      self.profileImageUrl = imageURL.absoluteString
+      self.profileImageData = nil
+      print("DEBUG: 이미지 업로드 성공: \(imageURL)")
     } catch {
-      print("이미지 로드 중 오류 발생: \(error.localizedDescription)")
+      print("DEBUG: 이미지 업로드 중 오류 발생: \(error.localizedDescription)")
     }
   }
   
-  func setImageFromCamera(_ image: UIImage) async {
-    await uploadProfileImage(image)
+  func loadImageData() async -> Data? {
+    if let imageData = try? await selectedPhotoPickerItem?.loadTransferable(type: Data.self),
+       let resizedImageData = UIImage(data: imageData)?.resizedAndCompressedData(targetSize: CGSize(width: 400, height: 400)) {
+      return resizedImageData
+    }
+    
+    return nil
+  }
+
+  func setImageFromAlbum() async {
+    if let imageData = await loadImageData() {
+      self.profileImageData = imageData
+      self.imageState = .editing
+      handleAction(.updateEditingState)
+    }
+  }
+  
+  func setImageFromCamera(_ imageData: Data?) {
+    self.profileImageData = imageData
+    self.imageState = .editing
+    handleAction(.updateEditingState)
   }
   
   @MainActor
@@ -449,6 +450,11 @@ final class EditProfileViewModel {
     contacts.map { $0.value } != initial.contacts.map { $0.value }
     
     isEditing = hasChanges
+  }
+  private func pendingStateIfNeeded() {
+    if imageState == .editing {
+      imageState = .pending
+    }
   }
 }
 
