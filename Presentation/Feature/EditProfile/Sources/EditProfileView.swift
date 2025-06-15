@@ -41,8 +41,13 @@ struct EditProfileView: View {
         ScrollViewReader { proxy in
           ScrollView {
             VStack(alignment: .center, spacing: 32) {
-              // 프로필 이미지
-              profileImageButton
+              VStack(spacing: 8) {
+                // 프로필 이미지
+                profileImageButton
+                
+                // 프로필 이미지 설명 라벨
+                profileImageDescriptionLabel
+              }
               
               // 닉네임
               nicknameTextField.id("nickname_scroll")
@@ -264,6 +269,12 @@ struct EditProfileView: View {
               .stroke(Color.white, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
           )
       )
+  }
+  
+  private var profileImageDescriptionLabel: some View {
+    Text("얼굴이 잘 나온 사진으로 등록해 주세요.")
+      .pretendard(.body_S_M)
+      .foregroundStyle(Color.grayscaleDark3)
   }
   
   private var nicknameTextField: some View {

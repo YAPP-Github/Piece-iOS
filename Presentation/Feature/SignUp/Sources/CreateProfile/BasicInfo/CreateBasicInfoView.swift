@@ -41,37 +41,41 @@ struct CreateBasicInfoView: View {
               title
               
               // 프로필 이미지
-              Button {
-                viewModel.isProfileImageSheetPresented = true
-              } label: {
-                profileImage
-              }
-              .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
-                ActionSheet(
-                  title: Text("프로필 사진 선택"),
-                  buttons: [
-                    .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
-                    .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
-                    .cancel(Text("취소"))
-                  ]
-                )
-              }
-              .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
-                CameraPicker {
-                  viewModel.setImageFromCamera($0)
+              VStack(spacing: 8) {
+                Button {
+                  viewModel.isProfileImageSheetPresented = true
+                } label: {
+                  profileImage
                 }
-              }
-              .photosPicker(
-                isPresented: $viewModel.isPhotoSheetPresented,
-                selection: Binding(
-                  get: { viewModel.selectedItem },
-                  set: {
-                    viewModel.selectedItem = $0
-                    Task { await viewModel.loadImage() }
+                .actionSheet(isPresented: $viewModel.isProfileImageSheetPresented) {
+                  ActionSheet(
+                    title: Text("프로필 사진 선택"),
+                    buttons: [
+                      .default(Text("카메라")) { viewModel.handleAction(.selectCamera) },
+                      .default(Text("앨범")) { viewModel.handleAction(.selectPhotoLibrary) },
+                      .cancel(Text("취소"))
+                    ]
+                  )
+                }
+                .fullScreenCover(isPresented: $viewModel.isCameraPresented) {
+                  CameraPicker {
+                    viewModel.setImageFromCamera($0)
                   }
-                ),
-                matching: .images
-              )
+                }
+                .photosPicker(
+                  isPresented: $viewModel.isPhotoSheetPresented,
+                  selection: Binding(
+                    get: { viewModel.selectedItem },
+                    set: {
+                      viewModel.selectedItem = $0
+                      Task { await viewModel.loadImage() }
+                    }
+                  ),
+                  matching: .images
+                )
+                
+                profileImageDescriptionLabel
+              }
               // 닉네임
               nicknameTextField.id("nickname_scroll")
               
@@ -229,7 +233,7 @@ struct CreateBasicInfoView: View {
       }
     }
     .overlay(alignment: .bottomTrailing) {
-      profileImageButton(
+      profileEditButton(
         viewModel.profileImage != nil
         ? DesignSystemAsset.Icons.pencilFill24.swiftUIImage
         : DesignSystemAsset.Icons.plus24.swiftUIImage
@@ -237,7 +241,7 @@ struct CreateBasicInfoView: View {
     }
   }
   
-  private func profileImageButton(_ image: Image) -> some View {
+  private func profileEditButton(_ image: Image) -> some View {
     image
       .renderingMode(.template)
       .foregroundStyle(Color.grayscaleWhite)
@@ -252,6 +256,12 @@ struct CreateBasicInfoView: View {
       )
       .padding(.bottom, 10)
       .padding(.trailing, 10)
+  }
+  
+  private var profileImageDescriptionLabel: some View {
+    Text("얼굴이 잘 나온 사진으로 등록해 주세요.")
+      .pretendard(.body_S_M)
+      .foregroundStyle(Color.grayscaleDark3)
   }
   
   private var nicknameTextField: some View {
